@@ -3,7 +3,7 @@ from dataclasses import dataclass, asdict
 from pathlib import Path
 from pathlib import Path
 from typing import Callable, Dict, List
-from karsa.domain.models import ExecutionMetrics, WorkflowState
+from karsa.domain.models import ExecutionMetrics, WorkflowState, GovernanceDecision
 
 @dataclass
 class DomainEvent:
@@ -30,6 +30,17 @@ class StateTransitionedEvent(DomainEvent):
 class WorkflowFailedEvent(DomainEvent):
     workflow_id: str
     reason: str
+    sequence_number: int = 0
+
+@dataclass
+class WorkflowAbortedEvent(DomainEvent):
+    workflow_id: str
+    reason: str
+    sequence_number: int = 0
+
+@dataclass
+class GovernanceDecisionEvent(DomainEvent):
+    decision: GovernanceDecision
     sequence_number: int = 0
 
 class EventBus:

@@ -69,3 +69,11 @@ The `.gitignore` has been successfully hardened while strictly ensuring the foll
 **Recommendation: OPTION A (Fully Ignored)**
 
 *Justification*: The `.karsa/` directory within the platform repository itself is purely used for local development testing, containing transient metrics ledgers and mock snapshots. Fully ignoring it ensures test artifacts never leak. Any structural configuration required for the platform (like `pricing.json` bounds) should be shipped as `src/karsa/config/pricing.default.json` and selectively instantiated by users in their own target repositories, rather than tracking `.karsa/` globally in Karsa's source tree.
+
+
+## 6. Sprint 2.5 Hardening Closure
+The following technical debts from Sprint 2 have been officially remediated and are no longer deferred:
+- **Lock Heartbeat Strategy**: Replaced by mandatory `verify_lock` callback on all I/O boundaries.
+- **Recovery Determinism**: Guaranteed by pre-sort operations and strict `SequenceGapError` enforcements.
+
+*(Journal Compaction and Schema Migration remain deferred to Sprints 4 and 5).*

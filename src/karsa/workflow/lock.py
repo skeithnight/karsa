@@ -52,3 +52,22 @@ class WorkflowLockManager:
                     path.unlink()
             except json.JSONDecodeError:
                 path.unlink() # Corrupted, just remove
+
+class LockOwnershipError(Exception):
+    pass
+
+def verify_ownership(self, workflow_id: str, process_id: str):
+    path = self._get_path(workflow_id)
+    if not path.exists():
+        raise LockOwnershipError(f"No lock exists for workflow {workflow_id}")
+    with open(path, "r") as f:
+        try:
+            data = json.load(f)
+            if data.get("process_id") != process_id:
+                raise LockOwnershipError(f"Lock owned by {data.get('process_id')}, not {process_id}")
+            now = time.time()
+            if now > data.get("expires_at", 0):
+                raise LockOwnershipError(f"Lock expired for {process_id}")
+        except json.JSONDecodeError:
+            raise LockOwnershipError("Lock file is corrupted")
+WorkflowLockManager.verify_ownership = verify_ownership

@@ -11,10 +11,43 @@ class WorkflowState(Enum):
     FAILED = "FAILED"
     ABORTED = "ABORTED"
 
+@dataclass(frozen=True)
+class GovernancePolicy:
+    max_workflow_cost: float = 0.0
+    max_workflow_tokens: int = 0
+    max_review_cycles: int = 0
+    max_cycle_cost: float = 0.0
+
+@dataclass(frozen=True)
+class GovernancePolicySnapshot:
+    policy_version: str
+    policy_hash: str
+    max_workflow_cost: float
+    max_workflow_tokens: int
+    max_review_cycles: int
+    max_cycle_cost: float
+
+@dataclass(frozen=True)
+class ViolationContext:
+    limit_name: str
+    limit_value: float
+    actual_value: float
+
+@dataclass(frozen=True)
+class GovernanceDecision:
+    workflow_id: str
+    review_cycle_id: str
+    execution_id: str
+    sequence_number: int
+    decision_type: str
+    reason: str
+    violation_context: Optional[ViolationContext] = None
+
 @dataclass
 class WorkflowSnapshot:
     workflow_id: str
     state: WorkflowState
+    policy: Optional[GovernancePolicySnapshot] = None
     data: Dict[str, Any] = field(default_factory=dict)
     schema_version: int = 1
     last_sequence_number: int = 0

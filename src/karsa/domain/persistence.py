@@ -1,9 +1,12 @@
 import json
 import os
 from pathlib import Path
-from typing import List, Optional, Any, Dict
-from karsa.domain.models import WorkflowSnapshot, WorkflowState
-from karsa.domain.events import DomainEvent, WorkflowCreatedEvent, StateTransitionedEvent, WorkflowFailedEvent
+from typing import List, Optional, Any, Dict, Callable
+from karsa.domain.events import DomainEvent, WorkflowCreatedEvent, StateTransitionedEvent, WorkflowFailedEvent, WorkflowAbortedEvent, GovernanceDecisionEvent
+from karsa.domain.models import ViolationContext, GovernanceDecision, GovernancePolicySnapshot, WorkflowSnapshot, WorkflowState
+
+class CorruptedJournalError(Exception):
+    pass
 
 def serialize_event(event: DomainEvent) -> Dict[str, Any]:
     # Handle enums
@@ -11,6 +14,11 @@ def serialize_event(event: DomainEvent) -> Dict[str, Any]:
     for k, v in event.__dict__.items():
         if isinstance(v, WorkflowState):
             payload[k] = v.value
+        elif isinstance(v, GovernanceDecision):
+            decision_dict = v.__dict__.copy()
+            if v.violation_context:
+                decision_dict["violation_context"] = v.violation_context.__dict__
+            payload[k] = decision_dict
         else:
             payload[k] = v
     return {
@@ -34,6 +42,14 @@ def deserialize_event(data: Dict[str, Any]) -> DomainEvent:
         return StateTransitionedEvent(**payload)
     elif event_type == "WorkflowFailedEvent":
         return WorkflowFailedEvent(**payload)
+    elif event_type == "WorkflowAbortedEvent":
+        return WorkflowAbortedEvent(**payload)
+    elif event_type == "GovernanceDecisionEvent":
+        decision_data = payload["decision"]
+        if "violation_context" in decision_data and decision_data["violation_context"]:
+            decision_data["violation_context"] = ViolationContext(**decision_data["violation_context"])
+        payload["decision"] = GovernanceDecision(**decision_data)
+        return GovernanceDecisionEvent(**payload)
     else:
         return DomainEvent() # Fallback
 
@@ -44,13 +60,17 @@ class SnapshotRepository:
     def _get_path(self, workflow_id: str) -> Path:
         return self.workspace_path / ".karsa" / "workflows" / workflow_id / "snapshot.json"
         
-    def save(self, snapshot: WorkflowSnapshot):
+    def save(self, snapshot: WorkflowSnapshot, verify_lock: Callable[[str], None] = None):
+        if verify_lock:
+            verify_lock(snapshot.workflow_id)
+            
         path = self._get_path(snapshot.workflow_id)
         path.parent.mkdir(parents=True, exist_ok=True)
         
         data = {
             "workflow_id": snapshot.workflow_id,
             "state": snapshot.state.value,
+            "policy": snapshot.policy.__dict__ if snapshot.policy else None,
             "data": snapshot.data,
             "schema_version": snapshot.schema_version,
             "last_sequence_number": snapshot.last_sequence_number
@@ -65,9 +85,12 @@ class SnapshotRepository:
             
         with open(path, "r") as f:
             data = json.load(f)
+            policy_data = data.get("policy")
+            policy = GovernancePolicySnapshot(**policy_data) if policy_data else None
             return WorkflowSnapshot(
                 workflow_id=data["workflow_id"],
                 state=WorkflowState(data["state"]),
+                policy=policy,
                 data=data.get("data", {}),
                 schema_version=data.get("schema_version", 1),
                 last_sequence_number=data.get("last_sequence_number", 0)
@@ -80,7 +103,10 @@ class EventJournalRepository:
     def _get_path(self, workflow_id: str) -> Path:
         return self.workspace_path / ".karsa" / "workflows" / workflow_id / "events.jsonl"
         
-    def append(self, workflow_id: str, event: DomainEvent):
+    def append(self, workflow_id: str, event: DomainEvent, verify_lock: Callable[[str], None] = None):
+        if verify_lock:
+            verify_lock(workflow_id)
+            
         path = self._get_path(workflow_id)
         path.parent.mkdir(parents=True, exist_ok=True)
         
@@ -98,6 +124,9 @@ class EventJournalRepository:
             for line in f:
                 if not line.strip():
                     continue
-                data = json.loads(line)
-                events.append(deserialize_event(data))
+                try:
+                    data = json.loads(line)
+                    events.append(deserialize_event(data))
+                except json.JSONDecodeError as e:
+                    raise CorruptedJournalError(f"Failed to decode journal line: {e}")
         return events

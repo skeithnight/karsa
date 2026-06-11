@@ -159,3 +159,76 @@ def test_recovery_is_deterministic():
     
     # Absolute Object Equality (Dataclass comparison)
     assert recovered_workflow == expected_workflow
+
+def test_sequence_gap():
+    snap_repo = SnapshotRepository(TEST_WORKSPACE)
+    event_repo = EventJournalRepository(TEST_WORKSPACE)
+    recovery = RecoveryEngine(snap_repo, event_repo)
+    
+    workflow_id = "w_gap"
+    snap = WorkflowSnapshot(workflow_id=workflow_id, state=WorkflowState.IDEA, schema_version=1, last_sequence_number=10)
+    snap_repo.save(snap)
+    
+    event_repo.append(workflow_id, StateTransitionedEvent(workflow_id=workflow_id, previous_state=WorkflowState.IDEA, new_state=WorkflowState.DRAFT, sequence_number=12))
+    
+    with pytest.raises(Exception) as excinfo:
+        recovery.rehydrate(workflow_id)
+    assert "SequenceGapError" in str(type(excinfo.value))
+
+def test_out_of_order_replay():
+    snap_repo = SnapshotRepository(TEST_WORKSPACE)
+    event_repo = EventJournalRepository(TEST_WORKSPACE)
+    recovery = RecoveryEngine(snap_repo, event_repo)
+    
+    workflow_id = "w_ooo"
+    snap = WorkflowSnapshot(workflow_id=workflow_id, state=WorkflowState.IDEA, schema_version=1, last_sequence_number=10)
+    snap_repo.save(snap)
+    
+    event_repo.append(workflow_id, StateTransitionedEvent(workflow_id=workflow_id, previous_state=WorkflowState.DRAFT, new_state=WorkflowState.REVIEW, sequence_number=12))
+    event_repo.append(workflow_id, StateTransitionedEvent(workflow_id=workflow_id, previous_state=WorkflowState.IDEA, new_state=WorkflowState.DRAFT, sequence_number=11))
+    
+    rec = recovery.rehydrate(workflow_id)
+    assert rec.state == WorkflowState.REVIEW
+    assert rec.last_sequence_number == 12
+
+def test_corrupted_journal_error():
+    snap_repo = SnapshotRepository(TEST_WORKSPACE)
+    workflow_id = "w_corr"
+    snap = WorkflowSnapshot(workflow_id=workflow_id, state=WorkflowState.IDEA, schema_version=1, last_sequence_number=10)
+    snap_repo.save(snap)
+    
+    journal_path = TEST_WORKSPACE / ".karsa" / "workflows" / workflow_id / "events.jsonl"
+    journal_path.parent.mkdir(parents=True, exist_ok=True)
+    with open(journal_path, "w") as f:
+        f.write('{"event_type": "StateTransitionedEvent", "payload": {"seq')
+        
+    event_repo = EventJournalRepository(TEST_WORKSPACE)
+    recovery = RecoveryEngine(snap_repo, event_repo)
+    
+    with pytest.raises(Exception) as excinfo:
+        recovery.rehydrate(workflow_id)
+    assert "CorruptedJournalError" in str(type(excinfo.value))
+
+def test_lock_ownership_validation():
+    snap_repo = SnapshotRepository(TEST_WORKSPACE)
+    event_repo = EventJournalRepository(TEST_WORKSPACE)
+    lock_mgr = WorkflowLockManager(TEST_WORKSPACE, ttl_seconds=1)
+    
+    workflow_id = "w_zombie"
+    lock_mgr.acquire(workflow_id, "proc_A")
+    
+    # proc_A writes fine
+    def verify_proc_A(w_id):
+        lock_mgr.verify_ownership(w_id, "proc_A")
+        
+    event_repo.append(workflow_id, StateTransitionedEvent(workflow_id=workflow_id, previous_state=WorkflowState.IDEA, new_state=WorkflowState.DRAFT, sequence_number=11), verify_lock=verify_proc_A)
+    
+    import time
+    time.sleep(1.1)
+    
+    lock_mgr.acquire(workflow_id, "proc_B")
+    
+    # proc_A tries to write again and should fail
+    with pytest.raises(Exception) as excinfo:
+        event_repo.append(workflow_id, StateTransitionedEvent(workflow_id=workflow_id, previous_state=WorkflowState.DRAFT, new_state=WorkflowState.REVIEW, sequence_number=12), verify_lock=verify_proc_A)
+    assert "LockOwnershipError" in str(type(excinfo.value))
