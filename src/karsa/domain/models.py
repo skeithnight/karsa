@@ -10,6 +10,8 @@ class WorkflowState(Enum):
     APPROVED = "APPROVED"
     FAILED = "FAILED"
     ABORTED = "ABORTED"
+    SUSPENDED = "SUSPENDED"
+    ESCALATED = "ESCALATED"
 
 @dataclass(frozen=True)
 class GovernancePolicy:

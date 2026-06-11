@@ -6,13 +6,15 @@ class InvalidTransitionError(Exception):
 
 class StateTransitionEngine:
     VALID_TRANSITIONS = {
-        WorkflowState.IDEA: [WorkflowState.DRAFT, WorkflowState.FAILED, WorkflowState.ABORTED],
-        WorkflowState.DRAFT: [WorkflowState.REVIEW, WorkflowState.FAILED, WorkflowState.ABORTED],
-        WorkflowState.REVIEW: [WorkflowState.REVISE, WorkflowState.APPROVED, WorkflowState.FAILED, WorkflowState.ABORTED],
-        WorkflowState.REVISE: [WorkflowState.REVIEW, WorkflowState.FAILED, WorkflowState.ABORTED],
+        WorkflowState.IDEA: [WorkflowState.DRAFT, WorkflowState.FAILED, WorkflowState.ABORTED, WorkflowState.SUSPENDED],
+        WorkflowState.DRAFT: [WorkflowState.REVIEW, WorkflowState.FAILED, WorkflowState.ABORTED, WorkflowState.SUSPENDED],
+        WorkflowState.REVIEW: [WorkflowState.REVISE, WorkflowState.APPROVED, WorkflowState.FAILED, WorkflowState.ABORTED, WorkflowState.SUSPENDED, WorkflowState.ESCALATED],
+        WorkflowState.REVISE: [WorkflowState.REVIEW, WorkflowState.FAILED, WorkflowState.ABORTED, WorkflowState.SUSPENDED],
         WorkflowState.APPROVED: [],
         WorkflowState.FAILED: [],
-        WorkflowState.ABORTED: []
+        WorkflowState.ABORTED: [],
+        WorkflowState.ESCALATED: [],
+        WorkflowState.SUSPENDED: [WorkflowState.DRAFT, WorkflowState.REVIEW, WorkflowState.REVISE, WorkflowState.ABORTED]
     }
 
     def __init__(self):

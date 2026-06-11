@@ -7,76 +7,79 @@ from karsa.domain.models import ExecutionMetrics, WorkflowState, GovernanceDecis
 
 @dataclass
 class DomainEvent:
-    pass
+    schema_version: int = 1
 
 @dataclass
 class ExecutionCompletedEvent(DomainEvent):
-    metrics: ExecutionMetrics
+    metrics: ExecutionMetrics = None
+    sequence_number: int = 0
 
 @dataclass
 class WorkflowCreatedEvent(DomainEvent):
-    workflow_id: str
+    workflow_id: str = ""
     sequence_number: int = 0
 
 @dataclass
 class StateTransitionedEvent(DomainEvent):
-    workflow_id: str
-    previous_state: WorkflowState
-    new_state: WorkflowState
+    workflow_id: str = ""
+    previous_state: WorkflowState = None
+    new_state: WorkflowState = None
     reason: str = ""
     sequence_number: int = 0
 
 @dataclass
 class WorkflowFailedEvent(DomainEvent):
-    workflow_id: str
-    reason: str
+    workflow_id: str = ""
+    reason: str = ""
     sequence_number: int = 0
 
 @dataclass
 class WorkflowAbortedEvent(DomainEvent):
-    workflow_id: str
-    reason: str
+    workflow_id: str = ""
+    reason: str = ""
     sequence_number: int = 0
 
 @dataclass
 class GovernanceDecisionEvent(DomainEvent):
-    decision: GovernanceDecision
+    decision: GovernanceDecision = None
     sequence_number: int = 0
 
-class EventBus:
-    _instance = None
-    
-    def __new__(cls):
-        if cls._instance is None:
-            cls._instance = super(EventBus, cls).__new__(cls)
-            cls._instance._subscribers = {}
-            cls._instance._events_log_file = None
-        return cls._instance
+@dataclass
+class ArtifactPersistedEvent(DomainEvent):
+    artifact_id: str = ""
+    target_path: str = ""
+    sha256_hash: str = ""
+    sequence_number: int = 0
 
-    def initialize(self, events_log_file: Path):
-        self._events_log_file = events_log_file
-        if not self._events_log_file.exists():
-            self._events_log_file.parent.mkdir(parents=True, exist_ok=True)
-            self._events_log_file.touch()
+@dataclass
+class UserOverrideEvent(DomainEvent):
+    artifact_name: str = ""
+    new_version_hash: str = ""
+    sequence_number: int = 0
 
-    def subscribe(self, event_type: type, handler: Callable[[DomainEvent], None]):
-        if event_type not in self._subscribers:
-            self._subscribers[event_type] = []
-        self._subscribers[event_type].append(handler)
+@dataclass
+class ExecutionCheckpointEvent(DomainEvent):
+    cycle_id: int = 0
+    sub_task_name: str = ""
+    artifact_version_hash: str = ""
+    accumulated_cost: float = 0.0
+    accumulated_tokens: int = 0
+    sequence_number: int = 0
 
-    def publish(self, event: DomainEvent):
-        event_type = type(event)
-        
-        # Persist event
-        if self._events_log_file:
-            with open(self._events_log_file, "a") as f:
-                event_data = {
-                    "event_type": event_type.__name__,
-                    "payload": asdict(event)
-                }
-                f.write(json.dumps(event_data) + "\n")
-                
-        # Synchronous execution
-        if event_type in self._subscribers:
-            for handler in self._subscribers[event_type]:
-                handler(event)
+@dataclass
+class ReviewCycleStartedEvent(DomainEvent):
+    cycle_id: int = 0
+    sequence_number: int = 0
+
+@dataclass
+class ReviewCycleCompletedEvent(DomainEvent):
+    cycle_id: int = 0
+    convergence_score: float = 0.0
+    sequence_number: int = 0
+
+@dataclass
+class EscalationTriggeredEvent(DomainEvent):
+    cycle_id: int = 0
+    divergence_reason: str = ""
+    sequence_number: int = 0
+

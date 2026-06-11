@@ -2,7 +2,11 @@ import json
 import os
 from pathlib import Path
 from typing import List, Optional, Any, Dict, Callable
-from karsa.domain.events import DomainEvent, WorkflowCreatedEvent, StateTransitionedEvent, WorkflowFailedEvent, WorkflowAbortedEvent, GovernanceDecisionEvent
+from karsa.domain.events import (
+    DomainEvent, WorkflowCreatedEvent, StateTransitionedEvent, WorkflowFailedEvent, 
+    WorkflowAbortedEvent, GovernanceDecisionEvent, ArtifactPersistedEvent, UserOverrideEvent,
+    ExecutionCheckpointEvent, ReviewCycleStartedEvent, ReviewCycleCompletedEvent, EscalationTriggeredEvent
+)
 from karsa.domain.models import ViolationContext, GovernanceDecision, GovernancePolicySnapshot, WorkflowSnapshot, WorkflowState
 
 class CorruptedJournalError(Exception):
@@ -12,6 +16,8 @@ def serialize_event(event: DomainEvent) -> Dict[str, Any]:
     # Handle enums
     payload = {}
     for k, v in event.__dict__.items():
+        if k == "schema_version":
+            continue
         if isinstance(v, WorkflowState):
             payload[k] = v.value
         elif isinstance(v, GovernanceDecision):
@@ -23,12 +29,14 @@ def serialize_event(event: DomainEvent) -> Dict[str, Any]:
             payload[k] = v
     return {
         "event_type": type(event).__name__,
+        "schema_version": getattr(event, "schema_version", 1),
         "payload": payload
     }
 
 def deserialize_event(data: Dict[str, Any]) -> DomainEvent:
     event_type = data.get("event_type")
     payload = data.get("payload", {})
+    schema_version = data.get("schema_version", 1)
     
     # Rehydrate Enum
     if "previous_state" in payload:
@@ -37,21 +45,33 @@ def deserialize_event(data: Dict[str, Any]) -> DomainEvent:
         payload["new_state"] = WorkflowState(payload["new_state"])
         
     if event_type == "WorkflowCreatedEvent":
-        return WorkflowCreatedEvent(**payload)
+        return WorkflowCreatedEvent(schema_version=schema_version, **payload)
     elif event_type == "StateTransitionedEvent":
-        return StateTransitionedEvent(**payload)
+        return StateTransitionedEvent(schema_version=schema_version, **payload)
     elif event_type == "WorkflowFailedEvent":
-        return WorkflowFailedEvent(**payload)
+        return WorkflowFailedEvent(schema_version=schema_version, **payload)
     elif event_type == "WorkflowAbortedEvent":
-        return WorkflowAbortedEvent(**payload)
+        return WorkflowAbortedEvent(schema_version=schema_version, **payload)
     elif event_type == "GovernanceDecisionEvent":
         decision_data = payload["decision"]
         if "violation_context" in decision_data and decision_data["violation_context"]:
             decision_data["violation_context"] = ViolationContext(**decision_data["violation_context"])
         payload["decision"] = GovernanceDecision(**decision_data)
-        return GovernanceDecisionEvent(**payload)
+        return GovernanceDecisionEvent(schema_version=schema_version, **payload)
+    elif event_type == "ArtifactPersistedEvent":
+        return ArtifactPersistedEvent(schema_version=schema_version, **payload)
+    elif event_type == "UserOverrideEvent":
+        return UserOverrideEvent(schema_version=schema_version, **payload)
+    elif event_type == "ExecutionCheckpointEvent":
+        return ExecutionCheckpointEvent(schema_version=schema_version, **payload)
+    elif event_type == "ReviewCycleStartedEvent":
+        return ReviewCycleStartedEvent(schema_version=schema_version, **payload)
+    elif event_type == "ReviewCycleCompletedEvent":
+        return ReviewCycleCompletedEvent(schema_version=schema_version, **payload)
+    elif event_type == "EscalationTriggeredEvent":
+        return EscalationTriggeredEvent(schema_version=schema_version, **payload)
     else:
-        return DomainEvent() # Fallback
+        return DomainEvent(schema_version=schema_version) # Fallback
 
 class SnapshotRepository:
     def __init__(self, workspace_path: Path):
