@@ -1,15 +1,74 @@
-# runtime workspaces
-
+# ============================================================================
+# Runtime Workspaces & Workflow Data
+# ============================================================================
+# Ignored to prevent committing ephemeral sandbox directories or temp clones.
 workspace/
+test_workspace*/
+evidence_workspace*/
+.karsa/
+# Scope broad ignores tightly into .karsa/ to prevent false positives
+.karsa/**/*.jsonl
+.karsa/**/workflows/
+.karsa/**/executions/
+.karsa/**/metrics/
+.karsa/**/cache/
 
-# python
-
+# ============================================================================
+# Python Tooling & Caches
+# ============================================================================
+# Prevents committing byte-compiled, optimized, and test cache files.
 __pycache__/
-
-*.pyc
-
+*.py[cod]
+*$py.class
 .pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.pyre/
+.hypothesis/
+.tox/
+.nox/
 
-# local env
+# ============================================================================
+# Coverage Artifacts
+# ============================================================================
+.coverage
+.coverage.*
+htmlcov/
 
+# ============================================================================
+# Build Artifacts
+# ============================================================================
+dist/
+build/
+*.egg-info/
+
+# ============================================================================
+# Virtual Environments
+# ============================================================================
+# Prevents committing thousands of dependency files.
 .venv/
+venv/
+env/
+
+# ============================================================================
+# IDE
+# ============================================================================
+# User-specific editor configurations.
+.vscode/
+.idea/
+
+# ============================================================================
+# Operating System
+# ============================================================================
+# OS-generated metadata files.
+.DS_Store
+Thumbs.db
+
+# ============================================================================
+# Local Secrets
+# ============================================================================
+# Security safeguard against leaking API keys or local overrides.
+.env
+.env.*
+*.pem
+*.key

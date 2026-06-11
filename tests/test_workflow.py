@@ -14,8 +14,8 @@ def test_state_controller_initialize(tmp_path: Path):
 def test_state_controller_transition(tmp_path: Path):
     controller = StateController(tmp_path)
     controller.initialize("Test idea")
-    controller.transition_to(WorkflowState.RESEARCH)
+    controller.transition_to(WorkflowState.DRAFT)
     
     state = controller.load_state()
-    assert state["current_state"] == WorkflowState.RESEARCH.value
-    assert controller.get_current_state() == WorkflowState.RESEARCH
+    assert state["current_state"] == WorkflowState.DRAFT.value
+    assert controller.get_current_state() == WorkflowState.DRAFT
