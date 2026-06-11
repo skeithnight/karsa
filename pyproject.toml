@@ -1,0 +1,25 @@
+[project]
+name = "karsa"
+version = "0.1.0"
+description = "Karsa MVP: A lightweight orchestrator"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "typer>=0.12.3",
+    "rich>=13.7.1"
+]
+
+[project.scripts]
+karsa = "karsa.cli:app"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.3",
+]
