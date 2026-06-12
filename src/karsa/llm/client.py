@@ -106,15 +106,18 @@ class GeminiClient(LLMClient):
             self.pool.trace_fn = self.obs.log_trace
 
     def generate(self, prompt: str, system_prompt: str = "") -> str:
+        from karsa.llm.errors import QuotaExhaustedError, RateLimitError, AuthenticationError, ProviderUnavailableError
+        
         if not self.pool:
             raise Exception("No ProviderPool configured")
             
         provider_key = self.pool.get_next_key()
         if not provider_key:
-            raise Exception("429 QUOTA_EXHAUSTED: All keys suspended")
+            raise QuotaExhaustedError("All keys suspended")
             
         self.current_key_fingerprint = provider_key.fingerprint
         import google.genai
+        from google.genai.errors import APIError
         client = google.genai.Client(api_key=provider_key.key)
         
         try:
@@ -125,6 +128,17 @@ class GeminiClient(LLMClient):
             )
             self.pool.mark_success(provider_key)
             return response.text
+        except APIError as e:
+            if e.code == 400 and "API key not valid" in e.message:
+                self.pool.mark_failure(provider_key, is_quota=False)
+                raise AuthenticationError(f"API key invalid: {e.message}")
+            elif e.code == 429:
+                self.pool.mark_failure(provider_key, is_quota=True)
+                raise RateLimitError(f"Rate limited: {e.message}")
+            elif e.code in [502, 503]:
+                raise ProviderUnavailableError(f"Service unavailable: {e.message}")
+            else:
+                raise
         except Exception as e:
             error_msg = str(e).lower()
             is_quota = "429" in error_msg or "quota" in error_msg

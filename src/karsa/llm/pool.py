@@ -37,6 +37,10 @@ class ProviderPool:
                     
             keys = list(discovered_keys)
             
+        if not keys:
+            from karsa.llm.errors import MissingCredentialsError
+            raise MissingCredentialsError("No provider credentials discovered.")
+            
         self.keys = [ProviderKey(k) for k in keys]
         self.current_index = 0
         self.trace_fn = trace_fn
