@@ -19,6 +19,24 @@ class ProviderPool:
     def __init__(self, provider_name: str, keys: List[str], registry_file: Path, trace_fn: Callable[[str], None] = None):
         self.provider_name = provider_name
         self.registry_file = registry_file
+        
+        if not keys:
+            import os
+            discovered_keys = set()
+            
+            if karsa_keys := os.environ.get("KARSA_GEMINI_KEYS"):
+                discovered_keys.update([k.strip() for k in karsa_keys.split(",") if k.strip()])
+                
+            for singular in ["GEMINI_API_KEY", "GOOGLE_API_KEY"]:
+                if key := os.environ.get(singular):
+                    discovered_keys.add(key)
+                    
+            for i in range(1, 10):
+                if key := os.environ.get(f"GEMINI_API_KEY_{i}"):
+                    discovered_keys.add(key)
+                    
+            keys = list(discovered_keys)
+            
         self.keys = [ProviderKey(k) for k in keys]
         self.current_index = 0
         self.trace_fn = trace_fn

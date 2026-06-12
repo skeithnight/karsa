@@ -12,8 +12,8 @@
 - **Review Agent Complacency:** The Review Agent currently issues "APPROVED" too easily or loops indefinitely because its prompt lacks explicit criteria for evaluating completeness.
 - **Observability Void:** There is currently no standardized way to collect or export metrics regarding cycle iterations, review scores, or test-pass rates across multiple concurrent project generations.
 
-### 2. Benchmark Strategy
-To prove Karsa can deliver actual working software without infinite looping or crashing, we will execute five diverse Benchmark Missions. 
+### 2. Benchmark Strategy (Phase 1 Complete)
+To prove Karsa can deliver actual working software without infinite looping or crashing, we will execute five diverse Benchmark Missions. We have introduced a lightweight `BenchmarkSuiteRunner` capable of aggregating metrics cleanly across multiple sandbox executions.
 **Benchmark Scenarios:**
 1. Duplicate File Finder CLI
 2. Expense Tracker CLI

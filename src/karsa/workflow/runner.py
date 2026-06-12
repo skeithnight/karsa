@@ -33,9 +33,13 @@ class WorkflowRunner:
                     self.engine.transition_state(WorkflowState.REVIEW)
                 self.engine.transition_state(WorkflowState.APPROVED)
             elif outcome == "REVISE":
+                if self.engine.snapshot.state == WorkflowState.REVISE:
+                    self.engine.transition_state(WorkflowState.REVIEW)
                 self.engine.transition_state(WorkflowState.REVISE)
                 cycle_id += 1
             elif outcome == "ESCALATED":
+                if self.engine.snapshot.state == WorkflowState.REVISE:
+                    self.engine.transition_state(WorkflowState.REVIEW)
                 self.engine.transition_state(WorkflowState.ESCALATED)
             elif outcome == "SUSPENDED":
                 self.engine.transition_state(WorkflowState.SUSPENDED)

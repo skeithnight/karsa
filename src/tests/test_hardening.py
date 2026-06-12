@@ -100,10 +100,10 @@ def test_orchestrator_user_override(workspace):
     original_hash = registry.store_versioned("Original content")
     engine.snapshot = WorkflowSnapshot(workflow_id="wf_ovr", state=WorkflowState.REVIEW)
     engine.append_event(WorkflowCreatedEvent(workflow_id="wf_ovr"))
-    engine.append_event(ArtifactPersistedEvent(target_path="design.md", sha256_hash=original_hash))
+    engine.append_event(ArtifactPersistedEvent(target_path="duplicate_finder.py", sha256_hash=original_hash))
     
     # User modifies live file
-    design_path = workspace / "design.md"
+    design_path = workspace / "duplicate_finder.py"
     design_path.parent.mkdir(parents=True, exist_ok=True)
     with open(design_path, "w") as f:
         f.write("Modified content")
@@ -121,7 +121,7 @@ def test_orchestrator_user_override(workspace):
     events = event_repo.load("wf_ovr")
     overrides = [e for e in events if type(e).__name__ == "UserOverrideEvent"]
     assert len(overrides) == 1
-    assert overrides[0].artifact_name == "design.md"
+    assert overrides[0].artifact_name == "duplicate_finder.py"
 
 def test_workflow_runner_suspend_resume(workspace):
     engine = WorkflowEngine(SnapshotRepository(workspace), EventJournalRepository(workspace), StateTransitionEngine(), DummyEvaluator())

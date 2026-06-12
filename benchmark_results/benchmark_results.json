@@ -1,0 +1,78 @@
+{
+  "metrics": {
+    "project_success_rate": 1.0,
+    "test_pass_rate": 1.0,
+    "approval_rate": 1.0,
+    "failed_generation_rate": 0.0,
+    "review_cycles_per_project": 1.0,
+    "benchmark_duration": 1.9413118362426758,
+    "recovery_success_rate": 1.0
+  },
+  "results": [
+    {
+      "benchmark_id": "bm_001_duplicate_finder_improved",
+      "state": "APPROVED",
+      "review_cycles": 1,
+      "duration_seconds": 0.4822537899017334,
+      "recovery_attempts": 0,
+      "generated_files": [
+        "main.py",
+        "test_main.py",
+        "README.md"
+      ],
+      "test_pass": true
+    },
+    {
+      "benchmark_id": "bm_002_expense_tracker_improved",
+      "state": "APPROVED",
+      "review_cycles": 1,
+      "duration_seconds": 0.3657419681549072,
+      "recovery_attempts": 0,
+      "generated_files": [
+        "main.py",
+        "test_main.py",
+        "README.md"
+      ],
+      "test_pass": true
+    },
+    {
+      "benchmark_id": "bm_003_todo_api_improved",
+      "state": "APPROVED",
+      "review_cycles": 1,
+      "duration_seconds": 0.3499131202697754,
+      "recovery_attempts": 0,
+      "generated_files": [
+        "main.py",
+        "test_main.py",
+        "README.md"
+      ],
+      "test_pass": true
+    },
+    {
+      "benchmark_id": "bm_004_static_site_improved",
+      "state": "APPROVED",
+      "review_cycles": 1,
+      "duration_seconds": 0.3768949508666992,
+      "recovery_attempts": 0,
+      "generated_files": [
+        "main.py",
+        "test_main.py",
+        "README.md"
+      ],
+      "test_pass": true
+    },
+    {
+      "benchmark_id": "bm_005_csv_analysis_improved",
+      "state": "APPROVED",
+      "review_cycles": 1,
+      "duration_seconds": 0.36650800704956055,
+      "recovery_attempts": 0,
+      "generated_files": [
+        "main.py",
+        "test_main.py",
+        "README.md"
+      ],
+      "test_pass": true
+    }
+  ]
+}

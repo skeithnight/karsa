@@ -189,4 +189,4 @@ class ProviderManager(LLMClient):
         raise Exception(f"All providers failed. Last error: {self.last_error}")
 
     def generate(self, prompt: str, system_prompt: str = "") -> str:
-        pass
+        return self.generate_with_obs("Agent", prompt, system_prompt)
