@@ -1,100 +1,64 @@
 import pytest
-from datetime import datetime, timezone
-from testcontainers.postgres import PostgresContainer
-from psycopg_pool import ConnectionPool
-
-from karsa.thesis.domain.model.thesis import (
-    ActiveThesis,
-    ThesisVersion,
-    ThesisReview,
-    ThesisInvalidationRule,
-    ThesisDependencyGraph,
-    ThesisDependencyEdge,
-    ThesisState
+from unittest.mock import MagicMock
+from karsa.shared.domain.identity import OriginatorIdentity
+from karsa.thesis.domain.model.thesis import Thesis
+from karsa.thesis.domain.model.value_objects import (
+    HypothesisStructure, ConfidenceModel, TimeHorizon, TimeClassification, ConfidenceSource
 )
-from karsa.thesis.infrastructure.storage.in_memory_thesis_repository import InMemoryThesisRepository
-from karsa.thesis.infrastructure.storage.postgres_thesis_repository import PostgresThesisRepository
+from karsa.thesis.infrastructure.storage.thesis_repository import PostgresThesisRepository
+from karsa.shared.infrastructure.uow import ConcurrencyConflictError
 
-@pytest.fixture(scope="module")
-def postgres_pool():
-    try:
-        with PostgresContainer("postgres:15") as postgres:
-            conn_str = postgres.get_connection_url().replace("postgresql+psycopg2", "postgresql")
-            with ConnectionPool(conn_str) as pool:
-                repo = PostgresThesisRepository(pool)
-                repo._setup_schema()
-                yield pool
-    except Exception as e:
-        pytest.skip(f"Could not start Postgres container: {e}")
+def create_valid_thesis():
+    originator = OriginatorIdentity("o1", "HUMAN", "v1")
+    hypothesis = HypothesisStructure("H1", "Bull", "Bear", ["A1"], "Out", ["I1"], ["S1"])
+    confidence = ConfidenceModel(0.8, None, ConfidenceSource.MANUAL, "2024")
+    time_horizon = TimeHorizon("2024-01-01", "2024-12-31", TimeClassification.SHORT_TERM)
+    return Thesis("t1", originator, hypothesis, confidence, time_horizon, [])
 
-@pytest.fixture
-def in_memory_repo():
-    return InMemoryThesisRepository()
-
-@pytest.fixture
-def postgres_repo(postgres_pool):
-    return PostgresThesisRepository(postgres_pool)
-
-def _run_repository_contract_tests(repo):
-    # 1. Save & Load thesis
-    thesis = ActiveThesis("T-1", "author1", datetime.now(timezone.utc))
+def test_save_new_thesis():
+    conn = MagicMock()
+    cursor = MagicMock()
+    conn.cursor.return_value.__enter__.return_value = cursor
+    
+    repo = PostgresThesisRepository(conn)
+    thesis = create_valid_thesis()
+    
     repo.save(thesis)
     
-    loaded = repo.get_by_id("T-1")
+    # Verify insert was called since version is 1
+    assert "INSERT INTO thesis" in cursor.execute.call_args[0][0]
+
+def test_occ_conflict():
+    conn = MagicMock()
+    cursor = MagicMock()
+    conn.cursor.return_value.__enter__.return_value = cursor
+    
+    # Simulate update returning 0 rows
+    cursor.rowcount = 0
+    
+    repo = PostgresThesisRepository(conn)
+    thesis = create_valid_thesis()
+    thesis.increment_version() # Now version 2, should trigger UPDATE
+    
+    with pytest.raises(ConcurrencyConflictError):
+        repo.save(thesis)
+
+def test_load_thesis():
+    conn = MagicMock()
+    cursor = MagicMock()
+    conn.cursor.return_value.__enter__.return_value = cursor
+    
+    thesis = create_valid_thesis()
+    from karsa.thesis.infrastructure.storage.thesis_mapper import ThesisMapper
+    import json
+    payload = json.dumps(ThesisMapper.to_payload(thesis))
+    
+    cursor.fetchone.return_value = ("t1", thesis.state.value, thesis.aggregate_version, payload, "2024", "2024")
+    
+    repo = PostgresThesisRepository(conn)
+    loaded = repo.get_by_id("t1")
+    
     assert loaded is not None
-    assert loaded.thesis_id == "T-1"
-    assert loaded.author == "author1"
-    
-    # 3. Update thesis
-    loaded.degrade()
-    repo.save(loaded)
-    
-    updated = repo.get_by_id("T-1")
-    assert updated.state == ThesisState.DEGRADED
-    
-    # 5, 6, 7. Persist versions, reviews, graph
-    updated.versions.append(ThesisVersion("v1", None, datetime.now(timezone.utc), "hash1"))
-    updated.reviews.append(ThesisReview("r1", "rev1", datetime.now(timezone.utc), "APPROVE", "notes"))
-    updated.invalidation_rules.append(ThesisInvalidationRule("rule1", "metric1", 10.0, ">", True))
-    
-    graph = ThesisDependencyGraph("g1")
-    graph.add_edge(ThesisDependencyEdge("T-2", 0.5, "dep"))
-    updated.dependency_graph = graph
-    
-    repo.save(updated)
-    
-    # 8. Load aggregate reconstruction
-    fully_loaded = repo.get_by_id("T-1")
-    assert len(fully_loaded.versions) == 1
-    assert len(fully_loaded.reviews) == 1
-    assert len(fully_loaded.invalidation_rules) == 1
-    assert fully_loaded.dependency_graph is not None
-    assert len(fully_loaded.dependency_graph.edges) == 1
-    
-    # 9. Repository existence checks
-    assert repo.exists("T-1") is True
-    assert repo.exists("T-999") is False
-    
-    # 4. Delete thesis
-    repo.delete("T-1")
-    assert repo.get_by_id("T-1") is None
-    assert repo.exists("T-1") is False
-
-def test_in_memory_repository_contract(in_memory_repo):
-    _run_repository_contract_tests(in_memory_repo)
-
-def test_postgres_repository_contract(postgres_repo):
-    _run_repository_contract_tests(postgres_repo)
-
-def test_postgres_multiple_save_update(postgres_repo):
-    thesis = ActiveThesis("T-2", "author2", datetime.now(timezone.utc))
-    postgres_repo.save(thesis)
-    
-    thesis.degrade()
-    postgres_repo.save(thesis)
-    
-    thesis.request_review()
-    postgres_repo.save(thesis)
-    
-    loaded = postgres_repo.get_by_id("T-2")
-    assert loaded.state == ThesisState.UNDER_REVIEW
+    assert loaded.identity.thesis_id == "t1"
+    assert loaded.aggregate_version == 1
+    assert loaded.state.value == "DRAFT"

@@ -1,123 +1,120 @@
-from typing import Optional
-from datetime import datetime, timezone
-
-from karsa.thesis.domain.model.thesis import ActiveThesis, ThesisReview
-from karsa.thesis.domain.repository.thesis_repository import ThesisRepository
-from karsa.thesis.application.port.memory_platform_port import MemoryPlatformPort, ArtifactPayload
+import json
+from dataclasses import asdict
+from karsa.shared.infrastructure.uow import UnitOfWork
+from karsa.shared.infrastructure.outbox import OutboxRecord
+from karsa.thesis.application.commands import (
+    ProposeThesisCommand, AddContributorCommand, UpdateConfidenceCommand,
+    InvalidateThesisCommand, GovernanceDecisionPayload, RecordReviewCommand
+)
+from karsa.thesis.domain.model.thesis import Thesis
+from karsa.thesis.infrastructure.storage.thesis_repository import ThesisRepository
+from karsa.thesis.events.factory import ThesisEventFactory
 
 class ThesisApplicationService:
-    def __init__(self, repository: ThesisRepository, memory_port: MemoryPlatformPort):
-        self.repository = repository
-        self.memory_port = memory_port
+    def __init__(self, uow: UnitOfWork, repo: ThesisRepository):
+        self.uow = uow
+        self.repo = repo
 
-    def create_thesis(self, thesis_id: str, author: str) -> None:
-        thesis = ActiveThesis(thesis_id=thesis_id, author=author, created_at=datetime.now(timezone.utc))
-        self.repository.save(thesis)
-        
-        self.memory_port.publish_artifact(
-            ArtifactPayload(
-                thesis_id=thesis.thesis_id,
-                state=thesis.state.value,
-                author=thesis.author,
-                event_type="THESIS_CREATED",
-                details={}
+    def propose_thesis(self, cmd: ProposeThesisCommand) -> str:
+        with self.uow:
+            thesis = Thesis(
+                thesis_id=cmd.thesis_id,
+                originator=cmd.originator,
+                hypothesis=cmd.hypothesis,
+                confidence=cmd.confidence,
+                time_horizon=cmd.time_horizon,
+                research_lineage=cmd.research_lineage
             )
-        )
-
-    def degrade_thesis(self, thesis_id: str) -> None:
-        thesis = self.repository.get_by_id(thesis_id)
-        if not thesis:
-            raise ValueError(f"Thesis {thesis_id} not found")
+            thesis.propose()
+            self.repo.save(thesis)
             
-        thesis.degrade()
-        self.repository.save(thesis)
-        
-        self.memory_port.publish_artifact(
-            ArtifactPayload(
-                thesis_id=thesis.thesis_id,
-                state=thesis.state.value,
-                author=thesis.author,
-                event_type="THESIS_DEGRADED",
-                details={}
+            event = ThesisEventFactory.build_proposed(thesis)
+            outbox_record = OutboxRecord(
+                envelope_id=event.event_id,
+                payload=json.dumps(asdict(event)), 
+                published_status=False
             )
-        )
-
-    def request_review(self, thesis_id: str) -> None:
-        thesis = self.repository.get_by_id(thesis_id)
-        if not thesis:
-            raise ValueError(f"Thesis {thesis_id} not found")
+            self.uow.outbox_repository.save(outbox_record)
             
-        thesis.request_review()
-        self.repository.save(thesis)
-        
-        self.memory_port.publish_artifact(
-            ArtifactPayload(
-                thesis_id=thesis.thesis_id,
-                state=thesis.state.value,
-                author=thesis.author,
-                event_type="REVIEW_REQUESTED",
-                details={}
-            )
-        )
+        return cmd.thesis_id
 
-    def confirm_thesis(self, thesis_id: str, review_id: str, reviewer: str, outcome: str, notes: str) -> None:
-        thesis = self.repository.get_by_id(thesis_id)
-        if not thesis:
-            raise ValueError(f"Thesis {thesis_id} not found")
+    def add_contributor(self, cmd: AddContributorCommand) -> None:
+        with self.uow:
+            thesis = self.repo.get_by_id(cmd.thesis_id)
+            if not thesis:
+                raise ValueError("Thesis not found")
             
-        review = ThesisReview(
-            review_id=review_id,
-            reviewer=reviewer,
-            reviewed_at=datetime.now(timezone.utc),
-            outcome=outcome,
-            notes=notes
-        )
-        
-        thesis.confirm(review)
-        self.repository.save(thesis)
-        
-        self.memory_port.publish_artifact(
-            ArtifactPayload(
-                thesis_id=thesis.thesis_id,
-                state=thesis.state.value,
-                author=thesis.author,
-                event_type="THESIS_CONFIRMED",
-                details={"review_id": review_id, "reviewer": reviewer, "outcome": outcome}
-            )
-        )
+            thesis.add_contributor(cmd.contributor)
+            self.repo.save(thesis)
 
-    def invalidate_thesis(self, thesis_id: str, reason: str) -> None:
-        thesis = self.repository.get_by_id(thesis_id)
-        if not thesis:
-            raise ValueError(f"Thesis {thesis_id} not found")
+    def update_confidence(self, cmd: UpdateConfidenceCommand) -> None:
+        with self.uow:
+            thesis = self.repo.get_by_id(cmd.thesis_id)
+            if not thesis:
+                raise ValueError("Thesis not found")
             
-        thesis.invalidate(reason)
-        self.repository.save(thesis)
-        
-        self.memory_port.publish_artifact(
-            ArtifactPayload(
-                thesis_id=thesis.thesis_id,
-                state=thesis.state.value,
-                author=thesis.author,
-                event_type="THESIS_INVALIDATED",
-                details={"reason": reason}
+            thesis.update_confidence(cmd.confidence)
+            self.repo.save(thesis)
+            
+            event = ThesisEventFactory.build_confidence_updated(thesis)
+            outbox_record = OutboxRecord(
+                envelope_id=event.event_id,
+                payload=json.dumps(asdict(event)),
+                published_status=False
             )
-        )
+            self.uow.outbox_repository.save(outbox_record)
 
-    def retire_thesis(self, thesis_id: str, reason: str) -> None:
-        thesis = self.repository.get_by_id(thesis_id)
-        if not thesis:
-            raise ValueError(f"Thesis {thesis_id} not found")
+    def invalidate_thesis(self, cmd: InvalidateThesisCommand) -> None:
+        with self.uow:
+            thesis = self.repo.get_by_id(cmd.thesis_id)
+            if not thesis:
+                raise ValueError("Thesis not found")
+                
+            thesis.invalidate()
+            self.repo.save(thesis)
             
-        thesis.retire(reason)
-        self.repository.save(thesis)
-        
-        self.memory_port.publish_artifact(
-            ArtifactPayload(
-                thesis_id=thesis.thesis_id,
-                state=thesis.state.value,
-                author=thesis.author,
-                event_type="THESIS_RETIRED",
-                details={"reason": reason}
+            event = ThesisEventFactory.build_invalidated(thesis)
+            outbox_record = OutboxRecord(
+                envelope_id=event.event_id,
+                payload=json.dumps(asdict(event)),
+                published_status=False
             )
-        )
+            self.uow.outbox_repository.save(outbox_record)
+
+    def apply_governance_decision(self, cmd: GovernanceDecisionPayload) -> None:
+        with self.uow:
+            thesis = self.repo.get_by_id(cmd.thesis_id)
+            if not thesis:
+                raise ValueError("Thesis not found")
+                
+            if cmd.governance_decision == "APPROVED":
+                thesis.activate()
+                event = ThesisEventFactory.build_activated(thesis)
+            elif cmd.governance_decision == "REJECTED":
+                thesis.reject()
+                event = ThesisEventFactory.build_rejected(thesis)
+            else:
+                raise ValueError(f"Unknown decision: {cmd.governance_decision}")
+                
+            self.repo.save(thesis)
+            outbox_record = OutboxRecord(
+                envelope_id=event.event_id,
+                payload=json.dumps(asdict(event)),
+                published_status=False
+            )
+            self.uow.outbox_repository.save(outbox_record)
+
+    def record_review(self, cmd: RecordReviewCommand) -> None:
+        with self.uow:
+            thesis = self.repo.get_by_id(cmd.thesis_id)
+            if not thesis:
+                raise ValueError("Thesis not found")
+                
+            # ADR-12.6 Event-Only Review Workflow: Do not mutate thesis
+            event = ThesisEventFactory.build_reviewed(thesis.identity.thesis_id, cmd.review)
+            outbox_record = OutboxRecord(
+                envelope_id=event.event_id,
+                payload=json.dumps(asdict(event)),
+                published_status=False
+            )
+            self.uow.outbox_repository.save(outbox_record)

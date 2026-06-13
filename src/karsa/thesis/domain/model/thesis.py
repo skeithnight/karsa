@@ -1,166 +1,89 @@
-from enum import Enum
-from dataclasses import dataclass, field
-from datetime import datetime
 from typing import List, Optional
+from karsa.shared.domain.aggregate import VersionedAggregate
+from karsa.shared.domain.identity import OriginatorIdentity
+from karsa.thesis.domain.model.value_objects import (
+    ThesisIdentity, ThesisState, ThesisContributor, HypothesisStructure,
+    ConfidenceModel, TimeHorizon, ResearchReference
+)
+from karsa.thesis.domain.model.exceptions import (
+    InvalidThesisStateTransitionError, MissingOriginatorError,
+    DuplicateContributorError, InvalidConfidenceError
+)
 
-class ThesisState(Enum):
-    ACTIVE = "ACTIVE"
-    DEGRADED = "DEGRADED"
-    UNDER_REVIEW = "UNDER_REVIEW"
-    CONFIRMED = "CONFIRMED"
-    INVALIDATED = "INVALIDATED"
-    RETIRED = "RETIRED"
-
-class InvalidTransitionError(Exception):
-    pass
-
-class CircularDependencyError(Exception):
-    pass
-
-@dataclass
-class ThesisVersion:
-    version_id: str
-    derived_from: Optional[str]
-    created_at: datetime
-    content_hash: str
-
-@dataclass
-class ThesisReview:
-    review_id: str
-    reviewer: str
-    reviewed_at: datetime
-    outcome: str
-    notes: str
-
-@dataclass
-class ThesisInvalidationRule:
-    rule_id: str
-    metric_name: str
-    threshold: float
-    comparator: str  # e.g., ">", "<", "=="
-    is_breached: bool = False
-
-    def evaluate(self, value: float) -> bool:
-        if self.comparator == ">":
-            return value > self.threshold
-        elif self.comparator == "<":
-            return value < self.threshold
-        elif self.comparator == ">=":
-            return value >= self.threshold
-        elif self.comparator == "<=":
-            return value <= self.threshold
-        elif self.comparator == "==":
-            return value == self.threshold
-        elif self.comparator == "!=":
-            return value != self.threshold
-        else:
-            raise ValueError(f"Unknown comparator: {self.comparator}")
-
-@dataclass
-class ThesisDependencyEdge:
-    dependency_thesis_id: str
-    impact_weight: float
-    description: str
-
-@dataclass
-class ThesisDependencyGraph:
-    graph_id: str
-    edges: List[ThesisDependencyEdge] = field(default_factory=list)
-
-    def add_edge(self, edge: ThesisDependencyEdge) -> None:
-        self.edges.append(edge)
-
-    def check_cycles(self, get_dependencies_func) -> None:
-        """
-        get_dependencies_func: Callable[[str], List[str]]
-        Returns a list of dependency_thesis_ids for a given thesis_id.
-        """
-        visited = set()
-        stack = set()
+class Thesis(VersionedAggregate):
+    """The canonical hypothesis structure."""
+    
+    def __init__(self, 
+                 thesis_id: str,
+                 originator: OriginatorIdentity,
+                 hypothesis: HypothesisStructure,
+                 confidence: ConfidenceModel,
+                 time_horizon: TimeHorizon,
+                 research_lineage: List[ResearchReference],
+                 contributors: Optional[List[ThesisContributor]] = None,
+                 state: ThesisState = ThesisState.DRAFT,
+                 aggregate_version: int = 1):
+        super().__init__(aggregate_version=aggregate_version)
+        self.identity = ThesisIdentity(thesis_id)
+        if not originator:
+            raise MissingOriginatorError("Thesis must have an originator.")
+        self.originator = originator
+        self.hypothesis = hypothesis
         
-        def dfs(current_id):
-            if current_id in stack:
-                raise CircularDependencyError(f"Circular dependency detected involving thesis: {current_id}")
-            if current_id in visited:
-                return
+        self._validate_confidence(confidence)
+        self.confidence = confidence
+        
+        self.time_horizon = time_horizon
+        self.research_lineage = research_lineage or []
+        self.contributors = contributors or []
+        self.state = state
+        
+    def _validate_confidence(self, confidence: ConfidenceModel):
+        if not (0.0 <= confidence.raw_confidence <= 1.0):
+            raise InvalidConfidenceError("raw_confidence must be between 0.0 and 1.0")
+        if confidence.calibrated_confidence is not None:
+            if not (0.0 <= confidence.calibrated_confidence <= 1.0):
+                raise InvalidConfidenceError("calibrated_confidence must be between 0.0 and 1.0")
                 
-            visited.add(current_id)
-            stack.add(current_id)
-            
-            deps = get_dependencies_func(current_id)
-            for d in deps:
-                dfs(d)
-                
-            stack.remove(current_id)
-            
-        # Start DFS from all edges of this graph
-        for edge in self.edges:
-            dfs(edge.dependency_thesis_id)
-
-class ActiveThesis:
-    def __init__(self, thesis_id: str, author: str, created_at: datetime):
-        self.thesis_id = thesis_id
-        self.author = author
-        self.created_at = created_at
+    def propose(self):
+        if self.state != ThesisState.DRAFT:
+            raise InvalidThesisStateTransitionError(f"Cannot propose thesis from state {self.state}")
+        self.state = ThesisState.PROPOSED
+        self.increment_version()
+        
+    def activate(self):
+        if self.state != ThesisState.PROPOSED:
+            raise InvalidThesisStateTransitionError(f"Cannot activate thesis from state {self.state}")
         self.state = ThesisState.ACTIVE
-        self.versions: List[ThesisVersion] = []
-        self.reviews: List[ThesisReview] = []
-        self.invalidation_rules: List[ThesisInvalidationRule] = []
-        self.dependency_graph: Optional[ThesisDependencyGraph] = None
+        self.increment_version()
         
-    def degrade(self) -> None:
-        if self.state not in [ThesisState.ACTIVE, ThesisState.CONFIRMED]:
-            raise InvalidTransitionError(f"Cannot transition from {self.state} to DEGRADED")
-        self.state = ThesisState.DEGRADED
+    def reject(self):
+        if self.state != ThesisState.PROPOSED:
+            raise InvalidThesisStateTransitionError(f"Cannot reject thesis from state {self.state}")
+        self.state = ThesisState.REJECTED
+        self.increment_version()
         
-    def request_review(self) -> None:
-        if self.state not in [ThesisState.ACTIVE, ThesisState.DEGRADED, ThesisState.CONFIRMED]:
-            raise InvalidTransitionError(f"Cannot transition from {self.state} to UNDER_REVIEW")
-        self.state = ThesisState.UNDER_REVIEW
-
-    def confirm(self, review: ThesisReview) -> None:
-        if self.state != ThesisState.UNDER_REVIEW:
-            raise InvalidTransitionError(f"Cannot transition from {self.state} to CONFIRMED. Must be UNDER_REVIEW")
-        self.reviews.append(review)
-        self.state = ThesisState.CONFIRMED
+    def update_confidence(self, new_confidence: ConfidenceModel):
+        self._validate_confidence(new_confidence)
+        self.confidence = new_confidence
+        self.increment_version()
         
-    def invalidate(self, reason: str) -> None:
-        if self.state in [ThesisState.INVALIDATED, ThesisState.RETIRED]:
-            raise InvalidTransitionError(f"Cannot invalidate from terminal state {self.state}")
+    def invalidate(self):
+        if self.state != ThesisState.ACTIVE:
+            raise InvalidThesisStateTransitionError(f"Cannot invalidate thesis from state {self.state}")
         self.state = ThesisState.INVALIDATED
+        self.increment_version()
         
-    def retire(self, reason: str) -> None:
-        if self.state in [ThesisState.INVALIDATED, ThesisState.RETIRED]:
-            raise InvalidTransitionError(f"Cannot retire from terminal state {self.state}")
-        self.state = ThesisState.RETIRED
-
-    def evaluate_telemetry(self, telemetry: dict) -> None:
-        """Evaluate incoming telemetry. If any rule is breached, transition to DEGRADED."""
-        breached = False
-        for rule in self.invalidation_rules:
-            if rule.metric_name in telemetry:
-                if rule.evaluate(telemetry[rule.metric_name]):
-                    rule.is_breached = True
-                    breached = True
-                else:
-                    rule.is_breached = False
-                    
-        if breached and self.state in [ThesisState.ACTIVE, ThesisState.CONFIRMED]:
-            self.degrade()
-            
-    def evaluate_dependencies(self, get_thesis_state_func) -> None:
-        """
-        Evaluate dependencies. If any are DEGRADED or INVALIDATED, degrade this thesis.
-        get_thesis_state_func: Callable[[str], ThesisState]
-        """
-        if not self.dependency_graph:
-            return
-            
-        degraded_count = 0
-        for edge in self.dependency_graph.edges:
-            dep_state = get_thesis_state_func(edge.dependency_thesis_id)
-            if dep_state in [ThesisState.DEGRADED, ThesisState.INVALIDATED, ThesisState.RETIRED]:
-                degraded_count += 1
-                
-        if degraded_count > 0 and self.state in [ThesisState.ACTIVE, ThesisState.CONFIRMED]:
-            self.degrade()
+    def realize(self):
+        if self.state != ThesisState.ACTIVE:
+            raise InvalidThesisStateTransitionError(f"Cannot realize thesis from state {self.state}")
+        self.state = ThesisState.REALIZED
+        self.increment_version()
+        
+    def add_contributor(self, contributor: ThesisContributor):
+        if contributor.contribution_role == "AUTHOR":
+            raise ValueError("Role AUTHOR is reserved for the Originator.")
+        if any(c.contributor_id == contributor.contributor_id for c in self.contributors):
+            raise DuplicateContributorError("Contributor already exists.")
+        self.contributors.append(contributor)
+        self.increment_version()

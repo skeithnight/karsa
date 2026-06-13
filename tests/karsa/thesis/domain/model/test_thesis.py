@@ -1,52 +1,68 @@
 import pytest
-from datetime import datetime, timezone
-from karsa.thesis.domain.model.thesis import ActiveThesis, ThesisState, InvalidTransitionError, ThesisReview
+from karsa.shared.domain.identity import OriginatorIdentity
+from karsa.thesis.domain.model.thesis import Thesis
+from karsa.thesis.domain.model.value_objects import (
+    HypothesisStructure, ConfidenceModel, TimeHorizon, ResearchReference,
+    TimeClassification, ConfidenceSource, ThesisState, ThesisContributor, ContributionRole
+)
+from karsa.thesis.domain.model.exceptions import (
+    InvalidThesisStateTransitionError, InvalidConfidenceError, DuplicateContributorError
+)
 
-def test_thesis_initial_state():
-    thesis = ActiveThesis(thesis_id="T-1", author="quant_1", created_at=datetime.now(timezone.utc))
+def create_valid_thesis():
+    originator = OriginatorIdentity("o1", "HUMAN", "v1")
+    hypothesis = HypothesisStructure("H1", "Bull", "Bear", ["A1"], "Out", ["I1"], ["S1"])
+    confidence = ConfidenceModel(0.8, None, ConfidenceSource.MANUAL, "2024")
+    time_horizon = TimeHorizon("2024-01-01", "2024-12-31", TimeClassification.SHORT_TERM)
+    return Thesis("t1", originator, hypothesis, confidence, time_horizon, [])
+
+def test_thesis_cannot_return_to_draft():
+    thesis = create_valid_thesis()
+    thesis.propose()
+    assert thesis.state == ThesisState.PROPOSED
+    thesis.activate()
+    assert thesis.state == ThesisState.ACTIVE
+    
+    with pytest.raises(InvalidThesisStateTransitionError):
+        thesis.propose()
+        
+    thesis = create_valid_thesis()
+    thesis.propose()
+    thesis.activate()
     assert thesis.state == ThesisState.ACTIVE
 
-def test_valid_degrade_transition():
-    thesis = ActiveThesis("T-1", "quant_1", datetime.now(timezone.utc))
-    thesis.degrade()
-    assert thesis.state == ThesisState.DEGRADED
+def test_activate_requires_proposed():
+    thesis = create_valid_thesis()
+    with pytest.raises(InvalidThesisStateTransitionError):
+        thesis.activate()
 
-def test_valid_review_transition():
-    thesis = ActiveThesis("T-1", "quant_1", datetime.now(timezone.utc))
-    thesis.degrade()
-    thesis.request_review()
-    assert thesis.state == ThesisState.UNDER_REVIEW
+def test_reject_requires_proposed():
+    thesis = create_valid_thesis()
+    with pytest.raises(InvalidThesisStateTransitionError):
+        thesis.reject()
 
-def test_valid_confirm_transition():
-    thesis = ActiveThesis("T-1", "quant_1", datetime.now(timezone.utc))
-    thesis.request_review()
-    review = ThesisReview("R-1", "reviewer_1", datetime.now(timezone.utc), "APPROVE", "Looks good")
-    thesis.confirm(review)
-    assert thesis.state == ThesisState.CONFIRMED
-    assert len(thesis.reviews) == 1
+def test_version_increment_on_mutation():
+    thesis = create_valid_thesis()
+    initial_version = thesis.aggregate_version
+    thesis.propose()
+    assert thesis.aggregate_version == initial_version + 1
 
-def test_valid_invalidate_transition():
-    thesis = ActiveThesis("T-1", "quant_1", datetime.now(timezone.utc))
-    thesis.invalidate("Core assumptions broken")
-    assert thesis.state == ThesisState.INVALIDATED
+def test_confidence_bounds():
+    thesis = create_valid_thesis()
+    with pytest.raises(InvalidConfidenceError):
+        bad_conf = ConfidenceModel(1.5, None, ConfidenceSource.MANUAL, "2024")
+        thesis.update_confidence(bad_conf)
 
-def test_valid_retire_transition():
-    thesis = ActiveThesis("T-1", "quant_1", datetime.now(timezone.utc))
-    thesis.retire("Strategy reached end of life")
-    assert thesis.state == ThesisState.RETIRED
+def test_contributor_role_validation():
+    thesis = create_valid_thesis()
+    with pytest.raises(ValueError, match="Role AUTHOR is reserved"):
+        thesis.add_contributor(ThesisContributor("c1", "HUMAN", "AUTHOR"))
 
-def test_invalid_transition_confirm_from_active():
-    thesis = ActiveThesis("T-1", "quant_1", datetime.now(timezone.utc))
-    review = ThesisReview("R-1", "reviewer_1", datetime.now(timezone.utc), "APPROVE", "Looks good")
-    with pytest.raises(InvalidTransitionError):
-        thesis.confirm(review)
-
-def test_invalid_transition_from_invalidated():
-    thesis = ActiveThesis("T-1", "quant_1", datetime.now(timezone.utc))
-    thesis.invalidate("Broken")
-    with pytest.raises(InvalidTransitionError):
-        thesis.degrade()
-    with pytest.raises(InvalidTransitionError):
-        thesis.request_review()
-    with pytest.raises(InvalidTransitionError):
-        thesis.retire("Retiring after invalidated")
+def test_snapshot_immutability():
+    from karsa.thesis.domain.model.snapshot import ThesisSnapshotFactory
+    thesis = create_valid_thesis()
+    snapshot = ThesisSnapshotFactory.build(thesis)
+    # The snapshot is a frozen dataclass, setting an attribute should raise FrozenInstanceError
+    from dataclasses import FrozenInstanceError
+    with pytest.raises(FrozenInstanceError):
+        snapshot.thesis_id = "t2"
