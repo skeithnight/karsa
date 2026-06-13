@@ -98,89 +98,24 @@ Required evidence may include:
 - coverage report
 - integration test results
 
-Accepted format:
+---
 
-Claim
-Evidence
-Result
+# Rule 5: Documentation Closure Gate
 
-If evidence is unavailable:
+Sprint closure is blocked when:
 
-Status = UNVERIFIED
+* extra sprint artifacts remain
+* roadmap not updated
+* ADR references inconsistent
 
 ---
 
-# Rule 5: Documentation Must Be Updated
+# Rule 6: Architecture Iteration Rule
 
-Every completed task must update documentation.
+Architecture drafts may exist during design.
 
-Before declaring completion:
+After architecture freeze:
 
-1. Update sprint documentation.
-2. Update roadmap if sprint status changes.
-3. Verify documentation changes.
+drafts must be merged or archived.
 
-Required verification:
-
-git diff --name-only docs/
-
-Completion reports must show documentation updates.
-
-If documentation was not updated:
-
-Status = INCOMPLETE
-
----
-
-# Rule 6: Architecture Freeze Protection
-
-When architecture is marked frozen:
-
-Do not:
-
-- redesign architecture
-- create new orchestration layers
-- introduce new core subsystems
-- replace existing foundations
-
-unless explicitly approved through a documented architecture decision.
-
-Prefer implementation and capability delivery over architectural expansion.
-
----
-
-# Rule 7: Technical Debt Handling
-
-Technical debt must be recorded.
-
-Do not block sprint closure for:
-
-- low-risk cleanup
-- coverage improvements
-- cosmetic refactors
-
-unless they are production blockers.
-
-All deferred work must be tracked in:
-
-remediation.md
-
----
-
-# Rule 8: Sprint Closure Criteria
-
-A sprint may be closed only when:
-
-- code is implemented
-- tests pass
-- documentation is updated
-- audit is completed
-- remaining debt is recorded
-
-Closure status:
-
-COMPLETE
-COMPLETE_WITH_KNOWN_DEBT
-NOT_COMPLETE
-
-Use the most conservative status supported by evidence.
+Canonical architecture remains single-source.

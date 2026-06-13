@@ -11,6 +11,16 @@
 - Roadmap
 - Sprint lifecycle documents
 
+## Directory Enforcement
+Allowed root directories:
+- `architecture`
+- `adr`
+- `roadmap`
+- `implementation`
+- `archive`
+
+All others prohibited.
+
 ## Folder Ownership
 - `architecture/`: Canonical design definitions.
 - `adr/`: Architectural Decision Records.
@@ -18,11 +28,22 @@
 - `implementation/sprint-XX/`: The strict 4-file sprint lifecycle.
 - `archive/`: Deprecated artifacts.
 
+## ADR Number Governance
+- ADR numbers must be unique.
+- Duplicate ADR identifiers prohibited.
+
 ## Lifecycle Rules
 - Architecture documents describe systems.
 - Implementation documents describe work performed.
 - Never mix them.
-- Blueprints, reviews, inventories, summaries, status reports, migration reports, execution reports, compliance reports must be merged into canonical sprint files.
+
+## Sprint Artifact Consolidation
+Upon sprint closure:
+- all blueprint files
+- all challenge files
+- all review files
+- all execution packages
+must be merged into canonical sprint lifecycle files.
 
 ## Archival Rules
 - Historical documents must be moved to `archive/` instead of deleted.
