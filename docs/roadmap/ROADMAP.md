@@ -28,4 +28,4 @@
 - Sprint-17 Closed (Complete with Debt)
 - Sprint-18 Closed (Implementation Complete)
 - Sprint-19 Closed (Implementation Complete)
-- Sprint-20 In Progress (Architecture Design Only)
+- Sprint-20 Closed (Implementation Complete)
