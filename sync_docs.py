@@ -1,4 +1,7 @@
-# Sprint 6.1 Workspace Foundation Implementation Specification
+import os
+import textwrap
+
+plan_content = """# Sprint 6.1 Workspace Foundation Implementation Specification
 
 ## 1. Architecture Alignment
 The Workspace Foundation strictly adheres to Architecture V3. It elevates the physical working directory into a first-class domain entity possessing strict lineage, branchability, and snapshot support, natively guaranteeing the safety of concurrent execution.
@@ -80,3 +83,25 @@ Mandate a clean initialization state requiring users to clear legacy `.karsa/` s
 1. Workspaces instantiate with distinct physical paths without polluting root.
 2. Branching from Snapshot perfectly duplicates the frozen state.
 3. No implementation modifies the core FSM or Provider execution flow.
+"""
+
+with open("docs/implementation/sprint-06/plan.md", "w") as f:
+    f.write(textwrap.dedent(plan_content))
+
+# Update ADRs
+def update_adr_status(file_path, new_status):
+    if not os.path.exists(file_path): return
+    with open(file_path, "r") as f: content = f.read()
+    if "Status:" not in content and "status:" not in content:
+        content = f"**Status:** {new_status}\n\n" + content
+    else:
+        # Simple replacement if it exists
+        content = content.replace("status: active", f"status: {new_status}")
+        content = content.replace("Status: Approved", f"Status: {new_status}")
+    with open(file_path, "w") as f: f.write(content)
+
+update_adr_status("docs/adr/ADR-001-eventbus-design.md", "ACTIVE")
+update_adr_status("docs/adr/ADR-002-hybrid-persistence.md", "SUPERSEDED")
+update_adr_status("docs/adr/ADR-003-git-worktree-sandbox.md", "SUPERSEDED")
+update_adr_status("docs/adr/ADR-004-cost-governance.md", "ACTIVE")
+update_adr_status("docs/adr/ADR-005-execution-contracts.md", "ACTIVE")

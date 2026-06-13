@@ -10,5 +10,11 @@ Before proceeding to WP-4, a verification pass was conducted on WP-3. The follow
 4. **Namespace Isolation Strategy**: Implemented successfully via `os.path.join(base_path, namespace)`. However, cross-namespace hash collision handling is missing.
 5. **Hash Verification on Retrieval**: `SnapshotService.get_snapshot()` reconstructs the snapshot but DOES NOT verify that the retrieved JSON payload's newly-calculated hash matches the `payload_hash` stored in the `ImmutableSnapshot` metadata. This violates zero-trust principles.
 
+## WP-4 Verification Findings
+
+During the Sprint-08 Audit, the following gaps were discovered regarding the final API deliverables:
+
+6. **Lineage Queries Missing**: The acceptance criterion "System correctly resolves simple `DERIVED_FROM` lineage queries" was omitted from WP-4. The `GET /artifacts/{id}` endpoint was delivered, but lineage resolution or search by lineage was not exposed via the HTTP interface or underlying repository methods.
+
 ## Next Steps
 These items do not require architecture redesign but do require physical code implementation. They are added to the technical debt backlog to be completed before production release.

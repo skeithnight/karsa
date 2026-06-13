@@ -1,5 +1,5 @@
 ---
-status: active
+status: SUPERSEDED
 owner: Karsa Architecture Team
 created: 2026-06-11
 last_reviewed: 2026-06-11
