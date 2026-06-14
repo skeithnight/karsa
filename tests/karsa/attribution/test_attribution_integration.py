@@ -1,145 +1,90 @@
 import os
 import shutil
 import pytest
+from datetime import datetime
 from decimal import Decimal
-from karsa.attribution.domain.model.models import CurrencyAmount, CostCalculation
 from karsa.attribution.infrastructure.repositories import (
-    FileAttributionRecordRepository,
-    FileAttributionAdjustmentRepository
+    FileAttributionSessionRepository,
+    FilePerformanceAttributionRepository
 )
 from karsa.attribution.application.service import (
-    LedgerProjectionService,
-    LedgerProjectionRebuildService,
-    AttributionService
+    AttributionCalculationService,
+    AttributionRecomputationService,
+    AttributionInvalidationService,
+    AttributionReplayService
 )
 
-def test_attribution_integration_flow():
-    test_record_dir = ".karsa/test_integration/records/"
-    test_adj_dir = ".karsa/test_integration/adjustments/"
-    test_proj_path = ".karsa/test_integration/projection.json"
+def test_full_attribution_integration_flow():
+    session_dir = ".karsa/test_integration/sessions/"
+    record_dir = ".karsa/test_integration/records/"
 
     if os.path.exists(".karsa/test_integration/"):
         shutil.rmtree(".karsa/test_integration/")
 
-    record_repo = FileAttributionRecordRepository(storage_dir=test_record_dir)
-    adjustment_repo = FileAttributionAdjustmentRepository(storage_dir=test_adj_dir)
-    projection_service = LedgerProjectionService(projection_file_path=test_proj_path)
-
+    session_repo = FileAttributionSessionRepository(storage_dir=session_dir)
+    record_repo = FilePerformanceAttributionRepository(storage_dir=record_dir)
     events = []
-    service = AttributionService(
-        record_repo=record_repo,
-        adjustment_repo=adjustment_repo,
-        projection_service=projection_service,
-        events_list=events
-    )
 
-    cost1 = service.calculate_cost_from_pricing_snapshot(
-        input_tokens=1000,
-        output_tokens=3000,
-        input_rate_per_1m=Decimal("15.00"),
-        output_rate_per_1m=Decimal("60.00")
-    )
-    assert cost1.amount == Decimal("0.195")
+    calc_service = AttributionCalculationService(session_repo, record_repo, events)
+    recalc_service = AttributionRecomputationService(session_repo, record_repo, {}, events)
+    replay_service = AttributionReplayService(session_repo, record_repo)
 
-    record1 = service.create_attribution_record(
-        attribution_id="attr-int-1",
-        execution_id="exec-int-1",
-        trace_id="trace-int-1",
-        calculated_cost=cost1,
-        calculation_details=CostCalculation(1000, 3000, Decimal("15.00"), Decimal("60.00")),
-        research_run_id="run-int-A",
-        portfolio_id="port-int-A",
-        extended_dimensions={"tenant": "acme"}
-    )
+    # 1. Stage session
+    calc_service.stage_session("session-int-1", datetime(2026, 1, 1), datetime(2026, 1, 5))
 
-    assert projection_service.aggregate_balances("portfolio_id", "port-int-A").amount == Decimal("0.195")
-    assert projection_service.aggregate_balances("tenant", "acme").amount == Decimal("0.195")
+    inputs_v1 = {
+        "decision_id": "urn:decision:int-1",
+        "thesis_urn": "urn:thesis:int-1",
+        "worker_urn": "urn:worker:int-1",
+        "capability_urn": "urn:capability:int-1",
+        "regime_urn": "urn:regime:int-1",
+        "daily_returns": [{"portfolio_return": 0.01, "benchmark_return": 0.005}],
+        "daily_effects": {
+            "urn:asset:int-1": [{"selection": 0.005, "allocation": 0.002, "execution": 0.001, "beta": 0.002}]
+        }
+    }
 
-    adj_amount = CurrencyAmount(Decimal("0.05"), "USD")
-    service.create_adjustment_records(
-        adjustment_id="adj-int-1",
-        original_attribution_id="attr-int-1",
-        adjustment_amount=adj_amount,
-        adjustment_reason="pricing_drift"
-    )
+    # 2. Calculate and Seal
+    calc_service.calculate_attribution("session-int-1", inputs_v1)
+    calc_service.seal_session("session-int-1")
 
-    assert projection_service.aggregate_balances("portfolio_id", "port-int-A").amount == Decimal("0.245")
+    records_v1 = record_repo.find_by_session("session-int-1")
+    assert len(records_v1) == 1
+    assert records_v1[0].attribution_version == 1
+    assert records_v1[0].is_active is True
 
-    replay_res = service.replay_historical_attribution("attr-int-1")
-    assert replay_res["original_cost"]["amount"] == "0.195"
-    assert replay_res["final_cost"]["amount"] == "0.245"
-    assert len(replay_res["adjustments"]) == 1
+    # 3. Replay session
+    replay_res = replay_service.replay_session("session-int-1", inputs_v1)
+    assert replay_res["session_id"] == "session-int-1"
+    assert "urn:asset:int-1" in replay_res["replayed_outputs"]
 
-    projection_service.clear()
-    assert projection_service.aggregate_balances("portfolio_id", "port-int-A").amount == Decimal("0")
+    # 4. Recomputation (V2)
+    inputs_v2 = {
+        "decision_id": "urn:decision:int-1",
+        "thesis_urn": "urn:thesis:int-1",
+        "worker_urn": "urn:worker:int-1",
+        "capability_urn": "urn:capability:int-1",
+        "regime_urn": "urn:regime:int-1",
+        "daily_returns": [{"portfolio_return": 0.02, "benchmark_return": 0.005}],  # changed portfolio return
+        "daily_effects": {
+            "urn:asset:int-1": [{"selection": 0.01, "allocation": 0.002, "execution": 0.001, "beta": 0.002}]
+        }
+    }
 
-    rebuild_service = LedgerProjectionRebuildService(record_repo, adjustment_repo, projection_service)
-    rebuild_event = rebuild_service.rebuild_projection()
-    
-    assert rebuild_event.record_count == 1
-    assert rebuild_event.adjustment_count == 1
-    assert projection_service.aggregate_balances("portfolio_id", "port-int-A").amount == Decimal("0.245")
+    recalc_service.recompute_horizon("session-int-1", inputs_v2, "recomputation-req-int-1")
+
+    # Verify old records are superseded/inactive
+    old_records = record_repo.find_by_session("session-int-1")
+    v1_rec = [r for r in old_records if r.attribution_version == 1][0]
+    v2_rec = [r for r in old_records if r.attribution_version == 2][0]
+    assert v1_rec.is_active is False
+    assert v2_rec.is_active is True
+
+    # Verify event logs
+    superseded_events = [e for e in events if e.event_type == "AttributionSupersededEvent"]
+    recomputed_events = [e for e in events if e.event_type == "AttributionRecomputedEvent"]
+    assert len(superseded_events) == 1
+    assert len(recomputed_events) == 1
 
     if os.path.exists(".karsa/test_integration/"):
         shutil.rmtree(".karsa/test_integration/")
-
-def test_replay_after_pricing_change():
-    test_record_dir = ".karsa/test_pricing_change/records/"
-    test_adj_dir = ".karsa/test_pricing_change/adjustments/"
-    test_proj_path = ".karsa/test_pricing_change/projection.json"
-
-    if os.path.exists(".karsa/test_pricing_change/"):
-        shutil.rmtree(".karsa/test_pricing_change/")
-
-    record_repo = FileAttributionRecordRepository(storage_dir=test_record_dir)
-    adjustment_repo = FileAttributionAdjustmentRepository(storage_dir=test_adj_dir)
-    projection_service = LedgerProjectionService(projection_file_path=test_proj_path)
-
-    events = []
-    service = AttributionService(
-        record_repo=record_repo,
-        adjustment_repo=adjustment_repo,
-        projection_service=projection_service,
-        events_list=events
-    )
-
-    # Initial pricing rate: input_rate=15.00, output_rate=60.00
-    cost = service.calculate_cost_from_pricing_snapshot(
-        input_tokens=1000,
-        output_tokens=3000,
-        input_rate_per_1m=Decimal("15.00"),
-        output_rate_per_1m=Decimal("60.00")
-    )
-    assert cost.amount == Decimal("0.195")
-
-    record = service.create_attribution_record(
-        attribution_id="attr-pricing-1",
-        execution_id="exec-pricing-1",
-        trace_id="trace-pricing-1",
-        calculated_cost=cost,
-        calculation_details=CostCalculation(1000, 3000, Decimal("15.00"), Decimal("60.00")),
-        research_run_id="run-pricing"
-    )
-
-    # Now, simulate a pricing change in the provider registry (e.g. rate changes to input_rate=30.00, output_rate=120.00)
-    # Replay must NOT query the active provider pricing, but load the stored pricing snapshot
-    replay_before = service.replay_historical_attribution("attr-pricing-1")
-    assert Decimal(replay_before["original_cost"]["amount"]) == Decimal("0.195")
-
-    # If we recalculate today with the new pricing, it would be different, but replay uses the original record.
-    new_cost = service.calculate_cost_from_pricing_snapshot(
-        input_tokens=1000,
-        output_tokens=3000,
-        input_rate_per_1m=Decimal("30.00"),
-        output_rate_per_1m=Decimal("120.00")
-    )
-    assert new_cost.amount == Decimal("0.390")  # Cost doubled under new rates
-
-    # Replay after the simulated pricing change still yields the original cost
-    replay_after = service.replay_historical_attribution("attr-pricing-1")
-    assert Decimal(replay_after["original_cost"]["amount"]) == Decimal("0.195")
-    assert replay_after["original_cost"]["amount"] == replay_before["original_cost"]["amount"]
-
-    if os.path.exists(".karsa/test_pricing_change/"):
-        shutil.rmtree(".karsa/test_pricing_change/")
-

@@ -1,71 +1,105 @@
 import os
 import shutil
 import pytest
+from datetime import datetime
 from decimal import Decimal
-from karsa.attribution.domain.model.models import CurrencyAmount, CostCalculation, AttributionRecord, AttributionAdjustment
+from karsa.attribution.domain.model.models import AttributionSession, PerformanceAttributionRecord
 from karsa.attribution.infrastructure.repositories import (
-    InMemoryAttributionRecordRepository,
-    InMemoryAttributionAdjustmentRepository,
-    FileAttributionRecordRepository,
-    FileAttributionAdjustmentRepository
+    InMemoryAttributionSessionRepository,
+    InMemoryPerformanceAttributionRepository,
+    FileAttributionSessionRepository,
+    FilePerformanceAttributionRepository
 )
+from karsa.shared.infrastructure.uow import ConcurrencyConflictError
 
-def test_in_memory_repositories():
-    rec_repo = InMemoryAttributionRecordRepository()
-    adj_repo = InMemoryAttributionAdjustmentRepository()
+def test_in_memory_session_repository():
+    repo = InMemoryAttributionSessionRepository()
+    
+    session = AttributionSession("s1", datetime(2026, 1, 1), datetime(2026, 1, 5))
+    repo.save(session)
+    
+    retrieved = repo.get_by_id("s1")
+    assert retrieved is not None
+    assert retrieved.compounding_strategy == "FRONGELLO"
+    
+    # Save update with correct version
+    retrieved.transition_to("COMPUTING")
+    repo.save(retrieved)
+    
+    # Save update with WRONG version -> ConcurrencyConflictError
+    session_stale = AttributionSession("s1", datetime(2026, 1, 1), datetime(2026, 1, 5), aggregate_version=1)
+    with pytest.raises(ConcurrencyConflictError):
+        repo.save(session_stale)
 
-    cost = CurrencyAmount(Decimal("0.05"), "USD")
-    details = CostCalculation(100, 100, Decimal("1.0"), Decimal("1.0"))
-    record = AttributionRecord("attr-1", "exec-1", "trace-1", cost, details, research_run_id="run-1")
-    rec_repo.save(record)
+def test_in_memory_record_repository():
+    repo = InMemoryPerformanceAttributionRepository()
+    
+    rec = PerformanceAttributionRecord(
+        record_id="r1",
+        session_id="s1",
+        decision_id="urn:decision:1",
+        thesis_urn="urn:thesis:1",
+        worker_urn="urn:worker:1",
+        capability_urn="urn:capability:1",
+        regime_urn="urn:regime:1",
+        asset_urn="urn:asset:1",
+        selection_return=Decimal("0.05"),
+        allocation_return=Decimal("0.01"),
+        execution_return=Decimal("0.01"),
+        beta_return=Decimal("0.01"),
+        attribution_version=1
+    )
+    repo.save(rec)
+    
+    # saving same version again -> ValueError
+    with pytest.raises(ValueError):
+        repo.save(rec)
 
-    adj = AttributionAdjustment("adj-1", "attr-1", CurrencyAmount(Decimal("0.01"), "USD"), "test")
-    adj_repo.save(adj)
+def test_file_session_repository():
+    dir_path = ".karsa/test_file_session_repo/"
+    if os.path.exists(dir_path):
+        shutil.rmtree(dir_path)
+        
+    repo = FileAttributionSessionRepository(storage_dir=dir_path)
+    session = AttributionSession("s1", datetime(2026, 1, 1), datetime(2026, 1, 5))
+    repo.save(session)
+    
+    retrieved = repo.get_by_id("s1")
+    assert retrieved is not None
+    assert retrieved.horizon_start == datetime(2026, 1, 1)
+    
+    shutil.rmtree(dir_path)
 
-    assert rec_repo.find_by_attribution_id("attr-1") == record
-    assert rec_repo.find_by_execution_id("exec-1") == record
-    assert len(adj_repo.find_by_original_id("attr-1")) == 1
-    assert adj_repo.find_by_original_id("attr-1")[0] == adj
-
-def test_file_repositories():
-    test_record_dir = ".karsa/test_attribution/records/"
-    test_adj_dir = ".karsa/test_attribution/adjustments/"
-
-    if os.path.exists(".karsa/test_attribution/"):
-        shutil.rmtree(".karsa/test_attribution/")
-
-    rec_repo = FileAttributionRecordRepository(storage_dir=test_record_dir)
-    adj_repo = FileAttributionAdjustmentRepository(storage_dir=test_adj_dir)
-
-    cost = CurrencyAmount(Decimal("0.12"), "USD")
-    details = CostCalculation(200, 200, Decimal("2.0"), Decimal("2.0"))
-    record = AttributionRecord("attr-file", "exec-file", "trace-file", cost, details, thesis_id="thesis-file")
-    rec_repo.save(record)
-
-    adj = AttributionAdjustment("adj-file", "attr-file", CurrencyAmount(Decimal("-0.02"), "USD"), "drift")
-    adj_repo.save(adj)
-
-    rebuilt_rec = rec_repo.find_by_attribution_id("attr-file")
-    assert rebuilt_rec is not None
-    assert rebuilt_rec.attribution_id == "attr-file"
-    assert rebuilt_rec.execution_id == "exec-file"
-    assert rebuilt_rec.thesis_id == "thesis-file"
-    assert rebuilt_rec.calculated_cost.amount == Decimal("0.12")
-    assert rebuilt_rec.calculation_details.input_tokens == 200
-
-    rebuilt_exec = rec_repo.find_by_execution_id("exec-file")
-    assert rebuilt_exec is not None
-    assert rebuilt_exec.attribution_id == "attr-file"
-
-    adjs = adj_repo.find_by_original_id("attr-file")
-    assert len(adjs) == 1
-    assert adjs[0].adjustment_id == "adj-file"
-    assert adjs[0].adjustment_amount.amount == Decimal("-0.02")
-
-    rec_repo.clear()
-    adj_repo.clear()
-    assert len(rec_repo.list_all()) == 0
-    assert len(adj_repo.list_all()) == 0
-
-    if os.path.exists(".karsa/test_attribution/"):
-        shutil.rmtree(".karsa/test_attribution/")
+def test_file_record_repository():
+    dir_path = ".karsa/test_file_record_repo/"
+    if os.path.exists(dir_path):
+        shutil.rmtree(dir_path)
+        
+    repo = FilePerformanceAttributionRepository(storage_dir=dir_path)
+    rec = PerformanceAttributionRecord(
+        record_id="r1",
+        session_id="s1",
+        decision_id="urn:decision:1",
+        thesis_urn="urn:thesis:1",
+        worker_urn="urn:worker:1",
+        capability_urn="urn:capability:1",
+        regime_urn="urn:regime:1",
+        asset_urn="urn:asset:1",
+        selection_return=Decimal("0.05"),
+        allocation_return=Decimal("0.01"),
+        execution_return=Decimal("0.01"),
+        beta_return=Decimal("0.01"),
+        attribution_version=1
+    )
+    repo.save(rec)
+    
+    retrieved = repo.find_by_id("r1", 1)
+    assert retrieved is not None
+    assert retrieved.selection_return == Decimal("0.05")
+    
+    # deactivate old versions
+    repo.deactivate_old_versions("urn:decision:1", 2)
+    retrieved_updated = repo.find_by_id("r1", 1)
+    assert retrieved_updated.is_active is False
+    
+    shutil.rmtree(dir_path)

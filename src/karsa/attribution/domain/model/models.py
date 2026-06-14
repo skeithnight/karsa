@@ -4,267 +4,210 @@ from datetime import datetime
 from typing import Optional, Dict
 from karsa.shared.domain.aggregate import VersionedAggregate
 
-@dataclass(frozen=True)
-class CurrencyAmount:
-    amount: Decimal
-    currency: str = "USD"
+class AttributionSession(VersionedAggregate):
+    VALID_STATES = {"STAGED", "COMPUTING", "CALIBRATED", "SEALED"}
 
-    def __post_init__(self):
-        if not isinstance(self.amount, Decimal):
-            try:
-                object.__setattr__(self, 'amount', Decimal(str(self.amount)))
-            except Exception as e:
-                raise ValueError(f"Amount must be a Decimal, got {type(self.amount)}: {e}")
-        if not self.currency or not isinstance(self.currency, str):
-            raise ValueError("Currency must be a non-empty string")
-
-    def add(self, other: 'CurrencyAmount') -> 'CurrencyAmount':
-        if self.currency != other.currency:
-            raise ValueError(f"Currency mismatch: {self.currency} vs {other.currency}")
-        return CurrencyAmount(self.amount + other.amount, self.currency)
-
-    def to_dict(self) -> dict:
-        return {"amount": str(self.amount), "currency": self.currency}
-
-    @classmethod
-    def from_dict(cls, data: dict) -> 'CurrencyAmount':
-        return cls(amount=Decimal(data["amount"]), currency=data.get("currency", "USD"))
-
-
-@dataclass(frozen=True)
-class CostCalculation:
-    input_tokens: int
-    output_tokens: int
-    input_rate_per_1m: Decimal
-    output_rate_per_1m: Decimal
-
-    def __post_init__(self):
-        if not isinstance(self.input_tokens, int) or self.input_tokens < 0:
-            raise ValueError("input_tokens must be a non-negative integer")
-        if not isinstance(self.output_tokens, int) or self.output_tokens < 0:
-            raise ValueError("output_tokens must be a non-negative integer")
-        if not isinstance(self.input_rate_per_1m, Decimal):
-            try:
-                object.__setattr__(self, 'input_rate_per_1m', Decimal(str(self.input_rate_per_1m)))
-            except Exception as e:
-                raise ValueError(f"input_rate_per_1m must be Decimal: {e}")
-        if not isinstance(self.output_rate_per_1m, Decimal):
-            try:
-                object.__setattr__(self, 'output_rate_per_1m', Decimal(str(self.output_rate_per_1m)))
-            except Exception as e:
-                raise ValueError(f"output_rate_per_1m must be Decimal: {e}")
-
-    def calculate_cost(self) -> CurrencyAmount:
-        input_cost = Decimal(self.input_tokens) * self.input_rate_per_1m / Decimal("1000000")
-        output_cost = Decimal(self.output_tokens) * self.output_rate_per_1m / Decimal("1000000")
-        return CurrencyAmount(input_cost + output_cost, "USD")
-
-    def to_dict(self) -> dict:
-        return {
-            "input_tokens": self.input_tokens,
-            "output_tokens": self.output_tokens,
-            "input_rate_per_1m": str(self.input_rate_per_1m),
-            "output_rate_per_1m": str(self.output_rate_per_1m)
-        }
-
-    @classmethod
-    def from_dict(cls, data: dict) -> 'CostCalculation':
-        return cls(
-            input_tokens=int(data["input_tokens"]),
-            output_tokens=int(data["output_tokens"]),
-            input_rate_per_1m=Decimal(data["input_rate_per_1m"]),
-            output_rate_per_1m=Decimal(data["output_rate_per_1m"])
-        )
-
-
-class AttributionRecord(VersionedAggregate):
     def __init__(
         self,
-        attribution_id: str,
-        execution_id: str,
-        trace_id: str,
-        calculated_cost: CurrencyAmount,
-        calculation_details: CostCalculation,
-        research_run_id: Optional[str] = None,
-        thesis_id: Optional[str] = None,
-        worker_id: Optional[str] = None,
-        portfolio_id: Optional[str] = None,
-        strategy_id: Optional[str] = None,
-        extended_dimensions: Optional[Dict[str, str]] = None,
-        created_at: Optional[datetime] = None,
+        session_id: str,
+        horizon_start: datetime,
+        horizon_end: datetime,
+        state: str = "STAGED",
+        compounding_strategy: str = "FRONGELLO",
+        raw_input_manifest_hash: str = "",
         aggregate_version: int = 1
     ):
         super().__init__(aggregate_version=aggregate_version)
-        self.attribution_id = attribution_id
-        self.execution_id = execution_id
-        self.trace_id = trace_id
-        self.calculated_cost = calculated_cost
-        self.calculation_details = calculation_details
-        self.research_run_id = research_run_id
-        self.thesis_id = thesis_id
-        self.worker_id = worker_id
-        self.portfolio_id = portfolio_id
-        self.strategy_id = strategy_id
-        self.extended_dimensions = extended_dimensions or {}
-        self.created_at = created_at or datetime.utcnow()
-        
+        self.session_id = session_id
+        self.horizon_start = horizon_start
+        self.horizon_end = horizon_end
+        self.state = state
+        self.compounding_strategy = compounding_strategy
+        self.raw_input_manifest_hash = raw_input_manifest_hash
         self.validate()
-        self._initialized = True
 
     def validate(self):
-        if not self.attribution_id:
-            raise ValueError("attribution_id is required")
-        if not self.execution_id:
-            raise ValueError("execution_id is required")
-        if not self.trace_id:
-            raise ValueError("trace_id is required")
-        if not isinstance(self.calculated_cost, CurrencyAmount):
-            raise ValueError("calculated_cost must be a CurrencyAmount")
-        if not isinstance(self.calculation_details, CostCalculation):
-            raise ValueError("calculation_details must be a CostCalculation")
-        
-        if self.extended_dimensions is not None:
-            if not isinstance(self.extended_dimensions, dict):
-                raise ValueError("extended_dimensions must be a dictionary")
-            if len(self.extended_dimensions) > 20:
-                raise ValueError("extended_dimensions cannot have more than 20 keys")
-            for k, v in self.extended_dimensions.items():
-                if not isinstance(k, str) or len(k) > 128:
-                    raise ValueError("extended_dimensions key must be a string under 128 characters")
-                if not isinstance(v, str) or len(v) > 128:
-                    raise ValueError("extended_dimensions value must be a string under 128 characters")
+        if not self.session_id:
+            raise ValueError("session_id is required")
+        if not self.horizon_start or not isinstance(self.horizon_start, datetime):
+            raise ValueError("horizon_start must be a datetime")
+        if not self.horizon_end or not isinstance(self.horizon_end, datetime):
+            raise ValueError("horizon_end must be a datetime")
+        if self.horizon_start > self.horizon_end:
+            raise ValueError("horizon_start cannot be after horizon_end")
+        if self.state not in self.VALID_STATES:
+            raise ValueError(f"Invalid state: {self.state}")
+        if self.compounding_strategy not in {"FRONGELLO", "CARINO", "MENCHERO"}:
+            raise ValueError(f"Invalid compounding strategy: {self.compounding_strategy}")
 
-    def __setattr__(self, name, value):
-        if getattr(self, "_initialized", False):
-            raise TypeError("Cannot modify immutable AttributionRecord aggregate")
-        super().__setattr__(name, value)
+    def transition_to(self, new_state: str):
+        if new_state not in self.VALID_STATES:
+            raise ValueError(f"Invalid target state: {new_state}")
 
-    def __delattr__(self, name):
-        if getattr(self, "_initialized", False):
-            raise TypeError("Cannot modify immutable AttributionRecord aggregate")
-        super().__delattr__(name)
+        # Check state transitions: STAGED -> COMPUTING -> CALIBRATED -> SEALED
+        current = self.state
+        if current == "STAGED" and new_state != "COMPUTING":
+            raise ValueError(f"Cannot transition from STAGED to {new_state}")
+        elif current == "COMPUTING" and new_state != "CALIBRATED" and new_state != "STAGED":
+            # Allow fallback to STAGED on calculation failures
+            raise ValueError(f"Cannot transition from COMPUTING to {new_state}")
+        elif current == "CALIBRATED" and new_state != "SEALED" and new_state != "STAGED":
+            raise ValueError(f"Cannot transition from CALIBRATED to {new_state}")
+        elif current == "SEALED":
+            raise ValueError("Cannot transition out of SEALED state")
+
+        self.state = new_state
+        self.increment_version()
 
     def to_dict(self) -> dict:
         return {
-            "attribution_id": self.attribution_id,
-            "execution_id": self.execution_id,
-            "trace_id": self.trace_id,
-            "calculated_cost": self.calculated_cost.to_dict(),
-            "calculation_details": self.calculation_details.to_dict(),
-            "research_run_id": self.research_run_id,
-            "thesis_id": self.thesis_id,
-            "worker_id": self.worker_id,
-            "portfolio_id": self.portfolio_id,
-            "strategy_id": self.strategy_id,
-            "extended_dimensions": self.extended_dimensions,
-            "created_at": self.created_at.isoformat(),
+            "session_id": self.session_id,
+            "horizon_start": self.horizon_start.isoformat(),
+            "horizon_end": self.horizon_end.isoformat(),
+            "state": self.state,
+            "compounding_strategy": self.compounding_strategy,
+            "raw_input_manifest_hash": self.raw_input_manifest_hash,
             "aggregate_version": self.aggregate_version
         }
 
     @classmethod
-    def from_dict(cls, data: dict) -> 'AttributionRecord':
-        created_at = datetime.fromisoformat(data["created_at"]) if isinstance(data["created_at"], str) else data["created_at"]
+    def from_dict(cls, data: dict) -> 'AttributionSession':
+        start = datetime.fromisoformat(data["horizon_start"]) if isinstance(data["horizon_start"], str) else data["horizon_start"]
+        end = datetime.fromisoformat(data["horizon_end"]) if isinstance(data["horizon_end"], str) else data["horizon_end"]
         return cls(
-            attribution_id=data["attribution_id"],
-            execution_id=data["execution_id"],
-            trace_id=data["trace_id"],
-            calculated_cost=CurrencyAmount.from_dict(data["calculated_cost"]),
-            calculation_details=CostCalculation.from_dict(data["calculation_details"]),
-            research_run_id=data.get("research_run_id"),
-            thesis_id=data.get("thesis_id"),
-            worker_id=data.get("worker_id"),
-            portfolio_id=data.get("portfolio_id"),
-            strategy_id=data.get("strategy_id"),
-            extended_dimensions=data.get("extended_dimensions"),
-            created_at=created_at,
+            session_id=data["session_id"],
+            horizon_start=start,
+            horizon_end=end,
+            state=data["state"],
+            compounding_strategy=data.get("compounding_strategy", "FRONGELLO"),
+            raw_input_manifest_hash=data.get("raw_input_manifest_hash", ""),
             aggregate_version=data.get("aggregate_version", 1)
         )
 
 
-class AttributionAdjustment(VersionedAggregate):
+class PerformanceAttributionRecord(VersionedAggregate):
     def __init__(
         self,
-        adjustment_id: str,
-        original_attribution_id: str,
-        adjustment_amount: CurrencyAmount,
-        adjustment_reason: str,
-        adjustment_timestamp: Optional[datetime] = None,
+        record_id: str,
+        session_id: str,
+        decision_id: str,
+        thesis_urn: str,
+        worker_urn: str,
+        capability_urn: str,
+        regime_urn: str,
+        asset_urn: str,
+        selection_return: Decimal,
+        allocation_return: Decimal,
+        execution_return: Decimal,
+        beta_return: Decimal,
+        liquidation_tracking_residual: Decimal = Decimal("0.0"),
+        attribution_version: int = 1,
+        is_active: bool = True,
+        calculated_at: Optional[datetime] = None,
         aggregate_version: int = 1
     ):
         super().__init__(aggregate_version=aggregate_version)
-        self.adjustment_id = adjustment_id
-        self.original_attribution_id = original_attribution_id
-        self.adjustment_amount = adjustment_amount
-        self.adjustment_reason = adjustment_reason
-        self.adjustment_timestamp = adjustment_timestamp or datetime.utcnow()
-        
+        self.record_id = record_id
+        self.session_id = session_id
+        self.decision_id = decision_id
+        self.thesis_urn = thesis_urn
+        self.worker_urn = worker_urn
+        self.capability_urn = capability_urn
+        self.regime_urn = regime_urn
+        self.asset_urn = asset_urn
+        self.selection_return = Decimal(str(selection_return))
+        self.allocation_return = Decimal(str(allocation_return))
+        self.execution_return = Decimal(str(execution_return))
+        self.beta_return = Decimal(str(beta_return))
+        self.liquidation_tracking_residual = Decimal(str(liquidation_tracking_residual))
+        self.attribution_version = attribution_version
+        self.is_active = is_active
+        self.calculated_at = calculated_at or datetime.utcnow()
         self.validate()
         self._initialized = True
 
     def validate(self):
-        if not self.adjustment_id:
-            raise ValueError("adjustment_id is required")
-        if not self.original_attribution_id:
-            raise ValueError("original_attribution_id is required")
-        if not self.adjustment_reason or not isinstance(self.adjustment_reason, str):
-            raise ValueError("adjustment_reason is required and must be a string")
-        if not isinstance(self.adjustment_amount, CurrencyAmount):
-            raise ValueError("adjustment_amount must be a CurrencyAmount")
+        if not self.record_id:
+            raise ValueError("record_id is required")
+        if not self.session_id:
+            raise ValueError("session_id is required")
+        if not self.decision_id:
+            raise ValueError("decision_id is required")
+        if not self.thesis_urn:
+            raise ValueError("thesis_urn is required")
+        if not self.worker_urn:
+            raise ValueError("worker_urn is required")
+        if not self.capability_urn:
+            raise ValueError("capability_urn is required")
+        if not self.regime_urn:
+            raise ValueError("regime_urn is required")
+        if not self.asset_urn:
+            raise ValueError("asset_urn is required")
+        if self.attribution_version < 1:
+            raise ValueError("attribution_version must be positive")
 
     def __setattr__(self, name, value):
+        # Allow updating ONLY is_active flag after initialization
         if getattr(self, "_initialized", False):
-            raise TypeError("Cannot modify immutable AttributionAdjustment aggregate")
+            if name == "is_active":
+                # Only allow toggling from True to False (superseding)
+                if not value and self.is_active:
+                    super().__setattr__(name, value)
+                    self.increment_version()
+                    return
+                else:
+                    raise TypeError("Cannot toggle is_active from False to True or re-apply same active status")
+            elif name == "aggregate_version":
+                super().__setattr__(name, value)
+                return
+            raise TypeError("Cannot modify immutable PerformanceAttributionRecord aggregate")
         super().__setattr__(name, value)
 
     def __delattr__(self, name):
         if getattr(self, "_initialized", False):
-            raise TypeError("Cannot modify immutable AttributionAdjustment aggregate")
+            raise TypeError("Cannot delete immutable PerformanceAttributionRecord properties")
         super().__delattr__(name)
 
     def to_dict(self) -> dict:
         return {
-            "adjustment_id": self.adjustment_id,
-            "original_attribution_id": self.original_attribution_id,
-            "adjustment_amount": self.adjustment_amount.to_dict(),
-            "adjustment_reason": self.adjustment_reason,
-            "adjustment_timestamp": self.adjustment_timestamp.isoformat(),
+            "record_id": self.record_id,
+            "session_id": self.session_id,
+            "decision_id": self.decision_id,
+            "thesis_urn": self.thesis_urn,
+            "worker_urn": self.worker_urn,
+            "capability_urn": self.capability_urn,
+            "regime_urn": self.regime_urn,
+            "asset_urn": self.asset_urn,
+            "selection_return": str(self.selection_return),
+            "allocation_return": str(self.allocation_return),
+            "execution_return": str(self.execution_return),
+            "beta_return": str(self.beta_return),
+            "liquidation_tracking_residual": str(self.liquidation_tracking_residual),
+            "attribution_version": self.attribution_version,
+            "is_active": self.is_active,
+            "calculated_at": self.calculated_at.isoformat(),
             "aggregate_version": self.aggregate_version
         }
 
     @classmethod
-    def from_dict(cls, data: dict) -> 'AttributionAdjustment':
-        timestamp = datetime.fromisoformat(data["adjustment_timestamp"]) if isinstance(data["adjustment_timestamp"], str) else data["adjustment_timestamp"]
+    def from_dict(cls, data: dict) -> 'PerformanceAttributionRecord':
+        calculated_at = datetime.fromisoformat(data["calculated_at"]) if isinstance(data["calculated_at"], str) else data["calculated_at"]
         return cls(
-            adjustment_id=data["adjustment_id"],
-            original_attribution_id=data["original_attribution_id"],
-            adjustment_amount=CurrencyAmount.from_dict(data["adjustment_amount"]),
-            adjustment_reason=data["adjustment_reason"],
-            adjustment_timestamp=timestamp,
+            record_id=data["record_id"],
+            session_id=data["session_id"],
+            decision_id=data["decision_id"],
+            thesis_urn=data["thesis_urn"],
+            worker_urn=data["worker_urn"],
+            capability_urn=data["capability_urn"],
+            regime_urn=data["regime_urn"],
+            asset_urn=data["asset_urn"],
+            selection_return=Decimal(data["selection_return"]),
+            allocation_return=Decimal(data["allocation_return"]),
+            execution_return=Decimal(data["execution_return"]),
+            beta_return=Decimal(data["beta_return"]),
+            liquidation_tracking_residual=Decimal(data.get("liquidation_tracking_residual", "0.0")),
+            attribution_version=data["attribution_version"],
+            is_active=data["is_active"],
+            calculated_at=calculated_at,
             aggregate_version=data.get("aggregate_version", 1)
-        )
-
-
-@dataclass
-class CostLedgerProjection:
-    dimension_key: str
-    dimension_value: str
-    balance: CurrencyAmount
-    updated_at: datetime
-
-    def to_dict(self) -> dict:
-        return {
-            "dimension_key": self.dimension_key,
-            "dimension_value": self.dimension_value,
-            "balance": self.balance.to_dict(),
-            "updated_at": self.updated_at.isoformat()
-        }
-
-    @classmethod
-    def from_dict(cls, data: dict) -> 'CostLedgerProjection':
-        updated_at = datetime.fromisoformat(data["updated_at"]) if isinstance(data["updated_at"], str) else data["updated_at"]
-        return cls(
-            dimension_key=data["dimension_key"],
-            dimension_value=data["dimension_value"],
-            balance=CurrencyAmount.from_dict(data["balance"]),
-            updated_at=updated_at
         )

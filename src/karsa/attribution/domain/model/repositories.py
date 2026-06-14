@@ -1,34 +1,54 @@
 from abc import ABC, abstractmethod
 from typing import Optional, List
-from karsa.attribution.domain.model.models import AttributionRecord, AttributionAdjustment
+from karsa.attribution.domain.model.models import AttributionSession, PerformanceAttributionRecord
 
-class AttributionRecordRepository(ABC):
+class AttributionSessionRepository(ABC):
     @abstractmethod
-    def save(self, record: AttributionRecord) -> None:
+    def save(self, session: AttributionSession) -> None:
         pass
 
     @abstractmethod
-    def find_by_attribution_id(self, attr_id: str) -> Optional[AttributionRecord]:
+    def get_by_id(self, session_id: str) -> Optional[AttributionSession]:
         pass
 
     @abstractmethod
-    def find_by_execution_id(self, exec_id: str) -> Optional[AttributionRecord]:
+    def list_all(self) -> List[AttributionSession]:
         pass
 
     @abstractmethod
-    def list_all(self) -> List[AttributionRecord]:
+    def clear(self) -> None:
         pass
 
 
-class AttributionAdjustmentRepository(ABC):
+class PerformanceAttributionRepository(ABC):
     @abstractmethod
-    def save(self, adjustment: AttributionAdjustment) -> None:
+    def save(self, record: PerformanceAttributionRecord) -> None:
         pass
 
     @abstractmethod
-    def find_by_original_id(self, original_id: str) -> List[AttributionAdjustment]:
+    def find_by_id(self, record_id: str, version: int) -> Optional[PerformanceAttributionRecord]:
         pass
 
     @abstractmethod
-    def list_all(self) -> List[AttributionAdjustment]:
+    def find_active_by_decision(self, decision_id: str) -> List[PerformanceAttributionRecord]:
+        pass
+
+    @abstractmethod
+    def find_by_session(self, session_id: str) -> List[PerformanceAttributionRecord]:
+        pass
+
+    @abstractmethod
+    def list_all(self) -> List[PerformanceAttributionRecord]:
+        pass
+
+    @abstractmethod
+    def deactivate_old_versions(self, decision_id: str, exclude_version: int) -> None:
+        pass
+
+    @abstractmethod
+    def deactivate_by_session(self, session_id: str) -> None:
+        pass
+
+    @abstractmethod
+    def clear(self) -> None:
         pass

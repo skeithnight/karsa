@@ -1,137 +1,163 @@
 import pytest
-from datetime import datetime
+from datetime import datetime, date, timezone
 from decimal import Decimal
-from karsa.attribution.domain.model.models import (
-    CurrencyAmount,
-    CostCalculation,
-    AttributionRecord,
-    AttributionAdjustment
+from karsa.attribution.domain.model.models import AttributionSession, PerformanceAttributionRecord
+from karsa.attribution.domain.model.value_objects import (
+    FrongelloCompounding,
+    CarinoCompounding,
+    MencheroCompounding,
+    CanonicalManifestSerializer,
+    BenchmarkSnapshot
 )
 
-def test_currency_amount():
-    c1 = CurrencyAmount(Decimal("10.50"), "USD")
-    c2 = CurrencyAmount(Decimal("5.25"), "USD")
-    c3 = c1.add(c2)
-    assert c3.amount == Decimal("15.75")
-    assert c3.currency == "USD"
-
-    with pytest.raises(ValueError):
-        c1.add(CurrencyAmount(Decimal("1"), "EUR"))
-
-def test_cost_calculation():
-    calc = CostCalculation(
-        input_tokens=1000,
-        output_tokens=2000,
-        input_rate_per_1m=Decimal("15.00"),
-        output_rate_per_1m=Decimal("60.00")
-    )
-    cost = calc.calculate_cost()
-    assert cost.amount == Decimal("0.135")
-    assert cost.currency == "USD"
-
-def test_attribution_record_immutability():
-    cost = CurrencyAmount(Decimal("0.135"), "USD")
-    details = CostCalculation(1000, 2000, Decimal("15.00"), Decimal("60.00"))
-    
-    record = AttributionRecord(
-        attribution_id="attr-123",
-        execution_id="exec-456",
-        trace_id="trace-789",
-        calculated_cost=cost,
-        calculation_details=details,
-        research_run_id="run-1",
-        thesis_id="thesis-1",
-        worker_id="worker-1",
-        portfolio_id="port-1",
-        strategy_id="strat-1",
-        extended_dimensions={"extra": "value"}
+def test_attribution_session_state_transitions():
+    session = AttributionSession(
+        session_id="session-1",
+        horizon_start=datetime(2026, 1, 1),
+        horizon_end=datetime(2026, 1, 10),
+        state="STAGED",
+        compounding_strategy="FRONGELLO"
     )
     
-    assert record.attribution_id == "attr-123"
-    assert record.execution_id == "exec-456"
-    assert record.research_run_id == "run-1"
-    assert record.extended_dimensions == {"extra": "value"}
+    # staged -> computing
+    session.transition_to("COMPUTING")
+    assert session.state == "COMPUTING"
+    assert session.aggregate_version == 2
+    
+    # computing -> calibrated
+    session.transition_to("CALIBRATED")
+    assert session.state == "CALIBRATED"
+    
+    # calibrated -> sealed
+    session.transition_to("SEALED")
+    assert session.state == "SEALED"
+    
+    # sealed is final state
+    with pytest.raises(ValueError):
+        session.transition_to("STAGED")
 
-    with pytest.raises(TypeError):
-        record.attribution_id = "new-id"
-    with pytest.raises(TypeError):
-        record.research_run_id = "new-run"
+def test_attribution_session_invalid_transitions():
+    session = AttributionSession(
+        session_id="session-2",
+        horizon_start=datetime(2026, 1, 1),
+        horizon_end=datetime(2026, 1, 10),
+        state="STAGED"
+    )
+    # cannot go staged -> sealed
+    with pytest.raises(ValueError):
+        session.transition_to("SEALED")
 
-def test_attribution_adjustment_immutability():
-    cost = CurrencyAmount(Decimal("0.05"), "USD")
-    adj = AttributionAdjustment(
-        adjustment_id="adj-1",
-        original_attribution_id="attr-123",
-        adjustment_amount=cost,
-        adjustment_reason="billing_correction"
+def test_performance_record_immutability():
+    rec = PerformanceAttributionRecord(
+        record_id="rec-1",
+        session_id="session-1",
+        decision_id="urn:decision:1",
+        thesis_urn="urn:thesis:1",
+        worker_urn="urn:worker:1",
+        capability_urn="urn:capability:1",
+        regime_urn="urn:regime:1",
+        asset_urn="urn:asset:1",
+        selection_return=Decimal("0.05"),
+        allocation_return=Decimal("0.02"),
+        execution_return=Decimal("0.01"),
+        beta_return=Decimal("0.03"),
+        attribution_version=1,
+        is_active=True
     )
     
-    assert adj.adjustment_id == "adj-1"
-    assert adj.original_attribution_id == "attr-123"
-    assert adj.adjustment_amount.amount == Decimal("0.05")
-
+    # We can set is_active from True to False (superseding)
+    rec.is_active = False
+    assert rec.is_active is False
+    assert rec.aggregate_version == 2
+    
+    # Cannot toggle it back to True
     with pytest.raises(TypeError):
-        adj.adjustment_id = "new-adj"
+        rec.is_active = True
+        
+    # Cannot modify other fields
     with pytest.raises(TypeError):
-        adj.adjustment_reason = "new-reason"
+        rec.selection_return = Decimal("0.10")
 
-def test_dimension_validation():
-    cost = CurrencyAmount(Decimal("0.1"), "USD")
-    details = CostCalculation(10, 10, Decimal("1"), Decimal("1"))
+def test_frongello_compounding_math():
+    strategy = FrongelloCompounding()
     
-    bad_ext = {f"k{i}": "v" for i in range(25)}
-    with pytest.raises(ValueError):
-        AttributionRecord(
-            attribution_id="attr-1",
-            execution_id="exec-1",
-            trace_id="trace-1",
-            calculated_cost=cost,
-            calculation_details=details,
-            extended_dimensions=bad_ext
-        )
+    daily_returns = [
+        {"portfolio_return": 0.02, "benchmark_return": 0.01},
+        {"portfolio_return": -0.01, "benchmark_return": 0.03}
+    ]
+    
+    effects = [
+        {"selection": Decimal("0.01"), "allocation": Decimal("0.005"), "execution": Decimal("0.0"), "beta": Decimal("0.005")},
+        {"selection": Decimal("-0.02"), "allocation": Decimal("-0.01"), "execution": Decimal("-0.005"), "beta": Decimal("-0.005")}
+    ]
+    
+    res = strategy.compound_returns(daily_returns, effects)
+    
+    # T=1: cum_p = 1.0, cum_b = 1.0 + 0.03 = 1.03. beta_1 = 1.03
+    # T=2: cum_p = 1.02, cum_b = 1.0. beta_2 = 1.02
+    # selection_1_compounded = 0.01 * 1.03 = 0.0103
+    # selection_2_compounded = -0.02 * 1.02 = -0.0204
+    # selection_total = -0.0101
+    assert abs(res["selection"] - Decimal("-0.0101")) < Decimal("1e-6")
+    assert abs(res["allocation"] - (Decimal("0.005") * Decimal("1.03") - Decimal("0.01") * Decimal("1.02"))) < Decimal("1e-6")
 
-    bad_key = {"a" * 130: "v"}
-    with pytest.raises(ValueError):
-        AttributionRecord(
-            attribution_id="attr-1",
-            execution_id="exec-1",
-            trace_id="trace-1",
-            calculated_cost=cost,
-            calculation_details=details,
-            extended_dimensions=bad_key
-        )
+def test_frongello_floor_protection():
+    strategy = FrongelloCompounding()
+    
+    daily_returns = [
+        {"portfolio_return": -1.0, "benchmark_return": -1.0}
+    ]
+    
+    effects = [
+        {"selection": Decimal("0.0"), "allocation": Decimal("0.0"), "execution": Decimal("0.0"), "beta": Decimal("0.0")}
+    ]
+    
+    res = strategy.compound_returns(daily_returns, effects)
+    # Floor caps portfolio/benchmark returns at -0.999999
+    # Residual of actual vs cap is: (-1.0 - -0.999999) - (-1.0 - -0.999999) = 0.0
+    assert res["residual"] == Decimal("0.0")
 
-    bad_val = {"k": "v" * 130}
-    with pytest.raises(ValueError):
-        AttributionRecord(
-            attribution_id="attr-1",
-            execution_id="exec-1",
-            trace_id="trace-1",
-            calculated_cost=cost,
-            calculation_details=details,
-            extended_dimensions=bad_val
-        )
+def test_menchero_compounding():
+    strategy = MencheroCompounding()
+    daily_returns = [
+        {"portfolio_return": 0.02, "benchmark_return": 0.01},
+        {"portfolio_return": 0.03, "benchmark_return": 0.02}
+    ]
+    effects = [
+        {"selection": Decimal("0.01")},
+        {"selection": Decimal("0.02")}
+    ]
+    res = strategy.compound_returns(daily_returns, effects)
+    # Excess sum = (0.02 - 0.01) + (0.03 - 0.02) = 0.02
+    # R_p = 1.02 * 1.03 - 1 = 0.0506
+    # R_b = 1.01 * 1.02 - 1 = 0.0302
+    # theta = (0.0506 - 0.0302) / 0.02 = 0.0204 / 0.02 = 1.02
+    # selection_total = (0.01 + 0.02) * 1.02 = 0.0306
+    assert abs(res["selection"] - Decimal("0.0306")) < Decimal("1e-6")
 
-def test_pricing_snapshot_persistence():
-    cost = CurrencyAmount(Decimal("0.135"), "USD")
-    details = CostCalculation(1000, 2000, Decimal("15.00"), Decimal("60.00"))
+def test_canonical_serializer():
+    data1 = {
+        "decision_id": "urn:decision:1",
+        "horizon_start": datetime(2026, 1, 1, 12, 0, 0, tzinfo=timezone.utc),
+        "asset_weight": Decimal("0.45"),
+        "null_val": None,
+        "assets_list": [
+            {"asset_urn": "urn:asset:B", "weight": 0.2},
+            {"asset_urn": "urn:asset:A", "weight": 0.3}
+        ]
+    }
     
-    record = AttributionRecord(
-        attribution_id="attr-123",
-        execution_id="exec-456",
-        trace_id="trace-789",
-        calculated_cost=cost,
-        calculation_details=details,
-        research_run_id="run-1",
-        extended_dimensions={"extra": "value"}
-    )
+    data2 = {
+        "asset_weight": 0.45,
+        "assets_list": [
+            {"weight": 0.3, "asset_urn": "urn:asset:A"},
+            {"asset_urn": "urn:asset:B", "weight": 0.2}
+        ],
+        "decision_id": "urn:decision:1",
+        "horizon_start": datetime(2026, 1, 1, 12, 0, 0, tzinfo=timezone.utc),
+        "null_val": None
+    }
     
-    d = record.to_dict()
-    assert d["attribution_id"] == "attr-123"
-    assert d["calculation_details"]["input_rate_per_1m"] == "15.00"
-    
-    rebuilt = AttributionRecord.from_dict(d)
-    assert rebuilt.attribution_id == "attr-123"
-    assert rebuilt.calculation_details.input_tokens == 1000
-    assert rebuilt.calculation_details.input_rate_per_1m == Decimal("15.00")
-    assert rebuilt.calculated_cost.amount == Decimal("0.135")
+    hash1 = CanonicalManifestSerializer.generate_hash(data1)
+    hash2 = CanonicalManifestSerializer.generate_hash(data2)
+    assert hash1 == hash2

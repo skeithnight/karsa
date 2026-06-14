@@ -1,317 +1,353 @@
-import os
 import uuid
-import json
-from datetime import datetime
+from datetime import datetime, timezone
 from decimal import Decimal
-from typing import Optional, Dict, List, Any
-from karsa.attribution.domain.model.models import (
-    CurrencyAmount,
-    CostCalculation,
-    AttributionRecord,
-    AttributionAdjustment,
-    CostLedgerProjection
-)
-from karsa.attribution.domain.model.repositories import (
-    AttributionRecordRepository,
-    AttributionAdjustmentRepository
+from typing import List, Dict, Any, Optional
+
+from karsa.attribution.domain.model.models import AttributionSession, PerformanceAttributionRecord
+from karsa.attribution.domain.model.repositories import AttributionSessionRepository, PerformanceAttributionRepository
+from karsa.attribution.domain.model.value_objects import (
+    CanonicalManifestSerializer,
+    FrongelloCompounding,
+    CarinoCompounding,
+    MencheroCompounding,
+    CompoundingStrategy
 )
 from karsa.attribution.events.events import (
-    AttributionRecordedEvent,
-    AttributionAdjustmentCreatedEvent,
-    LedgerProjectionRebuiltEvent
+    AttributionCalculatedEvent,
+    AttributionSupersededEvent,
+    AttributionInvalidatedEvent,
+    AttributionRecomputedEvent
 )
 
-class LedgerProjectionService:
-    def __init__(self, projection_file_path: Optional[str] = ".karsa/attribution/projection.json"):
-        self.projection_file_path = projection_file_path
-        self._projection: Dict[str, Dict[str, CostLedgerProjection]] = {}
-        if self.projection_file_path:
-            self._load()
 
-    def _load(self):
-        if not self.projection_file_path or not os.path.exists(self.projection_file_path):
-            return
-        try:
-            with open(self.projection_file_path, "r") as f:
-                data = json.load(f)
-            self._projection = {}
-            for key, vals in data.items():
-                self._projection[key] = {}
-                for val, proj_data in vals.items():
-                    self._projection[key][val] = CostLedgerProjection.from_dict(proj_data)
-        except Exception:
-            self._projection = {}
-
-    def _save(self):
-        if self.projection_file_path:
-            os.makedirs(os.path.dirname(self.projection_file_path), exist_ok=True)
-            data = {}
-            for key, vals in self._projection.items():
-                data[key] = {}
-                for val, proj in vals.items():
-                    data[key][val] = proj.to_dict()
-            with open(self.projection_file_path, "w") as f:
-                json.dump(data, f, indent=2)
-
-    def build_projection(self, record: AttributionRecord) -> None:
-        self.update_dimensions(record.calculated_cost, record)
-
-    def update_dimensions(self, amount: CurrencyAmount, record: AttributionRecord) -> None:
-        dims = {
-            "research_run_id": record.research_run_id,
-            "thesis_id": record.thesis_id,
-            "worker_id": record.worker_id,
-            "portfolio_id": record.portfolio_id,
-            "strategy_id": record.strategy_id
-        }
-        for k, v in dims.items():
-            if v:
-                self._add_balance(k, v, amount)
-        if record.extended_dimensions:
-            for k, v in record.extended_dimensions.items():
-                if v:
-                    self._add_balance(k, v, amount)
-        self._save()
-
-    def _add_balance(self, key: str, value: str, amount: CurrencyAmount) -> None:
-        if key not in self._projection:
-            self._projection[key] = {}
-        if value not in self._projection[key]:
-            self._projection[key][value] = CostLedgerProjection(
-                dimension_key=key,
-                dimension_value=value,
-                balance=CurrencyAmount(Decimal("0"), amount.currency),
-                updated_at=datetime.utcnow()
-            )
-        current = self._projection[key][value]
-        new_balance = current.balance.add(amount)
-        self._projection[key][value] = CostLedgerProjection(
-            dimension_key=key,
-            dimension_value=value,
-            balance=new_balance,
-            updated_at=datetime.utcnow()
-        )
-
-    def aggregate_balances(self, dimension_key: str, dimension_value: str) -> CurrencyAmount:
-        self._load()
-        if dimension_key in self._projection and dimension_value in self._projection[dimension_key]:
-            return self._projection[dimension_key][dimension_value].balance
-        return CurrencyAmount(Decimal("0"), "USD")
-
-    def atomic_projection_swap(self, temp_projection: Dict[str, Dict[str, CostLedgerProjection]]) -> None:
-        self._projection = temp_projection
-        self._save()
-
-    def clear(self) -> None:
-        self._projection = {}
-        if self.projection_file_path and os.path.exists(self.projection_file_path):
-            try:
-                os.remove(self.projection_file_path)
-            except Exception:
-                pass
-
-
-class LedgerProjectionRebuildService:
-    def __init__(self, record_repo: AttributionRecordRepository, adjustment_repo: AttributionAdjustmentRepository, projection_service: LedgerProjectionService):
-        self.record_repo = record_repo
-        self.adjustment_repo = adjustment_repo
-        self.projection_service = projection_service
-
-    def rebuild_projection(self) -> LedgerProjectionRebuiltEvent:
-        records = self.record_repo.list_all()
-        adjustments = self.adjustment_repo.list_all()
-
-        temp_projection: Dict[str, Dict[str, CostLedgerProjection]] = {}
-
-        def add_temp_balance(key: str, value: str, amount: CurrencyAmount):
-            if key not in temp_projection:
-                temp_projection[key] = {}
-            if value not in temp_projection[key]:
-                temp_projection[key][value] = CostLedgerProjection(
-                    dimension_key=key,
-                    dimension_value=value,
-                    balance=CurrencyAmount(Decimal("0"), amount.currency),
-                    updated_at=datetime.utcnow()
-                )
-            current = temp_projection[key][value]
-            temp_projection[key][value] = CostLedgerProjection(
-                dimension_key=key,
-                dimension_value=value,
-                balance=current.balance.add(amount),
-                updated_at=datetime.utcnow()
-            )
-
-        for r in records:
-            adjs = self.adjustment_repo.find_by_original_id(r.attribution_id)
-            net_amount = r.calculated_cost
-            for adj in adjs:
-                net_amount = net_amount.add(adj.adjustment_amount)
-
-            dims = {
-                "research_run_id": r.research_run_id,
-                "thesis_id": r.thesis_id,
-                "worker_id": r.worker_id,
-                "portfolio_id": r.portfolio_id,
-                "strategy_id": r.strategy_id
-            }
-            for k, v in dims.items():
-                if v:
-                    add_temp_balance(k, v, net_amount)
-            if r.extended_dimensions:
-                for k, v in r.extended_dimensions.items():
-                    if v:
-                        add_temp_balance(k, v, net_amount)
-
-        self.projection_service.atomic_projection_swap(temp_projection)
-
-        return LedgerProjectionRebuiltEvent(
-            event_id=str(uuid.uuid4()),
-            timestamp=datetime.utcnow(),
-            record_count=len(records),
-            adjustment_count=len(adjustments)
-        )
-
-
-class AttributionService:
+class AttributionCalculationService:
     def __init__(
         self,
-        record_repo: AttributionRecordRepository,
-        adjustment_repo: AttributionAdjustmentRepository,
-        projection_service: LedgerProjectionService,
+        session_repo: AttributionSessionRepository,
+        record_repo: PerformanceAttributionRepository,
         events_list: Optional[List[Any]] = None
     ):
+        self.session_repo = session_repo
         self.record_repo = record_repo
-        self.adjustment_repo = adjustment_repo
-        self.projection_service = projection_service
         self.events_list = events_list if events_list is not None else []
 
-    def validate_idempotency(self, execution_id: str) -> bool:
-        record = self.record_repo.find_by_execution_id(execution_id)
-        return record is None
+    def _get_strategy(self, name: str) -> CompoundingStrategy:
+        if name == "FRONGELLO":
+            return FrongelloCompounding()
+        elif name == "CARINO":
+            return CarinoCompounding()
+        elif name == "MENCHERO":
+            return MencheroCompounding()
+        raise ValueError(f"Unknown strategy: {name}")
 
-    def calculate_cost_from_pricing_snapshot(
+    def stage_session(
         self,
-        input_tokens: int,
-        output_tokens: int,
-        input_rate_per_1m: Decimal,
-        output_rate_per_1m: Decimal
-    ) -> CurrencyAmount:
-        calc = CostCalculation(input_tokens, output_tokens, input_rate_per_1m, output_rate_per_1m)
-        return calc.calculate_cost()
-
-    def create_attribution_record(
-        self,
-        attribution_id: str,
-        execution_id: str,
-        trace_id: str,
-        calculated_cost: CurrencyAmount,
-        calculation_details: CostCalculation,
-        research_run_id: Optional[str] = None,
-        thesis_id: Optional[str] = None,
-        worker_id: Optional[str] = None,
-        portfolio_id: Optional[str] = None,
-        strategy_id: Optional[str] = None,
-        extended_dimensions: Optional[Dict[str, str]] = None
-    ) -> AttributionRecord:
-        if not self.validate_idempotency(execution_id):
-            raise ValueError(f"Duplicate execution_id: {execution_id} already exists")
-
-        record = AttributionRecord(
-            attribution_id=attribution_id,
-            execution_id=execution_id,
-            trace_id=trace_id,
-            calculated_cost=calculated_cost,
-            calculation_details=calculation_details,
-            research_run_id=research_run_id,
-            thesis_id=thesis_id,
-            worker_id=worker_id,
-            portfolio_id=portfolio_id,
-            strategy_id=strategy_id,
-            extended_dimensions=extended_dimensions
+        session_id: str,
+        horizon_start: datetime,
+        horizon_end: datetime,
+        compounding_strategy: str = "FRONGELLO"
+    ) -> AttributionSession:
+        session = AttributionSession(
+            session_id=session_id,
+            horizon_start=horizon_start,
+            horizon_end=horizon_end,
+            state="STAGED",
+            compounding_strategy=compounding_strategy
         )
+        self.session_repo.save(session)
+        return session
 
-        self.record_repo.save(record)
-        self.projection_service.build_projection(record)
+    def calculate_attribution(self, session_id: str, inputs: dict) -> List[PerformanceAttributionRecord]:
+        session = self.session_repo.get_by_id(session_id)
+        if not session:
+            raise ValueError(f"Session not found: {session_id}")
 
-        event = AttributionRecordedEvent(
-            event_id=str(uuid.uuid4()),
-            attribution_id=attribution_id,
-            execution_id=execution_id,
-            trace_id=trace_id,
-            calculated_cost=calculated_cost.to_dict(),
-            research_run_id=research_run_id or "",
-            thesis_id=thesis_id or "",
-            worker_id=worker_id or "",
-            portfolio_id=portfolio_id or "",
-            strategy_id=strategy_id or "",
-            extended_dimensions=record.extended_dimensions,
-            timestamp=datetime.utcnow()
-        )
-        self.events_list.append(event)
+        session.transition_to("COMPUTING")
+        self.session_repo.save(session)
 
-        return record
+        # Generate canonical hash of inputs and bind to session
+        input_hash = CanonicalManifestSerializer.generate_hash(inputs)
+        session.raw_input_manifest_hash = input_hash
 
-    def create_adjustment_records(
-        self,
-        adjustment_id: str,
-        original_attribution_id: str,
-        adjustment_amount: CurrencyAmount,
-        adjustment_reason: str
-    ) -> AttributionAdjustment:
-        record = self.record_repo.find_by_attribution_id(original_attribution_id)
-        if not record:
-            raise ValueError(f"Original attribution record not found: {original_attribution_id}")
-
-        adjustment = AttributionAdjustment(
-            adjustment_id=adjustment_id,
-            original_attribution_id=original_attribution_id,
-            adjustment_amount=adjustment_amount,
-            adjustment_reason=adjustment_reason
-        )
-
-        self.adjustment_repo.save(adjustment)
-        self.projection_service.update_dimensions(adjustment_amount, record)
-
-        event = AttributionAdjustmentCreatedEvent(
-            event_id=str(uuid.uuid4()),
-            adjustment_id=adjustment_id,
-            original_attribution_id=original_attribution_id,
-            adjustment_amount=adjustment_amount.to_dict(),
-            adjustment_reason=adjustment_reason,
-            timestamp=datetime.utcnow()
-        )
-        self.events_list.append(event)
-
-        return adjustment
-
-    def replay_historical_attribution(self, attribution_id: str) -> dict:
-        record = self.record_repo.find_by_attribution_id(attribution_id)
-        if not record:
-            raise ValueError(f"Attribution record not found: {attribution_id}")
-
-        adjustments = self.adjustment_repo.find_by_original_id(attribution_id)
+        # Extract returns and effects
+        daily_returns = inputs.get("daily_returns", [])
+        daily_effects = inputs.get("daily_effects", {}) # map of asset_urn -> list of daily effects
         
-        final_cost = record.calculated_cost
-        for adj in adjustments:
-            final_cost = final_cost.add(adj.adjustment_amount)
+        # Determine compounding strategy
+        strategy = self._get_strategy(session.compounding_strategy)
+        calculated_records = []
+
+        # Iterate assets and calculate multi-period returns
+        for asset_urn, effects_list in daily_effects.items():
+            smoothed = strategy.compound_returns(daily_returns, effects_list)
+            
+            # Extract references from inputs or defaults
+            decision_id = inputs.get("decision_id", f"urn:decision:{session_id}")
+            thesis_urn = inputs.get("thesis_urn", "urn:thesis:default")
+            worker_urn = inputs.get("worker_urn", "urn:worker:default")
+            capability_urn = inputs.get("capability_urn", "urn:capability:default")
+            regime_urn = inputs.get("regime_urn", "urn:regime:default")
+
+            record = PerformanceAttributionRecord(
+                record_id=str(uuid.uuid4()),
+                session_id=session_id,
+                decision_id=decision_id,
+                thesis_urn=thesis_urn,
+                worker_urn=worker_urn,
+                capability_urn=capability_urn,
+                regime_urn=regime_urn,
+                asset_urn=asset_urn,
+                selection_return=smoothed.get("selection", Decimal("0.0")),
+                allocation_return=smoothed.get("allocation", Decimal("0.0")),
+                execution_return=smoothed.get("execution", Decimal("0.0")),
+                beta_return=smoothed.get("beta", Decimal("0.0")),
+                liquidation_tracking_residual=smoothed.get("residual", Decimal("0.0")),
+                attribution_version=1,
+                is_active=True
+            )
+            self.record_repo.save(record)
+            calculated_records.append(record)
+
+        session.transition_to("CALIBRATED")
+        self.session_repo.save(session)
+        return calculated_records
+
+    def seal_session(self, session_id: str) -> AttributionCalculatedEvent:
+        session = self.session_repo.get_by_id(session_id)
+        if not session:
+            raise ValueError(f"Session not found: {session_id}")
+
+        session.transition_to("SEALED")
+        self.session_repo.save(session)
+
+        # Query all records
+        records = self.record_repo.find_by_session(session_id)
+        records_payload = [r.to_dict() for r in records]
+
+        event = AttributionCalculatedEvent(
+            event_id=str(uuid.uuid4()),
+            correlation_id=session_id,
+            causation_id=session_id,
+            session_id=session_id,
+            calculated_at=datetime.utcnow(),
+            records=records_payload
+        )
+        self.events_list.append(event)
+        return event
+
+
+class AttributionRecomputationService:
+    def __init__(
+        self,
+        session_repo: AttributionSessionRepository,
+        record_repo: PerformanceAttributionRepository,
+        idempotency_cache: Optional[Dict[str, bool]] = None,
+        events_list: Optional[List[Any]] = None
+    ):
+        self.session_repo = session_repo
+        self.record_repo = record_repo
+        self.idempotency_cache = idempotency_cache if idempotency_cache is not None else {}
+        self.events_list = events_list if events_list is not None else []
+
+    def _get_strategy(self, name: str) -> CompoundingStrategy:
+        if name == "FRONGELLO":
+            return FrongelloCompounding()
+        elif name == "CARINO":
+            return CarinoCompounding()
+        elif name == "MENCHERO":
+            return MencheroCompounding()
+        raise ValueError(f"Unknown strategy: {name}")
+
+    def recompute_horizon(
+        self,
+        session_id: str,
+        new_inputs: dict,
+        recalculation_request_id: str
+    ) -> List[PerformanceAttributionRecord]:
+        # Idempotency Check
+        if recalculation_request_id in self.idempotency_cache:
+            # Drop recalculation request
+            return []
+        self.idempotency_cache[recalculation_request_id] = True
+
+        session = self.session_repo.get_by_id(session_id)
+        if not session:
+            raise ValueError(f"Session not found: {session_id}")
+
+        new_hash = CanonicalManifestSerializer.generate_hash(new_inputs)
+        
+        # If input data is identical to current manifest, skip recomputation to protect resources
+        if session.raw_input_manifest_hash == new_hash:
+            return self.record_repo.find_by_session(session_id)
+
+        # Retrieve previous records to find max version
+        old_records = self.record_repo.find_by_session(session_id)
+        max_ver = max((r.attribution_version for r in old_records), default=1)
+        next_ver = max_ver + 1
+
+        if next_ver > 99:
+            raise ValueError("Recomputation depth ceiling of 99 exceeded. Halted to prevent data loops.")
+
+        # Update input hash
+        session.raw_input_manifest_hash = new_hash
+        # Transition back to STAGED to reset calculations
+        session.state = "STAGED"
+        session.transition_to("COMPUTING")
+        self.session_repo.save(session)
+
+        # Deactivate old versions in same transaction block
+        decision_id = new_inputs.get("decision_id", f"urn:decision:{session_id}")
+        self.record_repo.deactivate_old_versions(decision_id, next_ver)
+
+        daily_returns = new_inputs.get("daily_returns", [])
+        daily_effects = new_inputs.get("daily_effects", {})
+        strategy = self._get_strategy(session.compounding_strategy)
+        new_records = []
+
+        for asset_urn, effects_list in daily_effects.items():
+            smoothed = strategy.compound_returns(daily_returns, effects_list)
+            thesis_urn = new_inputs.get("thesis_urn", "urn:thesis:default")
+            worker_urn = new_inputs.get("worker_urn", "urn:worker:default")
+            capability_urn = new_inputs.get("capability_urn", "urn:capability:default")
+            regime_urn = new_inputs.get("regime_urn", "urn:regime:default")
+
+            record = PerformanceAttributionRecord(
+                record_id=str(uuid.uuid4()),
+                session_id=session_id,
+                decision_id=decision_id,
+                thesis_urn=thesis_urn,
+                worker_urn=worker_urn,
+                capability_urn=capability_urn,
+                regime_urn=regime_urn,
+                asset_urn=asset_urn,
+                selection_return=smoothed.get("selection", Decimal("0.0")),
+                allocation_return=smoothed.get("allocation", Decimal("0.0")),
+                execution_return=smoothed.get("execution", Decimal("0.0")),
+                beta_return=smoothed.get("beta", Decimal("0.0")),
+                liquidation_tracking_residual=smoothed.get("residual", Decimal("0.0")),
+                attribution_version=next_ver,
+                is_active=True
+            )
+            self.record_repo.save(record)
+            new_records.append(record)
+
+            # Emit superseded event for each record
+            for old_rec in old_records:
+                if old_rec.asset_urn == asset_urn and old_rec.is_active:
+                    # Mark as superseded
+                    old_rec.is_active = False
+                    
+                    event_sup = AttributionSupersededEvent(
+                        event_id=str(uuid.uuid4()),
+                        correlation_id=session_id,
+                        causation_id=recalculation_request_id,
+                        record_id=old_rec.record_id,
+                        old_version=old_rec.attribution_version,
+                        new_version=next_ver,
+                        superseded_at=datetime.utcnow()
+                    )
+                    self.events_list.append(event_sup)
+
+        session.transition_to("CALIBRATED")
+        self.session_repo.save(session)
+        session.transition_to("SEALED")
+        self.session_repo.save(session)
+
+        # Emit recomputed session-level event
+        event_re = AttributionRecomputedEvent(
+            event_id=str(uuid.uuid4()),
+            correlation_id=session_id,
+            causation_id=recalculation_request_id,
+            session_id=session_id,
+            recomputed_at=datetime.utcnow()
+        )
+        self.events_list.append(event_re)
+        return new_records
+
+
+class AttributionInvalidationService:
+    def __init__(
+        self,
+        session_repo: AttributionSessionRepository,
+        record_repo: PerformanceAttributionRepository,
+        events_list: Optional[List[Any]] = None
+    ):
+        self.session_repo = session_repo
+        self.record_repo = record_repo
+        self.events_list = events_list if events_list is not None else []
+
+    def invalidate_session(self, session_id: str) -> AttributionInvalidatedEvent:
+        session = self.session_repo.get_by_id(session_id)
+        if not session:
+            raise ValueError(f"Session not found: {session_id}")
+
+        # Deactivate all active records associated with this session
+        self.record_repo.deactivate_by_session(session_id)
+
+        event = AttributionInvalidatedEvent(
+            event_id=str(uuid.uuid4()),
+            correlation_id=session_id,
+            causation_id=session_id,
+            session_id=session_id,
+            invalidated_at=datetime.utcnow()
+        )
+        self.events_list.append(event)
+        return event
+
+
+class AttributionReplayService:
+    def __init__(
+        self,
+        session_repo: AttributionSessionRepository,
+        record_repo: PerformanceAttributionRepository
+    ):
+        self.session_repo = session_repo
+        self.record_repo = record_repo
+
+    def replay_session(self, session_id: str, historical_inputs: dict) -> dict:
+        session = self.session_repo.get_by_id(session_id)
+        if not session:
+            raise ValueError(f"Session not found: {session_id}")
+
+        # Check input manifest hash matches
+        inputs_hash = CanonicalManifestSerializer.generate_hash(historical_inputs)
+        if session.raw_input_manifest_hash != inputs_hash:
+            raise ValueError("Input data mismatch against raw_input_manifest_hash. Replay failed.")
+
+        # Re-run calculations dynamically
+        daily_returns = historical_inputs.get("daily_returns", [])
+        daily_effects = historical_inputs.get("daily_effects", {})
+        
+        # Compounding Math
+        if session.compounding_strategy == "FRONGELLO":
+            strategy = FrongelloCompounding()
+        elif session.compounding_strategy == "CARINO":
+            strategy = CarinoCompounding()
+        elif session.compounding_strategy == "MENCHERO":
+            strategy = MencheroCompounding()
+        else:
+            raise ValueError(f"Unknown strategy: {session.compounding_strategy}")
+
+        replayed_results = {}
+        for asset_urn, effects_list in daily_effects.items():
+            replayed_results[asset_urn] = strategy.compound_returns(daily_returns, effects_list)
+
+        # Cross-validate output matches saved records
+        records = self.record_repo.find_by_session(session_id)
+        for r in records:
+            if r.is_active:
+                rep_eff = replayed_results.get(r.asset_urn)
+                if not rep_eff:
+                    raise ValueError(f"Missing replayed results for asset {r.asset_urn}")
+                # Verify return match
+                if Decimal(str(rep_eff.get("selection", 0.0))) != r.selection_return:
+                    raise ValueError(f"Replay output mismatch on selection effect for asset {r.asset_urn}")
+                if Decimal(str(rep_eff.get("allocation", 0.0))) != r.allocation_return:
+                    raise ValueError(f"Replay output mismatch on allocation effect for asset {r.asset_urn}")
 
         return {
-            "attribution_id": record.attribution_id,
-            "execution_id": record.execution_id,
-            "trace_id": record.trace_id,
-            "original_cost": record.calculated_cost.to_dict(),
-            "calculation_details": record.calculation_details.to_dict(),
-            "adjustments": [adj.to_dict() for adj in adjustments],
-            "final_cost": final_cost.to_dict(),
-            "dimensions": {
-                "research_run_id": record.research_run_id,
-                "thesis_id": record.thesis_id,
-                "worker_id": record.worker_id,
-                "portfolio_id": record.portfolio_id,
-                "strategy_id": record.strategy_id,
-                "extended_dimensions": record.extended_dimensions
-            }
+            "session_id": session_id,
+            "compounding_strategy": session.compounding_strategy,
+            "raw_input_manifest_hash": session.raw_input_manifest_hash,
+            "replayed_outputs": {k: {key: str(val) for key, val in v.items()} for k, v in replayed_results.items()}
         }
-
-    def query_attribution_records(self, attribution_id: str) -> Optional[AttributionRecord]:
-        return self.record_repo.find_by_attribution_id(attribution_id)
