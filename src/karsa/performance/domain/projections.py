@@ -1,49 +1,56 @@
 from dataclasses import dataclass
 from decimal import Decimal
-from datetime import datetime, date
-from typing import Optional
-from .value_objects import DecisionPerformanceIdentity
+from datetime import datetime
+from typing import Dict, Any, Optional
 
 @dataclass
-class DecisionContext:
-    decision_id: str
-    worker_id: str
-    strategy_id: str
-    thesis_id: str
-    stated_confidence: Optional[Decimal]
-    decision_timestamp: datetime
-
-@dataclass
-class DecisionPerformanceRecord:
-    identity: DecisionPerformanceIdentity
-    worker_id: str
-    strategy_id: str
-    thesis_id: str
-    regime_id: Optional[str]
-    gross_pnl: Decimal
-    net_pnl: Decimal
-    stated_confidence: Optional[Decimal]
-    decision_timestamp: datetime
-    projection_schema_version: int = 1
-    calculation_version: int = 1
-
-@dataclass
-class DailyPnlBucket:
+class PerformanceEvaluation:
     target_type: str
     target_id: str
-    bucket_date: date
-    daily_gross_pnl: Decimal
-    daily_net_pnl: Decimal
+    hit_rate: Decimal
+    brier_score: Decimal
+    sharpe_ratio: Decimal
+    max_drawdown: Decimal
+    total_decisions: int
+    updated_at: datetime
+
 
 @dataclass
-class WorkerPerformanceProfile:
-    worker_id: str
-    cumulative_gross_pnl: Decimal
-    max_drawdown: Decimal
-    sharpe_proxy: Decimal
-    hit_rate: Decimal
-    brier_score: Optional[Decimal]
-    last_updated_at: datetime
-    calculation_version: int = 1
+class ThesisPerformanceProjection:
+    thesis_version_id: str
+    brier_score: Decimal
+    invalidation_triggered: bool
+    total_predictions: int
+    updated_at: datetime
 
-# Other profiles follow the exact same structure dynamically driven by target_type
+
+@dataclass
+class WorkerPerformanceProjection:
+    worker_id: str
+    hit_rate: Decimal
+    brier_score: Decimal
+    calibrated_confidence: Decimal
+    total_decisions: int
+    updated_at: datetime
+
+
+@dataclass
+class StrategyPerformanceProjection:
+    strategy_id: str
+    excess_return_bps: Decimal
+    max_drawdown: Decimal
+    sharpe_ratio: Decimal
+    updated_at: datetime
+
+
+@dataclass
+class ThesisExecutionBindingPerformanceProjection:
+    binding_id: str
+    thesis_version_id: str
+    portfolio_id: str
+    strategy_id: str
+    excess_return_bps: Decimal
+    max_drawdown: Decimal
+    allocation_limit: Decimal
+    status: str
+    updated_at: datetime

@@ -31,3 +31,5 @@
 - Sprint-20 Closed (Implementation Complete)
 - Sprint-21 Closed (Architecture Design Only)
 - Sprint-22 Closed (Implementation Complete)
+- Sprint-23 Closed (Architecture Design Only)
+- Sprint-24 Closed (Implementation Complete)

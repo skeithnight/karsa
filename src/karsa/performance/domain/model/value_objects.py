@@ -1,34 +1,51 @@
 from dataclasses import dataclass
-from typing import Optional
+from decimal import Decimal
+from datetime import datetime
+from typing import List, Optional
 
 @dataclass(frozen=True)
-class TargetIdentity:
-    target_id: str
-    target_type: str
+class EvaluationTarget:
+    target_type: str                    # e.g., "WORKER", "THESIS_VERSION", "BINDING"
+    target_id: str                      # Unique context reference
 
 @dataclass(frozen=True)
-class WindowIdentity:
-    period_type: str
-    period_value: str
+class EvaluationPeriod:
+    start_time: datetime
+    end_time: datetime
 
 @dataclass(frozen=True)
-class PredictionMetrics:
-    hit_rate: float
-    brier_score: float
-    evaluation_count: int
+class ThesisQualityMetric:
+    brier_score: Decimal
+    is_invalidated: bool
+    parameter_deviation: Decimal
 
 @dataclass(frozen=True)
-class InvestmentMetrics:
-    average_roi: float
-    capital_efficiency_score: float
+class ExecutionQualityMetric:
+    slippage_bps: Decimal
+    fill_latency_ms: int
+    token_count: int
 
 @dataclass(frozen=True)
-class EvaluationGrade:
-    prediction_score: float
-    investment_score: float
-    timing_score: float
+class AllocationQualityMetric:
+    sharpe_ratio: Decimal
+    drawdown_pct: Decimal
+    excess_return_bps: Decimal
 
 @dataclass(frozen=True)
-class ThesisScoreRecord:
-    thesis_id: str
-    evaluation_grade: EvaluationGrade
+class BenchmarkComparison:
+    benchmark_name: str                 # e.g., "SPY", "QQQ"
+    excess_return: Decimal
+    drawdown_pct: Decimal
+    index_snapshot_value: Decimal       # Frozen price at evaluation time
+
+@dataclass(frozen=True)
+class CalibrationBin:
+    bin_range_start: Decimal            # e.g., 0.80
+    bin_range_end: Decimal              # e.g., 0.90
+    prediction_count: int
+    success_count: int
+    calibrated_probability: Decimal     # success_count / prediction_count
+
+@dataclass(frozen=True)
+class ConfidenceCalibration:
+    bins: List[CalibrationBin]
