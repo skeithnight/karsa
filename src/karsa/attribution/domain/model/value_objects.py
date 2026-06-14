@@ -122,11 +122,11 @@ class CarinoCompounding(CompoundingStrategy):
         R_b = prod_b - Decimal("1.0")
 
         # Logarithmic smoothing factor for total period
+        if (Decimal("1.0") + R_p) <= 0 or (Decimal("1.0") + R_b) <= 0:
+            raise ValueError("Logarithm of non-positive return value in Carino compounding. Use Frongello.")
         if R_p == R_b:
             K = Decimal("1.0") / (Decimal("1.0") + R_p)
         else:
-            if (Decimal("1.0") + R_p) <= 0 or (Decimal("1.0") + R_b) <= 0:
-                raise ValueError("Logarithm of non-positive return value in Carino compounding. Use Frongello.")
             K = (Decimal(str(math.log(float(Decimal("1.0") + R_p)))) - Decimal(str(math.log(float(Decimal("1.0") + R_b))))) / (R_p - R_b)
 
         smoothed_effects = {
@@ -140,11 +140,11 @@ class CarinoCompounding(CompoundingStrategy):
         for t in range(T):
             rp = p_returns[t]
             rb = b_returns[t]
+            if (Decimal("1.0") + rp) <= 0 or (Decimal("1.0") + rb) <= 0:
+                raise ValueError("Logarithm of non-positive daily return in Carino compounding.")
             if rp == rb:
                 k_t = Decimal("1.0") / (Decimal("1.0") + rp)
             else:
-                if (Decimal("1.0") + rp) <= 0 or (Decimal("1.0") + rb) <= 0:
-                    raise ValueError("Logarithm of non-positive daily return in Carino compounding.")
                 k_t = (Decimal(str(math.log(float(Decimal("1.0") + rp)))) - Decimal(str(math.log(float(Decimal("1.0") + rb))))) / (rp - rb)
 
             w_t = k_t / K if K != 0 else Decimal("1.0")
@@ -263,6 +263,12 @@ class BenchmarkSnapshot:
     end_date: str
     daily_returns: Dict[str, str]  # string representation of Decimals
     manifest_hash: str
+
+    def __post_init__(self):
+        if not self.snapshot_urn:
+            raise ValueError("snapshot_urn is required")
+        if not self.benchmark_urn:
+            raise ValueError("benchmark_urn is required")
 
     def get_returns_dict(self) -> Dict[str, Decimal]:
         return {k: Decimal(v) for k, v in self.daily_returns.items()}

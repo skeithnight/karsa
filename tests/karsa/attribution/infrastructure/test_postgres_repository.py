@@ -65,10 +65,12 @@ def clean_db(postgres_pool):
                            NEW.beta_return = OLD.beta_return AND
                            NEW.liquidation_tracking_residual = OLD.liquidation_tracking_residual AND
                            NEW.attribution_version = OLD.attribution_version AND
-                           NEW.calculated_at = OLD.calculated_at THEN
+                           NEW.calculated_at = OLD.calculated_at AND
+                           (NEW.superseded_by_version IS NOT DISTINCT FROM OLD.superseded_by_version OR (OLD.superseded_by_version IS NULL AND NEW.superseded_by_version IS NOT NULL)) AND
+                           (NEW.invalidated_by_version IS NOT DISTINCT FROM OLD.invalidated_by_version OR (OLD.invalidated_by_version IS NULL AND NEW.invalidated_by_version IS NOT NULL)) THEN
                             RETURN NEW;
                         ELSE
-                            RAISE EXCEPTION 'Performance attribution records are immutable. Only is_active may be updated from TRUE to FALSE.';
+                            RAISE EXCEPTION 'Performance attribution records are immutable. Only deactivation and version lineage updates are allowed.';
                         END IF;
                     END IF;
                     RETURN NEW;
@@ -106,6 +108,8 @@ def clean_db(postgres_pool):
                     attribution_version INTEGER NOT NULL,
                     is_active BOOLEAN NOT NULL,
                     calculated_at TIMESTAMP NOT NULL,
+                    superseded_by_version INTEGER,
+                    invalidated_by_version INTEGER,
                     aggregate_version INTEGER NOT NULL,
                     PRIMARY KEY (record_id, calculated_at)
                 ) PARTITION BY RANGE (calculated_at);
@@ -213,3 +217,31 @@ def test_postgres_record_repository_and_triggers(clean_db):
         
         retrieved_after = repo.find_by_id(rid, 1)
         assert retrieved_after.is_active is False
+        assert retrieved_after.superseded_by_version == 2
+        
+        # Test queries
+        assert len(repo.find_active_by_decision("urn:decision:1")) == 0
+        assert len(repo.find_by_session(sid)) == 1
+        assert len(repo.list_all()) == 1
+        
+        # Test deactivation by session
+        repo.deactivate_by_session(sid)
+        retrieved_final = repo.find_by_id(rid, 1)
+        assert retrieved_final.is_active is False
+        
+        repo.clear()
+        assert len(repo.list_all()) == 0
+        
+        # Test clear and list for session repo
+        sess_repo = PostgresAttributionSessionRepository(conn)
+        s1 = AttributionSession(
+            session_id=sid,
+            horizon_start=datetime.now(timezone.utc),
+            horizon_end=datetime.now(timezone.utc) + timedelta(days=5),
+            state="STAGED",
+            compounding_strategy="FRONGELLO"
+        )
+        sess_repo.save(s1)
+        assert len(sess_repo.list_all()) == 1
+        sess_repo.clear()
+        assert len(sess_repo.list_all()) == 0

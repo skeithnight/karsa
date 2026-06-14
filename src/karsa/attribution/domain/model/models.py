@@ -104,6 +104,8 @@ class PerformanceAttributionRecord(VersionedAggregate):
         attribution_version: int = 1,
         is_active: bool = True,
         calculated_at: Optional[datetime] = None,
+        superseded_by_version: Optional[int] = None,
+        invalidated_by_version: Optional[int] = None,
         aggregate_version: int = 1
     ):
         super().__init__(aggregate_version=aggregate_version)
@@ -123,6 +125,8 @@ class PerformanceAttributionRecord(VersionedAggregate):
         self.attribution_version = attribution_version
         self.is_active = is_active
         self.calculated_at = calculated_at or datetime.utcnow()
+        self.superseded_by_version = superseded_by_version
+        self.invalidated_by_version = invalidated_by_version
         self.validate()
         self._initialized = True
 
@@ -147,7 +151,7 @@ class PerformanceAttributionRecord(VersionedAggregate):
             raise ValueError("attribution_version must be positive")
 
     def __setattr__(self, name, value):
-        # Allow updating ONLY is_active flag after initialization
+        # Allow updating ONLY is_active flag and version lineage pointers after initialization
         if getattr(self, "_initialized", False):
             if name == "is_active":
                 # Only allow toggling from True to False (superseding)
@@ -157,6 +161,10 @@ class PerformanceAttributionRecord(VersionedAggregate):
                     return
                 else:
                     raise TypeError("Cannot toggle is_active from False to True or re-apply same active status")
+            elif name in ("superseded_by_version", "invalidated_by_version"):
+                super().__setattr__(name, value)
+                self.increment_version()
+                return
             elif name == "aggregate_version":
                 super().__setattr__(name, value)
                 return
@@ -186,6 +194,8 @@ class PerformanceAttributionRecord(VersionedAggregate):
             "attribution_version": self.attribution_version,
             "is_active": self.is_active,
             "calculated_at": self.calculated_at.isoformat(),
+            "superseded_by_version": self.superseded_by_version,
+            "invalidated_by_version": self.invalidated_by_version,
             "aggregate_version": self.aggregate_version
         }
 
@@ -209,5 +219,7 @@ class PerformanceAttributionRecord(VersionedAggregate):
             attribution_version=data["attribution_version"],
             is_active=data["is_active"],
             calculated_at=calculated_at,
+            superseded_by_version=data.get("superseded_by_version"),
+            invalidated_by_version=data.get("invalidated_by_version"),
             aggregate_version=data.get("aggregate_version", 1)
         )

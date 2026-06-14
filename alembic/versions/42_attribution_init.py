@@ -18,7 +18,7 @@ def upgrade():
             IF TG_OP = 'DELETE' THEN
                 RAISE EXCEPTION 'Performance attribution records are immutable and cannot be deleted.';
             ELSIF TG_OP = 'UPDATE' THEN
-                -- Allow ONLY updates to is_active (from TRUE to FALSE) and increment of aggregate_version
+                -- Allow ONLY updates to is_active (from TRUE to FALSE) and version lineage pointers and increment of aggregate_version
                 IF NEW.is_active = FALSE AND OLD.is_active = TRUE AND
                    NEW.record_id = OLD.record_id AND
                    NEW.session_id = OLD.session_id AND
@@ -34,10 +34,12 @@ def upgrade():
                    NEW.beta_return = OLD.beta_return AND
                    NEW.liquidation_tracking_residual = OLD.liquidation_tracking_residual AND
                    NEW.attribution_version = OLD.attribution_version AND
-                   NEW.calculated_at = OLD.calculated_at THEN
+                   NEW.calculated_at = OLD.calculated_at AND
+                   (NEW.superseded_by_version IS NOT DISTINCT FROM OLD.superseded_by_version OR (OLD.superseded_by_version IS NULL AND NEW.superseded_by_version IS NOT NULL)) AND
+                   (NEW.invalidated_by_version IS NOT DISTINCT FROM OLD.invalidated_by_version OR (OLD.invalidated_by_version IS NULL AND NEW.invalidated_by_version IS NOT NULL)) THEN
                     RETURN NEW;
                 ELSE
-                    RAISE EXCEPTION 'Performance attribution records are immutable. Only is_active may be updated from TRUE to FALSE.';
+                    RAISE EXCEPTION 'Performance attribution records are immutable. Only deactivation and version lineage updates are allowed.';
                 END IF;
             END IF;
             RETURN NEW;
@@ -77,6 +79,8 @@ def upgrade():
             attribution_version INTEGER NOT NULL,
             is_active BOOLEAN NOT NULL,
             calculated_at TIMESTAMP NOT NULL,
+            superseded_by_version INTEGER,
+            invalidated_by_version INTEGER,
             aggregate_version INTEGER NOT NULL,
             PRIMARY KEY (record_id, calculated_at)
         ) PARTITION BY RANGE (calculated_at);

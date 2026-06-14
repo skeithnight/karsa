@@ -1,8 +1,8 @@
 # Consolidated Roadmap & Dashboard
 
 ## Current Architecture Baseline
-- Status: IMPLEMENTATION_COMPLETE (Sprint-41 Governance Engine Foundation Implemented)
-- Core Capabilities: Scalable bounded contexts, event-driven deterministic execution, capability-based security, write-once immutable decision ledgers, portfolio-level orchestration, dual-signature PEP validations, pre-outcome reasoning ledger, hindsight-prevention controls, authoritative decision authorization layer, ex-ante parametric risk engine, concentration and liquidity analysis, regime-aware volatility scaling, stress scenario testing, compliance policy lifecycles, Ed25519 double-signature Exception override verification.
+- Status: IMPLEMENTATION_COMPLETE (Sprint-42 Attribution Engine Foundation Implemented)
+- Core Capabilities: Scalable bounded contexts, event-driven deterministic execution, capability-based security, write-once immutable decision ledgers, portfolio-level orchestration, dual-signature PEP validations, pre-outcome reasoning ledger, hindsight-prevention controls, authoritative decision authorization layer, ex-ante parametric risk engine, concentration and liquidity analysis, regime-aware volatility scaling, stress scenario testing, compliance policy lifecycles, Ed25519 double-signature Exception override verification, cost attribution models, performance-outcome calibration curves, ex-post performance return decomposition (selection, allocation, execution, beta, and residual returns), and deterministic recomputation chains.
 
 ## Current ADR Count
 - Total Active Architecture Decision Records: 56
@@ -49,10 +49,10 @@
 - Sprint-39 Closed (IMPLEMENTATION_COMPLETE, AUDIT_COMPLETE, REMEDIATION_COMPLETE, FULLY_COMPLIANT)
 - Sprint-40 Closed (IMPLEMENTATION_COMPLETE, AUDIT_COMPLETE, REMEDIATION_COMPLETE, FULLY_COMPLIANT)
 - Sprint-41 Closed (IMPLEMENTATION_COMPLETE, AUDIT_COMPLETE, REMEDIATION_COMPLETE, FULLY_COMPLIANT)
+- Sprint-42 Closed (SPRINT_42_CLOSED, FULLY_COMPLIANT, CLOSED_SPRINT_PROTECTED)
 
 
 ## Proposed Future Roadmap
-- **Sprint-42**: Attribution Engine Foundation (Implement cost attribution models and performance-outcome calibration curves)
 - **Sprint-43**: Capital Allocation Engine Foundation (Implement Mean-Variance solvers and dynamic risk-budgeting solver loops)
 - **Sprint-44**: Regime Engine Foundation (Implement market regime classification and volatility states)
 - **Sprint-45**: Thesis Engine Evolution (Refactor legacy repositories, clean up ActiveThesis debt, finalize Postgres schemas)

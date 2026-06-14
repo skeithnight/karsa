@@ -82,11 +82,13 @@ class InMemoryPerformanceAttributionRepository(PerformanceAttributionRepository)
         for r in self._records.values():
             if r.decision_id == decision_id and r.attribution_version != exclude_version and r.is_active:
                 r.is_active = False
+                r.superseded_by_version = exclude_version
 
     def deactivate_by_session(self, session_id: str) -> None:
         for r in self._records.values():
             if r.session_id == session_id and r.is_active:
                 r.is_active = False
+                r.invalidated_by_version = r.attribution_version + 1
 
     def clear(self) -> None:
         self._records.clear()
@@ -224,6 +226,7 @@ class FilePerformanceAttributionRepository(PerformanceAttributionRepository):
                     rec = PerformanceAttributionRecord.from_dict(data)
                     if rec.decision_id == decision_id and rec.attribution_version != exclude_version and rec.is_active:
                         rec.is_active = False
+                        rec.superseded_by_version = exclude_version
                         # Resave updated active flag
                         with open(path, "w") as f:
                             json.dump(rec.to_dict(), f, indent=2)
@@ -240,6 +243,7 @@ class FilePerformanceAttributionRepository(PerformanceAttributionRepository):
                     rec = PerformanceAttributionRecord.from_dict(data)
                     if rec.session_id == session_id and rec.is_active:
                         rec.is_active = False
+                        rec.invalidated_by_version = rec.attribution_version + 1
                         with open(path, "w") as f:
                             json.dump(rec.to_dict(), f, indent=2)
                 except Exception:
@@ -387,8 +391,8 @@ class PostgresPerformanceAttributionRepository(PerformanceAttributionRepository)
                 record_id, session_id, decision_id, thesis_urn, worker_urn, capability_urn,
                 regime_urn, asset_urn, selection_return, allocation_return, execution_return,
                 beta_return, liquidation_tracking_residual, attribution_version, is_active,
-                calculated_at, aggregate_version
-            ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                calculated_at, superseded_by_version, invalidated_by_version, aggregate_version
+            ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             """,
             (
                 record.record_id,
@@ -407,6 +411,8 @@ class PostgresPerformanceAttributionRepository(PerformanceAttributionRepository)
                 record.attribution_version,
                 record.is_active,
                 record.calculated_at,
+                record.superseded_by_version,
+                record.invalidated_by_version,
                 record.aggregate_version
             )
         )
@@ -418,7 +424,7 @@ class PostgresPerformanceAttributionRepository(PerformanceAttributionRepository)
             SELECT record_id, session_id, decision_id, thesis_urn, worker_urn, capability_urn,
                    regime_urn, asset_urn, selection_return, allocation_return, execution_return,
                    beta_return, liquidation_tracking_residual, attribution_version, is_active,
-                   calculated_at, aggregate_version
+                   calculated_at, superseded_by_version, invalidated_by_version, aggregate_version
             FROM performance_attribution_records
             WHERE record_id = %s AND attribution_version = %s
             """,
@@ -444,7 +450,9 @@ class PostgresPerformanceAttributionRepository(PerformanceAttributionRepository)
             attribution_version=row[13],
             is_active=row[14],
             calculated_at=row[15],
-            aggregate_version=row[16]
+            superseded_by_version=row[16],
+            invalidated_by_version=row[17],
+            aggregate_version=row[18]
         )
 
     def find_active_by_decision(self, decision_id: str) -> List[PerformanceAttributionRecord]:
@@ -454,7 +462,7 @@ class PostgresPerformanceAttributionRepository(PerformanceAttributionRepository)
             SELECT record_id, session_id, decision_id, thesis_urn, worker_urn, capability_urn,
                    regime_urn, asset_urn, selection_return, allocation_return, execution_return,
                    beta_return, liquidation_tracking_residual, attribution_version, is_active,
-                   calculated_at, aggregate_version
+                   calculated_at, superseded_by_version, invalidated_by_version, aggregate_version
             FROM performance_attribution_records
             WHERE decision_id = %s AND is_active = TRUE
             """,
@@ -480,7 +488,9 @@ class PostgresPerformanceAttributionRepository(PerformanceAttributionRepository)
                     attribution_version=row[13],
                     is_active=row[14],
                     calculated_at=row[15],
-                    aggregate_version=row[16]
+                    superseded_by_version=row[16],
+                    invalidated_by_version=row[17],
+                    aggregate_version=row[18]
                 )
             )
         return records
@@ -492,7 +502,7 @@ class PostgresPerformanceAttributionRepository(PerformanceAttributionRepository)
             SELECT record_id, session_id, decision_id, thesis_urn, worker_urn, capability_urn,
                    regime_urn, asset_urn, selection_return, allocation_return, execution_return,
                    beta_return, liquidation_tracking_residual, attribution_version, is_active,
-                   calculated_at, aggregate_version
+                   calculated_at, superseded_by_version, invalidated_by_version, aggregate_version
             FROM performance_attribution_records
             WHERE session_id = %s
             """,
@@ -518,7 +528,9 @@ class PostgresPerformanceAttributionRepository(PerformanceAttributionRepository)
                     attribution_version=row[13],
                     is_active=row[14],
                     calculated_at=row[15],
-                    aggregate_version=row[16]
+                    superseded_by_version=row[16],
+                    invalidated_by_version=row[17],
+                    aggregate_version=row[18]
                 )
             )
         return records
@@ -530,7 +542,7 @@ class PostgresPerformanceAttributionRepository(PerformanceAttributionRepository)
             SELECT record_id, session_id, decision_id, thesis_urn, worker_urn, capability_urn,
                    regime_urn, asset_urn, selection_return, allocation_return, execution_return,
                    beta_return, liquidation_tracking_residual, attribution_version, is_active,
-                   calculated_at, aggregate_version
+                   calculated_at, superseded_by_version, invalidated_by_version, aggregate_version
             FROM performance_attribution_records
             """
         )
@@ -554,7 +566,9 @@ class PostgresPerformanceAttributionRepository(PerformanceAttributionRepository)
                     attribution_version=row[13],
                     is_active=row[14],
                     calculated_at=row[15],
-                    aggregate_version=row[16]
+                    superseded_by_version=row[16],
+                    invalidated_by_version=row[17],
+                    aggregate_version=row[18]
                 )
             )
         return records
@@ -564,10 +578,10 @@ class PostgresPerformanceAttributionRepository(PerformanceAttributionRepository)
         cur.execute(
             """
             UPDATE performance_attribution_records
-            SET is_active = FALSE, aggregate_version = aggregate_version + 1
+            SET is_active = FALSE, superseded_by_version = %s, aggregate_version = aggregate_version + 1
             WHERE decision_id = %s AND attribution_version != %s AND is_active = TRUE
             """,
-            (decision_id, exclude_version)
+            (exclude_version, decision_id, exclude_version)
         )
 
     def deactivate_by_session(self, session_id: str) -> None:
@@ -575,7 +589,7 @@ class PostgresPerformanceAttributionRepository(PerformanceAttributionRepository)
         cur.execute(
             """
             UPDATE performance_attribution_records
-            SET is_active = FALSE, aggregate_version = aggregate_version + 1
+            SET is_active = FALSE, invalidated_by_version = attribution_version + 1, aggregate_version = aggregate_version + 1
             WHERE session_id = %s AND is_active = TRUE
             """,
             (session_id,)

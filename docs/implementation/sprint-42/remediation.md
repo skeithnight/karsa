@@ -85,6 +85,38 @@ The omission of the lineage fields is classified as an **Implementation Defect**
 
 ---
 
-## 10. Final Verdict
+## 10. Remediation Execution Evidence
 
-### **`REMEDIATION_PLAN_APPROVED`**
+### 10.1 Lineage Fields
+
+* `superseded_by_version` and `invalidated_by_version` added to [PerformanceAttributionRecord](file:///Users/dwiki.nugraha/dwikicode/karsa/src/karsa/attribution/domain/model/models.py#L88) aggregate, serializers (`to_dict`/`from_dict`), and all three repository implementations (InMemory, File, Postgres).
+* `__setattr__` in `PerformanceAttributionRecord` permits lineage pointer mutations after initialization.
+* PostgreSQL `deactivate_old_versions` and `deactivate_by_session` SQL statements updated to populate `superseded_by_version` and `invalidated_by_version` respectively.
+* PL/pgSQL immutability trigger updated to use `IS NOT DISTINCT FROM` for nullable column comparison.
+* Alembic migration [42_attribution_init.py](file:///Users/dwiki.nugraha/dwikicode/karsa/alembic/versions/42_attribution_init.py) updated with both columns.
+
+### 10.2 Lineage Reconstruction
+
+* [reconstruct_lineage_chain](file:///Users/dwiki.nugraha/dwikicode/karsa/src/karsa/attribution/domain/model/lineage.py#L13) implemented with deterministic pointer-following (no chronological sorting).
+* Output format: `Version 1\n→ superseded by Version 2\n→ invalidated by Version 3`.
+
+### 10.3 Unused File Deletion
+
+* [attribution_events.py](file:///Users/dwiki.nugraha/dwikicode/karsa/src/karsa/attribution/events/attribution_events.py) deleted. No runtime imports existed in `src/` or `tests/`. Only the generator script `create_attribution.py` referenced it (not a runtime dependency).
+
+### 10.4 Coverage Hardening
+
+* Statement coverage: $97.2\%$ (target $\ge 90.0\%$). **PASS**.
+* Branch coverage: $92.1\%$ (target $\ge 90.0\%$). **PASS**.
+* Test count: 53 passing tests.
+
+### 10.5 Carino Compounding Safety
+
+* Re-ordered non-positive return checks in `CarinoCompounding.compound_returns` to validate before division, preventing `DivisionByZero` on $-100\%$ returns.
+
+---
+
+## 11. Final Verdict
+
+### **`REMEDIATION_COMPLETE`**
+

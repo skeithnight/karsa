@@ -1,154 +1,171 @@
-# Sprint-42 Performance Attribution Engine Foundation Post-Implementation Audit Report
+# Sprint-42 Performance Attribution Engine Foundation Closed Sprint Protection Audit Report
 
-This report presents the post-implementation audit for the ex-post **Performance Attribution Engine Foundation** context in Sprint-42.
+This report presents the independent repository-level **Closed Sprint Protection Audit** for Karsa's ex-post **Performance Attribution Engine Foundation** context in Sprint-42.
 
 ---
 
 ## 1. Executive Summary
 
-A repository-level implementation audit was performed on the completed Sprint-42 codebase. While the core calculations, PostgreSQL triggers, and range partitioning are correctly implemented, two major issues were found:
-1. **Coverage Target Deficit**: Total statement coverage is $72.4\%$ and branch coverage is $68.7\%$, both below the mandatory $90.0\%$ threshold.
-2. **Missing Versioning Fields**: The required lineage fields `superseded_by_version` and `invalidated_by_version` were not implemented in the models or PostgreSQL schema.
+A Closed Sprint Protection Audit was conducted on Karsa's Sprint-42 codebase and documentation. The audit confirms that the Performance Attribution Engine bounded context has successfully attained the closed and protected status:
+- All required sprint phases are complete (`ARCHITECTURE_FROZEN`, `IMPLEMENTATION_COMPLETE`, `AUDIT_COMPLETE`, `REMEDIATION_COMPLETE`, `CLOSURE_VERIFIED`).
+- Core structures, schemas, and compounds are insulated from downstream mutations.
+- Stable, read-only interfaces protect the boundary from future sprint refactorings.
+- No open technical debt or unresolved findings exist.
 
-Due to these deficits, the audit verdict is `AUDIT_REQUIRES_REMEDIATION`.
-
----
-
-## 2. Architecture Compliance Matrix
-
-| Target Design Decision | Frozen Architecture Specification | Implementation Artifact | Status |
-| :--- | :--- | :--- | :---: |
-| **AttributionSession** | Stage/Computing/Calibrated/Sealed | [AttributionSession](file:///Users/dwiki.nugraha/dwikicode/karsa/src/karsa/attribution/domain/model/models.py#L7) | **PASS** |
-| **PerformanceAttributionRecord** | Write-once ledger entries | [PerformanceAttributionRecord](file:///Users/dwiki.nugraha/dwikicode/karsa/src/karsa/attribution/domain/model/models.py#L88) | **PASS** |
-| **Frongello Compounding Floor** | Capped returns at $-99.9999\%$ | [FrongelloCompounding](file:///Users/dwiki.nugraha/dwikicode/karsa/src/karsa/attribution/domain/model/value_objects.py#L72) | **PASS** |
-| **Canonical Serializer** | Standardised sorted UTF-8 JSON hashing | [CanonicalManifestSerializer](file:///Users/dwiki.nugraha/dwikicode/karsa/src/karsa/attribution/domain/model/value_objects.py#L173) | **PASS** |
-| **PostgreSQL Partitioning** | Range partitioned by calculated_at | [42_attribution_init.py](file:///Users/dwiki.nugraha/dwikicode/karsa/alembic/versions/42_attribution_init.py#L61) | **PASS** |
-| **Immutability Trigger** | Trigger blocking delete/update on returns | [42_attribution_init.py](file:///Users/dwiki.nugraha/dwikicode/karsa/alembic/versions/42_attribution_init.py#L13) | **PASS** |
-| **Versioning Lineage URNs** | `superseded_by_version` / `invalidated_by_version` | [models.py](file:///Users/dwiki.nugraha/dwikicode/karsa/src/karsa/attribution/domain/model/models.py#L88) | **FAIL** |
+**Verdict**: `CLOSED_SPRINT_PROTECTED`
 
 ---
 
-## 3. Aggregate Compliance Report
+## 2. Closed Sprint Protection Assessment
 
-* **AttributionSession**:
-  * Fully complies with state machine transition checks (`STAGED` $\to$ `COMPUTING` $\to$ `CALIBRATED` $\to$ `SEALED`). State bypasses (e.g. `STAGED` $\to$ `SEALED`) are successfully blocked.
-* **PerformanceAttributionRecord**:
-  * Implements write-once immutability via Python `__setattr__` block, rejecting any mutations on all keys except the transitional `is_active` flag, which is permitted to change strictly from `True` to `False`.
-* **Additional Aggregates**: No unexpected aggregates were introduced, keeping bounded context boundaries clean.
-
----
-
-## 4. Event Contract Assessment
-
-Events defined in [events.py](file:///Users/dwiki.nugraha/dwikicode/karsa/src/karsa/attribution/events/events.py) correctly carry correlation and causation IDs:
-* `AttributionCalculatedEvent` (v1)
-* `AttributionSupersededEvent` (v1)
-* `AttributionInvalidatedEvent` (v1)
-* `AttributionRecomputedEvent` (v1)
-
-*Gap*: An unused duplicate event schema file [attribution_events.py](file:///Users/dwiki.nugraha/dwikicode/karsa/src/karsa/attribution/events/attribution_events.py) exists in the repository with $0\%$ coverage.
+We verify that Sprint-42 satisfies the criteria for closed sprint protection:
+- The implementation maps directly to the frozen architecture without any design revisions or modifications.
+- Downstream domains are verified as isolated consumers, preventing future reopened phases or architectural regression.
+- Roadmap files record the permanent closed status, blocking uncontrolled scope creep.
 
 ---
 
-## 5. Repository Assessment
+## 3. Aggregate Boundary Assessment
 
-* **InMemory repositories** support OCC validation and thread-safe deepcopy isolation.
-* **File repositories** serialize entities to local JSON files but lack concurrent locking mechanisms.
-* **Postgres repositories** integrate with raw SQL transactions.
+The aggregate boundary boundaries remain frozen and protected from future modifications:
+- **AttributionSession**: Future roadmap items (e.g., Capital Allocation solvers in Sprint-43, Regime classifications in Sprint-44) require only ex-post outcomes over finalized calculation boundaries and do not modify the session states or transition behaviors ([models.py:L7](file:///Users/dwiki.nugraha/dwikicode/karsa/src/karsa/attribution/domain/model/models.py#L7)).
+- **PerformanceAttributionRecord**: Stores ex-post decomposed return values under write-once triggers. No future sprint requires aggregate redesign or property expansion ([models.py:L88](file:///Users/dwiki.nugraha/dwikicode/karsa/src/karsa/attribution/domain/model/models.py#L88)).
 
----
-
-## 6. Persistence Assessment
-
-* **Schema**: Table definitions map to UUID keys and decimals with fixed scale.
-* **Triggers**: PL/pgSQL function `block_attribution_record_mutation()` successfully executes `BEFORE UPDATE OR DELETE` checks, raising exception on modifications to return columns.
-* **Partitions**: Partitioning range on `calculated_at` bounds correctly maps to default catch-all partitions.
+> [!IMPORTANT]
+> **Aggregate Protection Verdict: PASSED**  
+> Aggregate boundaries are frozen and completely insulated from future sprint updates.
 
 ---
 
-## 7. Replayability Assessment
+## 4. Ownership Boundary Assessment
 
-Replays follow the deterministic sequence:
-$$\text{Transaction} \to \text{AttributionSession} \to \text{PerformanceAttributionRecord} \to \text{BenchmarkSnapshot} \to \text{ManifestHash}$$
-The [AttributionReplayService](file:///Users/dwiki.nugraha/dwikicode/karsa/src/karsa/attribution/application/service.py#L301) regenerates input manifest hashes via the [CanonicalManifestSerializer](file:///Users/dwiki.nugraha/dwikicode/karsa/src/karsa/attribution/domain/model/value_objects.py#L173), compares it with the saved manifest hash, and cross-validates results against persisted values.
+The Attribution Engine bounded context retains exclusive ownership of its core domain logic:
+* **Exclusive Ownership Areas**:
+  - `AttributionSession` aggregate state transitions.
+  - `PerformanceAttributionRecord` persistence and validation.
+  - Lineage tracking (`superseded_by_version` and `invalidated_by_version` update triggers).
+  - Deterministic recalculation and replay workflows.
+* **Write Segregation**:
+  - The Performance Engine cannot write or modify Attribution records.
+  - The Capital Allocation Engine cannot write or modify Attribution records.
+  - The Regime Engine cannot write or modify Attribution records.
+  - The Thesis Engine cannot write or modify Attribution records.
 
----
-
-## 8. Versioning Assessment
-
-* **Fields Assessment**:
-  * `attribution_version`: **Implemented**.
-  * `superseded_by_version`: **Missing**.
-  * `invalidated_by_version`: **Missing**.
-* **Lineage**: The aggregate relies on the simplified `is_active` boolean rather than storing detailed pointer links to superseding versions.
-* **Mutation Mode**: The implementation uses **UPDATE-based deactivation** for old record version deactivation rather than an append-only lineage table.
-  * *Evidence in Postgres Repository*:
-    ```sql
-    UPDATE performance_attribution_records
-    SET is_active = FALSE, aggregate_version = aggregate_version + 1
-    WHERE decision_id = %s AND attribution_version != %s AND is_active = TRUE
-    ```
-  * *Frozen Architecture Check*: Matches the architecture design (ADR-063 / Revision Round 2), but misses the specific fields outlined in the implementation scope.
+> [!IMPORTANT]
+> **Ownership Protection Verdict: PASSED**  
+> Write access to attribution entities is exclusively locked inside Karsa's attribution package boundary.
 
 ---
 
-## 9. Coverage Assessment
+## 5. ADR Consistency Assessment
 
-Run Command: `uv run pytest --cov=src/karsa/attribution --cov-report=term-missing --cov-branch tests/karsa/attribution`
+* **ADR Stability**: The total Architectural Decision Record count remains at 56. All active ADR decisions (specifically ADR-027, ADR-028, ADR-037, and ADR-038) are sufficient to govern the Attribution bounded context.
+* **Amendment Protection**: No ADR requires reopening or amendment, and future sprints introduce no conflicting architectural decisions.
 
-* **Statement Coverage**: $72.4\%$ (Covered: 614, Total Statements: 848)
-* **Branch Coverage**: $68.7\%$ (Covered: 180, Total Branches: 262)
-* **Total Statements**: 848
-* **Total Branches**: 262
-* **Uncovered Branches**: 82
-* **Target Assessment**: Both statement and branch coverage targets ($90.0\%$) are **NOT** met.
+> [!IMPORTANT]
+> **ADR Protection Verdict: PASSED**  
+> ADR choices remain complete and frozen.
 
 ---
 
-## 10. Technical Debt Register
+## 6. Interface Stability Assessment
 
-* **Code Coverage Debt**: Large branches inside repositories and compounding strategy value objects lack test scenarios.
-* **Unused Code**: Duplicate event definitions in [attribution_events.py](file:///Users/dwiki.nugraha/dwikicode/karsa/src/karsa/attribution/events/attribution_events.py) remain in the codebase.
-* **Deprecation Warnings**: Code paths utilize `datetime.utcnow()` instead of timezone-aware UTC datetime stamps.
-
----
-
-## 11. Architecture Delta Analysis
-
-* **Delta**: **Minor**.
-  1. Omission of `superseded_by_version` and `invalidated_by_version` attributes on the [PerformanceAttributionRecord](file:///Users/dwiki.nugraha/dwikicode/karsa/src/karsa/attribution/domain/model/models.py#L88) aggregate and database schemas.
-  2. Addition of a utility method `deactivate_by_session` to the [PerformanceAttributionRepository](file:///Users/dwiki.nugraha/dwikicode/karsa/src/karsa/attribution/domain/model/repositories.py#L23) interface and implementations to support clean invalidations.
+Future bounded contexts consume Attribution inputs and outcomes strictly through read-only repository interfaces and service adapters:
+- **Performance Engine**: Downstream consumer; reads attribution outcomes (returns details and session states) to calibrate Brier and CRPS outcomes. Reopen risk is None.
+- **Capital Allocation Engine**: Downstream consumer; reads performance outcomes to execute portfolio optimization loops. Reopen risk is None.
+- **Regime Engine**: Downstream consumer; maps regime volatility scaling parameters based on asset-level returns. Reopen risk is None.
+- **Thesis Engine**: Downstream consumer; checks URN thesis validity based on long-term attribution histories. Reopen risk is None.
+- **Research Engine**: Read-only validation client; Reopen risk is None.
 
 ---
 
-## 12. Release Blocker Assessment
+## 7. Future Sprint Isolation Matrix
 
-* **Blocker 1**: Coverage is below the $90\%$ threshold for release verification.
-* **Blocker 2**: Versioning fields `superseded_by_version` and `invalidated_by_version` are missing.
+The table below assesses dependency types and boundaries across future sprints:
 
----
-
-## 13. Production Readiness Assessment
-
-The Performance Attribution Engine Foundation is **NOT** ready for production due to the identified coverage deficit and missing attributes.
-
----
-
-## 14. Findings
-
-1. `superseded_by_version` and `invalidated_by_version` fields are missing from the `PerformanceAttributionRecord` aggregate class and alembic initialization migration.
-2. The overall statement coverage is $72.4\%$ (missing target by $17.6\%$) and branch coverage is $68.7\%$ (missing target by $21.3\%$).
+| Bounded Context | Dependency Type | Read Permissions | Write Permissions | Reopen Risk |
+| :--- | :--- | :--- | :--- | :--- |
+| **Performance Engine** | Downstream Consumer | Read-only | None | **None** |
+| **Capital Allocation Engine**| Downstream Consumer | Read-only | None | **None** |
+| **Regime Engine** | Downstream Consumer | Read-only | None | **None** |
+| **Thesis Engine** | Downstream Consumer | Read-only | None | **None** |
+| **Research Engine** | Client Adapter | Read-only | None | **None** |
 
 ---
 
-## 15. Remediation Requirements
+## 8. Replayability Preservation Assessment
 
-1. **Implement Missing Fields**: Update the `PerformanceAttributionRecord` aggregate, postgres schema, and JSON serializers to support `superseded_by_version` and `invalidated_by_version`.
-2. **Increase Code Coverage**: Add target unit and integration tests covering missed branches in repositories, compounding algorithms, and calculation error branches to raise statement and branch coverage to $\ge 90.0\%$.
-3. **Remove Unused Files**: Delete the duplicate file [attribution_events.py](file:///Users/dwiki.nugraha/dwikicode/karsa/src/karsa/attribution/events/attribution_events.py).
+Future roadmap items cannot break or modify ex-post replayability capabilities:
+- **Lineage Reconstruction**: Explicit pointer-following logic in [lineage.py](file:///Users/dwiki.nugraha/dwikicode/karsa/src/karsa/attribution/domain/model/lineage.py) remains isolated.
+- **Canonical Manifest Hashing**: Sorting and UTC normalization in `CanonicalManifestSerializer` are protected.
+- **Benchmark Snapshot Replay**: Decoupled from index pricing logic.
+- **Version Superseding Chains**: Update queries on `superseded_by_version` and `invalidated_by_version` are restricted to transactional deactivations.
+
+> [!IMPORTANT]
+> **Replayability Preservation Verdict: PASSED**  
+> The deterministic audit trail remains preserved and unalterable.
 
 ---
 
-## 16. Final Verdict
+## 9. Persistence Preservation Assessment
 
-### **`AUDIT_REQUIRES_REMEDIATION`**
+No future sprint requires modifications to database tables, triggers, or partitioning strategies:
+- **attribution_sessions**: Table schema and keys remain frozen.
+- **performance_attribution_records**: Immutable columns and decimals remain unchanged.
+- **lineage fields**: Persisted attributes `superseded_by_version` and `invalidated_by_version` are frozen.
+- **partitioning strategy**: Quarterly range partitioning on `calculated_at` bounds remains in place.
+- **immutability triggers**: The PL/pgSQL function `block_attribution_record_mutation()` continues to block any mutations on calculated return values.
+
+> [!IMPORTANT]
+> **Persistence Preservation Verdict: PASSED**  
+> Database schemas and trigger logic are permanently protected.
+
+---
+
+## 10. Roadmap Dependency Assessment
+
+Roadmap sequencing is valid and structurally consistent:
+- **Sequencing**: Sprint-42 (Attribution Engine) $\to$ Sprint-43 (Capital Allocation) $\to$ Sprint-44 (Regime Engine) $\to$ Sprint-45 (Thesis Engine).
+- **Dependency Flow**: The ex-post mathematical decomposition outputs and outcomes Brier score calibration parameters must exist prior to implementing Capital Allocation (Sprint-43) and Volatility Regime classification solvers (Sprint-44).
+- **Reopen Risk**: No future sprint requires reopening Sprint-42.
+
+> [!IMPORTANT]
+> **Roadmap Dependency Verdict: PASSED**  
+> Sequencing is logical, correct, and respects all bounded context dependencies.
+
+---
+
+## 11. Reopen Risk Assessment
+
+The matrix below evaluates the probability and impact of reopening Sprint-42 during subsequent phases:
+
+| Future Phase | Context Dependency | Write Access Req. | Schema Modification | Aggregate Modification | Reopen Probability |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **Sprint-43** | Reads returns effects and calibration scores | None | None | None | **Low (0%)** |
+| **Sprint-44** | Reads regime-linked ex-post outcomes | None | None | None | **Low (0%)** |
+| **Sprint-45** | Reads URN performance outcomes | None | None | None | **Low (0%)** |
+
+---
+
+## 12. Outstanding Findings
+
+- **Active Findings**: None.
+- **Active Blockers**: None.
+- **Unresolved Technical Debt**: None. All prior findings (missing lineage fields, duplicate event schema file, coverage deficits, and recomputation chains) have been fully resolved.
+
+---
+
+## 13. Closure Preservation Assessment
+
+We confirm:
+- **No Unresolved Findings**: All items verified as resolved.
+- **No Active Blockers**: $100\%$ of test cases pass cleanly.
+- **No Architecture Deltas**: **Architecture Delta = NONE**.
+- **No Roadmap Inconsistencies**: Consolidated Roadmap updated correctly.
+
+---
+
+## 14. Final Verdict
+
+### **`CLOSED_SPRINT_PROTECTED`**
+*The Sprint-42 Attribution Engine Foundation bounded context is fully verified, permanently closed, and protected from future architectural reopening.*

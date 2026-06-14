@@ -40,6 +40,8 @@ The domain models are defined in [models.py](file:///Users/dwiki.nugraha/dwikico
 * `selection_return` / `allocation_return` / `execution_return` / `beta_return` / `liquidation_tracking_residual` (Decimal): Decomposed sub-period returns.
 * `attribution_version` (Integer): Incremented for successive recalculations.
 * `is_active` (Boolean): Active indicator (strictly transitions from `True` to `False` on invalidation).
+* `superseded_by_version` (Integer, nullable): Points to the version that superseded this record. Populated during deactivation via `deactivate_old_versions`.
+* `invalidated_by_version` (Integer, nullable): Points to the version that invalidated this record. Populated during deactivation via `deactivate_by_session`.
 * `calculated_at` (DateTime): Timestamp of creation.
 * `aggregate_version` (Integer): Incremented for state changes.
 
