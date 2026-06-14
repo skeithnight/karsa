@@ -1,26 +1,33 @@
 # 19. Post-Mortem Engine Foundation Architecture
 
-This document defines the architecture of Karsa's **Post-Mortem Engine Foundation**, serving as the authoritative failure analysis, root-cause classification, and organizational learning subsystem of the platform.
+This document defines the canonical architecture of Karsa's **Post-Mortem Engine Foundation**, serving as the authoritative failure analysis, root-cause classification, and organizational learning subsystem of the platform.
 
 ---
 
 ## 1. Executive Summary
-The Post-Mortem Engine is responsible for structured failure analysis and root-cause mapping when trading outcomes deviate significantly from expected parameters (threshold breaches) or when operational failures occur. 
+The Post-Mortem Engine serves as the authoritative learning plane of the Virtual Investment Firm (VIF). It conducts structured retrospective evaluations when operational, performance, or governance failures occur.
 
-The engine uses a single, write-once immutable model (`PostMortemRecord`) that categorizes failure events against a formal failure taxonomy, assigns weighted root-cause contributions, captures lessons learned, and asynchronously propagates these lessons to downstream engines (Thesis, Research, Governance, and Capital Allocation) via events, completing the feedback loop of the Virtual Investment Firm (VIF).
+The engine utilizes:
+1. **`PostMortemRecord`** (Immutable Write-Once Ledger Aggregate Root) capturing the retrospective analysis, taxonomy categories, and attribution weights.
+2. **`Recommendation`** (Mutable Lifecycle Aggregate Root) tracking the state transitions of recommended actions.
+
+Downstream engines (Governance, Capital Allocation, Thesis) consume recommendations via the Event Bus and are the sole authorities accepting, rejecting, or implementing limit and budget adjustments.
 
 ---
 
 ## 2. Ownership Boundary Matrix
 
-| Subsystem / Context | Aggregate Root / Projection | Permitted Mutating Writer | Data Store Location | Read Dependencies | Write Responsibilities | Single Writer Rule |
+The table below defines the bounded-context responsibility matrix across the VIF learning and analysis engines:
+
+| Capability / Action | Performance Engine | Attribution Engine | Review Engine | Post-Mortem Engine | Governance Engine | Capital Allocation |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **Post-Mortem Engine** | `PostMortemRecord` | `PostMortemService` | `db_postmortem` | Decision Journal, Performance scorecards, Attribution factors. | Immutable post-mortem records and root-cause analysis details. | Sole writer of post-mortem records. Reads other databases asynchronously. |
-| **Review Engine** | `ReviewRecord` | `ReviewService` | `db_review` | None. | Qualitative periodic reviews. | Review Engine reviews operational routines; Post-Mortem analyzes specific failures. |
-| **Attribution Engine** | `AttributionAnalysis` | `AttributionService` | `db_attribution` | None. | Statistical causal factor scorecards. | Attribution calculates statistical correlation; Post-Mortem assigns root-cause accountability. |
-| **Performance Engine** | `DecisionEvaluation` | `EvaluationService` | `db_performance` | None. | Quantitative prediction errors and scorecard metrics. | Performance defines *if* a deviation occurred; Post-Mortem explains *why* it occurred. |
-| **Governance Engine** | `GovernancePolicy` | `GovernanceService` | `db_governance` | None. | Policy limits and violation logs. | Governance enforces policy bounds; Post-Mortem analyzes why limit violations or overrides happened. |
-| **Decision Journal** | `DecisionJournal` | `DecisionJournalService` | `db_journal` | None. | Immutable pre-outcome reasoning records. | Journal owns pre-outcome truth; Post-Mortem consumes it to detect reasoning drift. |
+| **Detect Deviations** | **Authoritative (Detects)** | Prohibited | Read-Only | Read-Only | Prohibited | Prohibited |
+| **Calculate Correlation** | Read-Only | **Authoritative (Correlates)** | Prohibited | Read-Only | Prohibited | Prohibited |
+| **Periodic Qualitative Appraisals** | Prohibited | Prohibited | **Authoritative (Appraises)** | Read-Only | Prohibited | Prohibited |
+| **Assign Root-Cause** | Prohibited | Prohibited | Prohibited | **Authoritative (Assigns)** | Prohibited | Prohibited |
+| **Generate Recommendations** | Prohibited | Prohibited | Prohibited | **Authoritative (Generates)** | Prohibited | Prohibited |
+| **Accept/Reject Policy Update** | Prohibited | Prohibited | Prohibited | Prohibited | **Authoritative (Accepts)** | Prohibited |
+| **Accept/Reject Budget Update** | Prohibited | Prohibited | Prohibited | Prohibited | Prohibited | **Authoritative (Accepts)** |
 
 ---
 
@@ -28,73 +35,78 @@ The engine uses a single, write-once immutable model (`PostMortemRecord`) that c
 
 ```mermaid
 graph TD
-    PE[Performance Engine] -->|1. Detects Threshold Breach| PME[Post-Mortem Engine]
-    PME -->|2. Ingests pre-outcome reasoning| DJ[Decision Journal]
-    PME -->|3. Ingests causal contribution factors| AE[Attribution Engine]
-    PME -->|4. Persists root-cause & lessons| PMR[PostMortemRecord Aggregate]
+    PE[Performance Engine] -->|1. Event: PerformanceBreachDetected| PMS[Post-Mortem Engine]
+    GE[Governance Engine] -->|2. Event: PolicyViolationLogged| PMS
+    Op[Manual Operator] -->|3. Request: QualitativeIncident| PMS
     
-    PMR -->|5. Publish Event: PostMortemRecordCreated| Bus[Event Bus]
-    Bus -->|6. Quarantine version| TE[Thesis Engine]
-    Bus -->|7. Adjust capital allocation size| CA[Capital Allocation]
-    Bus -->|8. Audit prompt templates| RE[Research Engine]
-    Bus -->|9. Update limit bounds| GE[Governance Engine]
+    PMS -->|4. Fetch pre-state reasoning| DJ[Decision Journal]
+    PMS -->|5. Fetch ex-ante risk projections| Risk[Risk Engine]
+    PMS -->|6. Fetch correlation weights| AE[Attribution Engine]
+    
+    PMS -->|7. Append Ledger Record| PMR[PostMortemRecord Aggregate]
+    PMS -->|8. Create Recommendation| Rec[Recommendation Aggregate]
+    
+    Rec -->|9. Publish Event: RecommendationProposed| Bus[Event Bus]
+    Bus -->|10. Evaluate and Update limits| Gov[Governance Engine]
+    Bus -->|11. Evaluate and Adjust budget| CA[Capital Allocation]
+    Bus -->|12. Evaluate and Quarantine version| TE[Thesis Engine]
 ```
 
 ---
 
 ## 4. Domain Model
 
-The domain is designed around a single, write-once ledger record to prevent aggregate inflation, lifecycle state complexity, and duplicate state machines:
+The domain contains two primary aggregate roots:
+* **`PostMortemRecord`** (Aggregate Root):
+  - Represents the retrospective analysis of a failure event. Strictly immutable and write-once.
+* **`Recommendation`** (Aggregate Root):
+  - Represents a proposed system adjustment, managing versioning and state changes.
 
-* **Aggregate Roots**:
-  * The context contains **zero mutable aggregate roots**. All analyses are stored as write-once records.
-* **Ledger Entries**:
-  * `PostMortemRecord`: An immutable, write-once ledger entry representing the root-cause analysis and lessons captured for a failure event.
 * **Value Objects**:
-  * `FailureClassification`: Categorization of the failure based on the formal failure taxonomy, including the taxonomy schema version.
-  * `RootCauseContribution`: Weighted list of contributing causes ($0.0 \le \text{weight} \le 1.0$) summing to $1.0$.
-  * `PostMortemFinding`: Qualitative findings, timeline events, and evidence references.
-  * `LessonLearned`: Structured recommendations and actions for downstream contexts.
+  - `FailureClassification`: Categorizes failure types against the taxonomy.
+  - `RootCauseContribution`: Weighted causes summing to 1.0.
+  - `PostMortemFinding`: Qualitative timeline details and evidence references.
+  - `IncidentReference`: Unique correlation identifier mapping to the source anomaly context.
 
 ---
 
-## 5. Ledger & Lineage Design
+## 5. Aggregate Design
 
-### `PostMortemRecord` (Immutable Write-Once Ledger Entry)
-- **Responsibilities**: Validates failure classification, asserts root-cause weights sum to $1.0$, encapsulates captured lessons, and emits record creation events.
-- **Invariants**:
-  - Root-cause weights must sum to exactly $1.0$ (normalized).
-  - Must reference a valid `decision_id` or operational execution identifier.
-  - Strictly immutable once appended to disk (no updates or deletes permitted).
-- **Structure**: Tracks `postmortem_id`, `decision_id` (foreign key), `failure_classification` (including `taxonomy_version`), `root_causes` (JSONB), `findings` (JSONB), `lessons_learned` (JSONB), `created_at`.
+### Option C: `PostMortemRecord` + `Recommendation` (Selected)
+* **`PostMortemRecord` (Aggregate Root)**:
+  - *Transaction Boundary*: Atomic save to the `post_mortem_records` table.
+  - *Invariants*: Contribution weights must sum to exactly 1.0. Must reference a valid `incident_ref`. Strictly immutable.
+* **`Recommendation` (Aggregate Root)**:
+  - *Transaction Boundary*: Atomic write to the `post_mortem_recommendations` table.
+  - *Lifecycle States*: `PROPOSED`, `ACCEPTED`, `REJECTED`, `IMPLEMENTED`, `EXPIRED`.
+  - *OCC Strategy*: Version-based Optimistic Concurrency Control (OCC) is required on `post_mortem_recommendations` table to prevent race conditions during concurrent state updates.
+  - *Ownership*: Post-Mortem owns recommendation creation and state tracking; target engines own execution status updates.
 
 ---
 
 ## 6. Value Objects
 
-* **`FailureClassification`**: Matches the failure category against the formal taxonomy:
-  * `failure_type`: Enumerated type (e.g. `THESIS_FAILURE`, `EXECUTION_FAILURE`).
-  * `severity`: Scale of impact (`LOW`, `MEDIUM`, `HIGH`, `CRITICAL`).
-  * `taxonomy_version`: Integer indicating the failure taxonomy version used during classification.
-* **`RootCauseContribution`**: Represents a specific cause and its weight:
-  * `cause_category`: Specific category within the taxonomy (e.g. `LLM_HALLUCINATION`).
-  * `weight`: Numerical impact score ($0.0 \le w \le 1.0$).
-  * `description`: Justification of why this cause contributed.
-* **`PostMortemFinding`**: Detail of evidence collected:
-  * `timeline_events`: List of timestamps and events leading to failure.
-  * `evidence_uris`: Links to telemetry spans or exchange logs.
-* **`LessonLearned`**: Actionable learning points:
-  * `action_item`: Clear statement of what must be adjusted.
-  * `target_context`: Target context to adjust (e.g. `GOVERNANCE`).
-  * `parameters`: Recommended adjustments (e.g. new limit sizes).
+* **`FailureClassification`**:
+  - `failure_type`: Enumerated string (`THESIS_FAILURE`, `EXECUTION_FAILURE`, `ALLOCATION_FAILURE`, `GOVERNANCE_FAILURE`, `REGIME_MISMATCH`, `RESEARCH_FAILURE`, `PORTFOLIO_FAILURE`, `PERFORMANCE_FAILURE`, `RISK_FAILURE`).
+  - `severity`: String (`LOW`, `MEDIUM`, `HIGH`, `CRITICAL`).
+  - `taxonomy_version`: Integer.
+* **`RootCauseContribution`**:
+  - `cause_category`: String (e.g. `LLM_HALLUCINATION`, `PARAMETER_OVERFITTING`).
+  - `weight`: Float ($0.0 \le w \le 1.0$).
+  - `description`: String.
+* **`IncidentReference`**:
+  - `incident_ref`: Unique identifier mapping to the source anomaly. Format `urn:karsa:incident:<context>:<uuid>`.
+* **`PostMortemFinding`**:
+  - `timeline_events`: List of key events with timestamps.
+  - `evidence_uris`: List of telemetry/log links.
 
 ---
 
 ## 7. Event Contracts
 
 ### `PostMortemRecordCreatedEvent`
-- **Event Version**: 1
-- **Payload**:
+* **Event Version**: 1
+* **Payload**:
 ```json
 {
   "event_id": "evt_pm_rec_001",
@@ -102,7 +114,7 @@ The domain is designed around a single, write-once ledger record to prevent aggr
   "correlation_id": "corr_thesis_eval_998",
   "causation_id": "evt_performance_breach_202",
   "postmortem_id": "pm_PM_2001",
-  "decision_id": "dec_PM_1001",
+  "incident_ref": "urn:karsa:incident:performance:drawdown_v1_001",
   "failure_classification": {
     "failure_type": "THESIS_FAILURE",
     "severity": "HIGH",
@@ -111,30 +123,8 @@ The domain is designed around a single, write-once ledger record to prevent aggr
   "root_causes": [
     {
       "cause_category": "PARAMETER_OVERFITTING",
-      "weight": 0.70,
-      "description": "Thesis assumed low volatility; regime model shifted."
-    },
-    {
-      "cause_category": "EXECUTION_SLIPPAGE",
-      "weight": 0.30,
-      "description": "High market impact occurred during trade routing."
-    }
-  ],
-  "lessons_learned": [
-    {
-      "action_item": "Reduce capital size limit when volatility exceeds 30%.",
-      "target_context": "CAPITAL_ALLOCATION",
-      "parameters": {
-        "max_capital_ratio": 0.02
-      }
-    },
-    {
-      "action_item": "Quarantine thesis version.",
-      "target_context": "THESIS_ENGINE",
-      "parameters": {
-        "thesis_version_id": "th_ver_v2_05",
-        "action": "QUARANTINE"
-      }
+      "weight": 1.0,
+      "description": "Thesis model assumed low volatility."
     }
   ],
   "timestamp": "2026-06-14T08:50:00Z",
@@ -142,11 +132,31 @@ The domain is designed around a single, write-once ledger record to prevent aggr
 }
 ```
 
+### `RecommendationProposedEvent`
+* **Event Version**: 1
+* **Payload**:
+```json
+{
+  "event_id": "evt_rec_prop_001",
+  "event_type": "RecommendationProposedEvent",
+  "recommendation_id": "rec_001",
+  "postmortem_id": "pm_PM_2001",
+  "target_context": "GOVERNANCE",
+  "action_item": "Reduce maximum leverage cap.",
+  "parameters": {
+    "max_leverage": 1.5
+  },
+  "timestamp": "2026-06-14T08:50:05Z",
+  "event_version": 1
+}
+```
+
 ---
 
 ## 8. Application Services
-- **`PostMortemService`**: Coordinates analysis assembly, validates root-cause weights, persists records, and publishes the `PostMortemRecordCreatedEvent`.
-- **`LearningLoopOrchestrator`**: Ingests event notifications and routes them to mock downstream engines during dry-runs.
+
+* **`PostMortemService`**: Instantiates analysis files, validates root causes, and saves records.
+* **`RecommendationRegistryService`**: Manages recommendation state updates, verifying OCC version checks.
 
 ---
 
@@ -155,146 +165,246 @@ The domain is designed around a single, write-once ledger record to prevent aggr
 ```python
 class PostMortemRecordRepository(ABC):
     @abstractmethod
-    def save(self, record: PostMortemRecord) -> None: pass
+    def save_record(self, record: PostMortemRecord) -> None: pass
     @abstractmethod
-    def find_by_id(self, postmortem_id: str) -> Optional[PostMortemRecord]: pass
+    def get_record_by_id(self, postmortem_id: str) -> Optional[PostMortemRecord]: pass
+
+class RecommendationRepository(ABC):
     @abstractmethod
-    def find_by_decision(self, decision_id: str) -> Optional[PostMortemRecord]: pass
+    def save_recommendation(self, rec: Recommendation) -> None: pass
+    @abstractmethod
+    def get_recommendation_by_id(self, rec_id: str) -> Optional[Recommendation]: pass
 ```
 
 ---
 
 ## 10. Persistence Design
 
-The Post-Mortem Engine persists data in a single, write-once relational table. All SQL updates and OCC logic are bypassed to maintain a strict, immutable historical audit trail.
-
 ```sql
 CREATE TABLE post_mortem_records (
-    postmortem_id VARCHAR(64) PRIMARY KEY,
-    decision_id VARCHAR(64) NOT NULL UNIQUE, -- Links 1-to-1 to Decision Journal
+    postmortem_id VARCHAR(128) NOT NULL,
+    incident_ref VARCHAR(128) NOT NULL UNIQUE,
     failure_classification JSONB NOT NULL,
     root_causes JSONB NOT NULL,
     findings JSONB NOT NULL,
-    lessons_learned JSONB NOT NULL,
-    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP NOT NULL,
+    PRIMARY KEY (postmortem_id, created_at)
+) PARTITION BY RANGE (created_at);
+
+CREATE TABLE post_mortem_records_default PARTITION OF post_mortem_records DEFAULT;
+
+CREATE TABLE post_mortem_recommendations (
+    recommendation_id VARCHAR(128) PRIMARY KEY,
+    postmortem_id VARCHAR(128) NOT NULL,
+    target_context VARCHAR(64) NOT NULL,
+    action_item TEXT NOT NULL,
+    parameters JSONB NOT NULL,
+    state VARCHAR(32) NOT NULL, -- PROPOSED, ACCEPTED, REJECTED, IMPLEMENTED, EXPIRED
+    version INTEGER NOT NULL DEFAULT 1,
+    updated_at TIMESTAMP NOT NULL
 );
 ```
-
-### Partitioning & Archival
-- **Partitioning**: Range partitioning on `created_at` (quarterly).
-- **Archival**: Cold partitions are archived to object storage after 1 year. Permanent indexes are maintained for historical audits.
 
 ---
 
 ## 11. Integration Design
 
-- **Performance Engine**: Triggers post-mortem creation when scorecards indicate prediction error or slippage bounds exceed threshold limits.
-- **Attribution Engine**: Post-Mortem reads attribution metrics during analysis to extract correlation weights.
-- **Decision Journal**: Ingests the pre-outcome reasoning parameters using the `decision_id` to evaluate assumptions.
-- **Thesis Engine**: Consumes learning events to flag and quarantine flawed versions.
-- **Governance Engine**: Consumes learning events to reduce limit sizes.
-- **Capital Allocation**: Consumes learning events to dynamically adjust budget availability for specific agent paths.
+* **Performance Port**: Listens for threshold breaches to flag anomalies.
+* **Risk Port**: Fetches ex-ante VaR and Beta forecasts.
+* **Decision Journal Port**: Ingests pre-outcome context references.
 
 ---
 
 ## 12. Sequence Diagrams
 
-### A. Failure Detection and Lesson Propagation
 ```mermaid
 sequenceDiagram
     participant PE as Performance Engine
     participant PMS as PostMortemService
-    participant JR as PostMortemRepository
+    participant RRS as RecommendationRegistryService
+    participant DB as Postgres DB
     participant Bus as Event Bus
-    participant TE as Thesis Engine
     
-    PE->>PMS: CreatePostMortem(decision_id, breach_details)
-    PMS->>PMS: Validate root-cause weights sum to 1.0
-    PMS->>JR: Save PostMortemRecord (Immutable)
-    PMS->>Bus: Emit PostMortemRecordCreatedEvent
-    Bus->>TE: Handle learning event (Quarantine thesis version)
+    PE->>PMS: TriggerIncident(incident_ref)
+    PMS->>PMS: Create PostMortemRecord (Weights sum to 1.0)
+    PMS->>DB: INSERT INTO post_mortem_records (Immutable)
+    PMS->>RRS: CreateRecommendation(postmortem_id, target_context, action_item)
+    RRS->>DB: INSERT INTO post_mortem_recommendations (State=PROPOSED)
+    RRS->>Bus: Emit RecommendationProposedEvent
 ```
 
 ---
 
 ## 13. State Diagrams
 
-### `PostMortemRecord` State Model
+### Recommendation Lifecycle
 ```mermaid
 stateDiagram-v2
-    [*] --> RECORDED
-    RECORDED --> [*]
+    [*] --> PROPOSED
+    PROPOSED --> ACCEPTED : Operator / Downstream Approval
+    PROPOSED --> REJECTED : Operator / Downstream Decline
+    ACCEPTED --> IMPLEMENTED : Active Update Applied
+    PROPOSED --> EXPIRED : Expiration Timer Reached
+    ACCEPTED --> EXPIRED : Expiration Timer Reached
+    IMPLEMENTED --> [*]
+    REJECTED --> [*]
+    EXPIRED --> [*]
 ```
-*Note: Because PostMortemRecords are strictly immutable write-once ledger entries, they undergo no state transitions.*
 
 ---
 
 ## 14. Failure Handling
-- **Invalid Weights**: If root-cause contribution weights do not sum to exactly 1.0, the record is rejected with a validation error.
-- **Missing Event Correlation**: If a post-mortem is requested for a `decision_id` that has no matching journal entry, the service halts and alerts risk managers.
+
+* **Attribution Invariant Violation**: Rejects inserts if contributions sum $\ne 1.0$.
+* **OCC Version Conflict**: Rejects update on recommendation if db version mismatch.
 
 ---
 
 ## 15. OCC Strategy
-Because the persistence model is write-once and append-only, Optimistic Concurrency Control (OCC) is **completely eliminated**. This prevents lock contention on write operations.
+
+| Component | OCC Required | Reason |
+| :--- | :--- | :--- |
+| **`post_mortem_records`** | **No** | Strictly append-only write-once ledger. |
+| **`post_mortem_recommendations`**| **Yes** | State transitions are mutable and subject to race conditions. |
 
 ---
 
 ## 16. Scalability Analysis
-- **Write Performance**: Linear O(1) writes with zero locking because rows are never updated.
-- **Index Load**: An index on `decision_id` ensures O(1) correlation checks.
+
+* **O(1) Append-Only**: Relational triggers block mutations, allowing lock-free insertion.
+* **B-Tree Lookups**: B-tree index on `incident_ref` keeps verification fast.
 
 ---
 
 ## 17. Security Analysis
-- **Hindsight Leakage Prevention**: Immutability rules prevent modification of root-cause records once written.
-- **Access Controls**: Restricted write access to authorized post-mortem services. Downstream engines read via read-only replication channels.
+
+* **Hindsight Blockade**: Prevents modification of historical post-mortems post-sealing.
+* **Asynchronous Execution isolation**: Downstream engines isolate action item ingestion, protecting operational loops.
 
 ---
 
 ## 18. Migration Strategy
-1. Deploy `post_mortem_records` SQL schemas.
-2. Configure event bus routing rules for `PostMortemRecordCreatedEvent`.
-3. Register mock consumers in the Thesis and Governance engines to validation learning loop actions.
+
+1. Deploy schema, partitions, triggers, and indices under Alembic.
+2. Setup event routing rules for learning events.
 
 ---
 
 ## 19. Risks
-- **Learning Event Loop Deadlocks**: Downstream engines failing during event ingestion could block learning progression. *Remediation*: Downstream event handlers run in isolated transaction blocks with dead-letter queue (DLQ) retry mechanisms.
+
+* **Feedback Deadlocks**: Downstream failures could stall recommendation acceptance. *Mitigation*: Isolated consumers running under DLQ.
 
 ---
 
 ## 20. ADR Decisions
-Refer to [ADR-041](file:///Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-041-post-mortem-engine-ownership.md) (Context boundaries and ownership) and [ADR-042](file:///Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-042-root-cause-and-organizational-learning-model.md) (Root cause and organizational learning model).
+
+* **[ADR-041](file:///Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-041-post-mortem-engine-ownership.md)**: Bounded context isolation.
+* **[ADR-042](file:///Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-042-root-cause-and-organizational-learning-model.md)**: Defines root-cause normalized weighting rules.
 
 ---
 
 ## 21. Architecture Challenges
 
-### A. Context Boundary
-- **Challenge**: Does Post-Mortem duplicate the Performance or Attribution Engines?
-- **Resolution**: No. Performance detects *quantitative deviations*, and Attribution identifies *statistical correlations*. Post-Mortem assigns *root-cause accountability* and translates it into *actionable downstream lessons*.
+### Challenge 1 — Governance and Allocation Ownership
+* **Resolution**: Post-Mortem Engine does **not** write policies or allocate budgets. It only proposes recommendations via events. The target contexts (Governance / Capital Allocation) own the acceptance/rejection and implementation of these suggestions.
 
-### B. Aggregate Inflation
-- **Challenge**: Does every lesson or finding require a separate aggregate root?
-- **Resolution**: No. All findings and lessons are nested value objects inside `PostMortemRecord`.
+### Challenge 2 — Aggregate Boundary Re-Evaluation
+* **Resolution**: **Option C** (`PostMortemRecord` + `Recommendation`). Declares both `PostMortemRecord` (ledger) and `Recommendation` (lifecycle) as first-class Aggregate Roots.
+
+### Challenge 3 — Incident Ownership Model
+* **Resolution**: **Context-Owned Incident Model**. Each context owns its incident databases. A centralized incident registry is rejected to avoid cross-context write coupling. Correlation is handled via a standardized URN.
+
+### Challenge 4 — Review vs Post-Mortem Ownership Matrix
+* **Resolution**: Standardized. Review owns periodic appraisals; Post-Mortem owns retrospective root-cause failure analysis.
+
+### Challenge 5 — OCC Ownership Matrix
+* **Resolution**: OCC is used for recommendations (`post_mortem_recommendations`) to guard concurrent state transitions, but bypassed on ledger tables.
+
+### Challenge 6 — Failure Attribution Expansion
+* **Resolution**: Standardized across VIF stages: Research, Thesis, Decision Journal, CIO, Execution, Portfolio, Performance, Risk, Review, Governance.
+
+### Challenge 7 — Replayability Specification
+* **Resolution**: Auditable chain verified via key chain: `Thesis ID -> Decision Journal ID -> CIO Decision ID -> Execution ID -> Portfolio Snapshot ID -> Performance Evaluation ID -> Review ID -> Post-Mortem ID -> Recommendation ID`.
+
+### Challenge 8 — Learning Loop Closure
+* **Resolution**: Completed via a dedicated **Recommendation Registry** (`Recommendation` aggregate) tracking recommendation states under OCC.
+
+### Challenge 9 — Capacity Model Validation
+* **Resolution**: **Yearly Partitioning** is selected due to low operational volume (~1000 records/year), reducing overhead compared to monthly partitions.
+
+### Challenge 10 — Recommendation Lifecycle Ownership
+* **Resolution**: Proposing is owned by Post-Mortem; acceptance/rejection/implementation is owned by the target contexts.
 
 ---
 
 ## 22. Architecture Delta Analysis
 
-| Virtual Investment Firm Stage | Pre-Sprint-29 Baseline | Post-Sprint-29 Post-Mortem Design | Gaps Closed |
+| Virtual Investment Firm Stage | Pre-Sprint-39 Baseline | Post-Sprint-39 Post-Mortem Design | Gaps Closed |
 | :--- | :--- | :--- | :--- |
-| **Learning** | Manual review logs. | Automated root-cause classification and event-driven learning loops. | Closes the VIF learning loop by translating failure analysis into automated context corrections. |
+| **Learning Feedback** | Qualitative periodic reviews only. | Event-driven recommendations and recommendation registry. | Closes loop safely by separating analysis from action. |
 
 ---
 
 ## 23. Acceptance Criteria
-1. **Root-Cause Validation**: Contribution weights must sum to exactly 1.0.
-2. **Immutability**: Once saved, any SQL `UPDATE` or `DELETE` attempt must fail.
-3. **Event Propagation**: Appending a record must publish a valid `PostMortemRecordCreatedEvent` containing action items.
+
+1. Causal weights sum to exactly 1.0.
+2. Recommendations update states using OCC versioning.
+3. Database triggers block UPDATE/DELETE on ledger tables.
 
 ---
 
 ## 24. Final Verdict
-**ARCHITECTURE_APPROVED**
+
+### **ARCHITECTURE_APPROVED**
+
+---
+
+## 25. Learning Loop Analysis
+The loop closes safely. The Post-Mortem Engine generates a recommendation, but the target engine decides whether to apply it. This prevents the learning engine from overriding compliance logic.
+
+---
+
+## 26. Failure Attribution Model
+Realized outcomes are attributed using normalized weights:
+$$W_{\text{Thesis}} + W_{\text{Execution}} + W_{\text{Allocation}} + W_{\text{Governance}} + W_{\text{Regime}} + W_{\text{Research}} + W_{\text{DecisionJournal}} + W_{\text{CIO}} + W_{\text{Review}} + W_{\text{Portfolio}} + W_{\text{Performance}} + W_{\text{Risk}} = 1.0$$
+
+---
+
+## 27. Root Cause Taxonomy
+* `RESEARCH_FAILURE`: Drift in Research data signals.
+* `THESIS_FAILURE`: Flawed mathematical modeling.
+* `DECISION_JOURNAL_FAILURE`: Invalid ex-ante expectations.
+* `CIO_FAILURE`: Poor consensus quorum validation.
+* `EXECUTION_FAILURE`: Routing latencies and slippage.
+* `PORTFOLIO_FAILURE`: Position valuation tracking error.
+* `PERFORMANCE_FAILURE`: Out-of-bounds metrics.
+* `REVIEW_FAILURE`: Stale qualitative appraisals.
+* `GOVERNANCE_FAILURE`: Ineffective limit parameters.
+* `RISK_FAILURE`: Ex-ante covariance forecasting errors.
+
+---
+
+## 28. Governance Feedback Model
+Emits recommendation events to Governance. Governance decides whether to accept and execute policies updates.
+
+---
+
+## 29. Allocation Feedback Model
+Emits recommendation events to Capital Allocation to quarantine flawed thesis versions.
+
+---
+
+## 30. Replayability Proof
+Reconstructed via SQL trace of correlation IDs:
+```
+Recommendation (recommendation_id)
+  -> Post-Mortem (postmortem_id / incident_ref)
+    -> Review Session (review_id)
+      -> Performance Evaluation (performance_evaluation_id)
+        -> Portfolio Snapshot (portfolio_snapshot_id)
+          -> Execution Request/Fill (execution_id)
+            -> CIO Decision (cio_decision_id)
+              -> Decision Journal (decision_journal_id)
+                -> Thesis (thesis_id)
+```
+This proves the complete causal chain.
