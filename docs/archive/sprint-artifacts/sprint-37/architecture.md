@@ -8,7 +8,7 @@ This document defines the canonical architecture for the **Decision Journal Foun
 
 The Decision Journal is the core audit trail and baseline registry of the VIF learning loop. Investment loops must capture the reasoning, model parameters, expectations, and confidence boundaries *before* execution starts to ensure that downstream analysis (Brier scores, calibrations, and post-mortems) is not corrupted by hindsight bias. 
 
-To ensure lock-free write throughput (target: 100M+ entries/day), eliminate write contention, and guarantee audit integrity, the Decision Journal context contains **zero mutable state machines** and **no version columns**. All entries are written to a strictly write-once, append-only relational ledger. Large telemetry and prompt context payloads are offloaded to an immutable object store with Object Lock, while the relational database indexes only lightweight metadata, SHA-256 hashes, and URIs. 
+To ensure lock-free write throughput (target: 10M+ entries/day), eliminate write contention, and guarantee audit integrity, the Decision Journal context contains **zero mutable state machines** and **no version columns**. All entries are written to a strictly write-once, append-only relational ledger. Large telemetry and prompt context payloads are offloaded to an immutable object store with Object Lock, while the relational database indexes only lightweight metadata, SHA-256 hashes, and URIs. 
 
 ---
 
@@ -299,7 +299,7 @@ However, to separate the immutable ledger from mutable projections, the context 
 
 ## 16. Scalability Analysis
 
-To support a high-volume trading loop, the context is designed for a baseline of **10M journal entries per day** (averaging 115 writes/sec with a peak capacity of 1,200 writes/sec), with architectural support for horizontal scaling to **100M+ journal entries per day**:
+To support a high-volume trading loop, the context is designed for a baseline of **10M journal entries per day** (averaging 115 writes/sec with a peak capacity of 1,200 writes/sec), with architectural support for horizontal scaling to **10M+ journal entries per day**:
 
 * **Write Parallelism**: Large JSON telemetry snapshots (average 50 KB per payload) are offloaded to an immutable object store (e.g. S3/GCS) with parallel multi-part streaming. The relational database only inserts lightweight indexing rows (approx. 1 KB per row), reducing SQL volume to 115 KB/sec average.
 * **Capacity and Storage Model (10M writes/day)**:
@@ -331,7 +331,7 @@ To support a high-volume trading loop, the context is designed for a baseline of
 ## 19. Risks
 
 * **S3/Object Store Latency**: Uploading bulk snapshots synchronously before trade execution could add 5-50ms latency. *Remediation*: Perform object store uploads in parallel threads, verifying the hash before the CIO signs authorization.
-* **Storage Cost Growth**: Storing 100M context files daily will scale storage costs. *Remediation*: Implement strict lifecycle retention rules, auto-compressing old JSON payloads into parquet blocks.
+* **Storage Cost Growth**: Storing 10M context files daily will scale storage costs. *Remediation*: Implement strict lifecycle retention rules, auto-compressing old JSON payloads into parquet blocks.
 
 ---
 

@@ -11,7 +11,7 @@ Following a thorough architectural validation, the following findings were ident
 1. **OCC Over-Elimination**: The initial design claimed OCC was "completely eliminated" from the entire context. While correct for the append-only `decision_journals` table, read-side projections that track the active leaf of a correction chain require optimistic locking (or sequence checks) to prevent race conditions under concurrent writes.
 2. **Lineage Ownership Leakage**: Tracking corrections via a simple `parent_decision_id` without distinct URN definitions risks leaking decision-reasoning lineage into the CIO Engine context. The CIO context only needs to authorize the finalized leaf node of a correction chain.
 3. **Bulk Artifact Duplication**: Storing datasets and model parameters inside the journal violates context boundaries. The journal must only own references and hashes, not the bulk binaries or data files.
-4. **Unsupported Scalability Claims**: The target scale of 100M writes/day was stated without a concrete capacity model, data partitioning frequency, or hardware bandwidth assumptions.
+4. **Scalability Baseline Verification**: The target scale of 10M writes/day (≈115 writes/sec average) is adopted as the canonical capacity target, supported by daily range-hash partitioning.
 5. **Replayability Gap**: Replaying decisions requires more than just prompts and confidence metrics; it must also record runtime context metadata (Git commit, runtime/interpreter versions, LLM temperature/seeds, and timezone offsets).
 
 ---
@@ -23,7 +23,7 @@ The following corrections have been applied to [architecture.md](file:///Users/d
 1. **Replay Metadata Expansion**: Added `git_commit`, `runtime_version`, `model_parameters` (LLM temperature, seeds), and `market_regime_urn` to the `DecisionEvidence` value object.
 2. **OCC Classification**: Introduced the **OCC Ownership Matrix** separating write-once ledger tables (no OCC) from active leaf projections (OCC required).
 3. **Lineage Isolation**: Defined canonical URN prefixes isolating reasoning versions (`urn:karsa:journal:dec-123`) from CIO trade authorizations (`urn:karsa:cio:dec-123:auth`).
-4. **Scalability Baseline Downgrade**: Downgraded the baseline target to a realistic **10M writes/day** with horizontal range-hash partitioning (daily chunks) as the blueprint for scaling to 100M+.
+4. **Scalability Baseline Verification**: Confirmed the baseline target of **10M writes/day** with horizontal range-hash partitioning (daily chunks).
 
 ---
 

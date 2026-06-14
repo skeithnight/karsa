@@ -6,7 +6,8 @@ from karsa.decision_journal.exceptions import (
     ImmutabilityViolationException, HindsightValidationException, LineageIntegrityException, VerificationFailedException, ActiveLeafNotFoundException
 )
 from karsa.decision_journal.value_objects import (
-    PromptReference, DatasetReference, TelemetryReference, ArtifactReference, ReplayMetadata, DecisionContextSnapshot, DecisionEvidence
+    PromptReference, DatasetReference, TelemetryReference, ArtifactReference, ReplayMetadata, DecisionContextSnapshot, DecisionEvidence,
+    DecisionRationale, DecisionHypothesis, DecisionConfidence
 )
 from karsa.decision_journal.models import DecisionJournalAggregate, DecisionRevisionAggregate, DecisionEvidenceAggregate
 from karsa.decision_journal.events import (
@@ -351,3 +352,103 @@ def test_ports_coverage():
     ObjectStorePort.get_context_snapshot(None, None)
     ObjectStorePort.verify_hash(None, None, None)
     EventPublisherPort.publish(None, None)
+
+def test_confidence_rejects_nan_probability():
+    with pytest.raises(ValueError):
+        DecisionConfidence(float('nan'), 0.05)
+
+def test_confidence_rejects_inf_probability():
+    with pytest.raises(ValueError):
+        DecisionConfidence(float('inf'), 0.05)
+    with pytest.raises(ValueError):
+        DecisionConfidence(float('-inf'), 0.05)
+
+def test_confidence_rejects_nan_standard_deviation():
+    with pytest.raises(ValueError):
+        DecisionConfidence(0.85, float('nan'))
+
+def test_confidence_rejects_inf_standard_deviation():
+    with pytest.raises(ValueError):
+        DecisionConfidence(0.85, float('inf'))
+    with pytest.raises(ValueError):
+        DecisionConfidence(0.85, float('-inf'))
+
+def test_rationale_validation_fails_on_empty():
+    with pytest.raises(ValueError):
+        DecisionRationale("", "Assumptions")
+    with pytest.raises(ValueError):
+        DecisionRationale("Reasoning", "   ")
+
+def test_hypothesis_validation_fails_on_invalid_bounds():
+    with pytest.raises(ValueError):
+        DecisionHypothesis("", 100, 3600)
+    with pytest.raises(ValueError):
+        DecisionHypothesis("urn:thesis:1", -10, 3600)
+    with pytest.raises(ValueError):
+        DecisionHypothesis("urn:thesis:1", 100, 0)
+
+def test_confidence_validation_fails_on_probability_bounds():
+    with pytest.raises(ValueError):
+        DecisionConfidence(-0.1, 0.05)
+    with pytest.raises(ValueError):
+        DecisionConfidence(1.1, 0.05)
+    with pytest.raises(ValueError):
+        DecisionConfidence(0.8, -0.01)
+
+def test_legacy_snapshot_deserialization():
+    from karsa.decision_journal.repositories import dict_to_snapshot
+    legacy_payload = {
+        "prompt_ref": {"prompt_id": "pr-1", "prompt_hash": "hash-pr", "template_urn": "urn:temp:1"},
+        "dataset_ref": {"dataset_id": "ds-1", "dataset_hash": "hash-ds", "dataset_urn": "urn:data:1"},
+        "telemetry_ref": {"telemetry_id": "tel-1", "telemetry_hash": "hash-tel", "span_id": "span-1"},
+        "artifact_ref": {"artifact_id": "art-1", "artifact_hash": "hash-art", "artifact_urn": "urn:art:1"},
+        "replay_metadata": {"git_commit": "git-1", "runtime_image": "docker-1", "seed": 42, "temperature": 0.7, "regime_identifier": "high-vol"}
+    }
+    snapshot = dict_to_snapshot(legacy_payload)
+    assert snapshot.prompt_ref.prompt_id == "pr-1"
+    assert snapshot.rationale.reasoning_steps == "Default Reasoning"
+    assert snapshot.hypothesis.thesis_urn == "urn:thesis:default"
+    assert snapshot.confidence.probability == 1.0
+
+def test_legacy_rationale_mapping():
+    from karsa.decision_journal.repositories import dict_to_snapshot
+    legacy_payload = {
+        "prompt_ref": {"prompt_id": "pr-1", "prompt_hash": "hash-pr", "template_urn": "urn:temp:1"},
+        "dataset_ref": {"dataset_id": "ds-1", "dataset_hash": "hash-ds", "dataset_urn": "urn:data:1"},
+        "telemetry_ref": {"telemetry_id": "tel-1", "telemetry_hash": "hash-tel", "span_id": "span-1"},
+        "artifact_ref": {"artifact_id": "art-1", "artifact_hash": "hash-art", "artifact_urn": "urn:art:1"},
+        "replay_metadata": {"git_commit": "git-1", "runtime_image": "docker-1", "seed": 42, "temperature": 0.7, "regime_identifier": "high-vol"}
+    }
+    snapshot = dict_to_snapshot(legacy_payload)
+    assert isinstance(snapshot.rationale, DecisionRationale)
+    assert snapshot.rationale.reasoning_steps == "Default Reasoning"
+    assert snapshot.rationale.market_assumptions == "Default Assumptions"
+
+def test_legacy_hypothesis_mapping():
+    from karsa.decision_journal.repositories import dict_to_snapshot
+    legacy_payload = {
+        "prompt_ref": {"prompt_id": "pr-1", "prompt_hash": "hash-pr", "template_urn": "urn:temp:1"},
+        "dataset_ref": {"dataset_id": "ds-1", "dataset_hash": "hash-ds", "dataset_urn": "urn:data:1"},
+        "telemetry_ref": {"telemetry_id": "tel-1", "telemetry_hash": "hash-tel", "span_id": "span-1"},
+        "artifact_ref": {"artifact_id": "art-1", "artifact_hash": "hash-art", "artifact_urn": "urn:art:1"},
+        "replay_metadata": {"git_commit": "git-1", "runtime_image": "docker-1", "seed": 42, "temperature": 0.7, "regime_identifier": "high-vol"}
+    }
+    snapshot = dict_to_snapshot(legacy_payload)
+    assert isinstance(snapshot.hypothesis, DecisionHypothesis)
+    assert snapshot.hypothesis.thesis_urn == "urn:thesis:default"
+    assert snapshot.hypothesis.expected_return_bps == 100
+    assert snapshot.hypothesis.validity_horizon_seconds == 3600
+
+def test_legacy_confidence_mapping():
+    from karsa.decision_journal.repositories import dict_to_snapshot
+    legacy_payload = {
+        "prompt_ref": {"prompt_id": "pr-1", "prompt_hash": "hash-pr", "template_urn": "urn:temp:1"},
+        "dataset_ref": {"dataset_id": "ds-1", "dataset_hash": "hash-ds", "dataset_urn": "urn:data:1"},
+        "telemetry_ref": {"telemetry_id": "tel-1", "telemetry_hash": "hash-tel", "span_id": "span-1"},
+        "artifact_ref": {"artifact_id": "art-1", "artifact_hash": "hash-art", "artifact_urn": "urn:art:1"},
+        "replay_metadata": {"git_commit": "git-1", "runtime_image": "docker-1", "seed": 42, "temperature": 0.7, "regime_identifier": "high-vol"}
+    }
+    snapshot = dict_to_snapshot(legacy_payload)
+    assert isinstance(snapshot.confidence, DecisionConfidence)
+    assert snapshot.confidence.probability == 1.0
+    assert snapshot.confidence.standard_deviation == 0.0

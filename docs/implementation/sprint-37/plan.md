@@ -69,7 +69,7 @@ src/karsa/decision_journal/
 
 ## 4. Aggregate Validation
 
-* **Aggregate Root**: [DecisionJournal](file:///Users/dwiki.nugraha/dwikicode/karsa/docs/implementation/sprint-37/architecture.md#L70) is the sole aggregate root representing a write-once ledger entry.
+* **Aggregate Root**: [DecisionJournal](file:///Users/dwiki.nugraha/dwikicode/karsa/docs/archive/sprint-artifacts/sprint-37/architecture.md#L70) is the sole aggregate root representing a write-once ledger entry.
 * **Transaction Boundaries**: Each database transaction commits a single `DecisionJournal` record. Row modifications or updates are blocked, eliminating locking write hotspots.
 * **Immutability Guarantees**: Class properties are frozen. Any `__setattr__` calls on instantiated aggregates raise a `TypeError` at runtime.
 * **Append-Only Enforcement**: Enforced at the database level using a PostgreSQL trigger function that blocks `UPDATE` and `DELETE` queries.

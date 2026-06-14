@@ -5,7 +5,7 @@
 - Core Capabilities: Scalable bounded contexts, event-driven deterministic execution, capability-based security, write-once immutable decision ledgers, portfolio-level orchestration, dual-signature PEP validations, pre-outcome reasoning ledger, hindsight-prevention controls.
 
 ## Current ADR Count
-- Total Active Architecture Decision Records: 50
+- Total Active Architecture Decision Records: 51
 
 ## Current Sprint Status
 - Sprint-01 Closed

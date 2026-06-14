@@ -6,7 +6,8 @@ from psycopg_pool import ConnectionPool
 
 from karsa.decision_journal.exceptions import ImmutabilityViolationException
 from karsa.decision_journal.value_objects import (
-    PromptReference, DatasetReference, TelemetryReference, ArtifactReference, ReplayMetadata, DecisionContextSnapshot, DecisionEvidence
+    PromptReference, DatasetReference, TelemetryReference, ArtifactReference, ReplayMetadata, DecisionContextSnapshot, DecisionEvidence,
+    DecisionRationale, DecisionHypothesis, DecisionConfidence
 )
 from karsa.decision_journal.models import DecisionJournalAggregate, DecisionRevisionAggregate, DecisionEvidenceAggregate
 from karsa.decision_journal.projections import ActiveLeafProjection
@@ -15,18 +16,15 @@ from karsa.shared.infrastructure.uow import ConcurrencyConflictError
 
 @pytest.fixture(scope="module")
 def postgres_pool():
-    # First try to connect to the running local/chaos-postgres instance
     import psycopg
     local_conn_str = "postgresql://chaos:chaos@localhost:5432/chaos"
     try:
         with psycopg.connect(local_conn_str) as conn:
             pass
-        # Connection succeeded! Use this pool.
         with ConnectionPool(local_conn_str) as pool:
             yield pool
             return
     except Exception:
-        # Fall back to testcontainers
         pass
 
     try:
@@ -45,6 +43,73 @@ def clean_db(postgres_pool):
             cur.execute("DROP TABLE IF EXISTS decision_evidences CASCADE;")
             cur.execute("DROP TABLE IF EXISTS decision_revisions CASCADE;")
             cur.execute("DROP TABLE IF EXISTS decision_journals CASCADE;")
+            
+            # Recreate schema exactly like Alembic migration does
+            cur.execute("""
+                CREATE TABLE decision_journals (
+                    decision_id VARCHAR(128) NOT NULL,
+                    parent_decision_id VARCHAR(128),
+                    root_decision_id VARCHAR(128) NOT NULL,
+                    proposing_agent_id VARCHAR(128) NOT NULL,
+                    signature VARCHAR(256) NOT NULL,
+                    thesis_urn VARCHAR(128) NOT NULL,
+                    context_hash VARCHAR(64) NOT NULL,
+                    context_uri VARCHAR(512) NOT NULL,
+                    context_snapshot_json JSONB NOT NULL,
+                    created_at TIMESTAMP NOT NULL,
+                    PRIMARY KEY (decision_id, root_decision_id, created_at)
+                ) PARTITION BY RANGE (created_at);
+                
+                CREATE TABLE decision_revisions (
+                    revision_id VARCHAR(128) NOT NULL,
+                    parent_decision_id VARCHAR(128) NOT NULL,
+                    root_decision_id VARCHAR(128) NOT NULL,
+                    proposing_agent_id VARCHAR(128) NOT NULL,
+                    signature VARCHAR(256) NOT NULL,
+                    correction_reason VARCHAR(512) NOT NULL,
+                    context_hash VARCHAR(64) NOT NULL,
+                    context_uri VARCHAR(512) NOT NULL,
+                    context_snapshot_json JSONB NOT NULL,
+                    created_at TIMESTAMP NOT NULL,
+                    PRIMARY KEY (revision_id, root_decision_id, created_at)
+                ) PARTITION BY RANGE (created_at);
+
+                CREATE TABLE decision_evidences (
+                    evidence_id VARCHAR(128) NOT NULL,
+                    decision_id VARCHAR(128) NOT NULL,
+                    attached_by_agent_id VARCHAR(128) NOT NULL,
+                    signature VARCHAR(256) NOT NULL,
+                    evidence_json JSONB NOT NULL,
+                    created_at TIMESTAMP NOT NULL,
+                    PRIMARY KEY (evidence_id, created_at)
+                ) PARTITION BY RANGE (created_at);
+
+                CREATE TABLE active_leaf_projections (
+                    root_decision_id VARCHAR(128) PRIMARY KEY,
+                    active_leaf_decision_id VARCHAR(128) NOT NULL,
+                    version INTEGER NOT NULL,
+                    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+                );
+
+                CREATE OR REPLACE FUNCTION block_journal_mutation()
+                RETURNS TRIGGER AS $$
+                BEGIN
+                    RAISE EXCEPTION 'Decision Journal records are strictly immutable. UPDATE and DELETE operations are prohibited.';
+                END;
+                $$ LANGUAGE plpgsql;
+
+                CREATE TRIGGER enforce_journal_immutability
+                BEFORE UPDATE OR DELETE ON decision_journals
+                FOR EACH ROW EXECUTE FUNCTION block_journal_mutation();
+
+                CREATE TRIGGER enforce_revision_immutability
+                BEFORE UPDATE OR DELETE ON decision_revisions
+                FOR EACH ROW EXECUTE FUNCTION block_journal_mutation();
+
+                CREATE TRIGGER enforce_evidence_immutability
+                BEFORE UPDATE OR DELETE ON decision_evidences
+                FOR EACH ROW EXECUTE FUNCTION block_journal_mutation();
+            """)
         conn.commit()
     return postgres_pool
 
@@ -55,12 +120,14 @@ def snapshot() -> DecisionContextSnapshot:
     telemetry = TelemetryReference("tel-1", "hash-tel", "span-1")
     artifact = ArtifactReference("art-1", "hash-art", "urn:artifact:1")
     meta = ReplayMetadata("git-1", "docker-1", 42, 0.7, "high-vol", "hp", "hd", "ha")
-    return DecisionContextSnapshot(prompt, dataset, telemetry, artifact, meta)
+    rationale = DecisionRationale("Verification Rationale", "Verification Assumptions")
+    hypothesis = DecisionHypothesis("urn:thesis:verification", 150, 7200)
+    confidence = DecisionConfidence(0.9, 0.05)
+    return DecisionContextSnapshot(prompt, dataset, telemetry, artifact, meta, rationale, hypothesis, confidence)
 
 def test_postgres_decision_journal_repository_flow(clean_db, snapshot):
     with clean_db.connection() as conn:
         repo = PostgresDecisionJournalRepository(conn)
-        repo._setup_schema()
 
         # 1. Test Save and Get Journal
         created_at = datetime.now(timezone.utc).replace(tzinfo=None)
@@ -85,6 +152,9 @@ def test_postgres_decision_journal_repository_flow(clean_db, snapshot):
         assert loaded_journal.context_hash == "hash-context-1"
         assert loaded_journal.context_uri == "s3://contexts/dec-pg-1.json"
         assert loaded_journal.context_snapshot.replay_metadata.prompt_hash == "hp"
+        assert loaded_journal.rationale.reasoning_steps == "Verification Rationale"
+        assert loaded_journal.hypothesis.expected_return_bps == 150
+        assert loaded_journal.confidence.probability == 0.9
 
         # 2. Test Save and Get Revision
         revision = DecisionRevisionAggregate(
@@ -107,6 +177,7 @@ def test_postgres_decision_journal_repository_flow(clean_db, snapshot):
         assert loaded_rev.parent_decision_id == "dec-pg-1"
         assert loaded_rev.root_decision_id == "dec-pg-1"
         assert loaded_rev.correction_reason == "Parameters tweaking"
+        assert loaded_rev.rationale.reasoning_steps == "Verification Rationale"
 
         all_revisions = repo.get_all_revisions_by_root_id("dec-pg-1")
         assert len(all_revisions) == 1
@@ -176,7 +247,6 @@ def test_postgres_decision_journal_repository_flow(clean_db, snapshot):
 def test_postgres_active_leaf_projection_occ(clean_db):
     with clean_db.connection() as conn:
         repo = PostgresActiveLeafProjectionRepository(conn)
-        repo._setup_schema()
 
         # 1. Save initial leaf
         updated_at = datetime.now(timezone.utc).replace(tzinfo=None)
@@ -205,7 +275,6 @@ def test_postgres_active_leaf_projection_occ(clean_db):
 def test_postgres_exceptions(clean_db, snapshot):
     with clean_db.connection() as conn:
         repo = PostgresDecisionJournalRepository(conn)
-        repo._setup_schema()
         
         journal = DecisionJournalAggregate(
             decision_id="dec-dup",
@@ -256,4 +325,3 @@ def test_postgres_exceptions(clean_db, snapshot):
         with pytest.raises(ImmutabilityViolationException):
             with conn.transaction():
                 repo.save_evidence(evidence_agg)
-

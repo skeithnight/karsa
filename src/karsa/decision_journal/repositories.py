@@ -7,7 +7,8 @@ from karsa.decision_journal.projections import ActiveLeafProjection
 from karsa.decision_journal.exceptions import ImmutabilityViolationException, LineageIntegrityException
 from karsa.shared.infrastructure.uow import ConcurrencyConflictError
 from karsa.decision_journal.value_objects import (
-    PromptReference, DatasetReference, TelemetryReference, ArtifactReference, ReplayMetadata, DecisionContextSnapshot, DecisionEvidence
+    PromptReference, DatasetReference, TelemetryReference, ArtifactReference, ReplayMetadata, DecisionContextSnapshot, DecisionEvidence,
+    DecisionRationale, DecisionHypothesis, DecisionConfidence
 )
 
 class DecisionJournalRepository(ABC):
@@ -127,6 +128,19 @@ def snapshot_to_dict(snapshot: DecisionContextSnapshot) -> dict:
             "prompt_hash": getattr(snapshot.replay_metadata, "prompt_hash", None),
             "dataset_hash": getattr(snapshot.replay_metadata, "dataset_hash", None),
             "artifact_hash": getattr(snapshot.replay_metadata, "artifact_hash", None)
+        },
+        "rationale": {
+            "reasoning_steps": snapshot.rationale.reasoning_steps,
+            "market_assumptions": snapshot.rationale.market_assumptions
+        },
+        "hypothesis": {
+            "thesis_urn": snapshot.hypothesis.thesis_urn,
+            "expected_return_bps": snapshot.hypothesis.expected_return_bps,
+            "validity_horizon_seconds": snapshot.hypothesis.validity_horizon_seconds
+        },
+        "confidence": {
+            "probability": snapshot.confidence.probability,
+            "standard_deviation": snapshot.confidence.standard_deviation
         }
     }
 
@@ -162,7 +176,34 @@ def dict_to_snapshot(data: dict) -> DecisionContextSnapshot:
         dataset_hash=replay_meta_data.get("dataset_hash"),
         artifact_hash=replay_meta_data.get("artifact_hash")
     )
-    return DecisionContextSnapshot(prompt, dataset, telemetry, artifact, meta)
+    
+    # Legacy snapshot compatibility mapping
+    if "rationale" in data:
+        rationale = DecisionRationale(
+            reasoning_steps=data["rationale"]["reasoning_steps"],
+            market_assumptions=data["rationale"]["market_assumptions"]
+        )
+    else:
+        rationale = DecisionRationale("Default Reasoning", "Default Assumptions")
+        
+    if "hypothesis" in data:
+        hypothesis = DecisionHypothesis(
+            thesis_urn=data["hypothesis"]["thesis_urn"],
+            expected_return_bps=data["hypothesis"]["expected_return_bps"],
+            validity_horizon_seconds=data["hypothesis"]["validity_horizon_seconds"]
+        )
+    else:
+        hypothesis = DecisionHypothesis("urn:thesis:default", 100, 3600)
+        
+    if "confidence" in data:
+        confidence = DecisionConfidence(
+            probability=data["confidence"]["probability"],
+            standard_deviation=data["confidence"]["standard_deviation"]
+        )
+    else:
+        confidence = DecisionConfidence(1.0, 0.0)
+        
+    return DecisionContextSnapshot(prompt, dataset, telemetry, artifact, meta, rationale, hypothesis, confidence)
 
 class PostgresDecisionJournalRepository(DecisionJournalRepository):
     def __init__(self, conn):
@@ -226,73 +267,6 @@ class PostgresDecisionJournalRepository(DecisionJournalRepository):
                     CREATE TABLE IF NOT EXISTS {partition_name} PARTITION OF decision_evidences
                     FOR VALUES FROM ('{date_str} 00:00:00') TO ('{next_day_str} 00:00:00')
                 """)
-
-    def _setup_schema(self) -> None:
-        with self.conn.cursor() as cur:
-            cur.execute("""
-                CREATE TABLE IF NOT EXISTS decision_journals (
-                    decision_id VARCHAR(128) NOT NULL,
-                    parent_decision_id VARCHAR(128),
-                    root_decision_id VARCHAR(128) NOT NULL,
-                    proposing_agent_id VARCHAR(128) NOT NULL,
-                    signature VARCHAR(256) NOT NULL,
-                    thesis_urn VARCHAR(128) NOT NULL,
-                    context_hash VARCHAR(64) NOT NULL,
-                    context_uri VARCHAR(512) NOT NULL,
-                    context_snapshot_json JSONB NOT NULL,
-                    created_at TIMESTAMP NOT NULL,
-                    PRIMARY KEY (decision_id, root_decision_id, created_at)
-                ) PARTITION BY RANGE (created_at);
-                
-                CREATE TABLE IF NOT EXISTS decision_revisions (
-                    revision_id VARCHAR(128) NOT NULL,
-                    parent_decision_id VARCHAR(128) NOT NULL,
-                    root_decision_id VARCHAR(128) NOT NULL,
-                    proposing_agent_id VARCHAR(128) NOT NULL,
-                    signature VARCHAR(256) NOT NULL,
-                    correction_reason VARCHAR(512) NOT NULL,
-                    context_hash VARCHAR(64) NOT NULL,
-                    context_uri VARCHAR(512) NOT NULL,
-                    context_snapshot_json JSONB NOT NULL,
-                    created_at TIMESTAMP NOT NULL,
-                    PRIMARY KEY (revision_id, root_decision_id, created_at)
-                ) PARTITION BY RANGE (created_at);
-
-                CREATE TABLE IF NOT EXISTS decision_evidences (
-                    evidence_id VARCHAR(128) NOT NULL,
-                    decision_id VARCHAR(128) NOT NULL,
-                    attached_by_agent_id VARCHAR(128) NOT NULL,
-                    signature VARCHAR(256) NOT NULL,
-                    evidence_json JSONB NOT NULL,
-                    created_at TIMESTAMP NOT NULL,
-                    PRIMARY KEY (evidence_id, created_at)
-                ) PARTITION BY RANGE (created_at);
-            """)
-            # Immutability trigger checks
-            cur.execute("""
-                CREATE OR REPLACE FUNCTION block_journal_mutation()
-                RETURNS TRIGGER AS $$
-                BEGIN
-                    RAISE EXCEPTION 'Decision Journal records are strictly immutable. UPDATE and DELETE operations are prohibited.';
-                END;
-                $$ LANGUAGE plpgsql;
-
-                DROP TRIGGER IF EXISTS enforce_journal_immutability ON decision_journals;
-                CREATE TRIGGER enforce_journal_immutability
-                BEFORE UPDATE OR DELETE ON decision_journals
-                FOR EACH ROW EXECUTE FUNCTION block_journal_mutation();
-
-                DROP TRIGGER IF EXISTS enforce_revision_immutability ON decision_revisions;
-                CREATE TRIGGER enforce_revision_immutability
-                BEFORE UPDATE OR DELETE ON decision_revisions
-                FOR EACH ROW EXECUTE FUNCTION block_journal_mutation();
-
-                DROP TRIGGER IF EXISTS enforce_evidence_immutability ON decision_evidences;
-                CREATE TRIGGER enforce_evidence_immutability
-                BEFORE UPDATE OR DELETE ON decision_evidences
-                FOR EACH ROW EXECUTE FUNCTION block_journal_mutation();
-            """)
-        self.conn.commit()
 
     def save_journal(self, journal: DecisionJournalAggregate) -> None:
         created_at = journal.created_at or datetime.utcnow()
@@ -502,18 +476,6 @@ class PostgresDecisionJournalRepository(DecisionJournalRepository):
 class PostgresActiveLeafProjectionRepository(ActiveLeafProjectionRepository):
     def __init__(self, conn):
         self.conn = conn
-
-    def _setup_schema(self) -> None:
-        with self.conn.cursor() as cur:
-            cur.execute("""
-                CREATE TABLE IF NOT EXISTS active_leaf_projections (
-                    root_decision_id VARCHAR(128) PRIMARY KEY,
-                    active_leaf_decision_id VARCHAR(128) NOT NULL,
-                    version INTEGER NOT NULL,
-                    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-                );
-            """)
-        self.conn.commit()
 
     def save_active_leaf(self, projection: ActiveLeafProjection) -> None:
         with self.conn.cursor() as cur:

@@ -2,7 +2,9 @@ from dataclasses import dataclass
 from datetime import datetime
 from typing import Optional
 from karsa.decision_journal.exceptions import ImmutabilityViolationException
-from karsa.decision_journal.value_objects import DecisionContextSnapshot, DecisionEvidence
+from karsa.decision_journal.value_objects import (
+    DecisionContextSnapshot, DecisionEvidence, DecisionRationale, DecisionHypothesis, DecisionConfidence
+)
 
 class ImmutableAggregate:
     """Base class for strictly immutable aggregates that prevent property modification at runtime."""
@@ -25,6 +27,18 @@ class DecisionJournalAggregate(ImmutableAggregate):
     context_hash: Optional[str] = None
     context_uri: Optional[str] = None
 
+    @property
+    def rationale(self) -> DecisionRationale:
+        return self.context_snapshot.rationale
+
+    @property
+    def hypothesis(self) -> DecisionHypothesis:
+        return self.context_snapshot.hypothesis
+
+    @property
+    def confidence(self) -> DecisionConfidence:
+        return self.context_snapshot.confidence
+
 @dataclass
 class DecisionRevisionAggregate(ImmutableAggregate):
     revision_id: str
@@ -37,6 +51,18 @@ class DecisionRevisionAggregate(ImmutableAggregate):
     created_at: datetime
     context_hash: Optional[str] = None
     context_uri: Optional[str] = None
+
+    @property
+    def rationale(self) -> DecisionRationale:
+        return self.context_snapshot.rationale
+
+    @property
+    def hypothesis(self) -> DecisionHypothesis:
+        return self.context_snapshot.hypothesis
+
+    @property
+    def confidence(self) -> DecisionConfidence:
+        return self.context_snapshot.confidence
 
 @dataclass
 class DecisionEvidenceAggregate(ImmutableAggregate):
