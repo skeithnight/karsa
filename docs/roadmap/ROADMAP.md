@@ -52,7 +52,7 @@
 
 
 ## Proposed Future Roadmap
-- **Sprint-42**: Thesis Engine Evolution (Refactor legacy repositories, clean up ActiveThesis debt, finalize Postgres schemas)
-- **Sprint-43**: Research Engine Foundation (Implement signal sandbox and prompt template auditing)
+- **Sprint-42**: Attribution Engine Foundation (Implement cost attribution models and performance-outcome calibration curves)
+- **Sprint-43**: Capital Allocation Engine Foundation (Implement Mean-Variance solvers and dynamic risk-budgeting solver loops)
 - **Sprint-44**: Regime Engine Foundation (Implement market regime classification and volatility states)
-- **Sprint-45**: Knowledge Graph Foundation (Implement semantic query and relationship storage layer)
+- **Sprint-45**: Thesis Engine Evolution (Refactor legacy repositories, clean up ActiveThesis debt, finalize Postgres schemas)
