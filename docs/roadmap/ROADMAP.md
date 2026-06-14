@@ -1,11 +1,11 @@
 # Consolidated Roadmap & Dashboard
 
 ## Current Architecture Baseline
-- Status: IMPLEMENTATION_COMPLETE (Sprint-40 Risk Engine Foundation Implemented)
-- Core Capabilities: Scalable bounded contexts, event-driven deterministic execution, capability-based security, write-once immutable decision ledgers, portfolio-level orchestration, dual-signature PEP validations, pre-outcome reasoning ledger, hindsight-prevention controls, authoritative decision authorization layer, ex-ante parametric risk engine, concentration and liquidity analysis, regime-aware volatility scaling, stress scenario testing.
+- Status: IMPLEMENTATION_COMPLETE (Sprint-41 Governance Engine Foundation Implemented)
+- Core Capabilities: Scalable bounded contexts, event-driven deterministic execution, capability-based security, write-once immutable decision ledgers, portfolio-level orchestration, dual-signature PEP validations, pre-outcome reasoning ledger, hindsight-prevention controls, authoritative decision authorization layer, ex-ante parametric risk engine, concentration and liquidity analysis, regime-aware volatility scaling, stress scenario testing, compliance policy lifecycles, Ed25519 double-signature Exception override verification.
 
 ## Current ADR Count
-- Total Active Architecture Decision Records: 54
+- Total Active Architecture Decision Records: 56
 
 ## Current Sprint Status
 - Sprint-01 Closed
@@ -48,11 +48,11 @@
 - Sprint-38 Closed (IMPLEMENTATION_COMPLETE, AUDIT_COMPLETE, REMEDIATION_COMPLETE, FULLY_COMPLIANT)
 - Sprint-39 Closed (IMPLEMENTATION_COMPLETE, AUDIT_COMPLETE, REMEDIATION_COMPLETE, FULLY_COMPLIANT)
 - Sprint-40 Closed (IMPLEMENTATION_COMPLETE, AUDIT_COMPLETE, REMEDIATION_COMPLETE, FULLY_COMPLIANT)
+- Sprint-41 Closed (IMPLEMENTATION_COMPLETE, AUDIT_COMPLETE, REMEDIATION_COMPLETE, FULLY_COMPLIANT)
 
 
 ## Proposed Future Roadmap
-- **Sprint-40**: Risk Engine Foundation (Implement ex-ante risk modeling, VaR/Stress testing, Covariance forecasting)
-- **Sprint-41**: Thesis Engine Evolution (Refactor legacy repositories, clean up ActiveThesis debt, finalize Postgres schemas)
-- **Sprint-42**: Research Engine Foundation (Implement signal sandbox and prompt template auditing)
-- **Sprint-43**: Regime Engine Foundation (Implement market regime classification and volatility states)
-- **Sprint-44**: Knowledge Graph Foundation (Implement semantic query and relationship storage layer)
+- **Sprint-42**: Thesis Engine Evolution (Refactor legacy repositories, clean up ActiveThesis debt, finalize Postgres schemas)
+- **Sprint-43**: Research Engine Foundation (Implement signal sandbox and prompt template auditing)
+- **Sprint-44**: Regime Engine Foundation (Implement market regime classification and volatility states)
+- **Sprint-45**: Knowledge Graph Foundation (Implement semantic query and relationship storage layer)

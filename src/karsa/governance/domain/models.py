@@ -9,27 +9,13 @@ from karsa.shared.domain.aggregate import VersionedAggregate
 class PolicyLifecycleState(Enum):
     DRAFT = "DRAFT"
     REVIEW = "REVIEW"
+    APPROVED = "APPROVED"
     ACTIVE = "ACTIVE"
-    SUSPENDED = "SUSPENDED"
-    REVOKED = "REVOKED"
     RETIRED = "RETIRED"
 
 class PolicyAction(Enum):
     ALLOW = "ALLOW"
     DENY = "DENY"
-    WARN = "WARN"
-
-@dataclass(frozen=True)
-class PolicyId:
-    value: str
-
-@dataclass(frozen=True)
-class PolicyVersion:
-    value: str  # e.g., "1.0.0"
-
-@dataclass(frozen=True)
-class DecisionReason:
-    value: str
 
 @dataclass(frozen=True)
 class PolicyURN:
@@ -53,14 +39,14 @@ class PolicyURN:
 
 @dataclass(frozen=True)
 class PolicyScope:
-    target_type: str  # e.g., "WORKFLOW", "CAPABILITY", "PROVIDER"
-    target_urn: str   # e.g., "urn:karsa:capability:chat:v1" or "*"
+    target_type: str  # PORTFOLIO, SECTOR, ASSET, CAPABILITY, WORKFLOW
+    target_urn: str   # URN or "*"
 
 @dataclass(frozen=True)
 class PolicyCondition:
-    attribute: str     # e.g., "estimated_cost", "execution_time"
-    operator: str      # e.g., "LESS_THAN_OR_EQUAL", "EQUALS"
-    value: str         # e.g., "0.05" or "ACTIVE"
+    attribute: str     # e.g., "portfolio_var_95", "estimated_cost"
+    operator: str      # e.g., "LESS_THAN_OR_EQUAL", "GREATER_THAN", "EQUALS"
+    value: str         # limit threshold value
 
     def evaluate(self, context: Dict[str, Any]) -> bool:
         if self.attribute not in context:
@@ -69,7 +55,7 @@ class PolicyCondition:
         op = self.operator
 
         try:
-            # Handle float comparison
+            # Handle numeric conversion & float comparison
             if op == "LESS_THAN_OR_EQUAL":
                 return float(ctx_val) <= float(self.value)
             elif op == "GREATER_THAN":
@@ -79,11 +65,6 @@ class PolicyCondition:
         except (ValueError, TypeError):
             return False
         return False
-
-@dataclass(frozen=True)
-class BudgetConstraint:
-    limit_usd: float
-    time_window_seconds: int
 
 @dataclass
 class PolicyRule:
@@ -135,21 +116,20 @@ class ImmutableList(list):
         super().__delitem__(key)
 
 @dataclass
-class PolicyDefinition(VersionedAggregate):
+class CompliancePolicy(VersionedAggregate):
+    row_id: str = field(default_factory=lambda: str(uuid.uuid4()))
     policy_id: str = field(default_factory=lambda: str(uuid.uuid4()))
     policy_urn: Optional[PolicyURN] = None
     state: PolicyLifecycleState = PolicyLifecycleState.DRAFT
     priority: int = 100
     scope: Optional[PolicyScope] = None
     rules: List[PolicyRule] = field(default_factory=list)
+    signature_block: Optional[Dict[str, Any]] = None
     created_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
     updated_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
 
     def __setattr__(self, name: str, value: Any) -> None:
-        prop = getattr(self.__class__, name, None)
-        if isinstance(prop, property) and prop.fset is None:
-            raise AttributeError("can't set attribute")
-        if "updated_at" in self.__dict__ and name not in ("state", "updated_at", "aggregate_version"):
+        if "updated_at" in self.__dict__ and name not in ("state", "updated_at", "aggregate_version", "signature_block"):
             self._check_immutability()
         if name == "rules" and not isinstance(value, ImmutableList):
             value = ImmutableList(value or [], self, name)
@@ -162,10 +142,9 @@ class PolicyDefinition(VersionedAggregate):
     def transition_to(self, new_state: PolicyLifecycleState, reason: str = "") -> None:
         valid_transitions = {
             PolicyLifecycleState.DRAFT: [PolicyLifecycleState.REVIEW],
-            PolicyLifecycleState.REVIEW: [PolicyLifecycleState.ACTIVE, PolicyLifecycleState.RETIRED],
-            PolicyLifecycleState.ACTIVE: [PolicyLifecycleState.SUSPENDED, PolicyLifecycleState.REVOKED, PolicyLifecycleState.RETIRED],
-            PolicyLifecycleState.SUSPENDED: [PolicyLifecycleState.ACTIVE, PolicyLifecycleState.RETIRED],
-            PolicyLifecycleState.REVOKED: [PolicyLifecycleState.RETIRED],
+            PolicyLifecycleState.REVIEW: [PolicyLifecycleState.APPROVED, PolicyLifecycleState.RETIRED],
+            PolicyLifecycleState.APPROVED: [PolicyLifecycleState.ACTIVE, PolicyLifecycleState.RETIRED],
+            PolicyLifecycleState.ACTIVE: [PolicyLifecycleState.RETIRED],
             PolicyLifecycleState.RETIRED: [],
         }
 
@@ -177,14 +156,106 @@ class PolicyDefinition(VersionedAggregate):
         self.updated_at = datetime.now(timezone.utc)
         self.increment_version()
 
+# Compatibility alias for legacy tests
+PolicyDefinition = CompliancePolicy
+
 @dataclass
-class GovernanceDecision(VersionedAggregate):
+class AuthorizationPolicy(VersionedAggregate):
+    policy_id: str = field(default_factory=lambda: str(uuid.uuid4()))
+    policy_urn: str = "" # e.g. urn:karsa:auth-policy:<name>:<version>
+    state: str = "ACTIVE" # ACTIVE, RETIRED
+    roles_mapping: List[Dict[str, Any]] = field(default_factory=list)
+    created_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
+
+@dataclass
+class ExceptionToken(VersionedAggregate):
+    token_hash: str = "" # Primary key
+    token_urn: str = ""
+    order_id: str = ""
+    state: str = "" # REQUESTED, APPROVED, ACTIVE, EXPIRED, REVOKED
+    target_type: str = ""
+    target_urn: str = ""
+    limit_parameter: str = ""
+    limit_ceiling: float = 0.0
+    start_time: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
+    expire_time: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
+    cio_signature: str = ""
+    compliance_signature: str = ""
+    created_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
+
+    @staticmethod
+    def generate_token_hash(payload: Dict[str, Any]) -> str:
+        # Serializes payload deterministically and computes SHA-256
+        import json
+        serialized = json.dumps(payload, sort_keys=True)
+        return hashlib.sha256(serialized.encode("utf-8")).hexdigest()
+
+@dataclass
+class ExceptionRevocation(VersionedAggregate):
+    revocation_id: str = field(default_factory=lambda: str(uuid.uuid4()))
+    token_hash: str = ""
+    revoked_by: str = ""
+    revoked_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
+    reason: str = ""
+
+@dataclass
+class GovernanceDecisionRecord(VersionedAggregate):
     decision_id: str = field(default_factory=lambda: str(uuid.uuid4()))
+    order_id: str = ""
+    decision_outcome: str = "DENY" # ALLOW, DENY, ALLOW_VIA_EXCEPTION
+    policy_version_urn: Optional[str] = None
+    exception_token_urn: Optional[str] = None
+    portfolio_snapshot_id: str = ""
+    risk_evaluation_id: str = ""
+    evaluated_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
+
+    # Legacy compatibility fields
     execution_id: str = ""
-    outcome: str = "DENIED"  # APPROVED, DENIED
+    outcome: str = ""
     reason: str = ""
     estimated_cost: float = 0.0
+
+    def __post_init__(self):
+        # Align compatibility fields
+        if self.execution_id and not self.order_id:
+            self.order_id = self.execution_id
+        elif self.order_id and not self.execution_id:
+            self.execution_id = self.order_id
+
+        if self.outcome and not self.decision_outcome:
+            if self.outcome == "APPROVED":
+                self.decision_outcome = "ALLOW"
+            elif self.outcome == "DENIED":
+                self.decision_outcome = "DENY"
+        elif self.decision_outcome and not self.outcome:
+            self.outcome = "APPROVED" if self.decision_outcome in ("ALLOW", "ALLOW_VIA_EXCEPTION") else "DENIED"
+
+# Compatibility alias for legacy tests
+GovernanceDecision = GovernanceDecisionRecord
+
+@dataclass
+class RiskStateSnapshot:
+    portfolio_snapshot_id: str
+    risk_metrics: Dict[str, Any] = field(default_factory=dict)
+    concentration_stats: Dict[str, Any] = field(default_factory=dict)
     evaluated_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
+    cached_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
+
+    def is_stale(self, max_stale_limit_seconds: int = 600) -> bool:
+        # Check staleness against evaluated_at timestamp
+        age = (datetime.now(timezone.utc) - self.evaluated_at).total_seconds()
+        return age > max_stale_limit_seconds
+
+# Compatibility models for legacy tests
+@dataclass
+class GovernanceBudgetCache:
+    workflow_id: str
+    remaining_budget: float
+    last_updated_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
+
+    def is_stale(self, max_stale_limit_seconds: int = 60) -> bool:
+        age = (datetime.now(timezone.utc) - self.last_updated_at).total_seconds()
+        return age > max_stale_limit_seconds
 
 @dataclass
 class GovernanceAuditChain(VersionedAggregate):
@@ -198,13 +269,3 @@ class GovernanceAuditChain(VersionedAggregate):
     def calculate_hash(decision_id: str, outcome: str, previous_hash: str) -> str:
         payload = f"{decision_id}|{outcome}|{previous_hash}"
         return hashlib.sha256(payload.encode("utf-8")).hexdigest()
-
-@dataclass
-class GovernanceBudgetCache:
-    workflow_id: str
-    remaining_budget: float
-    last_updated_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
-
-    def is_stale(self, max_stale_limit_seconds: int = 60) -> bool:
-        age = (datetime.now(timezone.utc) - self.last_updated_at).total_seconds()
-        return age > max_stale_limit_seconds

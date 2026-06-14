@@ -68,6 +68,7 @@ def test_policy_registration_and_state_transitions(memory_repos, event_bus):
 
     # Transition state
     registry.transition_policy_state("pol-1", PolicyLifecycleState.REVIEW, "Review requested")
+    registry.transition_policy_state("pol-1", PolicyLifecycleState.APPROVED, "Approved", signature_block={"cio_signature": "sig", "compliance_signature": "sig"})
     registry.transition_policy_state("pol-1", PolicyLifecycleState.ACTIVE, "Approval granted")
 
     loaded = policy_repo.find_by_id("pol-1")

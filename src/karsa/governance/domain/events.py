@@ -1,46 +1,86 @@
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import datetime, timezone
 from karsa.domain.events import DomainEvent
 
 @dataclass
 class PolicyCreatedEvent(DomainEvent):
+    event_id: str = ""
+    correlation_id: str = ""
+    causation_id: str = ""
     policy_id: str = ""
     policy_urn_str: str = ""
-    target_type: str = ""
-    target_urn: str = ""
-    timestamp: datetime = field(default_factory=datetime.now)
-    sequence_number: int = 0
+    scope_type: str = ""
+    scope_urn: str = ""
+    timestamp: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
+    event_version: int = 1
 
 @dataclass
 class PolicyActivatedEvent(DomainEvent):
+    event_id: str = ""
+    correlation_id: str = ""
+    causation_id: str = ""
     policy_id: str = ""
-    reason: str = ""
-    timestamp: datetime = field(default_factory=datetime.now)
-    sequence_number: int = 0
+    policy_urn_str: str = ""
+    timestamp: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
+    event_version: int = 1
 
 @dataclass
-class PolicySuspendedEvent(DomainEvent):
+class PolicyRetiredEvent(DomainEvent):
+    event_id: str = ""
+    correlation_id: str = ""
+    causation_id: str = ""
     policy_id: str = ""
-    reason: str = ""
-    timestamp: datetime = field(default_factory=datetime.now)
-    sequence_number: int = 0
+    policy_urn_str: str = ""
+    timestamp: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
+    event_version: int = 1
 
 @dataclass
-class PolicyRevokedEvent(DomainEvent):
-    policy_id: str = ""
+class ExceptionGrantedEvent(DomainEvent):
+    event_id: str = ""
+    correlation_id: str = ""
+    causation_id: str = ""
+    token_hash: str = ""
+    token_urn: str = ""
+    order_id: str = ""
+    timestamp: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
+    event_version: int = 1
+
+@dataclass
+class ExceptionExpiredEvent(DomainEvent):
+    event_id: str = ""
+    correlation_id: str = ""
+    causation_id: str = ""
+    token_hash: str = ""
+    token_urn: str = ""
+    timestamp: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
+    event_version: int = 1
+
+@dataclass
+class ExceptionRevokedEvent(DomainEvent):
+    event_id: str = ""
+    correlation_id: str = ""
+    causation_id: str = ""
+    token_hash: str = ""
+    token_urn: str = ""
     reason: str = ""
-    timestamp: datetime = field(default_factory=datetime.now)
-    sequence_number: int = 0
+    timestamp: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
+    event_version: int = 1
 
 @dataclass
 class GovernanceDecisionCreatedEvent(DomainEvent):
     decision_id: str = ""
     execution_id: str = ""
-    outcome: str = ""  # APPROVED, DENIED
+    outcome: str = ""
     reason: str = ""
     estimated_cost: float = 0.0
-    timestamp: datetime = field(default_factory=datetime.now)
-    sequence_number: int = 0
+    timestamp: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
+
+@dataclass
+class CapabilityExecutionApprovedEvent(DomainEvent):
+    execution_id: str = ""
+    capability_urn: str = ""
+    decision_id: str = ""
+    timestamp: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
 
 @dataclass
 class CapabilityExecutionDeniedEvent(DomainEvent):
@@ -48,53 +88,4 @@ class CapabilityExecutionDeniedEvent(DomainEvent):
     capability_urn: str = ""
     decision_id: str = ""
     reason: str = ""
-    timestamp: datetime = field(default_factory=datetime.now)
-    sequence_number: int = 0
-
-@dataclass
-class CapabilityExecutionApprovedEvent(DomainEvent):
-    execution_id: str = ""
-    capability_urn: str = ""
-    decision_id: str = ""
-    timestamp: datetime = field(default_factory=datetime.now)
-    sequence_number: int = 0
-
-@dataclass
-class ProviderExecutionDeniedEvent(DomainEvent):
-    execution_id: str = ""
-    provider_urn: str = ""
-    decision_id: str = ""
-    reason: str = ""
-    timestamp: datetime = field(default_factory=datetime.now)
-    sequence_number: int = 0
-
-@dataclass
-class ProviderExecutionApprovedEvent(DomainEvent):
-    execution_id: str = ""
-    provider_urn: str = ""
-    decision_id: str = ""
-    timestamp: datetime = field(default_factory=datetime.now)
-    sequence_number: int = 0
-
-@dataclass
-class SuspensionRequestedEvent(DomainEvent):
-    target_id: str = ""
-    target_type: str = ""  # "PROVIDER" or "CAPABILITY"
-    reason: str = ""
-    timestamp: datetime = field(default_factory=datetime.now)
-    sequence_number: int = 0
-
-@dataclass
-class RevocationRequestedEvent(DomainEvent):
-    target_id: str = ""
-    target_type: str = ""  # "PROVIDER" or "CAPABILITY"
-    reason: str = ""
-    timestamp: datetime = field(default_factory=datetime.now)
-    sequence_number: int = 0
-
-@dataclass
-class BudgetConsumptionUpdatedEvent(DomainEvent):
-    workflow_id: str = ""
-    remaining_budget: float = 0.0
-    timestamp: datetime = field(default_factory=datetime.now)
-    sequence_number: int = 0
+    timestamp: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
