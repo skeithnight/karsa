@@ -1,11 +1,11 @@
 # Consolidated Roadmap & Dashboard
 
 ## Current Architecture Baseline
-- Status: IMPLEMENTATION_COMPLETE (Sprint-39 Post-Mortem Engine Foundation Implemented)
-- Core Capabilities: Scalable bounded contexts, event-driven deterministic execution, capability-based security, write-once immutable decision ledgers, portfolio-level orchestration, dual-signature PEP validations, pre-outcome reasoning ledger, hindsight-prevention controls, authoritative decision authorization layer.
+- Status: IMPLEMENTATION_COMPLETE (Sprint-40 Risk Engine Foundation Implemented)
+- Core Capabilities: Scalable bounded contexts, event-driven deterministic execution, capability-based security, write-once immutable decision ledgers, portfolio-level orchestration, dual-signature PEP validations, pre-outcome reasoning ledger, hindsight-prevention controls, authoritative decision authorization layer, ex-ante parametric risk engine, concentration and liquidity analysis, regime-aware volatility scaling, stress scenario testing.
 
 ## Current ADR Count
-- Total Active Architecture Decision Records: 52
+- Total Active Architecture Decision Records: 54
 
 ## Current Sprint Status
 - Sprint-01 Closed
@@ -47,6 +47,8 @@
 - Sprint-37 Closed (IMPLEMENTATION_COMPLETE, AUDIT_COMPLETE, REMEDIATION_COMPLETE, FULLY_COMPLIANT)
 - Sprint-38 Closed (IMPLEMENTATION_COMPLETE, AUDIT_COMPLETE, REMEDIATION_COMPLETE, FULLY_COMPLIANT)
 - Sprint-39 Closed (IMPLEMENTATION_COMPLETE, AUDIT_COMPLETE, REMEDIATION_COMPLETE, FULLY_COMPLIANT)
+- Sprint-40 Closed (IMPLEMENTATION_COMPLETE, AUDIT_COMPLETE, REMEDIATION_COMPLETE, FULLY_COMPLIANT)
+
 
 ## Proposed Future Roadmap
 - **Sprint-40**: Risk Engine Foundation (Implement ex-ante risk modeling, VaR/Stress testing, Covariance forecasting)
