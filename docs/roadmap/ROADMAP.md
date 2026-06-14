@@ -5,7 +5,7 @@
 - Core Capabilities: Scalable bounded contexts, event-driven deterministic execution, capability-based security.
 
 ## Current ADR Count
-- Total Active Architecture Decision Records: 28
+- Total Active Architecture Decision Records: 34
 
 ## Current Sprint Status
 - Sprint-01 Closed
@@ -33,3 +33,4 @@
 - Sprint-22 Closed (Implementation Complete)
 - Sprint-23 Closed (Architecture Design Only)
 - Sprint-24 Closed (Implementation Complete)
+- Sprint-25 Closed (Implementation Complete)
