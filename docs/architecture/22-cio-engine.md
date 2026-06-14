@@ -5,22 +5,27 @@ This document defines the architecture of Karsa's **CIO Engine Foundation**, ser
 ---
 
 ## 1. Executive Summary
-The CIO Engine is the authoritative portfolio-level decision maker. It orchestrates risk and capital allocation adjustments, promotes/retires theses, and activates/retires workers. 
 
-To eliminate lock contention, ensure database scalability (100M+ events/day ecosystem), and guarantee audit integrity, the platform contains **zero mutable aggregate roots** and enforces an **immutable write-once decision ledger** model. All authorization instructions are cryptographically signed by the CIO Agent, establishing a tamper-proof trail that execution engines consume. Governance remains final and authoritative; the CIO Engine cannot override active compliance limits.
+The CIO Engine is the authoritative portfolio-level decision maker. It orchestrates risk and capital allocation adjustments, promotes/retires theses, and activates/retires workers.
+
+To eliminate lock contention, ensure database scalability (100M+ events/day ecosystem), and guarantee audit integrity, the platform contains **zero mutable aggregate roots** and shifts the Portfolio domain entity to a **read-side projection** model. All strategic updates are written to an **immutable write-once decision ledger**. Decisions are authorized using cryptographically signed payloads. 
+
+Governance remains the supreme authority; the CIO Engine cannot override active compliance limits. To bypass standard bounds, the CIO must request a signed Exception Token from the Governance PDP. Relationships with the Capital Allocation Engine are defined by a strict request-recalculate loop (Option C). Conflicting recommendations are resolved deterministically using a precedence-multiplier formula. Both human and agent actors emit identical decision events under a unified decision contract.
 
 ---
 
 ## 2. Ownership Boundary Matrix
 
-| Subsystem / Context | Authoritative Ledger | Permitted Mutating Writer | Data Store Location | Read/Write Pattern | Downstream Enforcements |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| **CIO Engine** | `cio_decisions`<br>`portfolio_states` | `CIODecisionService` | `db_cio` | Write-Once / Append-Only | Emits cryptographically signed execution authorization. |
-| **Governance Engine** | `governance_decisions` | `GovernanceService` | `db_governance` | Read-Only to CIO | Active compliance rules override CIO decisions. |
-| **Capital Allocation** | `allocation_records` | `AllocationService` | `db_allocation` | Read-Only to CIO | Provides capital & risk recommendation inputs. |
-| **Decision Journal** | `decision_journal_records` | `DecisionJournalService` | `db_journal` | Read-Only to CIO | Logs prediction Brier score calibrations. |
-| **Review Engine** | `review_verdicts` | `ReviewService` | `db_review` | Read-Only to CIO | Provides qualitative rating bounds. |
-| **Execution Engine** | `execution_records` | `ExecutionService` | `db_execution` | Read-Only to CIO | Enforces active trading limits from signed decisions. |
+| Capability / Action | Capital Allocation | CIO Engine | Governance Engine | Execution Engine |
+| :--- | :--- | :--- | :--- | :--- |
+| **Calculate Optimal Allocations** | **Authoritative (Calculates)** | Prohibited | Prohibited | Prohibited |
+| **Generate Allocation Recommendation** | **Authoritative (Generates)** | Prohibited | Prohibited | Prohibited |
+| **Approve Allocation Decision** | Prohibited | **Authoritative (Approves)** | Read-Only (PDP Check) | Consumer (Receives Signed) |
+| **Reject Allocation Recommendation** | Prohibited | **Authoritative (Rejects)** | Prohibited | Prohibited |
+| **Request Allocation Recalculation** | Consumer (Triggers solver) | **Authoritative (Requests)** | Prohibited | Prohibited |
+| **Validate Compliance & Exceptions** | Read-Only (Pre-check) | Read-Only (Consumer) | **Authoritative (Evaluates)** | Consumer (Final Check) |
+| **Issue Exception Tokens** | Prohibited | Requester | **Authoritative (Signs)** | Consumer (Validates) |
+| **Enforce Live Limits at Trade Execution** | Prohibited | Prohibited | Prohibited | **Authoritative (Execution)** |
 
 ---
 
@@ -29,15 +34,15 @@ To eliminate lock contention, ensure database scalability (100M+ events/day ecos
 ```mermaid
 graph TD
     CA[Capital Allocation] -->|1. Propose weights & risk budgets| CIO[CIO Engine]
-    GE[Governance Engine] -->|2. Validate limits & rules| CIO
+    GE[Governance Engine] -->|2. Validate limits & exception tokens| CIO
     RE[Review Engine] -->|3. Qualitative ratings| CIO
     DJ[Decision Journal] -->|4. Brier score calibrations| CIO
     
     CIO -->|5. Save immutable ledger entry| AP[cio_decisions Ledger]
-    CIO -->|6. Save active tree state| PS[portfolio_states Ledger]
+    CIO -->|6. CDC triggers projection| PS[portfolio_states Read Snapshot / Redis]
     
     AP -->|7. Emit Event: DecisionMade| Bus[Event Bus]
-    Bus -->|8. Enforce trade limits asynchronously| EE[Execution Engine]
+    Bus -->|8. PEP validates dual signatures & limits| EE[Execution Engine]
 ```
 
 ---
@@ -50,22 +55,35 @@ The domain design utilizes strictly write-once ledger records and value objects 
   - The context contains **zero mutable aggregate roots**, ensuring 100% lock-free concurrency.
 - **Ledger Entries**:
   - `CIODecision`: An immutable write-once ledger entry capturing approvals, rejections, promotions, and retirements.
-  - `PortfolioState`: An immutable write-once ledger entry representing the active configuration tree of the portfolio.
+- **Projections**:
+  - `PortfolioState`: An immutable read-side snapshot representing the projected active configuration tree of the portfolio.
 - **Value Objects**:
   - `PortfolioTree`: Structural configuration linking Portfolio $\to$ Strategy $\to$ Thesis $\to$ Decision $\to$ Worker.
   - `AuthorizationSignature`: Cryptographic proof authorizing the downstream execution engine to modify limits.
 
 ---
 
-## 5. Aggregate Design
+## 5. Aggregate Design & CIODecision Classification
+
 Should the CIO context use mutable aggregates, a portfolio aggregate + decision aggregate, or an immutable append-only decision ledger?
 
-- **Option A (Mutable CIODecision Aggregate)**: Represents decisions as aggregates updated with status (e.g. `PROPOSED` $\to$ `APPROVED`).
-  - *Evaluation*: Rejected. Mutable aggregates require OCC validation, causing database locks and write contention when multiple agents execute concurrent adjustments.
-- **Option B (Portfolio + Decision Aggregates)**: Represents the portfolio configuration as a mutable aggregate and decisions as immutable ledger entries.
-  - *Evaluation*: Rejected. Portfolio state updates still require row locking and concurrency checks, risking write hotspots.
-- **Option C (Immutable Append-Only Decision Ledger - Canonical Model)**: The context contains zero mutable aggregates. Every decision and active portfolio configuration is appended to the ledger as a write-once record. The current state is projected on the read-side by querying the latest ledger entry prior to the target timestamp.
-  - *Justification*: Guarantees 100% replay determinism, eliminates database lock contention, and provides a complete audit trail.
+### A. Portfolio Representation
+- **Option A (Portfolio Aggregate Root)**: Represents portfolio configuration as a mutable aggregate.
+  - *Evaluation*: Rejected. Forces row-locking and write contention, bottlenecking the VIF loop.
+- **Option B (Portfolio Immutable Ledger)**: Stores the state as raw events replayed on every read.
+  - *Evaluation*: Rejected due to poor read latency on high-throughput queries.
+- **Option C (Portfolio Projection - Selected)**: The Portfolio is a read-side projection compiled asynchronously from the append-only decision ledger (`cio_decisions`) into `portfolio_states` and Redis.
+
+### B. CIODecision Representation
+- **Option A (Mutable Aggregate with State Machine & OCC)**:
+  - *Evaluation*: Rejected. Requires row locks and concurrency validation on state changes, risking transaction timeouts under high agent volume.
+- **Option B (Immutable Decision Ledger - Selected)**:
+  - *Evaluation*: Selected. The context contains zero mutable state machines. Every decision is an append-only, write-once ledger record. 
+  - *Metrics*:
+    - **Replayability**: 100% deterministic (replays chronological append logs).
+    - **Scalability**: High throughput (lock-free INSERTs, no write hotspots).
+    - **Auditability**: Complete chronological record of every state transition.
+    - **Multi-Agent Compatibility**: Multiple agents write concurrently without blocking.
 
 ---
 
@@ -80,160 +98,78 @@ Should the CIO context use mutable aggregates, a portfolio aggregate + decision 
 
 ---
 
-## 7. Event Contracts
+## 7. Event Contracts & Unified Decision Contract
 
-### `PortfolioDecisionMadeEvent`
-- **Event Version**: 1
-- **Payload**:
+Both Human and Agent CIO actors emit identical decision events to ensure unified downstream validation:
+
 ```json
 {
-  "event_id": "evt_cio_dec_001",
-  "event_type": "PortfolioDecisionMadeEvent",
-  "correlation_id": "corr_cio_301",
-  "causation_id": "evt_ca_rec_002",
-  "decision_id": "dec_CIO_9011",
-  "portfolio_id": "port_vif_main",
-  "signature": "sig_ed25519_abc123xyz...",
-  "timestamp": "2026-06-14T09:20:00Z",
-  "event_version": 1
-}
-```
-
-### `AllocationProposalApprovedEvent`
-- **Event Version**: 1
-- **Payload**:
-```json
-{
-  "event_id": "evt_cio_app_001",
-  "event_type": "AllocationProposalApprovedEvent",
-  "correlation_id": "corr_cio_301",
-  "causation_id": "evt_ca_rec_002",
-  "decision_id": "dec_CIO_9011",
-  "calculation_id": "calc_CA_4001",
-  "approved_adjustments": [
-    {
-      "target_type": "WORKER",
-      "target_id": "worker_risk_02",
-      "approved_capital_ratio": "0.12",
-      "approved_risk_budget": {
-        "max_volatility": "0.15",
-        "drawdown_budget": "0.05",
-        "exposure_limit": "1.50"
-      }
-    }
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "PortfolioDecisionMadeEvent",
+  "type": "OBJECT",
+  "required": [
+    "event_id",
+    "event_type",
+    "correlation_id",
+    "causation_id",
+    "decision_id",
+    "portfolio_id",
+    "actor",
+    "action_type",
+    "payload",
+    "rationale",
+    "cryptographic_signature",
+    "timestamp",
+    "event_version"
   ],
-  "timestamp": "2026-06-14T09:20:01Z",
-  "event_version": 1
-}
-```
-
-### `AllocationProposalRejectedEvent`
-- **Event Version**: 1
-- **Payload**:
-```json
-{
-  "event_id": "evt_cio_rej_001",
-  "event_type": "AllocationProposalRejectedEvent",
-  "correlation_id": "corr_cio_301",
-  "causation_id": "evt_ca_rec_002",
-  "decision_id": "dec_CIO_9012",
-  "calculation_id": "calc_CA_4001",
-  "reason": "Risk budget exceeded at strategy level.",
-  "timestamp": "2026-06-14T09:20:02Z",
-  "event_version": 1
-}
-```
-
-### `ThesisPromotionApprovedEvent`
-- **Event Version**: 1
-- **Payload**:
-```json
-{
-  "event_id": "evt_cio_th_promo_001",
-  "event_type": "ThesisPromotionApprovedEvent",
-  "correlation_id": "corr_cio_302",
-  "causation_id": "cmd_promo_th_03",
-  "decision_id": "dec_CIO_9013",
-  "thesis_id": "th_ver_v2_05",
-  "target_strategy_id": "strat_alpha_long",
-  "timestamp": "2026-06-14T09:20:03Z",
-  "event_version": 1
-}
-```
-
-### `ThesisRetirementApprovedEvent`
-- **Event Version**: 1
-- **Payload**:
-```json
-{
-  "event_id": "evt_cio_th_ret_001",
-  "event_type": "ThesisRetirementApprovedEvent",
-  "correlation_id": "corr_cio_303",
-  "causation_id": "cmd_retire_th_01",
-  "decision_id": "dec_CIO_9014",
-  "thesis_id": "th_ver_v1_08",
-  "timestamp": "2026-06-14T09:20:04Z",
-  "event_version": 1
-}
-```
-
-### `WorkerActivationApprovedEvent`
-- **Event Version**: 1
-- **Payload**:
-```json
-{
-  "event_id": "evt_cio_wrk_act_001",
-  "event_type": "WorkerActivationApprovedEvent",
-  "correlation_id": "corr_cio_304",
-  "causation_id": "cmd_activate_wrk_02",
-  "decision_id": "dec_CIO_9015",
-  "worker_id": "worker_risk_02",
-  "parent_thesis_id": "th_ver_v2_05",
-  "timestamp": "2026-06-14T09:20:05Z",
-  "event_version": 1
-}
-```
-
-### `WorkerRetirementApprovedEvent`
-- **Event Version**: 1
-- **Payload**:
-```json
-{
-  "event_id": "evt_cio_wrk_ret_001",
-  "event_type": "WorkerRetirementApprovedEvent",
-  "correlation_id": "corr_cio_305",
-  "causation_id": "cmd_retire_wrk_05",
-  "decision_id": "dec_CIO_9016",
-  "worker_id": "worker_risk_01",
-  "timestamp": "2026-06-14T09:20:06Z",
-  "event_version": 1
-}
-```
-
-### `GovernanceExceptionRequestedEvent`
-- **Event Version**: 1
-- **Payload**:
-```json
-{
-  "event_id": "evt_cio_gov_exc_001",
-  "event_type": "GovernanceExceptionRequestedEvent",
-  "correlation_id": "corr_cio_306",
-  "causation_id": "cmd_req_exc_01",
-  "decision_id": "dec_CIO_9017",
-  "exception_details": {
-    "target_worker": "worker_risk_02",
-    "requested_leverage_limit": "2.00",
-    "justification": "Mitigate market crash delta exposure during execution phase."
-  },
-  "timestamp": "2026-06-14T09:20:07Z",
-  "event_version": 1
+  "properties": {
+    "event_id": { "type": "STRING" },
+    "event_type": { "type": "STRING" },
+    "correlation_id": { "type": "STRING" },
+    "causation_id": { "type": "STRING" },
+    "decision_id": { "type": "STRING" },
+    "portfolio_id": { "type": "STRING" },
+    "actor": {
+      "type": "OBJECT",
+      "required": ["actor_id", "actor_type"],
+      "properties": {
+        "actor_id": { "type": "STRING" },
+        "actor_type": { "type": "STRING", "enum": ["HUMAN", "AGENT"] }
+      }
+    },
+    "action_type": { "type": "STRING" },
+    "payload": { "type": "OBJECT" },
+    "rationale": {
+      "type": "OBJECT",
+      "required": ["summary", "references"],
+      "properties": {
+        "summary": { "type": "STRING" },
+        "references": {
+          "type": "ARRAY",
+          "items": { "type": "STRING" }
+        }
+      }
+    },
+    "cryptographic_signature": {
+      "type": "OBJECT",
+      "required": ["key_id", "algorithm", "signature_hex"],
+      "properties": {
+        "key_id": { "type": "STRING" },
+        "algorithm": { "type": "STRING" },
+        "signature_hex": { "type": "STRING" }
+      }
+    },
+    "timestamp": { "type": "STRING", "format": "date-time" },
+    "event_version": { "type": "INTEGER" }
+  }
 }
 ```
 
 ---
 
 ## 8. Application Services
-- **`CIODecisionService`**: Handles incoming proposals (allocation, promotions, retirements), applies the conflict resolution framework, records decisions in the write-once ledger, and signs payloads.
+
+- **`CIODecisionService`**: Handles incoming proposals, runs the Precedence-Multiplier conflict resolution framework, appends decisions to the ledger, and generates signatures.
 - **`PortfolioOrchestrationService`**: Computes read-side projections of the active portfolio hierarchy from the ledger.
 
 ---
@@ -243,10 +179,10 @@ Should the CIO context use mutable aggregates, a portfolio aggregate + decision 
 ```sql
 CREATE TABLE cio_decisions (
     decision_id VARCHAR(64) PRIMARY KEY,
-    calculation_id VARCHAR(64),                 -- Capital Allocation ID (optional)
-    governance_exception_id VARCHAR(64),        -- Exception reference (optional)
-    action_type VARCHAR(64) NOT NULL,          -- APPROVE_ALLOCation, PROMOTE_THESIS, RETIRE_WORKER, etc.
-    target_node_type VARCHAR(64) NOT NULL,       -- PORTFOLIO, STRATEGY, THESIS, WORKER
+    calculation_id VARCHAR(64),                 -- Capital Allocation ID
+    governance_exception_id VARCHAR(64),        -- Exception reference
+    action_type VARCHAR(64) NOT NULL,           -- APPROVE_ALLOCATION, REJECT_ALLOCATION, etc.
+    target_node_type VARCHAR(64) NOT NULL,      -- PORTFOLIO, STRATEGY, THESIS, WORKER
     target_node_id VARCHAR(64) NOT NULL,
     decision_payload JSONB NOT NULL DEFAULT '{}',
     cryptographic_signature VARCHAR(256) NOT NULL,
@@ -256,19 +192,19 @@ CREATE TABLE cio_decisions (
 CREATE TABLE portfolio_states (
     state_id VARCHAR(64) PRIMARY KEY,
     decision_id VARCHAR(64) REFERENCES cio_decisions(decision_id),
-    portfolio_tree JSONB NOT NULL,              -- Polymorphous tree state
+    portfolio_tree JSONB NOT NULL,              -- Projected tree state
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 ```
 
-- **OCC Strategy**: Concurrency controls are **eliminated**. All records are write-once and append-only.
+Database triggers prevent all updates/deletes to ensure ledger immutability. Concurrency controls are eliminated because all operations are append-only.
 
 ---
 
 ## 10. Integration Design
 
-- **Governance Engine**: Emits validation bounds and active overrides. Consumes Exception Requests.
-- **Capital Allocation Engine**: Emits recommendations. Consumes signed allocations.
+- **Governance Engine**: Emits validation bounds. Consumes Exception Requests and signs Exception tokens.
+- **Capital Allocation Engine**: Emits recommendations. Consumes signed allocation results and recalculation requests.
 - **Decision Journal**: Consumes decision payloads to log prediction quality calibrations.
 - **Observability Platform**: Consumes TraceIds to map lineage paths.
 
@@ -276,7 +212,8 @@ CREATE TABLE portfolio_states (
 
 ## 11. Sequence Diagrams
 
-### A. Conflict Resolution & Decision Authorization Flow
+### Conflict Resolution & Exception Request Flow
+
 ```mermaid
 sequenceDiagram
     participant CA as Capital Allocation Engine
@@ -287,9 +224,13 @@ sequenceDiagram
     
     CA->>CS: Publish AllocationAdjustmentRecommendedEvent
     CS->>GE: FetchActiveGovernancePolicy()
-    GE-->>CS: return Policy overrides & exceptions
-    Note over CS: Run Conflict Resolution Framework
-    CS->>CS: Generate Cryptographic Signature (Authorize payload)
+    GE-->>CS: return Policy limits (WARNING state detected)
+    Note over CS: Evaluate exception necessity
+    CS->>GE: Submit ExceptionRequest (leverage increase)
+    GE->>GE: Evaluate PDP Exception
+    GE-->>CS: Return signed Exception Token
+    Note over CS: Run Precedence-Multiplier Resolution
+    CS->>CS: Sign authorized decision payload
     CS->>DL: INSERT INTO cio_decisions (Append-Only)
     CS->>Bus: Emit PortfolioDecisionMadeEvent
 ```
@@ -298,89 +239,105 @@ sequenceDiagram
 
 ## 12. State Diagrams
 
-### `PortfolioState` Transition Model
+### `PortfolioState` Projection Transition Model
+
 ```mermaid
 stateDiagram-v2
     [*] --> STAGED
-    STAGED --> ACTIVE : Insert New State Row
-    ACTIVE --> ARCHIVED : Insert Next State Row
+    STAGED --> ACTIVE : CDC Appends New State Row
+    ACTIVE --> ARCHIVED : Next Decision Appended
 ```
-*Note: Portfolio state transitions are captured by appending a new version row to `portfolio_states`.*
 
 ---
 
-## 13. Failure Handling
-- **Signature Outages**: If cryptographic keys are rotated or validation libraries fail, the Execution Engine rejects limit changes, failing closed.
-- **Split-Brain Resolutions**: If multiple agents trigger concurrent adjustments, the append-only ledger resolves conflicts by picking the latest record based on block number/timestamp, resolving race conditions.
+## 13. Conflict Resolution Framework
+
+### Precedence Model
+1. **Governance Hard Stop**: Multiplier = 0.0 (Immediate defunding).
+2. **CIO Override Decision**: Replaces models with explicit target values.
+3. **Governance Soft Limit / Warning**: Caps upper limit ($Cap_{gov}$).
+4. **Post-Mortem Failure Weight**: Multiplier penalty ($W_{pm}$).
+5. **Capital Allocation Model**: Base proposed weight ($A_{base}$).
+6. **Review Engine Score**: Multiplier penalty ($W_{rev}$).
+7. **Analyst Signals**: Weighted direction scaled by Decision Journal Brier scores.
+
+### Weighting Formula
+$$A_{raw} = A_{base} \times W_{pm} \times W_{rev} \times \left(1.0 + \sum_{i} (Signal_{i} \times (1.0 - Brier_{i})) \times 0.1\right)$$
+$$A_{final} = \min(A_{raw}, Cap_{gov})$$
+
+- **Tie-Breaking**: Broken by consensus trend, followed by risk-contribution minimization, and defaulting to passive cash.
+- **Escalation**: Defunds and creates a Governance review ticket if $A_{final}$ falls below the economic threshold.
 
 ---
 
-## 14. OCC Strategy
-Optimistic Concurrency Control (OCC) is **completely eliminated** since all tables are append-only.
+## 14. Replay Lineage Chain
+
+To verify why a specific portfolio change occurred, the audit traces:
+$$\text{Research} \to \text{Thesis} \to \text{Decision Journal} \to \text{Attribution} \to \text{Governance} \to \text{Allocation} \to \text{CIO Decision}$$
+
+- **Authoritative Trace Link**: Every table records the parent transaction hash and unique causation IDs, maintaining a correlation chain across all hop transitions.
 
 ---
 
 ## 15. Scalability Analysis
-- **Throughput**: Flat ledger tables support fast asynchronous writes.
-- **Projection Rebuilds**: Read-side cache (Redis) stores the projected tree state, compiled out-of-band by CDC pipelines, keeping query costs minimal.
+
+- **Lock-Free Operation**: Flat append-only ledger tables support fast asynchronous writes.
+- **Projection Caching**: Read-side cache (Redis) stores the projected tree state, compiled out-of-band by CDC pipelines, keeping query costs minimal.
 
 ---
 
 ## 16. Security Analysis
+
 - **Decision Tampering**: Database triggers prevent all updates/deletes.
-- **Signature Verification**: Every execution adjustment is cryptographically verified by the Execution Engine before limits are modified, blocking unauthorized requests.
+- **PEP Enforcement**: Every execution adjustment is cryptographically verified at the PEP. Dual signature verification is required for exceptions:
+  $$\text{Authorized} \iff \text{ValidSignature}(\text{CIO}) \land \text{ValidSignature}(\text{GovernanceException}) \land \neg \text{ActiveGovernanceBreach}()$$
 
 ---
 
-## 17. Migration Strategy
-1. Deploy SQL tables.
-2. Bootstrap the root `PortfolioState` linked to a system initialization decision.
-3. Conduct shadow runs where agent proposals are signed but execute on mock limits.
+## 17. Risks
+
+- **God Context Risk**: CIO could expand to absorb risk modeling, policy validation, and execution.
+  - *Mitigation*: Bounded Context limits enforce that the CIO can only write decisions to `cio_decisions` and cannot perform execution, policy validation, or risk optimization directly.
 
 ---
 
-## 18. Risks
-- **Signature Key Compromise**: If the CIO Agent's keys are leaked, malicious limits could be authorized. *Remediation*: Multi-agent multi-signature verification requirement for high-value adjustments.
+## 18. ADR Decisions
 
----
-
-## 19. ADR Decisions
 Refer to ADR-047 and ADR-048.
 
 ---
 
-## 20. Architecture Challenges
+## 19. Architecture Challenges Answers
 
-### 1. What does the CIO Engine own?
-The authoritative decision records, thesis promotion/retirement status, worker activation/retirement status, allocation proposal approvals, and cryptographic execution signatures.
+1. **What does the CIO Engine own?**
+   Authoritative decision records, thesis promotion/retirement status, worker activation/retirement status, allocation proposal approvals, and cryptographic execution signatures.
+2. **What does the CIO Engine explicitly NOT own?**
+   Live execution, compliance exception approvals, quantitative allocation calculations, or alpha factor calculations.
+3. **Can CIO override Governance?**
+   **No**. Governance is the absolute final authority. Compliance breaches override any CIO adjustments, defunding target nodes immediately. The CIO must request an exception from Governance.
+4. **Can CIO modify Allocation records?**
+   **No**. Allocation records are owned by the Capital Allocation Engine. The CIO reviews allocations and signs off on approvals/rejections or requests a recalculation with new inputs/constraints (Option C).
+5. **Is CIO a decision maker or an execution engine?**
+   The CIO Engine is a **decision maker**. It orchestrates limits and weights, publishing authorized decisions. The Execution Engine is the actor that consumes these signed decisions and performs trades.
+6. **Is CIO portfolio-centric or worker-centric?**
+   Strictly **portfolio-centric**, managing the target allocation hierarchy (`Portfolio -> Strategy -> Thesis -> Decision -> Worker`).
+7. **How are conflicting recommendations resolved?**
+   We implement a **Precedence-Multiplier Conflict Resolution Framework** combining Governance stops, CIO overrides, warnings, post-mortem safety penalty factors, and analyst sentiment weighted by Brier scores.
+8. **How do we explain a portfolio decision 5 years later?**
+   Reconstruct the trace path through immutable logs and frozen contexts linked by `TraceId` and `causation_id` across the complete research-to-execution lineage chain.
 
-### 2. What does the CIO Engine explicitly NOT own?
-Live execution, compliance exception approvals, quantitative allocation calculations, or alpha factor calculations.
+---
 
-### 3. Can CIO override Governance?
-**No**. Governance is the absolute final authority. Compliance breaches override any CIO adjustments, defunding target nodes immediately. The CIO must request an exception from Governance.
+## 20. Bounded Context Responsibility Matrix
 
-### 4. Can CIO modify Allocation records?
-**No**. Allocation records are immutable write-once ledger entries owned by the Capital Allocation Engine. The CIO reviews allocations and signs off on approvals/rejections, which are written to the CIO's own ledger.
-
-### 5. Is CIO a decision maker or an execution engine?
-The CIO Engine is a **decision maker**. It orchestrates limits and weights, publishing authorized decisions. The Execution Engine is the actor that consumes these signed decisions and performs trades.
-
-### 6. Is CIO portfolio-centric or worker-centric?
-Strictly **portfolio-centric**, managing the target allocation hierarchy (`Portfolio -> Strategy -> Thesis -> Decision -> Worker`) to enforce asset-class limits and aggregate risk.
-
-### 7. How are conflicting recommendations resolved?
-We implement a **Precedence Order & Conflict Resolution Framework**:
-1. Governance `HARD_STOP` (Compliance block - Weight = 0.0).
-2. Active CIO Override (Strategic manual decision).
-3. Governance `SOFT_LIMIT` / Exception (Capped limits).
-4. Capital Allocation recommendations (Model weights).
-5. Review Engine qualitative rating multipliers.
-6. Decision Journal Brier scores.
-
-### 8. How do we explain a portfolio decision 5 years later?
-Reconstruct the trace path through immutable logs and frozen contexts linked by `TraceId`:
-`Research -> Thesis -> Decision Journal -> Attribution -> Governance -> Allocation -> CIO Decision`.
+| Context | Owner | Readers | Forbidden Actions |
+| :--- | :--- | :--- | :--- |
+| **CIO Engine** | Portfolio-level decisions, active tree configurations. | Governance, Execution, Capital Allocation | Cannot modify governance rules; cannot calculate optimal risk weights; cannot run worker code. |
+| **Capital Allocation** | Risk/return solvers, allocation proposals. | CIO, Governance | Cannot sign limit changes; cannot write trade records. |
+| **Governance Engine** | Compliance verification, exception signing. | CIO, Execution | Cannot submit exception requests for itself. |
+| **Thesis Engine** | Research tracking, thesis metadata drafts. | CIO, Research | Cannot approve thesis promotions without CIO signature. |
+| **Review Engine** | Performance scoring, worker ratings. | CIO, Governance | Cannot adjust allocation limits or override exception tokens. |
+| **Execution Engine** | Live limit enforcement, trade book writing. | Observability | Cannot bypass dual-signature verification checks. |
 
 ---
 
@@ -388,28 +345,20 @@ Reconstruct the trace path through immutable logs and frozen contexts linked by 
 
 | VIF Phase | Pre-Sprint-32 Baseline | Post-Sprint-32 CIO Design | Gaps Closed |
 | :--- | :--- | :--- | :--- |
-| **Portfolio Orchestration** | Disconnected signal evaluations and quantitative calculations. | Authorized, unified decision orchestration using append-only ledgers and signatures. | Established authoritative decision authority and conflict resolution frameworks. |
+| **State Management** | Implicit states. | Explicit portfolio projection snapshots from append-only ledger. | Eliminates OCC write contention, ensuring complete replayability. |
+| **Compliance** | Ambiguous overrides. | Strict Governance supremacy with exception tokens. | Guarantees compliance boundaries remain uncompromised. |
+| **Integration** | Ad-hoc calculations. | Strict request-recalculate loop with Capital Allocation (Option C). | Preserves single-responsibility boundaries. |
 
 ---
 
 ## 22. Acceptance Criteria
+
 1. **Compliance Invariant**: A decision payload containing a worker with a Governance `HARD_STOP` block must be set to `0.0` weight.
 2. **Signature Invariant**: Every `cio_decisions` entry must contain a valid cryptographic signature.
 3. **Immutability Invariant**: Writing an `UPDATE` or `DELETE` statement against `cio_decisions` or `portfolio_states` must raise a database exception.
 
 ---
 
-## 23. VIF Success Questions Answers
+## 23. Final Verdict
 
-1. **Why does the CIO Engine exist as its own bounded context?**
-   It separates strategic decision authorization from model optimizations and trade execution.
-2. **Who validates execution limits?**
-   The Execution Engine, using the CIO Agent's cryptographic signature.
-3. **What is the source of truth for portfolio states?**
-   The append-only `portfolio_states` relational table.
-
----
-
-## 24. Final Verdict
-
-**ARCHITECTURE_APPROVED**
+### **ARCHITECTURE_FROZEN**
