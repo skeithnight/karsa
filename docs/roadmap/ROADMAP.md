@@ -1,11 +1,11 @@
 # Consolidated Roadmap & Dashboard
 
 ## Current Architecture Baseline
-- Status: IMPLEMENTATION_COMPLETE (Sprint-37 Decision Journal Foundation Complete)
-- Core Capabilities: Scalable bounded contexts, event-driven deterministic execution, capability-based security, write-once immutable decision ledgers, portfolio-level orchestration, dual-signature PEP validations, pre-outcome reasoning ledger, hindsight-prevention controls.
+- Status: IMPLEMENTATION_COMPLETE (Sprint-38 CIO Engine Foundation Complete)
+- Core Capabilities: Scalable bounded contexts, event-driven deterministic execution, capability-based security, write-once immutable decision ledgers, portfolio-level orchestration, dual-signature PEP validations, pre-outcome reasoning ledger, hindsight-prevention controls, authoritative decision authorization layer.
 
 ## Current ADR Count
-- Total Active Architecture Decision Records: 51
+- Total Active Architecture Decision Records: 52
 
 ## Current Sprint Status
 - Sprint-01 Closed
@@ -45,10 +45,9 @@
 - Sprint-34 Closed (Architecture Design Frozen)
 - Sprint-35 Closed (IMPLEMENTATION_COMPLETE, AUDIT_COMPLETE, REMEDIATION_COMPLETE, FULLY_COMPLIANT)
 - Sprint-37 Closed (IMPLEMENTATION_COMPLETE, AUDIT_COMPLETE, REMEDIATION_COMPLETE, FULLY_COMPLIANT)
+- Sprint-38 Closed (IMPLEMENTATION_COMPLETE, AUDIT_COMPLETE, REMEDIATION_COMPLETE, FULLY_COMPLIANT)
 
 ## Proposed Future Roadmap
-- **Sprint-36**: Performance Engine Evolution (Evolve file JSON persistence to PostgreSQL, add Sortino ratio, expose REST endpoints)
-- **Sprint-38**: CIO Engine Foundation (Implement write-once CIO decision ledger and authorization signature logic)
 - **Sprint-39**: Post-Mortem Engine Foundation (Implement failure classification taxonomy and feedback loops)
 - **Sprint-40**: Risk Engine Foundation (Implement ex-ante risk modeling, VaR/Stress testing, Covariance forecasting)
 - **Sprint-41**: Thesis Engine Evolution (Refactor legacy repositories, clean up ActiveThesis debt, finalize Postgres schemas)
