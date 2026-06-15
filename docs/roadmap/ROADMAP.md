@@ -1,8 +1,8 @@
 # Consolidated Roadmap & Dashboard
 
 ## Current Architecture Baseline
-- Status: IMPLEMENTATION_COMPLETE (Sprint-42 Attribution Engine Foundation Implemented)
-- Core Capabilities: Scalable bounded contexts, event-driven deterministic execution, capability-based security, write-once immutable decision ledgers, portfolio-level orchestration, dual-signature PEP validations, pre-outcome reasoning ledger, hindsight-prevention controls, authoritative decision authorization layer, ex-ante parametric risk engine, concentration and liquidity analysis, regime-aware volatility scaling, stress scenario testing, compliance policy lifecycles, Ed25519 double-signature Exception override verification, cost attribution models, performance-outcome calibration curves, ex-post performance return decomposition (selection, allocation, execution, beta, and residual returns), and deterministic recomputation chains.
+- Status: IMPLEMENTATION_COMPLETE (Sprint-44 Review & Post-Mortem Foundation Implemented)
+- Core Capabilities: Scalable bounded contexts, event-driven deterministic execution, capability-based security, write-once immutable decision ledgers, portfolio-level orchestration, dual-signature PEP validations, pre-outcome reasoning ledger, hindsight-prevention controls, authoritative decision authorization layer, ex-ante parametric risk engine, concentration and liquidity analysis, regime-aware volatility scaling, stress scenario testing, compliance policy lifecycles, Ed25519 double-signature Exception override verification, cost attribution models, performance-outcome calibration curves, ex-post performance return decomposition (selection, allocation, execution, beta, and residual returns), deterministic recomputation chains, qualitative review sessions, append-only post-mortem consensus ledgers, quarterly range partitioning, immutable database-level triggers, deterministic consensus solving, and review invalidation and lineage tracking.
 
 ## Current ADR Count
 - Total Active Architecture Decision Records: 56
@@ -50,9 +50,11 @@
 - Sprint-40 Closed (IMPLEMENTATION_COMPLETE, AUDIT_COMPLETE, REMEDIATION_COMPLETE, FULLY_COMPLIANT)
 - Sprint-41 Closed (IMPLEMENTATION_COMPLETE, AUDIT_COMPLETE, REMEDIATION_COMPLETE, FULLY_COMPLIANT)
 - Sprint-42 Closed (SPRINT_42_CLOSED, FULLY_COMPLIANT, CLOSED_SPRINT_PROTECTED)
+- Sprint-43 Closed (IMPLEMENTATION_COMPLETE, AUDIT_COMPLETE, FULLY_COMPLIANT, CLOSED_SPRINT_PROTECTED)
+- Sprint-44 Closed (IMPLEMENTATION_COMPLETE, AUDIT_COMPLETE, REMEDIATION_COMPLETE, FULLY_COMPLIANT, CLOSED_SPRINT_PROTECTED)
 
 
 ## Proposed Future Roadmap
-- **Sprint-43**: Capital Allocation Engine Foundation (Implement Mean-Variance solvers and dynamic risk-budgeting solver loops)
-- **Sprint-44**: Regime Engine Foundation (Implement market regime classification and volatility states)
-- **Sprint-45**: Thesis Engine Evolution (Refactor legacy repositories, clean up ActiveThesis debt, finalize Postgres schemas)
+- **Sprint-45**: Capital Allocation Foundation (Implement dynamic capital allocation and mean-variance sizing)
+- **Sprint-46**: Regime Foundation (Implement regime-aware volatility scaling and classification)
+- **Sprint-47**: Thesis Evolution (Implement evolutionary thesis models and validation checks)

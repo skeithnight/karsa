@@ -1,35 +1,54 @@
 from abc import ABC, abstractmethod
 from typing import Optional, List
-from karsa.performance.domain.model.evaluation import DecisionEvaluation, EvaluationSnapshot
-from karsa.performance.domain.model.value_objects import EvaluationTarget
+from karsa.performance.domain.model.models import PerformanceSession, WorkerEvaluationRecord
 
-class DecisionEvaluationRepository(ABC):
+class PerformanceSessionRepository(ABC):
     @abstractmethod
-    def save(self, evaluation: DecisionEvaluation) -> None:
+    def save(self, session: PerformanceSession) -> None:
         pass
 
     @abstractmethod
-    def find_by_decision(self, decision_id: str) -> Optional[DecisionEvaluation]:
+    def get_by_id(self, session_id: str) -> Optional[PerformanceSession]:
         pass
 
     @abstractmethod
-    def list_all(self) -> List[DecisionEvaluation]:
-        pass
-
-
-class EvaluationSnapshotRepository(ABC):
-    @abstractmethod
-    def save(self, snapshot: EvaluationSnapshot) -> None:
+    def list_all(self) -> List[PerformanceSession]:
         pass
 
     @abstractmethod
-    def find_by_id(self, snapshot_id: str) -> Optional[EvaluationSnapshot]:
+    def clear(self) -> None:
+        pass
+
+
+class WorkerEvaluationRepository(ABC):
+    @abstractmethod
+    def save(self, record: WorkerEvaluationRecord) -> None:
         pass
 
     @abstractmethod
-    def list_by_target(self, target: EvaluationTarget) -> List[EvaluationSnapshot]:
+    def find_by_id(self, record_id: str, version: int) -> Optional[WorkerEvaluationRecord]:
         pass
 
     @abstractmethod
-    def list_all(self) -> List[EvaluationSnapshot]:
+    def find_active_by_worker(self, worker_urn: str) -> List[WorkerEvaluationRecord]:
+        pass
+
+    @abstractmethod
+    def find_by_session(self, session_id: str) -> List[WorkerEvaluationRecord]:
+        pass
+
+    @abstractmethod
+    def list_all(self) -> List[WorkerEvaluationRecord]:
+        pass
+
+    @abstractmethod
+    def deactivate_old_versions(self, decision_id: str, exclude_version: int) -> None:
+        pass
+
+    @abstractmethod
+    def deactivate_by_session(self, session_id: str) -> None:
+        pass
+
+    @abstractmethod
+    def clear(self) -> None:
         pass
