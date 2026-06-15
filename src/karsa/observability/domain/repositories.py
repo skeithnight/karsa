@@ -1,28 +1,43 @@
+
 from abc import ABC, abstractmethod
 from typing import List, Optional
-from karsa.observability.domain.models import Span
+from .models import TraceSpan, WorkerState, QueueState, MetaHealthLedger, MetricSnapshot
 
-class SpanRepository(ABC):
+class TraceRepository(ABC):
     @abstractmethod
-    def save(self, span: Span) -> None:
+    def save_span(self, span: TraceSpan) -> None:
+        pass
+        
+    @abstractmethod
+    def get_by_trace_id(self, trace_id: str) -> List[TraceSpan]:
+        pass
+
+class SnapshotRepository(ABC):
+    @abstractmethod
+    def upsert_worker_state(self, state: WorkerState) -> None:
+        pass
+        
+    @abstractmethod
+    def get_worker_state(self, worker_id: str) -> Optional[WorkerState]:
+        pass
+        
+    @abstractmethod
+    def upsert_queue_state(self, state: QueueState) -> None:
+        pass
+        
+    @abstractmethod
+    def save_metric(self, metric: MetricSnapshot) -> None:
+        pass
+
+class ArchivalRepository(ABC):
+    @abstractmethod
+    def export_to_cold_storage(self, date_str: str) -> str:
         pass
 
     @abstractmethod
-    def save_batch(self, spans: List[Span]) -> None:
+    def verify_and_fetch_archive(self, s3_uri: str, expected_checksum: str) -> bytes:
         pass
-
+        
     @abstractmethod
-    def find_by_span_id(self, span_id: str) -> Optional[Span]:
-        pass
-
-    @abstractmethod
-    def find_by_trace_id(self, trace_id: str) -> List[Span]:
-        pass
-
-    @abstractmethod
-    def find_by_correlation_key(self, key: str, value: str) -> List[Span]:
-        pass
-
-    @abstractmethod
-    def prune_older_than_days(self, days: int) -> int:
+    def insert_sandbox_archive(self, raw_bytes: bytes) -> None:
         pass
