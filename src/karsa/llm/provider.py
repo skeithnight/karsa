@@ -1,7 +1,7 @@
 import time
 from typing import List
 from karsa.llm.client import LLMClient
-from karsa.observability.manager import ObservabilityManager
+
 
 class ProviderRetryPolicy:
     def __init__(self, max_attempts=4):
@@ -25,8 +25,8 @@ class ProviderRetryPolicy:
         return 0
 
 class ProviderManager(LLMClient):
-    def __init__(self, providers: List[LLMClient], obs_manager: ObservabilityManager = None, retry_policy: ProviderRetryPolicy = None):
-        super().__init__(obs_manager)
+    def __init__(self, providers: List[LLMClient], retry_policy: ProviderRetryPolicy = None):
+        super().__init__()
         if not providers:
             raise ValueError("Must provide at least one LLMClient")
         self.providers = providers

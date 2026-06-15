@@ -15,12 +15,9 @@ import re
 import textwrap
 from pathlib import Path
 from unittest.mock import MagicMock, patch
-from karsa.workflow.controller import StateController
-from karsa.workflow.engine import RevisionEngine, _extract_decision_reason
+# removed karsa.workflow.engine, _extract_decision_reason
 from karsa.models.state import WorkflowState
-from karsa.observability.manager import ObservabilityManager
-from karsa.observability.trace import TraceLogger
-from karsa.artifacts.manager import ArtifactManager
+
 from karsa.review.registry import IssueRegistry
 from karsa.review.convergence import ReviewConvergenceEngine
 from karsa.llm.pool import ProviderPool, ProviderKey

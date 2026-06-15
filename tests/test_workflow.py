@@ -1,4 +1,3 @@
-from karsa.workflow.controller import StateController
 from karsa.models.state import WorkflowState
 from pathlib import Path
 

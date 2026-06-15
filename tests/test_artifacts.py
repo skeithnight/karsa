@@ -1,4 +1,3 @@
-from karsa.artifacts.manager import ArtifactManager
 from pathlib import Path
 
 def test_artifact_manager_initialize(tmp_path: Path):

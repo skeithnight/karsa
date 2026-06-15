@@ -1,7 +1,6 @@
 import pytest
 from karsa.llm.client import LLMClient
 from karsa.llm.provider import ProviderManager, ProviderRetryPolicy
-from karsa.observability.manager import ObservabilityManager
 import os
 from pathlib import Path
 

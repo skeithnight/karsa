@@ -1,11 +1,10 @@
 import abc
 import os
 import time
-from karsa.observability.manager import ObservabilityManager
 
 class LLMClient(abc.ABC):
-    def __init__(self, obs_manager: ObservabilityManager = None):
-        self.obs = obs_manager
+    def __init__(self):
+        self.obs = None
 
     def generate_with_obs(self, agent_name: str, prompt: str, system_prompt: str = "") -> str:
         start_time = time.time()
@@ -53,8 +52,8 @@ class LLMClient(abc.ABC):
         pass
 
 class MockLLMClient(LLMClient):
-    def __init__(self, obs_manager: ObservabilityManager = None):
-        super().__init__(obs_manager)
+    def __init__(self):
+        super().__init__()
         self.model_name = "mock-llm"
 
     def generate(self, prompt: str, system_prompt: str = "") -> str:
@@ -96,8 +95,8 @@ class MockLLMClient(LLMClient):
         return f"Mock response for: {prompt}"
 
 class GeminiClient(LLMClient):
-    def __init__(self, obs_manager: ObservabilityManager = None, pool=None):
-        super().__init__(obs_manager)
+    def __init__(self, pool=None):
+        super().__init__()
         self.model_name = "gemini-2.5-flash"
         self.pool = pool
         self.current_key_fingerprint = None
@@ -144,3 +143,6 @@ class GeminiClient(LLMClient):
             is_quota = "429" in error_msg or "quota" in error_msg
             self.pool.mark_failure(provider_key, is_quota=is_quota)
             raise e
+
+class LLMClient:
+    pass

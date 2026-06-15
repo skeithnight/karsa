@@ -35,12 +35,14 @@ class PostgresRegimeSessionRepository(RegimeSessionRepository):
                 SET state = :state, aggregate_version = :ver 
                 WHERE session_urn = :urn AND aggregate_version = :curr_ver
             """)
+            print(f"DEBUG: update {domain_session.session_urn} from {current_version} to {domain_session.aggregate_version}")
             res = self.session.execute(update_stmt, {
                 "state": domain_session.state, 
                 "ver": domain_session.aggregate_version, 
                 "urn": domain_session.session_urn,
                 "curr_ver": current_version
             })
+            print(f"DEBUG: rowcount {res.rowcount}")
             if res.rowcount == 0:
                 raise ConcurrencyError("OCC violation on update")
         else:
