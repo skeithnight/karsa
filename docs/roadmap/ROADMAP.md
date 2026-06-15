@@ -52,9 +52,9 @@
 - Sprint-42 Closed (SPRINT_42_CLOSED, FULLY_COMPLIANT, CLOSED_SPRINT_PROTECTED)
 - Sprint-43 Closed (IMPLEMENTATION_COMPLETE, AUDIT_COMPLETE, FULLY_COMPLIANT, CLOSED_SPRINT_PROTECTED)
 - Sprint-44 Closed (IMPLEMENTATION_COMPLETE, AUDIT_COMPLETE, REMEDIATION_COMPLETE, FULLY_COMPLIANT, CLOSED_SPRINT_PROTECTED)
+- Sprint-45 Closed (IMPLEMENTATION_COMPLETE, AUDIT_COMPLETE, FULLY_COMPLIANT, CLOSED_SPRINT_PROTECTED)
 
 
 ## Proposed Future Roadmap
-- **Sprint-45**: Capital Allocation Foundation (Implement dynamic capital allocation and mean-variance sizing)
 - **Sprint-46**: Regime Foundation (Implement regime-aware volatility scaling and classification)
 - **Sprint-47**: Thesis Evolution (Implement evolutionary thesis models and validation checks)
