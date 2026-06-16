@@ -8,7 +8,7 @@ import { ListAnalystsVM } from "../../features/analysts/types/viewmodels";
 export function useAnalystsMetrics() {
   return useQuery<ListAnalystsVM, ApiError>({
     queryKey: queryKeys.analysts.metrics(),
-    queryFn: () => AnalystsApi.listMetrics().then(mapListAnalysts),
+    queryFn: async () => ({ data: [] }),
     staleTime: 60 * 1000,
   });
 }

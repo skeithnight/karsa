@@ -1,5 +1,5 @@
 export class ApiClient {
-  private static baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+  private static baseUrl = process.env.NEXT_PUBLIC_API_URL || "/api";
 
   static async fetch<T>(path: string, options?: RequestInit): Promise<T> {
     const response = await fetch(`${this.baseUrl}${path}`, {

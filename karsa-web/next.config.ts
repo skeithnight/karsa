@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  trailingSlash: true,
+  trailingSlash: false,
   images: {
     unoptimized: true
   },
@@ -9,7 +9,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: '/api/:path*',
-        destination: `${process.env.NEXT_PUBLIC_API_URL || 'http://karsa-api:8000'}/:path*`
+        destination: `${process.env.API_URL || 'http://karsa-api:8000'}/:path*`
       }
     ]
   }

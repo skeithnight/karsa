@@ -61,3 +61,47 @@ def create():
 
 if __name__ == "__main__":
     create()
+    pool = get_postgres_pool()
+    with pool.connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS event_journal (
+                    global_sequence BIGSERIAL PRIMARY KEY,
+                    event_id TEXT UNIQUE NOT NULL,
+                    event_type TEXT NOT NULL,
+                    aggregate_type TEXT NOT NULL,
+                    aggregate_id TEXT NOT NULL,
+                    aggregate_version INT NOT NULL,
+                    payload JSONB NOT NULL,
+                    occurred_at TIMESTAMP NOT NULL
+                );
+                CREATE TABLE IF NOT EXISTS projection_checkpoints (
+                    projection_name TEXT PRIMARY KEY,
+                    last_processed_sequence BIGINT NOT NULL DEFAULT 0,
+                    status TEXT NOT NULL DEFAULT 'NOT_STARTED',
+                    updated_at TIMESTAMP NOT NULL
+                );
+                CREATE TABLE IF NOT EXISTS portfolio_read_valuations (
+                    portfolio_id TEXT PRIMARY KEY,
+                    net_asset_value FLOAT NOT NULL,
+                    cash_balance FLOAT NOT NULL,
+                    updated_at TIMESTAMP NOT NULL
+                );
+                CREATE TABLE IF NOT EXISTS portfolio_read_positions (
+                    asset_id TEXT PRIMARY KEY,
+                    portfolio_id TEXT NOT NULL,
+                    quantity FLOAT NOT NULL,
+                    average_cost FLOAT NOT NULL,
+                    market_value FLOAT NOT NULL,
+                    exposure_pct FLOAT NOT NULL,
+                    exposure_value FLOAT NOT NULL,
+                    updated_at TIMESTAMP NOT NULL
+                );
+                CREATE TABLE IF NOT EXISTS portfolio_read_cash_ledgers (
+                    portfolio_id TEXT PRIMARY KEY,
+                    balance FLOAT NOT NULL,
+                    updated_at TIMESTAMP NOT NULL
+                );
+            """)
+        conn.commit()
+    print("ADR-071 Tables created")

@@ -29,7 +29,7 @@ export default function CioDashboardWorkspace() {
         ) : summary ? (
           <>
             <MetricCard title="Total AUM" metric={summary.totalAumDisplay} statusIndicator="neutral" />
-            <MetricCard title="Active Theses" metric={summary.activeThesesCount.toString()} statusIndicator="neutral" />
+            <MetricCard title="Active Theses" metric={(summary?.activeThesesCount ?? 0).toString()} statusIndicator="neutral" />
             <MetricCard title="Daily P&L" metric={summary.dailyPnlDisplay} statusIndicator={summary.dailyPnlRaw >= 0 ? 'positive' : 'negative'} />
           </>
         ) : (

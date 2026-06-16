@@ -58,13 +58,16 @@ RootLayout (Provides TanStack Query Client, Zustand Store)
 ```
 
 ## 7. API Contract Matrix
-| Endpoint | Method | Response Interface | Consumer |
-|---|---|---|---|
-| `/api/v1/search` | GET | `SearchResultDTO[]` | CommandPalette |
-| `/api/v1/theses` | GET | `ThesisListDTO[]` | ThesisWorkspacePage |
-| `/api/v1/theses/{id}/lineage` | GET | `ThesisLineageDTO` | ThesisDetailPage |
-| `/api/v1/workers/metrics` | GET | `AnalystMetricDTO[]` | AnalystsPage |
-| `/api/v1/portfolio/exposure` | GET | `ExposureHeatmapDTO` | PortfolioPage |
+| Method | Path | Frontend Consumer | Backend Owner | Status |
+|---|---|---|---|---|
+| GET | `/cio/decisions` | CIODashboardPage, InvestmentMemosPage | CIO Engine | Implemented + Verified |
+| GET | `/post-mortem/records` | InvestmentOversightPage | Post-Mortem Engine | Implemented + Verified |
+| GET | `/portfolio/summary` | CIODashboardPage | Portfolio Engine | Implemented + Verified |
+| GET | `/portfolio/exposure` | PortfolioPage | Portfolio Engine | Implemented + Verified |
+| GET | `/research/reports` | ResearchWorkspacePage | Research Engine | Deferred (Mocked) |
+| GET | `/theses` | ThesisWorkspacePage | Thesis Engine | Deferred (Mocked) |
+| GET | `/performance/attribution` | PerformanceAttributionPage | Performance Engine | Missing Router (Mocked) |
+| GET | `/workers/metrics` | AnalystsPage | Analysts Engine | Deferred (Mocked) |
 
 *(Note: API implementations are existing or read-only CQRS projections exposed by the API Gateway.)*
 

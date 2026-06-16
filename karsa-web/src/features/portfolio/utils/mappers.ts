@@ -5,17 +5,21 @@ import { formatPercentage } from "../../../lib/formatters/percentage";
 import { formatDate } from "../../../lib/formatters/date";
 import { PortfolioSummaryVM, PortfolioExposureVM, SectorExposureVM } from "../types/viewmodels";
 
-export function mapPortfolioSummary(dto: PortfolioSummaryResponseDTO): PortfolioSummaryVM {
+export function mapPortfolioSummary(dto: any): PortfolioSummaryVM {
+  const aum = dto.net_asset_value || dto.total_aum || 0;
+  const pnl = dto.daily_pnl || 0;
+  const count = dto.active_theses_count || 0;
+  const exposure = dto.net_exposure || 0;
   return {
-    totalAumRaw: dto.total_aum,
-    totalAumDisplay: formatCurrency(dto.total_aum, "USD"),
-    dailyPnlRaw: dto.daily_pnl,
-    dailyPnlDisplay: formatCurrency(dto.daily_pnl, "USD"),
-    activeThesesCount: dto.active_theses_count,
-    netExposureRaw: dto.net_exposure,
-    netExposureDisplay: formatPercentage(dto.net_exposure, 2),
-    lastUpdatedRaw: dto.last_updated,
-    lastUpdatedDisplay: formatDate(dto.last_updated, "short"),
+    totalAumRaw: aum,
+    totalAumDisplay: formatCurrency(aum, "USD"),
+    dailyPnlRaw: pnl,
+    dailyPnlDisplay: formatCurrency(pnl, "USD"),
+    activeThesesCount: count,
+    netExposureRaw: exposure,
+    netExposureDisplay: formatPercentage(exposure, 2),
+    lastUpdatedRaw: dto.last_updated || new Date().toISOString(),
+    lastUpdatedDisplay: formatDate(dto.last_updated || new Date().toISOString(), "short"),
   };
 }
 

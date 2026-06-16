@@ -29,7 +29,8 @@ from karsa.post_mortem.ports import SignatureValidationPort
 
 from karsa.portfolio.api import PortfolioAPI
 from karsa.portfolio.services import PortfolioProjectionService, PortfolioValuationService
-from karsa.portfolio.repositories import InMemoryValuationRepository, InMemoryPositionRepository, InMemoryCashLedgerRepository
+from karsa.portfolio.infrastructure.storage.postgres_read_repositories import PostgresValuationRepository, PostgresPositionRepository, PostgresCashLedgerRepository
+from karsa.memory.infrastructure.event.postgres_event_bus import PostgresEventBus
 
 from karsa.execution.application.services import (
     OrderPEPService, OrderRoutingService, FillService, ExecutionStateProjectionService
@@ -84,11 +85,13 @@ def get_postgres_pool() -> ConnectionPool:
 class ApplicationContainer:
     def __init__(self):
         self.pool = get_postgres_pool()
+        self.conn = self.pool.getconn()
+        self.conn.autocommit = True
         
         # Risk Setup
-        self.risk_repo = PostgresRiskEvaluationRepository(self.pool)
-        self.cov_repo = PostgresCovarianceForecastRepository(self.pool)
-        self.stress_repo = PostgresStressEvaluationRepository(self.pool)
+        self.risk_repo = PostgresRiskEvaluationRepository(self.conn)
+        self.cov_repo = PostgresCovarianceForecastRepository(self.conn)
+        self.stress_repo = PostgresStressEvaluationRepository(self.conn)
         
         self.risk_publisher = DummyPublisher()
         self.returns_port = DummyReturnsPort()
@@ -112,7 +115,7 @@ class ApplicationContainer:
         )
 
         # CIO Setup
-        self.cio_repo = PostgresCIODecisionRepository(self.pool)
+        self.cio_repo = PostgresCIODecisionRepository(self.conn)
         self.decision_journal = DummyDecisionJournal()
         self.gov_port = DummyGovernancePort()
         from cryptography.hazmat.primitives.asymmetric import ed25519
@@ -127,8 +130,8 @@ class ApplicationContainer:
         self.orchestration_service = PortfolioOrchestrationService(self.cio_repo)
         
         # Post Mortem Setup
-        self.pm_record_repo = PostgresPostMortemRecordRepository(self.pool)
-        self.pm_rec_repo = PostgresRecommendationRepository(self.pool)
+        self.pm_record_repo = PostgresPostMortemRecordRepository(self.conn)
+        self.pm_rec_repo = PostgresRecommendationRepository(self.conn)
         self.signature_validator = DummySignatureValidator()
         self.pm_service = PostMortemService(self.pm_record_repo, self.pm_rec_repo, self.risk_publisher)
         self.pm_rec_service = RecommendationRegistryService(self.pm_rec_repo, self.risk_publisher, self.signature_validator)
@@ -148,7 +151,7 @@ class ApplicationContainer:
         dummy_pep_key = ed25519.Ed25519PrivateKey.generate()
         self.pep_service = OrderPEPService(
             request_repo=DummyRequestRepo(),
-            decision_auth_port=PostgresDecisionAuthorizationAdapter(self.pool, dummy_cio_key.public_key()),
+            decision_auth_port=PostgresDecisionAuthorizationAdapter(self.conn, dummy_cio_key.public_key()),
             gov_auth_port=DummyGovAuthPort(),
             pep_private_key=dummy_pep_key
         )
@@ -170,9 +173,9 @@ class ApplicationContainer:
         )
         
         # Portfolio Setup
-        self.val_repo = InMemoryValuationRepository()
-        self.pos_repo = InMemoryPositionRepository()
-        self.cash_repo = InMemoryCashLedgerRepository()
+        self.val_repo = PostgresValuationRepository(self.pool)
+        self.pos_repo = PostgresPositionRepository(self.pool)
+        self.cash_repo = PostgresCashLedgerRepository(self.pool)
         self.portfolio_proj_service = PortfolioProjectionService(self.val_repo, self.pos_repo, self.cash_repo)
         self.portfolio_val_service = PortfolioValuationService(self.val_repo, self.pos_repo, self.cash_repo)
         self.portfolio_api = PortfolioAPI(
@@ -185,8 +188,10 @@ class ApplicationContainer:
         self.snapshot_repo = InMemorySnapshotRepository()
         self.registry_service = SchemaRegistryService(self.schema_repo)
         self.snapshot_service = SnapshotService(self.registry_service, self.snapshot_repo, self.blob_storage)
-        self.event_bus = MockEventBus()
+        self.event_bus = PostgresEventBus(self.pool)
 
     def close(self):
+        if hasattr(self, 'conn') and self.conn:
+            self.pool.putconn(self.conn)
         if self.pool:
             self.pool.close()

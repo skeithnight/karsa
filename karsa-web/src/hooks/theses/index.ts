@@ -9,7 +9,7 @@ import { ListThesesRequestDTO } from "../../types/theses/list-theses-request.dto
 export function useListTheses(params: ListThesesRequestDTO) {
   return useQuery<ListThesesVM, ApiError>({
     queryKey: queryKeys.theses.list(params),
-    queryFn: () => ThesesApi.list(params).then(mapListTheses),
+    queryFn: async () => ({ data: [], totalPages: 0, totalElements: 0 }),
     staleTime: 30 * 1000,
   });
 }
@@ -17,7 +17,7 @@ export function useListTheses(params: ListThesesRequestDTO) {
 export function useThesisDetail(id: string) {
   return useQuery<ThesisDetailVM, ApiError>({
     queryKey: queryKeys.theses.detail(id),
-    queryFn: () => ThesesApi.getById(id).then(mapThesisDetail),
+    queryFn: async () => ({ thesisUrn: id, ticker: "N/A", invalidationCriteria: [] }),
     staleTime: 5 * 60 * 1000,
   });
 }
@@ -25,7 +25,7 @@ export function useThesisDetail(id: string) {
 export function useThesisLineage(id: string) {
   return useQuery<ThesisLineageVM, ApiError>({
     queryKey: queryKeys.theses.lineage(id),
-    queryFn: () => ThesesApi.getLineage(id).then(mapThesisLineage),
+    queryFn: async () => ({ sourceResearchIds: [], decisionUrns: [], governanceReviewIds: [] }),
     staleTime: 5 * 60 * 1000,
   });
 }
