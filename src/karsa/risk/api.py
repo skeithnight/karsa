@@ -14,34 +14,14 @@ from karsa.risk.exceptions import (
 
 router = APIRouter(prefix="/risk", tags=["Risk Engine"])
 
-_risk_evaluation_service: Optional[RiskEvaluationService] = None
-_stress_testing_service: Optional[StressTestingService] = None
-_covariance_forecast_service: Optional[CovarianceForecastService] = None
-
 def get_risk_evaluation_service() -> RiskEvaluationService:
-    if _risk_evaluation_service is None:
-        raise RuntimeError("RiskEvaluationService not configured for API.")
-    return _risk_evaluation_service
+    raise NotImplementedError("Dependency must be overridden in app bootstrap")
 
 def get_stress_testing_service() -> StressTestingService:
-    if _stress_testing_service is None:
-        raise RuntimeError("StressTestingService not configured for API.")
-    return _stress_testing_service
+    raise NotImplementedError("Dependency must be overridden in app bootstrap")
 
 def get_covariance_forecast_service() -> CovarianceForecastService:
-    if _covariance_forecast_service is None:
-        raise RuntimeError("CovarianceForecastService not configured for API.")
-    return _covariance_forecast_service
-
-def configure_api(
-    risk_service: RiskEvaluationService,
-    stress_service: StressTestingService,
-    cov_service: CovarianceForecastService
-):
-    global _risk_evaluation_service, _stress_testing_service, _covariance_forecast_service
-    _risk_evaluation_service = risk_service
-    _stress_testing_service = stress_service
-    _covariance_forecast_service = cov_service
+    raise NotImplementedError("Dependency must be overridden in app bootstrap")
 
 class AssetExposureSchema(BaseModel):
     asset_urn: str

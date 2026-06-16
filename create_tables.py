@@ -1,0 +1,63 @@
+import psycopg
+from karsa.bootstrap import get_postgres_pool
+
+def create():
+    pool = get_postgres_pool()
+    with pool.connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS decision_journals (
+                    journal_ref TEXT PRIMARY KEY,
+                    sealed_at TIMESTAMP
+                );
+                CREATE TABLE IF NOT EXISTS cio_decisions (
+                    decision_id TEXT PRIMARY KEY,
+                    calculation_id TEXT,
+                    governance_exception_id TEXT,
+                    decision_journal_ref TEXT UNIQUE NOT NULL,
+                    portfolio_snapshot_hash TEXT NOT NULL,
+                    action_type TEXT NOT NULL,
+                    target_node_type TEXT NOT NULL,
+                    target_node_id TEXT NOT NULL,
+                    decision_payload JSONB NOT NULL,
+                    cryptographic_signature TEXT NOT NULL,
+                    created_at TIMESTAMP NOT NULL
+                );
+                CREATE TABLE IF NOT EXISTS portfolio_states (
+                    state_id TEXT PRIMARY KEY,
+                    decision_id TEXT NOT NULL,
+                    portfolio_tree JSONB NOT NULL,
+                    created_at TIMESTAMP NOT NULL
+                );
+                CREATE TABLE IF NOT EXISTS post_mortem_records (
+                    postmortem_id TEXT PRIMARY KEY,
+                    incident_ref TEXT UNIQUE NOT NULL,
+                    failure_classification JSONB NOT NULL,
+                    root_causes JSONB NOT NULL,
+                    findings JSONB NOT NULL,
+                    created_at TIMESTAMP NOT NULL
+                );
+                CREATE TABLE IF NOT EXISTS post_mortem_recommendations (
+                    recommendation_id TEXT PRIMARY KEY,
+                    postmortem_id TEXT NOT NULL,
+                    target_context TEXT NOT NULL,
+                    action_item TEXT NOT NULL,
+                    parameters JSONB NOT NULL,
+                    state TEXT NOT NULL,
+                    version INT NOT NULL,
+                    updated_at TIMESTAMP NOT NULL
+                );
+                CREATE TABLE IF NOT EXISTS recommendation_state_history (
+                    history_id TEXT PRIMARY KEY,
+                    recommendation_id TEXT NOT NULL,
+                    from_state TEXT NOT NULL,
+                    to_state TEXT NOT NULL,
+                    version INT NOT NULL,
+                    transitioned_at TIMESTAMP NOT NULL
+                );
+            """)
+        conn.commit()
+    print("Tables created")
+
+if __name__ == "__main__":
+    create()

@@ -108,11 +108,11 @@ npm run build
 ```
 
 ## Development Workflow
-Karsa operates under a zero-tolerance engineering governance model. All changes **must** follow the Strict Sprint Lifecycle:
+Karsa operates under a zero-tolerance engineering governance model via an Autonomous Delivery Engine. All changes **must** follow the Strict Sprint Lifecycle:
 
-**`PLAN` → `IMPLEMENT` → `AUDIT` → `REMEDIATE` → `CLOSE`**
+**`DESIGN` → `AUDIT` → `REMEDIATION` → `IMPLEMENT` → `AUDIT` → `REMEDIATION` → `VERIFY` → `DONE`**
 
-Every sprint must execute through `docs/implementation/sprint-XX/` containing exactly these 4 canonical files. Documentation drift and unverified claims block Sprint closure. See `docs/WORKFLOW_RULES.md`.
+Every sprint must execute through `docs/implementation/sprint-XX/` containing exactly these canonical files. Documentation drift and unverified claims block Sprint closure. The orchestrator never stops on first failure; it generates findings, classifies severity, executes remediation automatically, and re-verifies until closure. See `docs/WORKFLOW_RULES.md`.
 
 ## Testing Strategy
 Tests in Karsa strictly evaluate behavioral verification and mutation resistance over raw coverage percentages.

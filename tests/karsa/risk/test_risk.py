@@ -36,7 +36,7 @@ from karsa.risk.services import (
     RiskEvaluationService,
     CovarianceForecastService,
 )
-from karsa.risk.api import router, configure_api
+from karsa.risk.api import router
 from karsa.risk.events import RiskEvaluationCreatedEvent, CovarianceForecastUpdatedEvent, StressEvaluationCreatedEvent
 
 # ----------------- Mock Port Implementations -----------------
@@ -122,10 +122,14 @@ def api_client(service_setup):
         _, _, _, _, _, _, _, _, _, stress_service, risk_service, cov_service
     ) = service_setup
     
-    configure_api(risk_service, stress_service, cov_service)
-    
     app = FastAPI()
     app.include_router(router)
+    
+    from karsa.risk.api import get_risk_evaluation_service, get_stress_testing_service, get_covariance_forecast_service
+    app.dependency_overrides[get_risk_evaluation_service] = lambda: risk_service
+    app.dependency_overrides[get_stress_testing_service] = lambda: stress_service
+    app.dependency_overrides[get_covariance_forecast_service] = lambda: cov_service
+    
     return TestClient(app)
 
 # ----------------- Value Object Validation Tests -----------------

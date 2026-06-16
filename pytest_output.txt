@@ -1,0 +1,1385 @@
+============================= test session starts ==============================
+platform linux -- Python 3.13.11, pytest-9.0.3, pluggy-1.6.0 -- /app/.venv/bin/python
+cachedir: .pytest_cache
+rootdir: /app
+configfile: pyproject.toml
+plugins: anyio-4.13.0
+collecting ... collected 596 items
+
+tests/karsa/allocation/application/service/test_allocation_application_service.py::test_allocation_lifecycle_publishes_artifacts PASSED [  0%]
+tests/karsa/allocation/application/service/test_allocation_application_service.py::test_invalid_allocation_id_raises_error PASSED [  0%]
+tests/karsa/allocation/application/service/test_services_batch3.py::test_calculation_service_success_and_supersede PASSED [  0%]
+tests/karsa/allocation/application/service/test_services_batch3.py::test_calculation_service_validation_failures PASSED [  0%]
+tests/karsa/allocation/application/service/test_services_batch3.py::test_calculation_service_occ_retries PASSED [  0%]
+tests/karsa/allocation/application/service/test_services_batch3.py::test_ranking_projection_deterministic_ordering PASSED [  1%]
+tests/karsa/allocation/application/service/test_services_batch3.py::test_replay_service_success_and_failures PASSED [  1%]
+tests/karsa/allocation/application/service/test_services_batch3.py::test_invalidation_service PASSED [  1%]
+tests/karsa/allocation/domain/model/test_model_allocation.py::test_allocation_initial_state PASSED [  1%]
+tests/karsa/allocation/domain/model/test_model_allocation.py::test_transition_pending_to_active PASSED [  1%]
+tests/karsa/allocation/domain/model/test_model_allocation.py::test_transition_active_to_suspended PASSED [  1%]
+tests/karsa/allocation/domain/model/test_model_allocation.py::test_transition_active_to_terminated PASSED [  2%]
+tests/karsa/allocation/domain/model/test_model_allocation.py::test_transition_suspended_to_active PASSED [  2%]
+tests/karsa/allocation/domain/model/test_model_allocation.py::test_transition_suspended_to_terminated PASSED [  2%]
+tests/karsa/allocation/domain/model/test_model_allocation.py::test_invalid_transition_terminated_to_active PASSED [  2%]
+tests/karsa/allocation/domain/model/test_model_allocation.py::test_invalid_transition_terminated_to_suspended PASSED [  2%]
+tests/karsa/allocation/domain/model/test_model_allocation.py::test_invalid_transition_terminated_to_terminated PASSED [  2%]
+tests/karsa/allocation/domain/model/test_model_allocation.py::test_liquidity_constraint_validation PASSED [  3%]
+tests/karsa/allocation/domain/model/test_model_allocation.py::test_scale_volatility_budget_does_not_mutate_state PASSED [  3%]
+tests/karsa/allocation/domain/model/test_model_allocation.py::test_scale_volatility_no_action_on_low_vol PASSED [  3%]
+tests/karsa/allocation/domain/model/test_model_allocation.py::test_evaluate_drawdown_suspends_on_breach PASSED [  3%]
+tests/karsa/allocation/domain/model/test_model_allocation.py::test_evaluate_drawdown_no_action_below_limit PASSED [  3%]
+tests/karsa/allocation/domain/test_domain_batch1.py::test_portfolio_horizon PASSED [  3%]
+tests/karsa/allocation/domain/test_domain_batch1.py::test_allocation_score PASSED [  4%]
+tests/karsa/allocation/domain/test_domain_batch1.py::test_risk_budget_assignment PASSED [  4%]
+tests/karsa/allocation/domain/test_domain_batch1.py::test_allocation_recommendation PASSED [  4%]
+tests/karsa/allocation/domain/test_domain_batch1.py::test_allocation_methodology_manifest PASSED [  4%]
+tests/karsa/allocation/domain/test_domain_batch1.py::test_allocation_session_lifecycle PASSED [  4%]
+tests/karsa/allocation/domain/test_domain_batch1.py::test_allocation_session_validation PASSED [  4%]
+tests/karsa/allocation/domain/test_domain_batch1.py::test_allocation_session_immutability PASSED [  5%]
+tests/karsa/allocation/domain/test_domain_batch1.py::test_allocation_session_serialization PASSED [  5%]
+tests/karsa/allocation/domain/test_domain_batch1.py::test_decision_record_lifecycle PASSED [  5%]
+tests/karsa/allocation/domain/test_domain_batch1.py::test_decision_record_validation PASSED [  5%]
+tests/karsa/allocation/domain/test_domain_batch1.py::test_decision_record_immutability PASSED [  5%]
+tests/karsa/allocation/domain/test_domain_batch1.py::test_domain_events PASSED [  5%]
+tests/karsa/allocation/domain/test_domain_batch1.py::test_reconstruct_allocation_lineage PASSED [  6%]
+tests/karsa/allocation/domain/test_domain_batch1.py::test_value_object_edge_cases PASSED [  6%]
+tests/karsa/allocation/domain/test_domain_batch1.py::test_allocation_session_edge_cases PASSED [  6%]
+tests/karsa/allocation/domain/test_domain_batch1.py::test_decision_record_edge_cases PASSED [  6%]
+tests/karsa/allocation/domain/test_domain_batch1.py::test_domain_events_edge_cases PASSED [  6%]
+tests/karsa/allocation/infrastructure/storage/test_storage_allocation_mapper.py::test_mapper_roundtrip PASSED [  6%]
+tests/karsa/allocation/infrastructure/storage/test_storage_allocation_repository.py::test_in_memory_repository_contract PASSED [  7%]
+tests/karsa/allocation/infrastructure/storage/test_storage_allocation_repository.py::test_postgres_repository_contract SKIPPED [  7%]
+tests/karsa/allocation/infrastructure/storage/test_storage_postgres_repositories_batch4.py::test_occ_conflict_integration SKIPPED [  7%]
+tests/karsa/allocation/infrastructure/storage/test_storage_postgres_repositories_batch4.py::test_lineage_traversal_integration SKIPPED [  7%]
+tests/karsa/allocation/infrastructure/storage/test_storage_postgres_repositories_batch4.py::test_replay_success_integration SKIPPED [  7%]
+tests/karsa/allocation/infrastructure/storage/test_storage_postgres_repositories_batch4.py::test_replay_mismatch_integration SKIPPED [  7%]
+tests/karsa/allocation/infrastructure/storage/test_storage_postgres_repositories_batch4.py::test_methodology_drift_integration SKIPPED [  8%]
+tests/karsa/allocation/infrastructure/storage/test_storage_postgres_repositories_batch4.py::test_trigger_immutability_integration SKIPPED [  8%]
+tests/karsa/allocation/infrastructure/storage/test_storage_postgres_repositories_batch4.py::test_partition_routing_integration SKIPPED [  8%]
+tests/karsa/allocation/infrastructure/storage/test_storage_postgres_repositories_batch4.py::test_deterministic_ranking_integration SKIPPED [  8%]
+tests/karsa/allocation/infrastructure/storage/test_storage_postgres_repositories_batch4.py::test_allocation_invalidation_integration SKIPPED [  8%]
+tests/karsa/allocation/infrastructure/storage/test_storage_postgres_repositories_batch4.py::test_supersession_chain_integration SKIPPED [  8%]
+tests/karsa/allocation/infrastructure/storage/test_storage_postgres_repositories_batch4.py::test_lineage_cycle_detection SKIPPED [  9%]
+tests/karsa/allocation/infrastructure/storage/test_storage_postgres_repositories_batch4.py::test_pagination_keyset SKIPPED [  9%]
+tests/karsa/allocation/infrastructure/storage/test_storage_postgres_repositories_batch4.py::test_postgres_repositories_extra_coverage SKIPPED [  9%]
+tests/karsa/allocation/infrastructure/storage/test_storage_repositories_batch2.py::test_in_memory_session_repo_crud_and_occ PASSED [  9%]
+tests/karsa/allocation/infrastructure/storage/test_storage_repositories_batch2.py::test_in_memory_decision_record_repo_crud_and_occ PASSED [  9%]
+tests/karsa/allocation/infrastructure/storage/test_storage_repositories_batch2.py::test_in_memory_decision_record_pagination PASSED [  9%]
+tests/karsa/allocation/infrastructure/storage/test_storage_repositories_batch2.py::test_in_memory_lineage_and_cycles PASSED [ 10%]
+tests/karsa/allocation/infrastructure/storage/test_storage_repositories_batch2.py::test_file_repos PASSED [ 10%]
+tests/karsa/allocation/infrastructure/storage/test_storage_repositories_batch2.py::test_in_memory_repos_additional_edges PASSED [ 10%]
+tests/karsa/allocation/infrastructure/storage/test_storage_repositories_batch2.py::test_file_repos_cleanup_failures_and_errors PASSED [ 10%]
+tests/karsa/allocation/infrastructure/storage/test_storage_repositories_batch2.py::test_file_repos_temp_path_missing PASSED [ 10%]
+tests/karsa/attribution/application/test_application_attribution_services.py::test_calculation_service_workflow PASSED [ 10%]
+tests/karsa/attribution/application/test_application_attribution_services.py::test_recomputation_service PASSED [ 11%]
+tests/karsa/attribution/application/test_application_attribution_services.py::test_invalidation_service PASSED [ 11%]
+tests/karsa/attribution/application/test_application_attribution_services.py::test_replay_service PASSED [ 11%]
+tests/karsa/attribution/application/test_application_attribution_services.py::test_service_error_paths PASSED [ 11%]
+tests/karsa/attribution/application/test_application_attribution_services.py::test_file_repos_cleanup_and_list PASSED [ 11%]
+tests/karsa/attribution/application/test_application_attribution_services.py::test_service_strategy_resolution PASSED [ 11%]
+tests/karsa/attribution/application/test_application_attribution_services.py::test_recomputation_idempotency_cache PASSED [ 12%]
+tests/karsa/attribution/application/test_application_attribution_services.py::test_replay_service_mismatch_branches PASSED [ 12%]
+tests/karsa/attribution/application/test_application_audit.py::test_failure_recovery PASSED [ 12%]
+tests/karsa/attribution/application/test_application_audit.py::test_queue_replay PASSED [ 12%]
+tests/karsa/attribution/application/test_application_audit.py::test_multi_version_reconstruction PASSED [ 12%]
+tests/karsa/attribution/domain/test_attribution_domain.py::test_attribution_session_state_transitions PASSED [ 12%]
+tests/karsa/attribution/domain/test_attribution_domain.py::test_attribution_session_invalid_transitions PASSED [ 13%]
+tests/karsa/attribution/domain/test_attribution_domain.py::test_performance_record_immutability PASSED [ 13%]
+tests/karsa/attribution/domain/test_attribution_domain.py::test_frongello_compounding_math PASSED [ 13%]
+tests/karsa/attribution/domain/test_attribution_domain.py::test_frongello_floor_protection PASSED [ 13%]
+tests/karsa/attribution/domain/test_attribution_domain.py::test_menchero_compounding PASSED [ 13%]
+tests/karsa/attribution/domain/test_attribution_domain.py::test_canonical_serializer PASSED [ 13%]
+tests/karsa/attribution/domain/test_attribution_domain.py::test_lineage_reconstruction_helper PASSED [ 14%]
+tests/karsa/attribution/domain/test_attribution_domain.py::test_carino_compounding PASSED [ 14%]
+tests/karsa/attribution/domain/test_attribution_domain.py::test_benchmark_snapshot_validation PASSED [ 14%]
+tests/karsa/attribution/domain/test_attribution_domain.py::test_attribution_session_validation PASSED [ 14%]
+tests/karsa/attribution/domain/test_attribution_domain.py::test_performance_record_validation PASSED [ 14%]
+tests/karsa/attribution/domain/test_attribution_domain.py::test_performance_record_delattr PASSED [ 14%]
+tests/karsa/attribution/domain/test_attribution_domain.py::test_abstract_repositories PASSED [ 15%]
+tests/karsa/attribution/domain/test_attribution_domain.py::test_performance_record_mutation_details PASSED [ 15%]
+tests/karsa/attribution/domain/test_attribution_domain.py::test_performance_record_serialization_details PASSED [ 15%]
+tests/karsa/attribution/domain/test_attribution_domain.py::test_attribution_session_state_transition_details PASSED [ 15%]
+tests/karsa/attribution/domain/test_attribution_domain.py::test_value_objects_math_details PASSED [ 15%]
+tests/karsa/attribution/domain/test_attribution_domain.py::test_canonical_manifest_serializer_details PASSED [ 15%]
+tests/karsa/attribution/domain/test_attribution_domain.py::test_performance_record_all_field_validations PASSED [ 16%]
+tests/karsa/attribution/domain/test_attribution_domain.py::test_session_transition_computing_invalid PASSED [ 16%]
+tests/karsa/attribution/domain/test_attribution_domain.py::test_events_to_dict PASSED [ 16%]
+tests/karsa/attribution/domain/test_attribution_domain.py::test_session_serialization_roundtrip PASSED [ 16%]
+tests/karsa/attribution/domain/test_attribution_domain.py::test_benchmark_snapshot_get_returns PASSED [ 16%]
+tests/karsa/attribution/domain/test_domain_attribution_service.py::test_domain_service_placeholder PASSED [ 16%]
+tests/karsa/attribution/domain/test_domain_lineage.py::test_recomputation_lineage_creation PASSED [ 17%]
+tests/karsa/attribution/domain/test_domain_lineage.py::test_reconstruct_lineage_chain PASSED [ 17%]
+tests/karsa/attribution/infrastructure/test_infrastructure_attribution_repositories.py::test_in_memory_session_repository PASSED [ 17%]
+tests/karsa/attribution/infrastructure/test_infrastructure_attribution_repositories.py::test_in_memory_record_repository PASSED [ 17%]
+tests/karsa/attribution/infrastructure/test_infrastructure_attribution_repositories.py::test_file_session_repository PASSED [ 17%]
+tests/karsa/attribution/infrastructure/test_infrastructure_attribution_repositories.py::test_file_record_repository PASSED [ 17%]
+tests/karsa/attribution/infrastructure/test_infrastructure_attribution_repositories.py::test_in_memory_record_repository_queries PASSED [ 18%]
+tests/karsa/attribution/infrastructure/test_infrastructure_attribution_repositories.py::test_in_memory_session_list_and_clear PASSED [ 18%]
+tests/karsa/attribution/infrastructure/test_infrastructure_attribution_repositories.py::test_in_memory_record_find_by_id_miss PASSED [ 18%]
+tests/karsa/attribution/infrastructure/test_infrastructure_attribution_repositories.py::test_file_session_occ_conflict PASSED [ 18%]
+tests/karsa/attribution/infrastructure/test_infrastructure_attribution_repositories.py::test_file_session_get_by_id_miss PASSED [ 18%]
+tests/karsa/attribution/infrastructure/test_infrastructure_attribution_repositories.py::test_file_record_find_by_id_miss PASSED [ 18%]
+tests/karsa/attribution/infrastructure/test_infrastructure_attribution_repositories.py::test_file_record_save_duplicate PASSED [ 19%]
+tests/karsa/attribution/infrastructure/test_infrastructure_postgres_repository.py::test_postgres_session_repository SKIPPED [ 19%]
+tests/karsa/attribution/infrastructure/test_infrastructure_postgres_repository.py::test_postgres_record_repository_and_triggers SKIPPED [ 19%]
+tests/karsa/attribution/test_attribution_integration.py::test_full_attribution_integration_flow PASSED [ 19%]
+tests/karsa/attribution_engine/test_attribution_engine_attribution_math.py::test_dynamic_decomposition PASSED [ 19%]
+tests/karsa/attribution_engine/test_attribution_math.py::test_dynamic_decomposition PASSED [ 19%]
+tests/karsa/capabilities/test_capabilities_models.py::test_capability_urn_valid PASSED [ 20%]
+tests/karsa/capabilities/test_capabilities_models.py::test_capability_urn_invalid PASSED [ 20%]
+tests/karsa/capabilities/test_capabilities_models.py::test_contract_validation PASSED [ 20%]
+tests/karsa/capabilities/test_capabilities_models.py::test_fingerprint_generation PASSED [ 20%]
+tests/karsa/capabilities/test_capabilities_models.py::test_definition_lifecycle PASSED [ 20%]
+tests/karsa/capabilities/test_capabilities_models.py::test_execution_transitions PASSED [ 20%]
+tests/karsa/capabilities/test_capabilities_models.py::test_capability_definition_immutability PASSED [ 21%]
+tests/karsa/capabilities/test_capabilities_services.py::test_registry_services PASSED [ 21%]
+tests/karsa/capabilities/test_capabilities_services.py::test_dependency_cycle_detection PASSED [ 21%]
+tests/karsa/capabilities/test_capabilities_services.py::test_dependency_graph_projection_and_query PASSED [ 21%]
+tests/karsa/capabilities/test_capabilities_services.py::test_governance_hook PASSED [ 21%]
+tests/karsa/capabilities/test_capabilities_services.py::test_execution_replay_and_revocation PASSED [ 21%]
+tests/karsa/capabilities/test_capabilities_services.py::test_file_based_persistence PASSED [ 22%]
+tests/karsa/cio/test_cio_engine.py::test_aggregate_immutability PASSED   [ 22%]
+tests/karsa/cio/test_cio_engine.py::test_value_object_validation PASSED  [ 22%]
+tests/karsa/cio/test_cio_engine.py::test_create_decision_requires_valid_journal PASSED [ 22%]
+tests/karsa/cio/test_cio_engine.py::test_create_decision_enforces_quorum PASSED [ 22%]
+tests/karsa/cio/test_cio_engine.py::test_create_decision_override_bypasses_quorum PASSED [ 22%]
+tests/karsa/cio/test_cio_engine.py::test_signature_generation_and_payload_locking PASSED [ 23%]
+tests/karsa/cio/test_cio_engine.py::test_duplicate_decision_journal_ref_rejected PASSED [ 23%]
+tests/karsa/cio/test_cio_engine.py::test_api_endpoints PASSED            [ 23%]
+tests/karsa/cio/test_cio_postgres_repository.py::test_postgres_save_and_retrieve SKIPPED [ 23%]
+tests/karsa/cio/test_cio_postgres_repository.py::test_postgres_enforces_1to1_cardinality SKIPPED [ 23%]
+tests/karsa/cio/test_cio_postgres_repository.py::test_postgres_enforces_immutability SKIPPED [ 23%]
+tests/karsa/cio/test_cio_postgres_repository.py::test_postgres_save_and_retrieve_portfolio_projection SKIPPED [ 24%]
+tests/karsa/decision_journal/test_decision_journal_application.py::test_append_service PASSED [ 24%]
+tests/karsa/decision_journal/test_decision_journal_domain.py::test_confidence_level PASSED [ 24%]
+tests/karsa/decision_journal/test_decision_journal_domain.py::test_invalidation_criteria PASSED [ 24%]
+tests/karsa/decision_journal/test_decision_journal_domain.py::test_expected_horizon PASSED [ 24%]
+tests/karsa/decision_journal/test_decision_journal_domain.py::test_decision_journal_appended PASSED [ 25%]
+tests/karsa/decision_journal/test_decision_journal_domain.py::test_decision_journal_entry PASSED [ 25%]
+tests/karsa/decision_journal/test_decision_journal_domain.py::test_lineage PASSED [ 25%]
+tests/karsa/decision_journal/test_decision_journal_integration.py::test_decision_integration PASSED [ 25%]
+tests/karsa/decision_journal/test_integration.py::test_decision_integration PASSED [ 25%]
+tests/karsa/execution/test_execution.py::test_urn_validations PASSED     [ 25%]
+tests/karsa/execution/test_execution.py::test_immutable_ledger_record_creation PASSED [ 26%]
+tests/karsa/execution/test_execution.py::test_lifecycle_projection_flow PASSED [ 26%]
+tests/karsa/execution/test_execution.py::test_pep_validates_cio_signature PASSED [ 26%]
+tests/karsa/execution/test_execution.py::test_pep_governance_limit_exception PASSED [ 26%]
+tests/karsa/execution/test_execution.py::test_anti_bypass_broker_adapter PASSED [ 26%]
+tests/karsa/execution/test_execution.py::test_file_repositories_integration PASSED [ 26%]
+tests/karsa/execution/test_execution.py::test_replay_determinism PASSED  [ 27%]
+tests/karsa/execution/test_execution.py::test_architecture_compliance PASSED [ 27%]
+tests/karsa/execution/test_execution.py::test_api_stage_route_fill_lifecycle PASSED [ 27%]
+tests/karsa/governance/test_governance_models.py::test_policy_urn_valid_parsing PASSED [ 27%]
+tests/karsa/governance/test_governance_models.py::test_policy_urn_invalid_parsing PASSED [ 27%]
+tests/karsa/governance/test_governance_models.py::test_policy_lifecycle_valid_transitions PASSED [ 27%]
+tests/karsa/governance/test_governance_models.py::test_policy_lifecycle_invalid_transitions PASSED [ 28%]
+tests/karsa/governance/test_governance_models.py::test_policy_definition_immutability PASSED [ 28%]
+tests/karsa/governance/test_governance_models.py::test_budget_cache_staleness PASSED [ 28%]
+tests/karsa/governance/test_governance_models.py::test_policy_condition_evaluation PASSED [ 28%]
+tests/karsa/governance/test_governance_models.py::test_policy_version_lineage PASSED [ 28%]
+tests/karsa/governance/test_governance_models.py::test_immutable_exception_revocation PASSED [ 28%]
+tests/karsa/governance/test_governance_models.py::test_pep_fail_closed_exception PASSED [ 29%]
+tests/karsa/governance/test_governance_postgres_repository.py::test_postgres_compliance_policy_repository SKIPPED [ 29%]
+tests/karsa/governance/test_governance_postgres_repository.py::test_postgres_authorization_policy_repository SKIPPED [ 29%]
+tests/karsa/governance/test_governance_postgres_repository.py::test_postgres_exception_token_repository SKIPPED [ 29%]
+tests/karsa/governance/test_governance_postgres_repository.py::test_postgres_exception_revocation_repository SKIPPED [ 29%]
+tests/karsa/governance/test_governance_postgres_repository.py::test_postgres_governance_decision_repository SKIPPED [ 29%]
+tests/karsa/governance/test_governance_postgres_repository.py::test_postgres_risk_state_snapshot_repository SKIPPED [ 30%]
+tests/karsa/governance/test_governance_postgres_repository.py::test_postgres_repositories_edge_cases SKIPPED [ 30%]
+tests/karsa/governance/test_governance_remediation_coverage.py::test_verify_signature_edge_cases PASSED [ 30%]
+tests/karsa/governance/test_governance_remediation_coverage.py::test_policy_registration_failures PASSED [ 30%]
+tests/karsa/governance/test_governance_remediation_coverage.py::test_policy_transition_validation PASSED [ 30%]
+tests/karsa/governance/test_governance_remediation_coverage.py::test_exception_service_flows PASSED [ 30%]
+tests/karsa/governance/test_governance_remediation_coverage.py::test_pdp_evaluation_logic PASSED [ 31%]
+tests/karsa/governance/test_governance_remediation_coverage.py::test_policy_urn_parsing_failures PASSED [ 31%]
+tests/karsa/governance/test_governance_remediation_coverage.py::test_policy_condition_evaluation_failures PASSED [ 31%]
+tests/karsa/governance/test_governance_remediation_coverage.py::test_immutable_list_exceptions PASSED [ 31%]
+tests/karsa/governance/test_governance_remediation_coverage.py::test_staleness_methods PASSED [ 31%]
+tests/karsa/governance/test_governance_remediation_coverage.py::test_file_repositories_concurrency_conflict PASSED [ 31%]
+tests/karsa/governance/test_governance_remediation_coverage.py::test_file_audit_repo_concurrency_conflict PASSED [ 32%]
+tests/karsa/governance/test_governance_remediation_coverage.py::test_file_repos_missing_and_corrupt_files PASSED [ 32%]
+tests/karsa/governance/test_governance_remediation_coverage.py::test_config_loader_toml_parsing PASSED [ 32%]
+tests/karsa/governance/test_governance_remediation_coverage.py::test_legacy_evaluator_limits PASSED [ 32%]
+tests/karsa/governance/test_governance_remediation_coverage.py::test_legacy_decision_repository PASSED [ 32%]
+tests/karsa/governance/test_governance_remediation_coverage.py::test_registry_retired_transition_and_missing_keys PASSED [ 32%]
+tests/karsa/governance/test_governance_remediation_coverage.py::test_exception_service_event_publisher_and_missing_keys PASSED [ 33%]
+tests/karsa/governance/test_governance_remediation_coverage.py::test_pdp_event_publisher_and_audit PASSED [ 33%]
+tests/karsa/governance/test_governance_remediation_coverage.py::test_policy_condition_more_operators PASSED [ 33%]
+tests/karsa/governance/test_governance_remediation_coverage.py::test_immutable_list_draft_mutations PASSED [ 33%]
+tests/karsa/governance/test_governance_remediation_coverage.py::test_hash_utility_functions PASSED [ 33%]
+tests/karsa/governance/test_governance_remediation_coverage.py::test_event_publisher_none PASSED [ 33%]
+tests/karsa/governance/test_governance_remediation_coverage.py::test_immutable_list_without_check_immutability PASSED [ 34%]
+tests/karsa/governance/test_governance_remediation_coverage.py::test_staleness_false PASSED [ 34%]
+tests/karsa/governance/test_governance_remediation_coverage.py::test_pdp_various_branches PASSED [ 34%]
+tests/karsa/governance/test_governance_remediation_coverage.py::test_immutable_list_additional_mutations PASSED [ 34%]
+tests/karsa/governance/test_governance_remediation_coverage.py::test_governance_decision_record_post_init_branches PASSED [ 34%]
+tests/karsa/governance/test_governance_remediation_coverage.py::test_services_event_publisher_none_and_other_branches PASSED [ 34%]
+tests/karsa/governance/test_governance_remediation_coverage.py::test_pdp_exception_override_checks_branches PASSED [ 35%]
+tests/karsa/governance/test_governance_remediation_coverage.py::test_file_repositories_concurrency_and_exception_branches PASSED [ 35%]
+tests/karsa/governance/test_governance_remediation_coverage.py::test_in_memory_repositories_missing_branches PASSED [ 35%]
+tests/karsa/governance/test_governance_remediation_coverage.py::test_pdp_additional_branches PASSED [ 35%]
+tests/karsa/governance/test_governance_services.py::test_policy_registration_and_state_transitions PASSED [ 35%]
+tests/karsa/governance/test_governance_services.py::test_evaluation_deny_by_default PASSED [ 35%]
+tests/karsa/governance/test_governance_services.py::test_evaluation_allow_and_deny_rules PASSED [ 36%]
+tests/karsa/governance/test_governance_services.py::test_conflict_resolution_deny_overrides PASSED [ 36%]
+tests/karsa/governance/test_governance_services.py::test_budget_constraints_and_staleness PASSED [ 36%]
+tests/karsa/governance/test_governance_services.py::test_replay_bypass PASSED [ 36%]
+tests/karsa/governance/test_governance_services.py::test_emergency_override PASSED [ 36%]
+tests/karsa/governance/test_governance_services.py::test_async_audit_chain_projection PASSED [ 36%]
+tests/karsa/governance/test_governance_services.py::test_policy_in_memory_persistence_and_occ PASSED [ 37%]
+tests/karsa/governance/test_governance_services.py::test_policy_file_persistence_and_occ PASSED [ 37%]
+tests/karsa/governance_engine/test_governance_engine_gov.py::test_gov_service PASSED [ 37%]
+tests/karsa/infrastructure/test_infrastructure_persistence.py::test_recursive_cte_lineage PASSED [ 37%]
+tests/karsa/infrastructure/test_infrastructure_persistence.py::test_get_by_urn PASSED [ 37%]
+tests/karsa/infrastructure/test_infrastructure_persistence.py::test_feedback_projection PASSED [ 37%]
+tests/karsa/infrastructure/test_infrastructure_projections.py::test_projection_worker PASSED [ 38%]
+tests/karsa/infrastructure/test_persistence.py::test_recursive_cte_lineage PASSED [ 38%]
+tests/karsa/infrastructure/test_persistence.py::test_feedback_projection PASSED [ 38%]
+tests/karsa/infrastructure/test_projections.py::test_projection_worker PASSED [ 38%]
+tests/karsa/memory/domain/service/test_service_schema_registry.py::test_register_and_lookup_schema PASSED [ 38%]
+tests/karsa/memory/domain/service/test_service_schema_registry.py::test_register_invalid_json_schema PASSED [ 38%]
+tests/karsa/memory/domain/service/test_service_schema_registry.py::test_validate_valid_payload PASSED [ 39%]
+tests/karsa/memory/domain/service/test_service_schema_registry.py::test_validate_invalid_payload PASSED [ 39%]
+tests/karsa/memory/domain/service/test_service_schema_registry.py::test_validate_missing_schema PASSED [ 39%]
+tests/karsa/memory/domain/service/test_snapshot_service.py::test_end_to_end_snapshot_lifecycle PASSED [ 39%]
+tests/karsa/memory/infrastructure/api/test_api_artifacts.py::test_publish_and_get_artifact PASSED [ 39%]
+tests/karsa/memory/infrastructure/api/test_api_artifacts.py::test_publish_invalid_schema PASSED [ 39%]
+tests/karsa/memory/infrastructure/api/test_api_artifacts.py::test_get_missing_artifact PASSED [ 40%]
+tests/karsa/memory/infrastructure/storage/test_storage_schema.py::test_migrations_exist PASSED [ 40%]
+tests/karsa/observability/test_observability_application.py::test_ingest_telemetry_sampling PASSED [ 40%]
+tests/karsa/observability/test_observability_application.py::test_ingest_metric_flush PASSED [ 40%]
+tests/karsa/observability/test_observability_application.py::test_cardinality_governance PASSED [ 40%]
+tests/karsa/observability/test_observability_application.py::test_memory_budget_exceeded PASSED [ 40%]
+tests/karsa/observability/test_observability_application.py::test_meta_observability PASSED [ 41%]
+tests/karsa/observability/test_observability_domain.py::test_trace_context PASSED [ 41%]
+tests/karsa/observability/test_observability_domain.py::test_metric_snapshot PASSED [ 41%]
+tests/karsa/observability/test_observability_infrastructure.py::test_postgres_repos PASSED [ 41%]
+tests/karsa/observability/test_observability_infrastructure.py::test_debouncer PASSED [ 41%]
+tests/karsa/observability/test_observability_infrastructure.py::test_archival_fail_open PASSED [ 41%]
+tests/karsa/observability/test_observability_infrastructure.py::test_rehydration_worker PASSED [ 42%]
+tests/karsa/performance/test_performance_domain.py::test_brier_score_valid PASSED [ 42%]
+tests/karsa/performance/test_performance_domain.py::test_brier_score_invalid_high PASSED [ 42%]
+tests/karsa/performance/test_performance_domain.py::test_brier_score_invalid_low PASSED [ 42%]
+tests/karsa/performance/test_performance_domain.py::test_regime_distribution_valid PASSED [ 42%]
+tests/karsa/performance/test_performance_domain.py::test_regime_distribution_empty PASSED [ 42%]
+tests/karsa/performance/test_performance_domain.py::test_regime_distribution_sum_invalid PASSED [ 43%]
+tests/karsa/performance/test_performance_domain.py::test_outcome_record PASSED [ 43%]
+tests/karsa/performance/test_performance_domain.py::test_performance_evaluation PASSED [ 43%]
+tests/karsa/performance/test_performance_domain.py::test_calibration_ledger_entry PASSED [ 43%]
+tests/karsa/performance/test_performance_domain.py::test_events PASSED   [ 43%]
+tests/karsa/performance/test_performance_domain.py::test_lineage PASSED  [ 43%]
+tests/karsa/performance_engine/test_performance_engine_performance_regime.py::test_performance_regime PASSED [ 44%]
+tests/karsa/performance_engine/test_performance_regime.py::test_performance_regime PASSED [ 44%]
+tests/karsa/portfolio/application/service/test_portfolio_application_service.py::test_missing_portfolio PASSED [ 44%]
+tests/karsa/portfolio/application/service/test_portfolio_application_service.py::test_missing_allocations PASSED [ 44%]
+tests/karsa/portfolio/application/service/test_portfolio_application_service.py::test_successful_propose_workflow PASSED [ 44%]
+tests/karsa/portfolio/application/service/test_portfolio_application_service.py::test_apply_approved_decision PASSED [ 44%]
+tests/karsa/portfolio/domain/model/test_model_portfolio.py::test_portfolio_lifecycle_transitions PASSED [ 45%]
+tests/karsa/portfolio/domain/model/test_model_portfolio.py::test_invalid_lifecycle_transitions PASSED [ 45%]
+tests/karsa/portfolio/domain/model/test_model_portfolio.py::test_portfolio_target_snapshot_immutability PASSED [ 45%]
+tests/karsa/portfolio/domain/model/test_model_portfolio.py::test_portfolio_decision_immutability PASSED [ 45%]
+tests/karsa/portfolio/domain/model/test_model_portfolio.py::test_allocation_portfolio_mapping_validation PASSED [ 45%]
+tests/karsa/portfolio/domain/model/test_model_portfolio.py::test_cash_target_validation PASSED [ 45%]
+tests/karsa/portfolio/domain/model/test_model_portfolio.py::test_exposure_metrics_validation PASSED [ 46%]
+tests/karsa/portfolio/domain/model/test_model_portfolio.py::test_regime_state_validation PASSED [ 46%]
+tests/karsa/portfolio/domain/model/test_model_portfolio.py::test_trade_intent_creation PASSED [ 46%]
+tests/karsa/portfolio/domain/model/test_model_portfolio.py::test_position_creation PASSED [ 46%]
+tests/karsa/portfolio/domain/model/test_model_portfolio.py::test_portfolio_aggregate_invariants PASSED [ 46%]
+tests/karsa/portfolio/domain/model/test_model_portfolio.py::test_nm_mapping_support PASSED [ 46%]
+tests/karsa/portfolio/domain/service/test_service_rebalancing_engine.py::test_exposure_calculation_no_negative PASSED [ 47%]
+tests/karsa/portfolio/domain/service/test_service_rebalancing_engine.py::test_drift_calculation PASSED [ 47%]
+tests/karsa/portfolio/domain/service/test_service_rebalancing_engine.py::test_constraint_evaluation PASSED [ 47%]
+tests/karsa/portfolio/domain/service/test_service_rebalancing_engine.py::test_functional_purity PASSED [ 47%]
+tests/karsa/portfolio/domain/service/test_service_rebalancing_engine.py::test_deterministic_target_generation PASSED [ 47%]
+tests/karsa/portfolio/domain/service/test_service_rebalancing_engine.py::test_deterministic_trade_intent_ordering PASSED [ 47%]
+tests/karsa/portfolio/domain/service/test_service_rebalancing_engine.py::test_deterministic_decision_generation PASSED [ 48%]
+tests/karsa/portfolio/infrastructure/storage/test_storage_portfolio_mapper.py::test_portfolio_mapper_roundtrip PASSED [ 48%]
+tests/karsa/portfolio/infrastructure/storage/test_storage_portfolio_mapper.py::test_snapshot_mapper_roundtrip PASSED [ 48%]
+tests/karsa/portfolio/infrastructure/storage/test_storage_portfolio_repositories.py::test_in_memory_portfolio_repo PASSED [ 48%]
+tests/karsa/portfolio/infrastructure/storage/test_storage_portfolio_repositories.py::test_in_memory_target_snapshot_repo PASSED [ 48%]
+tests/karsa/portfolio/infrastructure/storage/test_storage_portfolio_repositories.py::test_postgres_portfolio_repo SKIPPED [ 48%]
+tests/karsa/portfolio/infrastructure/storage/test_storage_portfolio_repositories.py::test_postgres_target_snapshot_repo SKIPPED [ 49%]
+tests/karsa/portfolio/test_portfolio_foundation.py::test_portfolio_aggregate_immutability PASSED [ 49%]
+tests/karsa/portfolio/test_portfolio_foundation.py::test_position_aggregate_lifecycle PASSED [ 49%]
+tests/karsa/portfolio/test_portfolio_foundation.py::test_cash_ledger_aggregate PASSED [ 49%]
+tests/karsa/portfolio/test_portfolio_foundation.py::test_valuation_aggregate_immutability PASSED [ 49%]
+tests/karsa/portfolio/test_portfolio_foundation.py::test_valuation_and_exposure_calculation PASSED [ 50%]
+tests/karsa/portfolio/test_portfolio_foundation.py::test_in_memory_repository_occ PASSED [ 50%]
+tests/karsa/portfolio/test_portfolio_foundation.py::test_file_repository_occ PASSED [ 50%]
+tests/karsa/portfolio/test_portfolio_foundation.py::test_file_repository_immutability PASSED [ 50%]
+tests/karsa/portfolio/test_portfolio_foundation.py::test_deterministic_replay_reconstruction PASSED [ 50%]
+tests/karsa/portfolio/test_portfolio_foundation.py::test_order_filled_event_consumption PASSED [ 50%]
+tests/karsa/portfolio/test_portfolio_foundation.py::test_architecture_import_isolation PASSED [ 51%]
+tests/karsa/post_mortem/test_post_mortem.py::test_weights_sum_to_one PASSED [ 51%]
+tests/karsa/post_mortem/test_post_mortem.py::test_invalid_weight_rejected PASSED [ 51%]
+tests/karsa/post_mortem/test_post_mortem.py::test_postmortem_record_immutable PASSED [ 51%]
+tests/karsa/post_mortem/test_post_mortem.py::test_recommendation_accept PASSED [ 51%]
+tests/karsa/post_mortem/test_post_mortem.py::test_recommendation_reject PASSED [ 51%]
+tests/karsa/post_mortem/test_post_mortem.py::test_recommendation_implement PASSED [ 52%]
+tests/karsa/post_mortem/test_post_mortem.py::test_recommendation_expire PASSED [ 52%]
+tests/karsa/post_mortem/test_post_mortem.py::test_invalid_transition_rejected_to_implemented PASSED [ 52%]
+tests/karsa/post_mortem/test_post_mortem.py::test_invalid_transition_expired_to_accepted PASSED [ 52%]
+tests/karsa/post_mortem/test_post_mortem.py::test_postmortem_cannot_accept_recommendation PASSED [ 52%]
+tests/karsa/post_mortem/test_post_mortem.py::test_postmortem_cannot_implement_recommendation PASSED [ 52%]
+tests/karsa/post_mortem/test_post_mortem.py::test_recommendation_accept_race PASSED [ 53%]
+tests/karsa/post_mortem/test_post_mortem.py::test_recommendation_reject_race PASSED [ 53%]
+tests/karsa/post_mortem/test_post_mortem.py::test_recommendation_accept_reject_race PASSED [ 53%]
+tests/karsa/post_mortem/test_post_mortem.py::test_recommendation_accept_expire_race PASSED [ 53%]
+tests/karsa/post_mortem/test_post_mortem.py::test_replay_chain_reconstruction PASSED [ 53%]
+tests/karsa/post_mortem/test_post_mortem.py::test_api_endpoints PASSED   [ 53%]
+tests/karsa/post_mortem/test_post_mortem.py::test_value_object_validations PASSED [ 54%]
+tests/karsa/post_mortem/test_post_mortem.py::test_aggregate_constructor_validations PASSED [ 54%]
+tests/karsa/post_mortem/test_post_mortem.py::test_recommendation_summary_projection_validations PASSED [ 54%]
+tests/karsa/post_mortem/test_post_mortem.py::test_ports_abstract_methods PASSED [ 54%]
+tests/karsa/post_mortem/test_post_mortem.py::test_service_error_paths PASSED [ 54%]
+tests/karsa/post_mortem/test_post_mortem.py::test_repository_not_found_paths PASSED [ 54%]
+tests/karsa/post_mortem/test_post_mortem.py::test_api_error_responses PASSED [ 55%]
+tests/karsa/post_mortem/test_post_mortem_postgres_repository.py::test_postgres_save_and_retrieve_record SKIPPED [ 55%]
+tests/karsa/post_mortem/test_post_mortem_postgres_repository.py::test_postgres_trigger_blocks_update SKIPPED [ 55%]
+tests/karsa/post_mortem/test_post_mortem_postgres_repository.py::test_postgres_trigger_blocks_delete SKIPPED [ 55%]
+tests/karsa/post_mortem/test_post_mortem_postgres_repository.py::test_postgres_recommendation_concurrency_and_history SKIPPED [ 55%]
+tests/karsa/providers/test_providers_provider_models.py::test_provider_urn_valid_parsing PASSED [ 55%]
+tests/karsa/providers/test_providers_provider_models.py::test_provider_urn_invalid_parsing PASSED [ 56%]
+tests/karsa/providers/test_providers_provider_models.py::test_provider_lifecycle_valid_transitions PASSED [ 56%]
+tests/karsa/providers/test_providers_provider_models.py::test_provider_lifecycle_invalid_transitions PASSED [ 56%]
+tests/karsa/providers/test_providers_provider_models.py::test_provider_definition_immutability PASSED [ 56%]
+tests/karsa/providers/test_providers_provider_models.py::test_capability_mapping_compatibility_success PASSED [ 56%]
+tests/karsa/providers/test_providers_provider_models.py::test_capability_mapping_compatibility_failure PASSED [ 56%]
+tests/karsa/providers/test_providers_provider_services.py::test_routing_lowest_cost PASSED [ 57%]
+tests/karsa/providers/test_providers_provider_services.py::test_routing_lowest_latency PASSED [ 57%]
+tests/karsa/providers/test_providers_provider_services.py::test_routing_highest_health PASSED [ 57%]
+tests/karsa/providers/test_providers_provider_services.py::test_telemetry_success_tracking PASSED [ 57%]
+tests/karsa/providers/test_providers_provider_services.py::test_telemetry_failure_tracking_degradation_and_recovery PASSED [ 57%]
+tests/karsa/providers/test_providers_provider_services.py::test_in_memory_persistence_and_occ PASSED [ 57%]
+tests/karsa/providers/test_providers_provider_services.py::test_file_persistence_and_occ PASSED [ 58%]
+tests/karsa/providers/test_providers_provider_services.py::test_replay_bypass PASSED [ 58%]
+tests/karsa/providers/test_providers_provider_services.py::test_aggregate_boundaries_isolation PASSED [ 58%]
+tests/karsa/providers/test_providers_provider_services.py::test_custom_health_thresholds PASSED [ 58%]
+tests/karsa/regime/test_regime_domain_batch1.py::test_signal_confidence_score_valid PASSED [ 58%]
+tests/karsa/regime/test_regime_domain_batch1.py::test_signal_confidence_score_invalid PASSED [ 58%]
+tests/karsa/regime/test_regime_domain_batch1.py::test_regime_evidence PASSED [ 59%]
+tests/karsa/regime/test_regime_domain_batch1.py::test_regime_horizon PASSED [ 59%]
+tests/karsa/regime/test_regime_domain_batch1.py::test_regime_classification PASSED [ 59%]
+tests/karsa/regime/test_regime_domain_batch1.py::test_regime_methodology_manifest PASSED [ 59%]
+tests/karsa/regime/test_regime_domain_batch1.py::test_domain_events PASSED [ 59%]
+tests/karsa/regime/test_regime_domain_batch1.py::test_regime_session_lifecycle PASSED [ 59%]
+tests/karsa/regime/test_regime_domain_batch1.py::test_regime_session_invalid_transitions PASSED [ 60%]
+tests/karsa/regime/test_regime_domain_batch1.py::test_regime_snapshot PASSED [ 60%]
+tests/karsa/regime/test_regime_domain_batch1.py::test_regime_transition PASSED [ 60%]
+tests/karsa/regime/test_regime_domain_batch1.py::test_reconstruct_transition_lineage PASSED [ 60%]
+tests/karsa/regime/test_regime_domain_batch1.py::test_reconstruct_transition_lineage_cycle PASSED [ 60%]
+tests/karsa/regime/test_regime_domain_batch1.py::test_reconstruct_snapshot_lineage PASSED [ 60%]
+tests/karsa/regime/test_regime_domain_batch1.py::test_reconstruct_snapshot_lineage_cycle PASSED [ 61%]
+tests/karsa/regime/test_regime_postgres_batch4.py::test_occ_conflict PASSED [ 61%]
+tests/karsa/regime/test_regime_postgres_batch4.py::test_natural_key_uniqueness PASSED [ 61%]
+tests/karsa/regime/test_regime_postgres_batch4.py::test_transition_lineage_traversal PASSED [ 61%]
+tests/karsa/regime/test_regime_repositories_batch2.py::test_session_occ[InMemoryRegimeSessionRepository] PASSED [ 61%]
+tests/karsa/regime/test_regime_repositories_batch2.py::test_session_occ[FileRegimeSessionRepository] PASSED [ 61%]
+tests/karsa/regime/test_regime_repositories_batch2.py::test_snapshot_immutable_and_natural_key[InMemoryRegimeSnapshotRepository] PASSED [ 62%]
+tests/karsa/regime/test_regime_repositories_batch2.py::test_snapshot_immutable_and_natural_key[FileRegimeSnapshotRepository] PASSED [ 62%]
+tests/karsa/regime/test_regime_repositories_batch2.py::test_snapshot_pagination[InMemoryRegimeSnapshotRepository] PASSED [ 62%]
+tests/karsa/regime/test_regime_repositories_batch2.py::test_snapshot_pagination[FileRegimeSnapshotRepository] PASSED [ 62%]
+tests/karsa/regime/test_regime_repositories_batch2.py::test_transition_lineage_and_cycle[InMemoryRegimeTransitionRepository] PASSED [ 62%]
+tests/karsa/regime/test_regime_repositories_batch2.py::test_transition_lineage_and_cycle[FileRegimeTransitionRepository] PASSED [ 62%]
+tests/karsa/regime/test_regime_repositories_batch2.py::test_file_atomic_write PASSED [ 63%]
+tests/karsa/regime/test_regime_repositories_batch2.py::test_concurrent_access PASSED [ 63%]
+tests/karsa/regime/test_regime_services_batch3.py::test_classification_service PASSED [ 63%]
+tests/karsa/regime/test_regime_services_batch3.py::test_transition_hysteresis_suppression PASSED [ 63%]
+tests/karsa/regime/test_regime_services_batch3.py::test_transition_hysteresis_confirmation PASSED [ 63%]
+tests/karsa/regime/test_regime_services_batch3.py::test_replay_service PASSED [ 63%]
+tests/karsa/regime/test_regime_services_batch3.py::test_projection_service PASSED [ 64%]
+tests/karsa/regime/test_regime_services_batch3.py::test_invalidation_service PASSED [ 64%]
+tests/karsa/review/test_review_domain_batch1.py::test_decision_quality_assessment_full PASSED [ 64%]
+tests/karsa/review/test_review_domain_batch1.py::test_failure_classification_full PASSED [ 64%]
+tests/karsa/review/test_review_domain_batch1.py::test_success_classification_full PASSED [ 64%]
+tests/karsa/review/test_review_domain_batch1.py::test_improvement_recommendation_full PASSED [ 64%]
+tests/karsa/review/test_review_domain_batch1.py::test_methodology_manifest_full PASSED [ 65%]
+tests/karsa/review/test_review_domain_batch1.py::test_review_session_validation_and_lifecycle PASSED [ 65%]
+tests/karsa/review/test_review_domain_batch1.py::test_review_record_validation PASSED [ 65%]
+tests/karsa/review/test_review_domain_batch1.py::test_postmortem_record_validation PASSED [ 65%]
+tests/karsa/review/test_review_domain_batch1.py::test_review_session_immutability_and_deletion PASSED [ 65%]
+tests/karsa/review/test_review_domain_batch1.py::test_review_record_immutability_and_deletion PASSED [ 65%]
+tests/karsa/review/test_review_domain_batch1.py::test_postmortem_record_immutability_and_deletion PASSED [ 66%]
+tests/karsa/review/test_review_domain_batch1.py::test_postmortem_record_supersede_and_invalidate PASSED [ 66%]
+tests/karsa/review/test_review_domain_batch1.py::test_review_record_invalidate_active PASSED [ 66%]
+tests/karsa/review/test_review_domain_batch1.py::test_lineage_empty_start_record PASSED [ 66%]
+tests/karsa/review/test_review_domain_batch1.py::test_lineage_loop_detection PASSED [ 66%]
+tests/karsa/review/test_review_domain_batch1.py::test_review_record_recorded_event_full PASSED [ 66%]
+tests/karsa/review/test_review_domain_batch1.py::test_failure_classification_recorded_event_validation PASSED [ 67%]
+tests/karsa/review/test_review_domain_batch1.py::test_postmortem_finalized_event_validation PASSED [ 67%]
+tests/karsa/review/test_review_domain_batch1.py::test_postmortem_lineage_traversal PASSED [ 67%]
+tests/karsa/review/test_review_domain_batch1.py::test_other_events_serialization PASSED [ 67%]
+tests/karsa/review/test_review_domain_batch1.py::test_aggregate_serialization PASSED [ 67%]
+tests/karsa/review/test_review_domain_batch1.py::test_postmortem_inactive_errors PASSED [ 67%]
+tests/karsa/review/test_review_domain_batch1.py::test_deleting_attributes_on_record_and_completed_session PASSED [ 68%]
+tests/karsa/review/test_review_engine.py::test_review_session_lifecycle PASSED [ 68%]
+tests/karsa/review/test_review_engine.py::test_learning_feedback_lifecycle PASSED [ 68%]
+tests/karsa/review/test_review_engine.py::test_review_session_immutability PASSED [ 68%]
+tests/karsa/review/test_review_engine.py::test_learning_feedback_immutability PASSED [ 68%]
+tests/karsa/review/test_review_engine.py::test_occ_conflict_detection PASSED [ 68%]
+tests/karsa/review/test_review_engine.py::test_repository_persistence PASSED [ 69%]
+tests/karsa/review/test_review_engine.py::test_serialization PASSED      [ 69%]
+tests/karsa/review/test_review_engine.py::test_replay_determinism PASSED [ 69%]
+tests/karsa/review/test_review_engine.py::test_event_emission PASSED     [ 69%]
+tests/karsa/review/test_review_engine.py::test_feedback_lifecycle_events PASSED [ 69%]
+tests/karsa/review/test_review_engine.py::test_learning_loop_closure PASSED [ 69%]
+tests/karsa/review/test_review_engine.py::test_evidence_hashing PASSED   [ 70%]
+tests/karsa/review/test_review_engine.py::test_retention_classification PASSED [ 70%]
+tests/karsa/review/test_review_postgres_repository_integration.py::test_postgres_review_session_repository_flow SKIPPED [ 70%]
+tests/karsa/review/test_review_postgres_repository_integration.py::test_postgres_review_record_repository_flow SKIPPED [ 70%]
+tests/karsa/review/test_review_postgres_repository_integration.py::test_postgres_postmortem_record_repository_flow SKIPPED [ 70%]
+tests/karsa/review/test_review_postgres_repository_integration.py::test_review_record_immutability_triggers SKIPPED [ 70%]
+tests/karsa/review/test_review_postgres_repository_integration.py::test_postmortem_record_immutability_triggers SKIPPED [ 71%]
+tests/karsa/review/test_review_postgres_repository_integration.py::test_replay_review_success SKIPPED [ 71%]
+tests/karsa/review/test_review_postgres_repository_integration.py::test_replay_methodology_drift_and_mismatch SKIPPED [ 71%]
+tests/karsa/review/test_review_postgres_repository_integration.py::test_postgres_review_lineage_reconstruction SKIPPED [ 71%]
+tests/karsa/review/test_review_postgres_repository_integration.py::test_postgres_postmortem_lineage_reconstruction SKIPPED [ 71%]
+tests/karsa/review/test_review_postgres_repository_integration.py::test_postgres_lineage_cycle_detection SKIPPED [ 71%]
+tests/karsa/review/test_review_postgres_repository_integration.py::test_postgres_consensus_solver_and_postmortem_flows SKIPPED [ 72%]
+tests/karsa/review/test_review_postgres_repository_integration.py::test_postgres_not_found_cases SKIPPED [ 72%]
+tests/karsa/review/test_review_postgres_repository_integration.py::test_postgres_review_record_supersede_and_save SKIPPED [ 72%]
+tests/karsa/review/test_review_postgres_repository_integration.py::test_postgres_cursor_pagination SKIPPED [ 72%]
+tests/karsa/review/test_review_postgres_repository_integration.py::test_consensus_replay_success SKIPPED [ 72%]
+tests/karsa/review/test_review_postgres_repository_integration.py::test_consensus_methodology_drift_detection SKIPPED [ 72%]
+tests/karsa/review/test_review_repositories_batch2.py::test_session_save_load[adapter_class0] PASSED [ 73%]
+tests/karsa/review/test_review_repositories_batch2.py::test_session_save_load[adapter_class1] PASSED [ 73%]
+tests/karsa/review/test_review_repositories_batch2.py::test_record_save_load[adapter_class0] PASSED [ 73%]
+tests/karsa/review/test_review_repositories_batch2.py::test_record_save_load[adapter_class1] PASSED [ 73%]
+tests/karsa/review/test_review_repositories_batch2.py::test_postmortem_save_load[adapter_class0] PASSED [ 73%]
+tests/karsa/review/test_review_repositories_batch2.py::test_postmortem_save_load[adapter_class1] PASSED [ 73%]
+tests/karsa/review/test_review_repositories_batch2.py::test_session_occ[adapter_class0] PASSED [ 74%]
+tests/karsa/review/test_review_repositories_batch2.py::test_session_occ[adapter_class1] PASSED [ 74%]
+tests/karsa/review/test_review_repositories_batch2.py::test_record_immutability_preservation[adapter_class0] PASSED [ 74%]
+tests/karsa/review/test_review_repositories_batch2.py::test_record_immutability_preservation[adapter_class1] PASSED [ 74%]
+tests/karsa/review/test_review_repositories_batch2.py::test_record_pagination_and_cursors[adapter_class0] PASSED [ 74%]
+tests/karsa/review/test_review_repositories_batch2.py::test_record_pagination_and_cursors[adapter_class1] PASSED [ 75%]
+tests/karsa/review/test_review_repositories_batch2.py::test_postmortem_pagination[adapter_class0] PASSED [ 75%]
+tests/karsa/review/test_review_repositories_batch2.py::test_postmortem_pagination[adapter_class1] PASSED [ 75%]
+tests/karsa/review/test_review_repositories_batch2.py::test_review_lineage_traversal[adapter_class0] PASSED [ 75%]
+tests/karsa/review/test_review_repositories_batch2.py::test_review_lineage_traversal[adapter_class1] PASSED [ 75%]
+tests/karsa/review/test_review_repositories_batch2.py::test_record_occ[adapter_class0] PASSED [ 75%]
+tests/karsa/review/test_review_repositories_batch2.py::test_record_occ[adapter_class1] PASSED [ 76%]
+tests/karsa/review/test_review_repositories_batch2.py::test_postmortem_occ[adapter_class0] PASSED [ 76%]
+tests/karsa/review/test_review_repositories_batch2.py::test_postmortem_occ[adapter_class1] PASSED [ 76%]
+tests/karsa/review/test_review_repositories_batch2.py::test_inmemory_not_found_urns PASSED [ 76%]
+tests/karsa/review/test_review_repositories_batch2.py::test_file_not_found_urns PASSED [ 76%]
+tests/karsa/review/test_review_repositories_batch2.py::test_file_corrupt_files PASSED [ 76%]
+tests/karsa/review/test_review_repositories_batch2.py::test_file_temp_write_failure PASSED [ 77%]
+tests/karsa/review/test_review_repositories_batch2.py::test_postmortem_lineage_traversal PASSED [ 77%]
+tests/karsa/review/test_review_repositories_batch2.py::test_inmemory_session_occ_success PASSED [ 77%]
+tests/karsa/review/test_review_repositories_batch2.py::test_inmemory_record_find_active_by_worker_filtering PASSED [ 77%]
+tests/karsa/review/test_review_repositories_batch2.py::test_inmemory_record_find_active_by_worker_pagination PASSED [ 77%]
+tests/karsa/review/test_review_repositories_batch2.py::test_inmemory_record_find_by_session_paginated_filtering PASSED [ 77%]
+tests/karsa/review/test_review_repositories_batch2.py::test_inmemory_postmortem_find_by_session_paginated_filtering PASSED [ 78%]
+tests/karsa/review/test_review_repositories_batch2.py::test_file_occ_success PASSED [ 78%]
+tests/karsa/review/test_review_repositories_batch2.py::test_file_save_write_exception PASSED [ 78%]
+tests/karsa/review/test_review_repositories_batch2.py::test_file_find_by_urn_invalid_type PASSED [ 78%]
+tests/karsa/review/test_review_repositories_batch2.py::test_file_load_all_records_ignored_files PASSED [ 78%]
+tests/karsa/review/test_review_repositories_batch2.py::test_file_record_find_active_by_worker_pagination PASSED [ 78%]
+tests/karsa/review/test_review_services_batch3.py::test_record_review_success PASSED [ 79%]
+tests/karsa/review/test_review_services_batch3.py::test_record_review_supersedes_existing PASSED [ 79%]
+tests/karsa/review/test_review_services_batch3.py::test_record_review_session_validation_failures PASSED [ 79%]
+tests/karsa/review/test_review_services_batch3.py::test_record_review_manifest_hash_mismatch PASSED [ 79%]
+tests/karsa/review/test_review_services_batch3.py::test_replay_verify_methodology_success_and_failure PASSED [ 79%]
+tests/karsa/review/test_review_services_batch3.py::test_replay_verify_replay_integrity PASSED [ 79%]
+tests/karsa/review/test_review_services_batch3.py::test_consensus_solver_logic PASSED [ 80%]
+tests/karsa/review/test_review_services_batch3.py::test_consensus_solver_tie_breakers PASSED [ 80%]
+tests/karsa/review/test_review_services_batch3.py::test_consensus_solver_validation_errors PASSED [ 80%]
+tests/karsa/review/test_review_services_batch3.py::test_finalize_postmortem_success PASSED [ 80%]
+tests/karsa/review/test_review_services_batch3.py::test_finalize_postmortem_supersedes_existing PASSED [ 80%]
+tests/karsa/review/test_review_services_batch3.py::test_review_invalidation_chain PASSED [ 80%]
+tests/karsa/review/test_review_services_batch3.py::test_postmortem_invalidation_chain PASSED [ 81%]
+tests/karsa/risk/test_risk.py::test_value_object_validations PASSED      [ 81%]
+tests/karsa/risk/test_risk.py::test_aggregate_immutability PASSED        [ 81%]
+tests/karsa/risk/test_risk.py::test_concentration_calculation PASSED     [ 81%]
+tests/karsa/risk/test_risk.py::test_liquidity_calculation PASSED         [ 81%]
+tests/karsa/risk/test_risk.py::test_stress_testing_evaluation PASSED     [ 81%]
+tests/karsa/risk/test_risk.py::test_covariance_forecast_and_eigenvalues PASSED [ 82%]
+tests/karsa/risk/test_risk.py::test_risk_evaluation_parametric PASSED    [ 82%]
+tests/karsa/risk/test_risk.py::test_fallback_regime_behavior PASSED      [ 82%]
+tests/karsa/risk/test_risk.py::test_negative_eigenvalue_check PASSED     [ 82%]
+tests/karsa/risk/test_risk.py::test_replayability_verification PASSED    [ 82%]
+tests/karsa/risk/test_risk.py::test_api_endpoints PASSED                 [ 82%]
+tests/karsa/risk/test_risk.py::test_api_error_responses PASSED           [ 83%]
+tests/karsa/risk/test_risk.py::test_unconfigured_api PASSED              [ 83%]
+tests/karsa/risk/test_risk.py::test_additional_model_and_value_object_validations PASSED [ 83%]
+tests/karsa/risk/test_risk.py::test_api_exceptions PASSED                [ 83%]
+tests/karsa/risk/test_risk.py::test_service_edge_cases PASSED            [ 83%]
+tests/karsa/risk/test_risk_postgres_repository.py::test_postgres_save_and_retrieve_evaluation SKIPPED [ 83%]
+tests/karsa/risk/test_risk_postgres_repository.py::test_postgres_1to1_snapshot_trigger SKIPPED [ 84%]
+tests/karsa/risk/test_risk_postgres_repository.py::test_postgres_trigger_blocks_mutations SKIPPED [ 84%]
+tests/karsa/risk/test_risk_postgres_repository.py::test_postgres_non_existent_and_unique_violations SKIPPED [ 84%]
+tests/karsa/thesis/test_thesis_application_batch2.py::test_lifecycle_service PASSED [ 84%]
+tests/karsa/thesis/test_thesis_application_batch2.py::test_challenge_eval_service PASSED [ 84%]
+tests/karsa/thesis/test_thesis_application_batch2.py::test_evolution_service PASSED [ 84%]
+tests/karsa/thesis/test_thesis_application_batch2.py::test_attribution_service PASSED [ 85%]
+tests/karsa/thesis/test_thesis_application_batch2.py::test_replay_service PASSED [ 85%]
+tests/karsa/thesis/test_thesis_cqrs_failure_paths.py::test_cqrs_scenario_a_snapshot_succeeds_root_fails PASSED [ 85%]
+tests/karsa/thesis/test_thesis_cqrs_failure_paths.py::test_cqrs_scenario_b_root_succeeds_snapshot_fails PASSED [ 85%]
+tests/karsa/thesis/test_thesis_cqrs_failure_paths.py::test_cqrs_scenario_c_transaction_rollback PASSED [ 85%]
+tests/karsa/thesis/test_thesis_domain_batch1.py::test_value_objects PASSED [ 85%]
+tests/karsa/thesis/test_thesis_domain_batch1.py::test_models PASSED      [ 86%]
+tests/karsa/thesis/test_thesis_domain_batch1.py::test_events PASSED      [ 86%]
+tests/karsa/thesis/test_thesis_domain_batch1.py::test_lineage PASSED     [ 86%]
+tests/karsa/thesis/test_thesis_domain_batch1.py::test_lineage_success PASSED [ 86%]
+tests/karsa/thesis/test_thesis_migrations_batch5.py::test_migration_upgrade_downgrade ERROR [ 86%]
+tests/karsa/thesis/test_thesis_migrations_batch5.py::test_constraint_pk_fk_unique_not_null ERROR [ 86%]
+tests/karsa/thesis/test_thesis_migrations_batch5.py::test_trigger_snapshot_mutation_rejection ERROR [ 87%]
+tests/karsa/thesis/test_thesis_migrations_batch5.py::test_trigger_transition_mutation_rejection ERROR [ 87%]
+tests/karsa/thesis/test_thesis_migrations_batch5.py::test_trigger_delta_mutation_rejection ERROR [ 87%]
+tests/karsa/thesis/test_thesis_migrations_batch5.py::test_partition_creation_and_routing ERROR [ 87%]
+tests/karsa/thesis/test_thesis_migrations_batch5.py::test_manifest_hash_fields_present ERROR [ 87%]
+tests/karsa/thesis/test_thesis_postgres_batch4.py::test_occ_successful_update PASSED [ 87%]
+tests/karsa/thesis/test_thesis_postgres_batch4.py::test_occ_stale_update PASSED [ 88%]
+tests/karsa/thesis/test_thesis_postgres_batch4.py::test_occ_concurrent_writer_simulation PASSED [ 88%]
+tests/karsa/thesis/test_thesis_postgres_batch4.py::test_cqrs_active_lookup PASSED [ 88%]
+tests/karsa/thesis/test_thesis_postgres_batch4.py::test_pagination PASSED [ 88%]
+tests/karsa/thesis/test_thesis_postgres_batch4.py::test_lineage_snapshot PASSED [ 88%]
+tests/karsa/thesis/test_thesis_postgres_batch4.py::test_lineage_transition PASSED [ 88%]
+tests/karsa/thesis/test_thesis_postgres_batch4.py::test_lineage_cycle_snapshot PASSED [ 89%]
+tests/karsa/thesis/test_thesis_postgres_batch4.py::test_lineage_cycle_transition PASSED [ 89%]
+tests/karsa/thesis/test_thesis_postgres_batch4.py::test_immutability_snapshot PASSED [ 89%]
+tests/karsa/thesis/test_thesis_postgres_batch4.py::test_immutability_transition_and_delta PASSED [ 89%]
+tests/karsa/thesis/test_thesis_postgres_batch4.py::test_missing_coverage_postgres PASSED [ 89%]
+tests/karsa/thesis/test_thesis_postgres_batch4.py::test_missing_lines_and_explain PASSED [ 89%]
+tests/karsa/thesis/test_thesis_postgres_batch4.py::test_explain_analyze PASSED [ 90%]
+tests/karsa/thesis/test_thesis_repositories_batch3.py::test_thesis_repo_memory_occ PASSED [ 90%]
+tests/karsa/thesis/test_thesis_repositories_batch3.py::test_thesis_repo_pagination PASSED [ 90%]
+tests/karsa/thesis/test_thesis_repositories_batch3.py::test_snapshot_repo_immutability_and_lineage PASSED [ 90%]
+tests/karsa/thesis/test_thesis_repositories_batch3.py::test_transition_repo PASSED [ 90%]
+tests/karsa/thesis/test_thesis_repositories_batch3.py::test_assumption_repos PASSED [ 90%]
+tests/karsa/thesis/test_thesis_repositories_batch3.py::test_file_repos PASSED [ 91%]
+tests/karsa/thesis/test_thesis_repositories_batch3.py::test_missing_coverage PASSED [ 91%]
+tests/karsa/thesis/test_thesis_repositories_batch3.py::test_missing_coverage_more PASSED [ 91%]
+tests/karsa/thesis/test_thesis_repositories_batch3_remediation.py::test_file_durability_scenario_a PASSED [ 91%]
+tests/karsa/thesis/test_thesis_repositories_batch3_remediation.py::test_file_durability_scenario_b PASSED [ 91%]
+tests/karsa/thesis/test_thesis_repositories_batch3_remediation.py::test_file_durability_scenario_c PASSED [ 91%]
+tests/karsa/thesis/test_thesis_repositories_batch3_remediation.py::test_occ_scenarios PASSED [ 92%]
+tests/karsa/thesis/test_thesis_repositories_batch3_remediation.py::test_lineage_verification PASSED [ 92%]
+tests/karsa/thesis/test_thesis_repositories_batch3_remediation.py::test_keyset_pagination PASSED [ 92%]
+tests/karsa/thesis/test_thesis_repositories_batch3_remediation.py::test_all_interfaces_and_missing_lines PASSED [ 92%]
+tests/karsa/thesis/test_thesis_repositories_batch3_remediation.py::test_memory_repo_lineage_coverage PASSED [ 92%]
+tests/karsa/thesis/test_thesis_repositories_batch3_remediation.py::test_file_repo_lineage_coverage PASSED [ 92%]
+tests/karsa/thesis/test_thesis_repositories_batch3_remediation.py::test_file_repo_loading_coverage PASSED [ 93%]
+tests/karsa/thesis/test_thesis_repositories_batch3_remediation.py::test_file_repo_non_json_ignore PASSED [ 93%]
+tests/shared/test_shared_foundation.py::test_versioned_aggregate_increments PASSED [ 93%]
+tests/shared/test_shared_foundation.py::test_platform_event_envelope_serialization PASSED [ 93%]
+tests/shared/test_shared_foundation.py::test_decision_context_snapshot_fingerprint PASSED [ 93%]
+tests/shared/test_shared_foundation.py::test_originator_identity PASSED  [ 93%]
+tests/shared/test_shared_foundation.py::test_execution_outcome_contract PASSED [ 94%]
+tests/shared/test_shared_postgres_uow_outbox.py::test_uow_commit_and_outbox_dispatch PASSED [ 94%]
+tests/shared/test_shared_postgres_uow_outbox.py::test_uow_concurrency_conflict PASSED [ 94%]
+tests/shared/test_shared_postgres_uow_outbox.py::test_outbox_dispatcher PASSED [ 94%]
+tests/test_fsm_durability.py::test_fsm_valid_transitions PASSED          [ 94%]
+tests/test_fsm_durability.py::test_fsm_invalid_transitions PASSED        [ 94%]
+tests/test_fsm_durability.py::test_workflow_lock PASSED                  [ 95%]
+tests/test_fsm_durability.py::test_hybrid_persistence_and_recovery PASSED [ 95%]
+tests/test_fsm_durability.py::test_recovery_from_events_only PASSED      [ 95%]
+tests/test_fsm_durability.py::test_recovery_is_deterministic PASSED      [ 95%]
+tests/test_fsm_durability.py::test_sequence_gap PASSED                   [ 95%]
+tests/test_fsm_durability.py::test_out_of_order_replay PASSED            [ 95%]
+tests/test_fsm_durability.py::test_corrupted_journal_error PASSED        [ 96%]
+tests/test_fsm_durability.py::test_lock_ownership_validation PASSED      [ 96%]
+tests/test_pool.py::test_provider_pool_rotation PASSED                   [ 96%]
+tests/test_pool.py::test_provider_pool_quota_exhaustion_and_recovery PASSED [ 96%]
+tests/test_pool.py::test_provider_registry_persistence PASSED            [ 96%]
+tests/test_review.py::test_scenario_a_convergence PASSED                 [ 96%]
+tests/test_review.py::test_scenario_c_reopen PASSED                      [ 97%]
+tests/test_review.py::test_scenario_issue_freeze PASSED                  [ 97%]
+tests/test_review_parser.py::TestGoldenRejectWithBlocking::test_extracts_all_blocking_issues PASSED [ 97%]
+tests/test_review_parser.py::TestGoldenRejectWithBlocking::test_diagnostics_match PASSED [ 97%]
+tests/test_review_parser.py::TestGoldenRejectWithBlocking::test_should_approve_safe_returns_false PASSED [ 97%]
+tests/test_review_parser.py::TestGoldenApproveClean::test_approve_with_resolved_issues PASSED [ 97%]
+tests/test_review_parser.py::TestGoldenRejectVariantFormat::test_extracts_issues_with_variant_format PASSED [ 98%]
+tests/test_review_parser.py::TestGoldenRejectNoSummaryHeader::test_extracts_issues_without_summary PASSED [ 98%]
+tests/test_review_parser.py::TestParserValidation::test_blocking_mismatch_raises_exception PASSED [ 98%]
+tests/test_review_parser.py::TestParserValidation::test_reject_with_zero_registry_raises_exception PASSED [ 98%]
+tests/test_review_parser.py::TestParserValidation::test_unknown_outcome_raises_exception PASSED [ 98%]
+tests/test_review_parser.py::TestParserValidation::test_low_confidence_with_extraction_failure_raises PASSED [ 98%]
+tests/test_review_parser.py::TestFailClosed::test_never_approves_empty_reject PASSED [ 99%]
+tests/test_review_parser.py::TestFailClosed::test_should_approve_safe_rejects_when_outcome_is_reject PASSED [ 99%]
+tests/test_review_parser.py::TestFailClosed::test_should_approve_safe_rejects_on_extraction_failure PASSED [ 99%]
+tests/test_review_parser.py::TestFailClosed::test_should_approve_safe_approves_clean_review PASSED [ 99%]
+tests/test_review_parser.py::TestDiagnosticsPersistence::test_parser_debug_json_persisted PASSED [ 99%]
+tests/test_review_parser.py::TestDiagnosticsPersistence::test_diagnostics_stored_on_engine PASSED [100%]
+
+==================================== ERRORS ====================================
+______________ ERROR at setup of test_migration_upgrade_downgrade ______________
+tests/karsa/thesis/test_thesis_migrations_batch5.py:38: in run_migrations
+    with patch('alembic.op.execute', side_effect=lambda sql: execute_mock(conn, sql)):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/unittest/mock.py:1497: in __enter__
+    original, local = self.get_original()
+                      ^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/unittest/mock.py:1467: in get_original
+    raise AttributeError(
+E   AttributeError: <module 'alembic.op'> does not have the attribute 'execute'
+___________ ERROR at setup of test_constraint_pk_fk_unique_not_null ____________
+tests/karsa/thesis/test_thesis_migrations_batch5.py:38: in run_migrations
+    with patch('alembic.op.execute', side_effect=lambda sql: execute_mock(conn, sql)):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/unittest/mock.py:1497: in __enter__
+    original, local = self.get_original()
+                      ^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/unittest/mock.py:1467: in get_original
+    raise AttributeError(
+E   AttributeError: <module 'alembic.op'> does not have the attribute 'execute'
+__________ ERROR at setup of test_trigger_snapshot_mutation_rejection __________
+tests/karsa/thesis/test_thesis_migrations_batch5.py:38: in run_migrations
+    with patch('alembic.op.execute', side_effect=lambda sql: execute_mock(conn, sql)):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/unittest/mock.py:1497: in __enter__
+    original, local = self.get_original()
+                      ^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/unittest/mock.py:1467: in get_original
+    raise AttributeError(
+E   AttributeError: <module 'alembic.op'> does not have the attribute 'execute'
+_________ ERROR at setup of test_trigger_transition_mutation_rejection _________
+tests/karsa/thesis/test_thesis_migrations_batch5.py:38: in run_migrations
+    with patch('alembic.op.execute', side_effect=lambda sql: execute_mock(conn, sql)):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/unittest/mock.py:1497: in __enter__
+    original, local = self.get_original()
+                      ^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/unittest/mock.py:1467: in get_original
+    raise AttributeError(
+E   AttributeError: <module 'alembic.op'> does not have the attribute 'execute'
+___________ ERROR at setup of test_trigger_delta_mutation_rejection ____________
+tests/karsa/thesis/test_thesis_migrations_batch5.py:38: in run_migrations
+    with patch('alembic.op.execute', side_effect=lambda sql: execute_mock(conn, sql)):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/unittest/mock.py:1497: in __enter__
+    original, local = self.get_original()
+                      ^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/unittest/mock.py:1467: in get_original
+    raise AttributeError(
+E   AttributeError: <module 'alembic.op'> does not have the attribute 'execute'
+____________ ERROR at setup of test_partition_creation_and_routing _____________
+tests/karsa/thesis/test_thesis_migrations_batch5.py:38: in run_migrations
+    with patch('alembic.op.execute', side_effect=lambda sql: execute_mock(conn, sql)):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/unittest/mock.py:1497: in __enter__
+    original, local = self.get_original()
+                      ^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/unittest/mock.py:1467: in get_original
+    raise AttributeError(
+E   AttributeError: <module 'alembic.op'> does not have the attribute 'execute'
+_____________ ERROR at setup of test_manifest_hash_fields_present ______________
+tests/karsa/thesis/test_thesis_migrations_batch5.py:38: in run_migrations
+    with patch('alembic.op.execute', side_effect=lambda sql: execute_mock(conn, sql)):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/unittest/mock.py:1497: in __enter__
+    original, local = self.get_original()
+                      ^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.13/unittest/mock.py:1467: in get_original
+    raise AttributeError(
+E   AttributeError: <module 'alembic.op'> does not have the attribute 'execute'
+=============================== warnings summary ===============================
+.venv/lib/python3.13/site-packages/fastapi/testclient.py:1
+  /app/.venv/lib/python3.13/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+<frozen importlib._bootstrap>:530
+  <frozen importlib._bootstrap>:530: DeprecationWarning: the load_module() method is deprecated and slated for removal in Python 3.15; use exec_module() instead
+
+tests/karsa/attribution/application/test_application_attribution_services.py: 106 warnings
+tests/karsa/attribution/application/test_application_audit.py: 7 warnings
+tests/karsa/attribution/domain/test_attribution_domain.py: 16 warnings
+tests/karsa/attribution/infrastructure/test_infrastructure_attribution_repositories.py: 5 warnings
+tests/karsa/attribution/test_attribution_integration.py: 2 warnings
+  /app/src/karsa/attribution/domain/model/models.py:127: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    self.calculated_at = calculated_at or datetime.utcnow()
+
+tests/karsa/attribution/application/test_application_attribution_services.py::test_calculation_service_workflow
+tests/karsa/attribution/application/test_application_attribution_services.py::test_recomputation_service
+tests/karsa/attribution/application/test_application_attribution_services.py::test_replay_service
+tests/karsa/attribution/application/test_application_audit.py::test_queue_replay
+tests/karsa/attribution/test_attribution_integration.py::test_full_attribution_integration_flow
+  /app/src/karsa/attribution/application/service.py:132: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    calculated_at=datetime.utcnow(),
+
+tests/karsa/attribution/application/test_application_attribution_services.py::test_recomputation_service
+tests/karsa/attribution/application/test_application_audit.py::test_queue_replay
+tests/karsa/attribution/application/test_application_audit.py::test_queue_replay
+tests/karsa/attribution/test_attribution_integration.py::test_full_attribution_integration_flow
+  /app/src/karsa/attribution/application/service.py:247: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    superseded_at=datetime.utcnow()
+
+tests/karsa/attribution/application/test_application_attribution_services.py::test_recomputation_service
+tests/karsa/attribution/application/test_application_audit.py::test_queue_replay
+tests/karsa/attribution/application/test_application_audit.py::test_queue_replay
+tests/karsa/attribution/test_attribution_integration.py::test_full_attribution_integration_flow
+  /app/src/karsa/attribution/application/service.py:262: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    recomputed_at=datetime.utcnow()
+
+tests/karsa/attribution/application/test_application_attribution_services.py::test_invalidation_service
+  /app/src/karsa/attribution/application/service.py:292: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    invalidated_at=datetime.utcnow()
+
+tests/karsa/attribution/domain/test_domain_lineage.py::test_recomputation_lineage_creation
+  /Users/dwiki.nugraha/dwikicode/karsa-local-production/tests/karsa/attribution/domain/test_domain_lineage.py:8: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/karsa/cio/test_cio_engine.py::test_aggregate_immutability
+  /Users/dwiki.nugraha/dwikicode/karsa-local-production/tests/karsa/cio/test_cio_engine.py:82: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/karsa/cio/test_cio_engine.py::test_aggregate_immutability
+  /Users/dwiki.nugraha/dwikicode/karsa-local-production/tests/karsa/cio/test_cio_engine.py:83: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/karsa/cio/test_cio_engine.py::test_value_object_validation
+  /Users/dwiki.nugraha/dwikicode/karsa-local-production/tests/karsa/cio/test_cio_engine.py:103: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/karsa/cio/test_cio_engine.py::test_create_decision_requires_valid_journal
+  /Users/dwiki.nugraha/dwikicode/karsa-local-production/tests/karsa/cio/test_cio_engine.py:109: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/karsa/cio/test_cio_engine.py::test_create_decision_enforces_quorum
+  /Users/dwiki.nugraha/dwikicode/karsa-local-production/tests/karsa/cio/test_cio_engine.py:129: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/karsa/cio/test_cio_engine.py::test_create_decision_enforces_quorum
+  /Users/dwiki.nugraha/dwikicode/karsa-local-production/tests/karsa/cio/test_cio_engine.py:130: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/karsa/cio/test_cio_engine.py::test_create_decision_override_bypasses_quorum
+tests/karsa/cio/test_cio_engine.py::test_create_decision_override_bypasses_quorum
+tests/karsa/cio/test_cio_engine.py::test_signature_generation_and_payload_locking
+tests/karsa/cio/test_cio_engine.py::test_duplicate_decision_journal_ref_rejected
+tests/karsa/cio/test_cio_engine.py::test_api_endpoints
+  /app/src/karsa/cio/services.py:105: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    created_at=datetime.utcnow(),
+
+tests/karsa/cio/test_cio_engine.py::test_signature_generation_and_payload_locking
+  /Users/dwiki.nugraha/dwikicode/karsa-local-production/tests/karsa/cio/test_cio_engine.py:182: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/karsa/cio/test_cio_engine.py::test_duplicate_decision_journal_ref_rejected
+  /Users/dwiki.nugraha/dwikicode/karsa-local-production/tests/karsa/cio/test_cio_engine.py:203: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/karsa/cio/test_cio_engine.py::test_api_endpoints
+  /app/src/karsa/cio/api.py:62: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    timestamp=datetime.utcnow()
+
+tests/karsa/cio/test_cio_engine.py::test_api_endpoints
+  /app/src/karsa/cio/services.py:155: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    created_at=datetime.utcnow()
+
+tests/karsa/decision_journal/test_decision_journal_application.py::test_append_service
+tests/karsa/decision_journal/test_decision_journal_application.py::test_append_service
+  /app/src/karsa/decision_journal/application/services.py:61: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    created_at=datetime.utcnow()
+
+tests/karsa/decision_journal/test_decision_journal_domain.py::test_decision_journal_appended
+  /Users/dwiki.nugraha/dwikicode/karsa-local-production/tests/karsa/decision_journal/test_decision_journal_domain.py:32: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/karsa/decision_journal/test_decision_journal_domain.py::test_decision_journal_entry
+  /Users/dwiki.nugraha/dwikicode/karsa-local-production/tests/karsa/decision_journal/test_decision_journal_domain.py:37: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/karsa/observability/test_observability_application.py::test_ingest_telemetry_sampling
+tests/karsa/observability/test_observability_application.py::test_memory_budget_exceeded
+  /app/src/karsa/observability/application/services.py:33: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    self.buffer.append(("SPAN", context, payload, datetime.datetime.utcnow()))
+
+tests/karsa/observability/test_observability_application.py::test_ingest_telemetry_sampling
+  /app/src/karsa/observability/application/services.py:40: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    self.buffer.append(("SPAN", context, payload, datetime.datetime.utcnow()))
+
+tests/karsa/observability/test_observability_application.py::test_ingest_telemetry_sampling
+tests/karsa/observability/test_observability_application.py::test_ingest_telemetry_sampling
+  /app/src/karsa/observability/application/services.py:52: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    start_time=datetime.datetime.utcnow()
+
+tests/karsa/observability/test_observability_application.py::test_ingest_metric_flush
+  /app/src/karsa/observability/application/services.py:36: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    self.buffer.append(("METRIC", context, payload, datetime.datetime.utcnow()))
+
+tests/karsa/observability/test_observability_application.py::test_ingest_metric_flush
+tests/karsa/observability/test_observability_application.py::test_meta_observability
+tests/karsa/observability/test_observability_application.py::test_meta_observability
+tests/karsa/observability/test_observability_domain.py::test_metric_snapshot
+tests/karsa/observability/test_observability_infrastructure.py::test_postgres_repos
+  <string>:6: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/karsa/observability/test_observability_application.py::test_meta_observability
+  /Users/dwiki.nugraha/dwikicode/karsa-local-production/tests/karsa/observability/test_observability_application.py:59: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/karsa/observability/test_observability_application.py::test_meta_observability
+tests/karsa/observability/test_observability_application.py::test_meta_observability
+  /app/src/karsa/observability/application/services.py:70: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    now = datetime.datetime.utcnow()
+
+tests/karsa/observability/test_observability_infrastructure.py::test_postgres_repos
+  /Users/dwiki.nugraha/dwikicode/karsa-local-production/tests/karsa/observability/test_observability_infrastructure.py:19: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/karsa/observability/test_observability_infrastructure.py: 1 warning
+tests/karsa/portfolio/application/service/test_portfolio_application_service.py: 2 warnings
+tests/karsa/portfolio/domain/model/test_model_portfolio.py: 7 warnings
+tests/karsa/portfolio/domain/service/test_service_rebalancing_engine.py: 9 warnings
+tests/karsa/portfolio/infrastructure/storage/test_storage_portfolio_mapper.py: 1 warning
+tests/karsa/portfolio/infrastructure/storage/test_storage_portfolio_repositories.py: 1 warning
+  <string>:7: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/karsa/observability/test_observability_infrastructure.py::test_postgres_repos
+tests/karsa/observability/test_observability_infrastructure.py::test_debouncer
+  <string>:8: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/karsa/performance_engine/test_performance_engine_performance_regime.py::test_performance_regime
+tests/karsa/performance_engine/test_performance_regime.py::test_performance_regime
+  /app/src/karsa/performance_engine/application/services.py:17: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    eval_obj = PerformanceEvaluation(eval_urn, outcome_urn, journal_urn, error, regime, datetime.utcnow())
+
+tests/karsa/portfolio/application/service/test_portfolio_application_service.py::test_successful_propose_workflow
+tests/karsa/portfolio/domain/service/test_service_rebalancing_engine.py::test_functional_purity
+tests/karsa/portfolio/domain/service/test_service_rebalancing_engine.py::test_deterministic_target_generation
+tests/karsa/portfolio/domain/service/test_service_rebalancing_engine.py::test_deterministic_target_generation
+tests/karsa/portfolio/domain/service/test_service_rebalancing_engine.py::test_deterministic_decision_generation
+tests/karsa/portfolio/domain/service/test_service_rebalancing_engine.py::test_deterministic_decision_generation
+  /app/src/karsa/portfolio/domain/service/rebalancing_engine.py:177: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    timestamp=datetime.utcnow(),
+
+tests/karsa/portfolio/application/service/test_portfolio_application_service.py::test_successful_propose_workflow
+  /app/src/karsa/portfolio/application/service/portfolio_application_service.py:68: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    created_at=datetime.utcnow().isoformat(),
+
+tests/karsa/portfolio/application/service/test_portfolio_application_service.py::test_successful_propose_workflow
+  /app/src/karsa/portfolio/application/service/portfolio_application_service.py:88: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    occurred_at=datetime.utcnow().isoformat(),
+
+tests/karsa/portfolio/application/service/test_portfolio_application_service.py::test_apply_approved_decision
+  /app/src/karsa/portfolio/application/service/portfolio_application_service.py:121: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    occurred_at=datetime.utcnow().isoformat(),
+
+tests/karsa/portfolio/domain/model/test_model_portfolio.py::test_portfolio_decision_immutability
+  /Users/dwiki.nugraha/dwikicode/karsa-local-production/tests/karsa/portfolio/domain/model/test_model_portfolio.py:52: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/karsa/portfolio/test_portfolio_foundation.py::test_order_filled_event_consumption
+  /Users/dwiki.nugraha/dwikicode/karsa-local-production/tests/karsa/portfolio/test_portfolio_foundation.py:140: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/karsa/portfolio/test_portfolio_foundation.py::test_order_filled_event_consumption
+  /app/src/karsa/portfolio/services.py:75: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    calculated_at=datetime.utcnow()
+
+tests/karsa/post_mortem/test_post_mortem.py::test_weights_sum_to_one
+  /Users/dwiki.nugraha/dwikicode/karsa-local-production/tests/karsa/post_mortem/test_post_mortem.py:86: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/karsa/post_mortem/test_post_mortem.py::test_invalid_weight_rejected
+  /Users/dwiki.nugraha/dwikicode/karsa-local-production/tests/karsa/post_mortem/test_post_mortem.py:103: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/karsa/post_mortem/test_post_mortem.py::test_postmortem_record_immutable
+  /Users/dwiki.nugraha/dwikicode/karsa-local-production/tests/karsa/post_mortem/test_post_mortem.py:117: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/karsa/post_mortem/test_post_mortem.py::test_recommendation_accept
+  /Users/dwiki.nugraha/dwikicode/karsa-local-production/tests/karsa/post_mortem/test_post_mortem.py:137: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/karsa/post_mortem/test_post_mortem.py::test_recommendation_accept
+tests/karsa/post_mortem/test_post_mortem.py::test_recommendation_implement
+tests/karsa/post_mortem/test_post_mortem.py::test_recommendation_expire
+tests/karsa/post_mortem/test_post_mortem.py::test_postmortem_cannot_implement_recommendation
+tests/karsa/post_mortem/test_post_mortem.py::test_recommendation_accept_race
+tests/karsa/post_mortem/test_post_mortem.py::test_recommendation_accept_race
+tests/karsa/post_mortem/test_post_mortem.py::test_recommendation_accept_reject_race
+tests/karsa/post_mortem/test_post_mortem.py::test_recommendation_accept_expire_race
+tests/karsa/post_mortem/test_post_mortem.py::test_api_endpoints
+  /app/src/karsa/post_mortem/models.py:92: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    self.updated_at = datetime.utcnow()
+
+tests/karsa/post_mortem/test_post_mortem.py::test_recommendation_reject
+  /Users/dwiki.nugraha/dwikicode/karsa-local-production/tests/karsa/post_mortem/test_post_mortem.py:152: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/karsa/post_mortem/test_post_mortem.py::test_recommendation_reject
+tests/karsa/post_mortem/test_post_mortem.py::test_invalid_transition_rejected_to_implemented
+tests/karsa/post_mortem/test_post_mortem.py::test_recommendation_reject_race
+tests/karsa/post_mortem/test_post_mortem.py::test_recommendation_reject_race
+tests/karsa/post_mortem/test_post_mortem.py::test_recommendation_accept_reject_race
+tests/karsa/post_mortem/test_post_mortem.py::test_service_error_paths
+tests/karsa/post_mortem/test_post_mortem.py::test_api_error_responses
+  /app/src/karsa/post_mortem/models.py:101: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    self.updated_at = datetime.utcnow()
+
+tests/karsa/post_mortem/test_post_mortem.py::test_recommendation_implement
+  /Users/dwiki.nugraha/dwikicode/karsa-local-production/tests/karsa/post_mortem/test_post_mortem.py:167: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/karsa/post_mortem/test_post_mortem.py::test_recommendation_implement
+tests/karsa/post_mortem/test_post_mortem.py::test_api_endpoints
+  /app/src/karsa/post_mortem/models.py:110: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    self.updated_at = datetime.utcnow()
+
+tests/karsa/post_mortem/test_post_mortem.py::test_recommendation_expire
+  /Users/dwiki.nugraha/dwikicode/karsa-local-production/tests/karsa/post_mortem/test_post_mortem.py:184: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/karsa/post_mortem/test_post_mortem.py::test_recommendation_expire
+tests/karsa/post_mortem/test_post_mortem.py::test_recommendation_expire
+tests/karsa/post_mortem/test_post_mortem.py::test_invalid_transition_expired_to_accepted
+tests/karsa/post_mortem/test_post_mortem.py::test_recommendation_accept_expire_race
+tests/karsa/post_mortem/test_post_mortem.py::test_service_error_paths
+tests/karsa/post_mortem/test_post_mortem.py::test_api_error_responses
+  /app/src/karsa/post_mortem/models.py:119: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    self.updated_at = datetime.utcnow()
+
+tests/karsa/post_mortem/test_post_mortem.py::test_recommendation_expire
+  /Users/dwiki.nugraha/dwikicode/karsa-local-production/tests/karsa/post_mortem/test_post_mortem.py:199: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/karsa/post_mortem/test_post_mortem.py::test_invalid_transition_rejected_to_implemented
+  /Users/dwiki.nugraha/dwikicode/karsa-local-production/tests/karsa/post_mortem/test_post_mortem.py:215: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/karsa/post_mortem/test_post_mortem.py::test_invalid_transition_expired_to_accepted
+  /Users/dwiki.nugraha/dwikicode/karsa-local-production/tests/karsa/post_mortem/test_post_mortem.py:230: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/karsa/post_mortem/test_post_mortem.py::test_postmortem_cannot_accept_recommendation
+  /Users/dwiki.nugraha/dwikicode/karsa-local-production/tests/karsa/post_mortem/test_post_mortem.py:250: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/karsa/post_mortem/test_post_mortem.py: 10 warnings
+  /app/src/karsa/post_mortem/services.py:65: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    timestamp=datetime.utcnow(),
+
+tests/karsa/post_mortem/test_post_mortem.py: 12 warnings
+  /app/src/karsa/post_mortem/services.py:111: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    updated_at=datetime.utcnow()
+
+tests/karsa/post_mortem/test_post_mortem.py: 12 warnings
+  /app/src/karsa/post_mortem/services.py:121: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    timestamp=datetime.utcnow(),
+
+tests/karsa/post_mortem/test_post_mortem.py::test_postmortem_cannot_implement_recommendation
+  /Users/dwiki.nugraha/dwikicode/karsa-local-production/tests/karsa/post_mortem/test_post_mortem.py:277: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/karsa/post_mortem/test_post_mortem.py::test_postmortem_cannot_implement_recommendation
+tests/karsa/post_mortem/test_post_mortem.py::test_api_endpoints
+  /app/src/karsa/post_mortem/services.py:154: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    timestamp=datetime.utcnow(),
+
+tests/karsa/post_mortem/test_post_mortem.py::test_recommendation_accept_race
+  /Users/dwiki.nugraha/dwikicode/karsa-local-production/tests/karsa/post_mortem/test_post_mortem.py:308: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/karsa/post_mortem/test_post_mortem.py::test_recommendation_reject_race
+  /Users/dwiki.nugraha/dwikicode/karsa-local-production/tests/karsa/post_mortem/test_post_mortem.py:343: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/karsa/post_mortem/test_post_mortem.py::test_recommendation_accept_reject_race
+  /Users/dwiki.nugraha/dwikicode/karsa-local-production/tests/karsa/post_mortem/test_post_mortem.py:377: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/karsa/post_mortem/test_post_mortem.py::test_recommendation_accept_expire_race
+  /Users/dwiki.nugraha/dwikicode/karsa-local-production/tests/karsa/post_mortem/test_post_mortem.py:411: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/karsa/post_mortem/test_post_mortem.py::test_replay_chain_reconstruction
+  /Users/dwiki.nugraha/dwikicode/karsa-local-production/tests/karsa/post_mortem/test_post_mortem.py:475: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/karsa/post_mortem/test_post_mortem.py::test_api_endpoints
+tests/karsa/post_mortem/test_post_mortem.py::test_api_error_responses
+tests/karsa/post_mortem/test_post_mortem.py::test_api_error_responses
+  /app/src/karsa/post_mortem/api.py:96: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    created_at = request.created_at or datetime.utcnow()
+
+tests/karsa/post_mortem/test_post_mortem.py::test_api_endpoints
+  /app/src/karsa/post_mortem/services.py:204: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    timestamp=datetime.utcnow(),
+
+tests/karsa/post_mortem/test_post_mortem.py::test_aggregate_constructor_validations
+  /Users/dwiki.nugraha/dwikicode/karsa-local-production/tests/karsa/post_mortem/test_post_mortem.py:627: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/karsa/post_mortem/test_post_mortem.py::test_recommendation_summary_projection_validations
+  /Users/dwiki.nugraha/dwikicode/karsa-local-production/tests/karsa/post_mortem/test_post_mortem.py:666: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/karsa/post_mortem/test_post_mortem.py::test_service_error_paths
+  /Users/dwiki.nugraha/dwikicode/karsa-local-production/tests/karsa/post_mortem/test_post_mortem.py:697: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/karsa/post_mortem/test_post_mortem.py::test_service_error_paths
+tests/karsa/post_mortem/test_post_mortem.py::test_api_error_responses
+  /app/src/karsa/post_mortem/services.py:179: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    timestamp=datetime.utcnow(),
+
+tests/karsa/post_mortem/test_post_mortem.py::test_service_error_paths
+tests/karsa/post_mortem/test_post_mortem.py::test_api_error_responses
+  /app/src/karsa/post_mortem/services.py:226: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    timestamp=datetime.utcnow(),
+
+tests/karsa/post_mortem/test_post_mortem.py::test_repository_not_found_paths
+  /Users/dwiki.nugraha/dwikicode/karsa-local-production/tests/karsa/post_mortem/test_post_mortem.py:742: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/karsa/regime/test_regime_postgres_batch4.py::test_natural_key_uniqueness
+tests/karsa/regime/test_regime_postgres_batch4.py::test_natural_key_uniqueness
+tests/karsa/regime/test_regime_postgres_batch4.py::test_transition_lineage_traversal
+tests/karsa/regime/test_regime_postgres_batch4.py::test_transition_lineage_traversal
+  /app/.venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py:952: DeprecationWarning: The default datetime adapter is deprecated as of Python 3.12; see the sqlite3 documentation for suggested replacement recipes
+    cursor.execute(statement, parameters)
+
+tests/karsa/regime/test_regime_repositories_batch2.py::test_file_atomic_write
+  /app/.venv/lib/python3.13/site-packages/_pytest/threadexception.py:58: PytestUnhandledThreadExceptionWarning: Exception in thread Thread-50 (save_task)
+  
+  Traceback (most recent call last):
+    File "/usr/local/lib/python3.13/threading.py", line 1044, in _bootstrap_inner
+      self.run()
+      ~~~~~~~~^^
+    File "/usr/local/lib/python3.13/threading.py", line 995, in run
+      self._target(*self._args, **self._kwargs)
+      ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    File "/Users/dwiki.nugraha/dwikicode/karsa-local-production/tests/karsa/regime/test_regime_repositories_batch2.py", line 120, in save_task
+    File "/app/src/karsa/regime/infrastructure/storage/file_repositories.py", line 60, in save
+      raise ConcurrencyError("OCC violation")
+  src.karsa.regime.domain.repositories.ConcurrencyError: OCC violation
+  
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+    warnings.warn(pytest.PytestUnhandledThreadExceptionWarning(msg))
+
+tests/karsa/regime/test_regime_repositories_batch2.py::test_file_atomic_write
+  /app/.venv/lib/python3.13/site-packages/_pytest/threadexception.py:58: PytestUnhandledThreadExceptionWarning: Exception in thread Thread-49 (save_task)
+  
+  Traceback (most recent call last):
+    File "/usr/local/lib/python3.13/threading.py", line 1044, in _bootstrap_inner
+      self.run()
+      ~~~~~~~~^^
+    File "/usr/local/lib/python3.13/threading.py", line 995, in run
+      self._target(*self._args, **self._kwargs)
+      ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    File "/Users/dwiki.nugraha/dwikicode/karsa-local-production/tests/karsa/regime/test_regime_repositories_batch2.py", line 120, in save_task
+    File "/app/src/karsa/regime/infrastructure/storage/file_repositories.py", line 60, in save
+      raise ConcurrencyError("OCC violation")
+  src.karsa.regime.domain.repositories.ConcurrencyError: OCC violation
+  
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+    warnings.warn(pytest.PytestUnhandledThreadExceptionWarning(msg))
+
+tests/karsa/regime/test_regime_repositories_batch2.py::test_file_atomic_write
+  /app/.venv/lib/python3.13/site-packages/_pytest/threadexception.py:58: PytestUnhandledThreadExceptionWarning: Exception in thread Thread-48 (save_task)
+  
+  Traceback (most recent call last):
+    File "/usr/local/lib/python3.13/threading.py", line 1044, in _bootstrap_inner
+      self.run()
+      ~~~~~~~~^^
+    File "/usr/local/lib/python3.13/threading.py", line 995, in run
+      self._target(*self._args, **self._kwargs)
+      ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    File "/Users/dwiki.nugraha/dwikicode/karsa-local-production/tests/karsa/regime/test_regime_repositories_batch2.py", line 120, in save_task
+    File "/app/src/karsa/regime/infrastructure/storage/file_repositories.py", line 60, in save
+      raise ConcurrencyError("OCC violation")
+  src.karsa.regime.domain.repositories.ConcurrencyError: OCC violation
+  
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+    warnings.warn(pytest.PytestUnhandledThreadExceptionWarning(msg))
+
+tests/karsa/regime/test_regime_repositories_batch2.py::test_file_atomic_write
+  /app/.venv/lib/python3.13/site-packages/_pytest/threadexception.py:58: PytestUnhandledThreadExceptionWarning: Exception in thread Thread-47 (save_task)
+  
+  Traceback (most recent call last):
+    File "/usr/local/lib/python3.13/threading.py", line 1044, in _bootstrap_inner
+      self.run()
+      ~~~~~~~~^^
+    File "/usr/local/lib/python3.13/threading.py", line 995, in run
+      self._target(*self._args, **self._kwargs)
+      ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    File "/Users/dwiki.nugraha/dwikicode/karsa-local-production/tests/karsa/regime/test_regime_repositories_batch2.py", line 120, in save_task
+    File "/app/src/karsa/regime/infrastructure/storage/file_repositories.py", line 60, in save
+      raise ConcurrencyError("OCC violation")
+  src.karsa.regime.domain.repositories.ConcurrencyError: OCC violation
+  
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+    warnings.warn(pytest.PytestUnhandledThreadExceptionWarning(msg))
+
+tests/karsa/regime/test_regime_repositories_batch2.py::test_file_atomic_write
+  /app/.venv/lib/python3.13/site-packages/_pytest/threadexception.py:58: PytestUnhandledThreadExceptionWarning: Exception in thread Thread-46 (save_task)
+  
+  Traceback (most recent call last):
+    File "/usr/local/lib/python3.13/threading.py", line 1044, in _bootstrap_inner
+      self.run()
+      ~~~~~~~~^^
+    File "/usr/local/lib/python3.13/threading.py", line 995, in run
+      self._target(*self._args, **self._kwargs)
+      ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    File "/Users/dwiki.nugraha/dwikicode/karsa-local-production/tests/karsa/regime/test_regime_repositories_batch2.py", line 120, in save_task
+    File "/app/src/karsa/regime/infrastructure/storage/file_repositories.py", line 60, in save
+      raise ConcurrencyError("OCC violation")
+  src.karsa.regime.domain.repositories.ConcurrencyError: OCC violation
+  
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+    warnings.warn(pytest.PytestUnhandledThreadExceptionWarning(msg))
+
+tests/karsa/regime/test_regime_repositories_batch2.py::test_file_atomic_write
+  /app/.venv/lib/python3.13/site-packages/_pytest/threadexception.py:58: PytestUnhandledThreadExceptionWarning: Exception in thread Thread-45 (save_task)
+  
+  Traceback (most recent call last):
+    File "/usr/local/lib/python3.13/threading.py", line 1044, in _bootstrap_inner
+      self.run()
+      ~~~~~~~~^^
+    File "/usr/local/lib/python3.13/threading.py", line 995, in run
+      self._target(*self._args, **self._kwargs)
+      ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    File "/Users/dwiki.nugraha/dwikicode/karsa-local-production/tests/karsa/regime/test_regime_repositories_batch2.py", line 120, in save_task
+    File "/app/src/karsa/regime/infrastructure/storage/file_repositories.py", line 60, in save
+      raise ConcurrencyError("OCC violation")
+  src.karsa.regime.domain.repositories.ConcurrencyError: OCC violation
+  
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+    warnings.warn(pytest.PytestUnhandledThreadExceptionWarning(msg))
+
+tests/karsa/regime/test_regime_repositories_batch2.py::test_file_atomic_write
+  /app/.venv/lib/python3.13/site-packages/_pytest/threadexception.py:58: PytestUnhandledThreadExceptionWarning: Exception in thread Thread-42 (save_task)
+  
+  Traceback (most recent call last):
+    File "/usr/local/lib/python3.13/threading.py", line 1044, in _bootstrap_inner
+      self.run()
+      ~~~~~~~~^^
+    File "/usr/local/lib/python3.13/threading.py", line 995, in run
+      self._target(*self._args, **self._kwargs)
+      ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    File "/Users/dwiki.nugraha/dwikicode/karsa-local-production/tests/karsa/regime/test_regime_repositories_batch2.py", line 120, in save_task
+    File "/app/src/karsa/regime/infrastructure/storage/file_repositories.py", line 60, in save
+      raise ConcurrencyError("OCC violation")
+  src.karsa.regime.domain.repositories.ConcurrencyError: OCC violation
+  
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+    warnings.warn(pytest.PytestUnhandledThreadExceptionWarning(msg))
+
+tests/karsa/regime/test_regime_repositories_batch2.py::test_file_atomic_write
+  /app/.venv/lib/python3.13/site-packages/_pytest/threadexception.py:58: PytestUnhandledThreadExceptionWarning: Exception in thread Thread-43 (save_task)
+  
+  Traceback (most recent call last):
+    File "/usr/local/lib/python3.13/threading.py", line 1044, in _bootstrap_inner
+      self.run()
+      ~~~~~~~~^^
+    File "/usr/local/lib/python3.13/threading.py", line 995, in run
+      self._target(*self._args, **self._kwargs)
+      ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    File "/Users/dwiki.nugraha/dwikicode/karsa-local-production/tests/karsa/regime/test_regime_repositories_batch2.py", line 120, in save_task
+    File "/app/src/karsa/regime/infrastructure/storage/file_repositories.py", line 60, in save
+      raise ConcurrencyError("OCC violation")
+  src.karsa.regime.domain.repositories.ConcurrencyError: OCC violation
+  
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+    warnings.warn(pytest.PytestUnhandledThreadExceptionWarning(msg))
+
+tests/karsa/regime/test_regime_repositories_batch2.py::test_file_atomic_write
+  /app/.venv/lib/python3.13/site-packages/_pytest/threadexception.py:58: PytestUnhandledThreadExceptionWarning: Exception in thread Thread-44 (save_task)
+  
+  Traceback (most recent call last):
+    File "/usr/local/lib/python3.13/threading.py", line 1044, in _bootstrap_inner
+      self.run()
+      ~~~~~~~~^^
+    File "/usr/local/lib/python3.13/threading.py", line 995, in run
+      self._target(*self._args, **self._kwargs)
+      ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    File "/Users/dwiki.nugraha/dwikicode/karsa-local-production/tests/karsa/regime/test_regime_repositories_batch2.py", line 120, in save_task
+    File "/app/src/karsa/regime/infrastructure/storage/file_repositories.py", line 60, in save
+      raise ConcurrencyError("OCC violation")
+  src.karsa.regime.domain.repositories.ConcurrencyError: OCC violation
+  
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+    warnings.warn(pytest.PytestUnhandledThreadExceptionWarning(msg))
+
+tests/karsa/review/test_review_engine.py::test_review_session_lifecycle
+tests/karsa/review/test_review_engine.py::test_review_session_immutability
+tests/karsa/review/test_review_engine.py::test_occ_conflict_detection
+tests/karsa/review/test_review_engine.py::test_occ_conflict_detection
+tests/karsa/review/test_review_engine.py::test_repository_persistence
+tests/karsa/review/test_review_engine.py::test_serialization
+  /app/src/karsa/review/domain/model/review.py:44: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    self.created_at = created_at or datetime.utcnow()
+
+tests/karsa/review/test_review_engine.py::test_review_session_lifecycle
+tests/karsa/review/test_review_engine.py::test_review_session_immutability
+tests/karsa/review/test_review_engine.py::test_replay_determinism
+tests/karsa/review/test_review_engine.py::test_replay_determinism
+tests/karsa/review/test_review_engine.py::test_event_emission
+tests/karsa/review/test_review_engine.py::test_learning_loop_closure
+tests/karsa/review/test_review_engine.py::test_evidence_hashing
+tests/karsa/review/test_review_engine.py::test_retention_classification
+  /app/src/karsa/review/domain/model/review.py:64: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    self.updated_at = datetime.utcnow()
+
+tests/karsa/review/test_review_engine.py::test_review_session_lifecycle
+  /Users/dwiki.nugraha/dwikicode/karsa-local-production/tests/karsa/review/test_review_engine.py:47: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/karsa/review/test_review_engine.py::test_review_session_lifecycle
+  /app/src/karsa/review/domain/model/review.py:70: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    self.updated_at = datetime.utcnow()
+
+tests/karsa/review/test_review_engine.py::test_review_session_lifecycle
+  /Users/dwiki.nugraha/dwikicode/karsa-local-production/tests/karsa/review/test_review_engine.py:58: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/karsa/review/test_review_engine.py::test_review_session_lifecycle
+tests/karsa/review/test_review_engine.py::test_replay_determinism
+tests/karsa/review/test_review_engine.py::test_replay_determinism
+tests/karsa/review/test_review_engine.py::test_event_emission
+tests/karsa/review/test_review_engine.py::test_learning_loop_closure
+tests/karsa/review/test_review_engine.py::test_evidence_hashing
+tests/karsa/review/test_review_engine.py::test_evidence_hashing
+tests/karsa/review/test_review_engine.py::test_retention_classification
+  /app/src/karsa/review/domain/model/review.py:76: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    self.updated_at = datetime.utcnow()
+
+tests/karsa/review/test_review_engine.py::test_review_session_lifecycle
+  /Users/dwiki.nugraha/dwikicode/karsa-local-production/tests/karsa/review/test_review_engine.py:63: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/karsa/review/test_review_engine.py::test_review_session_lifecycle
+tests/karsa/review/test_review_engine.py::test_review_session_immutability
+tests/karsa/review/test_review_engine.py::test_replay_determinism
+tests/karsa/review/test_review_engine.py::test_replay_determinism
+tests/karsa/review/test_review_engine.py::test_event_emission
+tests/karsa/review/test_review_engine.py::test_learning_loop_closure
+  /app/src/karsa/review/domain/model/review.py:82: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    self.updated_at = datetime.utcnow()
+
+tests/karsa/review/test_review_engine.py::test_learning_feedback_lifecycle
+tests/karsa/review/test_review_engine.py::test_learning_feedback_immutability
+tests/karsa/review/test_review_engine.py::test_occ_conflict_detection
+tests/karsa/review/test_review_engine.py::test_occ_conflict_detection
+tests/karsa/review/test_review_engine.py::test_repository_persistence
+  /app/src/karsa/review/domain/model/review.py:221: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    self.created_at = created_at or datetime.utcnow()
+
+tests/karsa/review/test_review_engine.py::test_learning_feedback_lifecycle
+  /Users/dwiki.nugraha/dwikicode/karsa-local-production/tests/karsa/review/test_review_engine.py:85: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/karsa/review/test_review_engine.py::test_review_session_immutability
+  /Users/dwiki.nugraha/dwikicode/karsa-local-production/tests/karsa/review/test_review_engine.py:106: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/karsa/review/test_review_engine.py::test_learning_feedback_immutability
+  /Users/dwiki.nugraha/dwikicode/karsa-local-production/tests/karsa/review/test_review_engine.py:134: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/karsa/review/test_review_engine.py::test_serialization
+  /Users/dwiki.nugraha/dwikicode/karsa-local-production/tests/karsa/review/test_review_engine.py:250: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/karsa/review/test_review_engine.py::test_replay_determinism
+tests/karsa/review/test_review_engine.py::test_replay_determinism
+tests/karsa/review/test_review_engine.py::test_event_emission
+tests/karsa/review/test_review_engine.py::test_learning_loop_closure
+tests/karsa/review/test_review_engine.py::test_evidence_hashing
+tests/karsa/review/test_review_engine.py::test_retention_classification
+  /app/src/karsa/review/application/service.py:139: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    created_at=datetime.utcnow(),
+
+tests/karsa/review/test_review_engine.py::test_replay_determinism
+tests/karsa/review/test_review_engine.py::test_replay_determinism
+tests/karsa/review/test_review_engine.py::test_event_emission
+tests/karsa/review/test_review_engine.py::test_learning_loop_closure
+tests/karsa/review/test_review_engine.py::test_evidence_hashing
+tests/karsa/review/test_review_engine.py::test_evidence_hashing
+tests/karsa/review/test_review_engine.py::test_retention_classification
+  /app/src/karsa/review/application/service.py:192: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    created_at=datetime.utcnow(),
+
+tests/karsa/review/test_review_engine.py::test_replay_determinism
+tests/karsa/review/test_review_engine.py::test_replay_determinism
+tests/karsa/review/test_review_engine.py::test_event_emission
+tests/karsa/review/test_review_engine.py::test_learning_loop_closure
+  /app/src/karsa/review/application/service.py:214: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    created_at=datetime.utcnow()
+
+tests/karsa/review/test_review_engine.py::test_replay_determinism
+tests/karsa/review/test_review_engine.py::test_replay_determinism
+tests/karsa/review/test_review_engine.py::test_event_emission
+tests/karsa/review/test_review_engine.py::test_learning_loop_closure
+  /app/src/karsa/review/application/service.py:235: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    timestamp=datetime.utcnow()
+
+tests/karsa/review/test_review_engine.py::test_replay_determinism
+tests/karsa/review/test_review_engine.py::test_replay_determinism
+tests/karsa/review/test_review_engine.py::test_event_emission
+tests/karsa/review/test_review_engine.py::test_feedback_lifecycle_events
+tests/karsa/review/test_review_engine.py::test_learning_loop_closure
+  /app/src/karsa/review/application/service.py:51: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    created_at=datetime.utcnow(),
+
+tests/karsa/review/test_review_engine.py::test_feedback_lifecycle_events
+  /app/src/karsa/review/application/service.py:66: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    timestamp=datetime.utcnow()
+
+tests/karsa/review/test_review_engine.py::test_feedback_lifecycle_events
+  /Users/dwiki.nugraha/dwikicode/karsa-local-production/tests/karsa/review/test_review_engine.py:358: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/karsa/review/test_review_engine.py::test_learning_loop_closure
+  /Users/dwiki.nugraha/dwikicode/karsa-local-production/tests/karsa/review/test_review_engine.py:409: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/karsa/risk/test_risk.py::test_aggregate_immutability
+  /Users/dwiki.nugraha/dwikicode/karsa-local-production/tests/karsa/risk/test_risk.py:202: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/karsa/risk/test_risk.py::test_aggregate_immutability
+  /Users/dwiki.nugraha/dwikicode/karsa-local-production/tests/karsa/risk/test_risk.py:227: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/karsa/risk/test_risk.py::test_stress_testing_evaluation
+tests/karsa/risk/test_risk.py::test_api_endpoints
+  /app/src/karsa/risk/services.py:116: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    created_at=datetime.utcnow()
+
+tests/karsa/risk/test_risk.py::test_stress_testing_evaluation
+tests/karsa/risk/test_risk.py::test_api_endpoints
+  /app/src/karsa/risk/services.py:126: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    timestamp=datetime.utcnow(),
+
+tests/karsa/risk/test_risk.py::test_covariance_forecast_and_eigenvalues
+tests/karsa/risk/test_risk.py::test_covariance_forecast_and_eigenvalues
+  /Users/dwiki.nugraha/dwikicode/karsa-local-production/tests/karsa/risk/test_risk.py:318: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/karsa/risk/test_risk.py::test_covariance_forecast_and_eigenvalues
+tests/karsa/risk/test_risk.py::test_api_endpoints
+tests/karsa/risk/test_risk.py::test_service_edge_cases
+  /app/src/karsa/risk/services.py:345: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    created_at=datetime.utcnow()
+
+tests/karsa/risk/test_risk.py::test_covariance_forecast_and_eigenvalues
+tests/karsa/risk/test_risk.py::test_api_endpoints
+tests/karsa/risk/test_risk.py::test_service_edge_cases
+  /app/src/karsa/risk/services.py:355: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    timestamp=datetime.utcnow(),
+
+tests/karsa/risk/test_risk.py::test_risk_evaluation_parametric
+  /Users/dwiki.nugraha/dwikicode/karsa-local-production/tests/karsa/risk/test_risk.py:350: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/karsa/risk/test_risk.py::test_risk_evaluation_parametric
+tests/karsa/risk/test_risk.py::test_fallback_regime_behavior
+tests/karsa/risk/test_risk.py::test_replayability_verification
+tests/karsa/risk/test_risk.py::test_api_endpoints
+tests/karsa/risk/test_risk.py::test_service_edge_cases
+  /app/src/karsa/risk/services.py:266: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    created_at=datetime.utcnow()
+
+tests/karsa/risk/test_risk.py::test_risk_evaluation_parametric
+tests/karsa/risk/test_risk.py::test_fallback_regime_behavior
+tests/karsa/risk/test_risk.py::test_replayability_verification
+tests/karsa/risk/test_risk.py::test_api_endpoints
+tests/karsa/risk/test_risk.py::test_service_edge_cases
+  /app/src/karsa/risk/services.py:276: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    timestamp=datetime.utcnow(),
+
+tests/karsa/risk/test_risk.py::test_fallback_regime_behavior
+  /Users/dwiki.nugraha/dwikicode/karsa-local-production/tests/karsa/risk/test_risk.py:403: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/karsa/risk/test_risk.py::test_negative_eigenvalue_check
+  /Users/dwiki.nugraha/dwikicode/karsa-local-production/tests/karsa/risk/test_risk.py:433: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/karsa/risk/test_risk.py::test_replayability_verification
+  /Users/dwiki.nugraha/dwikicode/karsa-local-production/tests/karsa/risk/test_risk.py:460: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/karsa/risk/test_risk.py::test_api_endpoints
+  /Users/dwiki.nugraha/dwikicode/karsa-local-production/tests/karsa/risk/test_risk.py:494: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/karsa/risk/test_risk.py::test_additional_model_and_value_object_validations
+  /Users/dwiki.nugraha/dwikicode/karsa-local-production/tests/karsa/risk/test_risk.py:603: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/karsa/risk/test_risk.py::test_additional_model_and_value_object_validations
+  /Users/dwiki.nugraha/dwikicode/karsa-local-production/tests/karsa/risk/test_risk.py:607: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/karsa/risk/test_risk.py::test_additional_model_and_value_object_validations
+  /Users/dwiki.nugraha/dwikicode/karsa-local-production/tests/karsa/risk/test_risk.py:611: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/karsa/risk/test_risk.py::test_additional_model_and_value_object_validations
+  /Users/dwiki.nugraha/dwikicode/karsa-local-production/tests/karsa/risk/test_risk.py:615: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/karsa/risk/test_risk.py::test_additional_model_and_value_object_validations
+  /Users/dwiki.nugraha/dwikicode/karsa-local-production/tests/karsa/risk/test_risk.py:656: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+tests/karsa/risk/test_risk.py::test_service_edge_cases
+  /Users/dwiki.nugraha/dwikicode/karsa-local-production/tests/karsa/risk/test_risk.py:914: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+ERROR tests/karsa/thesis/test_thesis_migrations_batch5.py::test_migration_upgrade_downgrade
+ERROR tests/karsa/thesis/test_thesis_migrations_batch5.py::test_constraint_pk_fk_unique_not_null
+ERROR tests/karsa/thesis/test_thesis_migrations_batch5.py::test_trigger_snapshot_mutation_rejection
+ERROR tests/karsa/thesis/test_thesis_migrations_batch5.py::test_trigger_transition_mutation_rejection
+ERROR tests/karsa/thesis/test_thesis_migrations_batch5.py::test_trigger_delta_mutation_rejection
+ERROR tests/karsa/thesis/test_thesis_migrations_batch5.py::test_partition_creation_and_routing
+ERROR tests/karsa/thesis/test_thesis_migrations_batch5.py::test_manifest_hash_fields_present
+=========== 536 passed, 53 skipped, 431 warnings, 7 errors in 2.83s ============

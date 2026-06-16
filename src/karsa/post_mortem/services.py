@@ -85,6 +85,9 @@ class PostMortemService:
         self.publisher.publish(event)
         return record
 
+    def list_records(self, limit: int = 50, offset: int = 0) -> List[PostMortemRecord]:
+        return self.record_repo.list_records(limit=limit, offset=offset)
+
     def create_recommendation(
         self,
         recommendation_id: str,

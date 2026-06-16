@@ -31,6 +31,11 @@ class PostMortemRecordRepository(ABC):
         """Retrieves a post-mortem record by its incident reference URN."""
         pass
 
+    @abstractmethod
+    def list_records(self, limit: int = 50, offset: int = 0) -> List[PostMortemRecord]:
+        """Retrieves a paginated list of post-mortem records sorted by creation date."""
+        pass
+
 class RecommendationRepository(ABC):
     @abstractmethod
     def save_recommendation(self, rec: Recommendation) -> None:
@@ -70,6 +75,10 @@ class InMemoryPostMortemRecordRepository(PostMortemRecordRepository):
             if rec.incident_ref.incident_ref == incident_ref:
                 return copy.deepcopy(rec)
         return None
+
+    def list_records(self, limit: int = 50, offset: int = 0) -> List[PostMortemRecord]:
+        records = sorted(self._records.values(), key=lambda r: r.created_at, reverse=True)
+        return [copy.deepcopy(r) for r in records[offset:offset+limit]]
 
 class InMemoryRecommendationRepository(RecommendationRepository):
     def __init__(self):
@@ -186,6 +195,21 @@ class PostgresPostMortemRecordRepository(PostMortemRecordRepository):
             if not row:
                 return None
             return self._row_to_record(row)
+
+    def list_records(self, limit: int = 50, offset: int = 0) -> List[PostMortemRecord]:
+        with self.conn.connection() as conn:
+            with conn.cursor() as cur:
+                cur.execute(
+                    """
+                    SELECT postmortem_id, incident_ref, failure_classification, root_causes, findings, created_at
+                    FROM post_mortem_records
+                    ORDER BY created_at DESC
+                    LIMIT %s OFFSET %s
+                    """,
+                    (limit, offset)
+                )
+                rows = cur.fetchall()
+                return [self._row_to_record(row) for row in rows]
 
     def _row_to_record(self, row) -> PostMortemRecord:
         fc_data = row[2] if isinstance(row[2], dict) else json.loads(row[2])

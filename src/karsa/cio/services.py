@@ -143,6 +143,9 @@ class CIODecisionService:
             raise DecisionNotFoundException(f"CIO decision {decision_id} not found.")
         return decision
 
+    def list_decisions(self, limit: int = 50, offset: int = 0) -> List[CIODecisionAggregate]:
+        return self.decision_repo.list_decisions(limit=limit, offset=offset)
+
 class PortfolioOrchestrationService:
     def __init__(self, decision_repo: CIODecisionRepository):
         self.decision_repo = decision_repo

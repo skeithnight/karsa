@@ -11,18 +11,11 @@ from karsa.cio.exceptions import (
 
 router = APIRouter(prefix="/cio", tags=["CIO Engine"])
 
-_decision_service: Optional[CIODecisionService] = None
-_orchestration_service: Optional[PortfolioOrchestrationService] = None
-
 def get_decision_service() -> CIODecisionService:
-    if _decision_service is None:
-        raise RuntimeError("CIODecisionService not configured for API.")
-    return _decision_service
+    raise NotImplementedError("Dependency must be overridden in app bootstrap")
 
 def get_orchestration_service() -> PortfolioOrchestrationService:
-    if _orchestration_service is None:
-        raise RuntimeError("PortfolioOrchestrationService not configured for API.")
-    return _orchestration_service
+    raise NotImplementedError("Dependency must be overridden in app bootstrap")
 
 class VoteSchema(BaseModel):
     voter_id: str
@@ -97,6 +90,34 @@ def create_decision(
         raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=str(e))
     except ValueError as e:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+
+@router.get("/decisions")
+def list_decisions(
+    page: int = 1,
+    size: int = 50,
+    service: CIODecisionService = Depends(get_decision_service)
+):
+    offset = (page - 1) * size
+    decisions = service.list_decisions(limit=size, offset=offset)
+    
+    data = []
+    for d in decisions:
+        data.append({
+            "decision_id": d.decision_id,
+            "target_node_id": d.target_node_id,
+            "action_type": d.action_type,
+            "cryptographic_signature": d.cryptographic_signature,
+            "created_at": d.created_at.isoformat()
+        })
+    
+    return {
+        "data": data,
+        "pagination": {
+            "page": page,
+            "size": size,
+            "total_items": len(data)  # Exact total requires count query, simplified for now
+        }
+    }
 
 @router.get("/decisions/{decision_id}")
 def get_decision(

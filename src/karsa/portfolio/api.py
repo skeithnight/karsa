@@ -32,3 +32,34 @@ class PortfolioAPI:
                 "exposure_value": str(e.exposure_value)
             } for e in val.exposures]
         }
+
+from fastapi import APIRouter, Depends, HTTPException, status
+
+router = APIRouter(prefix="/portfolio", tags=["Portfolio Engine"])
+
+def get_portfolio_api() -> PortfolioAPI:
+    raise NotImplementedError("Dependency must be overridden in app bootstrap")
+
+@router.get("/summary")
+def get_portfolio_summary(api: PortfolioAPI = Depends(get_portfolio_api)):
+    # We use a hardcoded default portfolio ID 'MAIN' for MVP since it's a single fund context
+    val = api.get_valuation("MAIN")
+    if not val:
+        # Return empty state if no valuation exists yet
+        return {
+            "net_asset_value": "0.0",
+            "cash_balance": "0.0",
+            "exposures": []
+        }
+    return val
+
+@router.get("/exposure")
+def get_portfolio_exposure(api: PortfolioAPI = Depends(get_portfolio_api)):
+    val = api.get_valuation("MAIN")
+    if not val:
+        return {
+            "net_asset_value": "0.0",
+            "cash_balance": "0.0",
+            "exposures": []
+        }
+    return val

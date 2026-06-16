@@ -31,4 +31,4 @@ from karsa.post_mortem.repositories import (
 )
 from karsa.post_mortem.services import PostMortemService, RecommendationRegistryService
 from karsa.post_mortem.projections import RecommendationSummaryProjection
-from karsa.post_mortem.api import router, configure_api
+from karsa.post_mortem.api import router

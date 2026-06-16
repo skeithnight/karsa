@@ -25,13 +25,15 @@ services:
       timeout: 5s
       retries: 5
 
-  karsa-worker:
+  karsa-api:
     build: .
     depends_on:
       postgres:
         condition: service_healthy
       minio:
         condition: service_healthy
+    ports:
+      - "8000:8000"
     environment:
       POSTGRES_URL: "postgresql://karsa:karsa_password@postgres:5432/karsa_db"
       POSTGRES_HOST: "postgres"
@@ -40,4 +42,16 @@ services:
       POSTGRES_USER: "karsa"
       POSTGRES_PASSWORD: "karsa_password"
       MINIO_URL: "http://minio:9000"
-    restart: on-failure
+    restart: always
+
+  karsa-web:
+    build:
+      context: ./karsa-web
+      dockerfile: Dockerfile
+    depends_on:
+      - karsa-api
+    ports:
+      - "3000:3000"
+    environment:
+      NEXT_PUBLIC_API_URL: "http://karsa-api:8000"
+    restart: always

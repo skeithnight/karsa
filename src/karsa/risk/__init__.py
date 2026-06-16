@@ -51,4 +51,4 @@ from karsa.risk.services import (
     CovarianceForecastService,
 )
 from karsa.risk.projections import RiskSummaryProjection
-from karsa.risk.api import router, configure_api
+from karsa.risk.api import router

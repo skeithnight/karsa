@@ -5,6 +5,6 @@ import { buildQueryString } from "../utils/query-string";
 
 export const MemosApi = {
   list: (params: ListMemosRequestDTO): Promise<ListMemosResponseDTO> => {
-    return ApiClient.fetch<ListMemosResponseDTO>(`/decisions${buildQueryString(params)}`);
+    return ApiClient.fetch<ListMemosResponseDTO>(`/cio/decisions${buildQueryString(params)}`);
   }
 };

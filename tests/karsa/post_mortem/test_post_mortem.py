@@ -22,7 +22,7 @@ from karsa.post_mortem.repositories import (
     InMemoryRecommendationRepository,
 )
 from karsa.post_mortem.services import PostMortemService, RecommendationRegistryService
-from karsa.post_mortem.api import router, configure_api
+from karsa.post_mortem.api import router
 import karsa.post_mortem.api as api_module
 from karsa.shared.infrastructure.uow import ConcurrencyConflictError
 from fastapi import FastAPI, status
@@ -62,10 +62,13 @@ def service_setup():
 @pytest.fixture
 def api_client(service_setup):
     pm_service, rec_service, _, _, _ = service_setup
-    configure_api(pm_service, rec_service)
-    
     app = FastAPI()
     app.include_router(router)
+    
+    from karsa.post_mortem.api import get_post_mortem_service, get_recommendation_registry_service
+    app.dependency_overrides[get_post_mortem_service] = lambda: pm_service
+    app.dependency_overrides[get_recommendation_registry_service] = lambda: rec_service
+    
     return TestClient(app)
 
 # ----------------- Value Object & Aggregate Invariant Tests -----------------

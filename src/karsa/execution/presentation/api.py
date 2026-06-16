@@ -9,7 +9,7 @@ from karsa.execution.domain.exceptions import (
     ExecutionNotFoundError
 )
 
-router = APIRouter(prefix="/api/v1/execution/orders", tags=["execution"])
+router = APIRouter(prefix="/execution/orders", tags=["execution"])
 
 
 # ----------------- Request / Response Models -----------------

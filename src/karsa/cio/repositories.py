@@ -25,6 +25,11 @@ class CIODecisionRepository(ABC):
         pass
 
     @abstractmethod
+    def list_decisions(self, limit: int = 50, offset: int = 0) -> List[CIODecisionAggregate]:
+        """Retrieves a paginated list of CIO decisions sorted by creation date."""
+        pass
+
+    @abstractmethod
     def save_portfolio_state(self, state: PortfolioStateProjection) -> None:
         """Saves a projected portfolio tree state."""
         pass
@@ -60,6 +65,10 @@ class InMemoryCIODecisionRepository(CIODecisionRepository):
             if d.decision_journal_ref == journal_ref:
                 return d
         return None
+
+    def list_decisions(self, limit: int = 50, offset: int = 0) -> List[CIODecisionAggregate]:
+        decisions = sorted(self._decisions.values(), key=lambda d: d.created_at, reverse=True)
+        return decisions[offset:offset+limit]
 
     def save_portfolio_state(self, state: PortfolioStateProjection) -> None:
         # Check uniqueness to simulate trigger
@@ -162,6 +171,23 @@ class PostgresCIODecisionRepository(CIODecisionRepository):
             if not row:
                 return None
             return self._row_to_aggregate(row)
+
+    def list_decisions(self, limit: int = 50, offset: int = 0) -> List[CIODecisionAggregate]:
+        with self.conn.connection() as conn:
+            with conn.cursor() as cur:
+                cur.execute(
+                    """
+                    SELECT decision_id, calculation_id, governance_exception_id, decision_journal_ref,
+                           portfolio_snapshot_hash, action_type, target_node_type, target_node_id,
+                           decision_payload, cryptographic_signature, created_at
+                    FROM cio_decisions
+                    ORDER BY created_at DESC
+                    LIMIT %s OFFSET %s
+                    """,
+                    (limit, offset)
+                )
+                rows = cur.fetchall()
+                return [self._row_to_aggregate(row) for row in rows]
 
     def save_portfolio_state(self, state: PortfolioStateProjection) -> None:
         try:

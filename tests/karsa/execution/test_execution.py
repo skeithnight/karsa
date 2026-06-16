@@ -606,25 +606,25 @@ def test_api_stage_route_fill_lifecycle(api_client, keys) -> None:
         "price": 100.0,
         "cio_signature": cio_signature
     }
-    resp = api_client.post("/api/v1/execution/orders/stage", json=payload)
+    resp = api_client.post("/execution/orders/stage", json=payload)
     assert resp.status_code == 201
     data = resp.json()
     assert data["pep_status"] == "PEP_VALIDATED"
     assert data["pep_token_signature"] is not None
 
     # 2. GET projected state -> should be PEP_VALIDATED
-    resp = api_client.get(f"/api/v1/execution/orders/{exec_id}/state")
+    resp = api_client.get(f"/execution/orders/{exec_id}/state")
     assert resp.status_code == 200
     assert resp.json()["state"] == "PEP_VALIDATED"
 
     # 3. POST Route Order
-    resp = api_client.post(f"/api/v1/execution/orders/{exec_id}/route")
+    resp = api_client.post(f"/execution/orders/{exec_id}/route")
     assert resp.status_code == 200
     route_id = resp.json()["route_id"]
     assert route_id.startswith("urn:karsa:execution:route:")
 
     # GET projected state -> should be ROUTED
-    resp = api_client.get(f"/api/v1/execution/orders/{exec_id}/state")
+    resp = api_client.get(f"/execution/orders/{exec_id}/state")
     assert resp.status_code == 200
     assert resp.json()["state"] == "ROUTED"
 
@@ -636,11 +636,11 @@ def test_api_stage_route_fill_lifecycle(api_client, keys) -> None:
         "commission": 1.0,
         "slippage": 0.0
     }
-    resp = api_client.post("/api/v1/execution/orders/fill", json=fill_payload)
+    resp = api_client.post("/execution/orders/fill", json=fill_payload)
     assert resp.status_code == 201
     assert resp.json()["status"] == "FILLED"
 
     # GET projected state -> should be FILLED
-    resp = api_client.get(f"/api/v1/execution/orders/{exec_id}/state")
+    resp = api_client.get(f"/execution/orders/{exec_id}/state")
     assert resp.status_code == 200
     assert resp.json()["state"] == "FILLED"

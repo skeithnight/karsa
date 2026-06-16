@@ -29,13 +29,14 @@ Planning and execution information must be merged strictly into:
 
 ## Rule 3: Sprint Lifecycle
 Every standard sprint follows this strict sequence:
-**PLAN → IMPLEMENT → AUDIT → REMEDIATE → CLOSE**
+**DESIGN → AUDIT → REMEDIATION → IMPLEMENT → AUDIT → REMEDIATION → VERIFY → DONE**
 
 Required files in `docs/implementation/sprint-XX/` (where XX is a zero-padded integer):
-1. `plan.md`
+1. `design.md`
 2. `implementation.md`
 3. `audit.md`
 4. `remediation.md`
+5. `verify.md`
 
 No additional sprint document types are allowed.
 

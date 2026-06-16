@@ -4,7 +4,7 @@ base_dir = "src/api"
 
 files = {
     "client.ts": """export class ApiClient {
-  private static baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
+  private static baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
   static async fetch<T>(path: string, options?: RequestInit): Promise<T> {
     const response = await fetch(`${this.baseUrl}${path}`, {
@@ -99,7 +99,7 @@ import { buildQueryString } from "../utils/query-string";
 
 export const MemosApi = {
   list: (params: ListMemosRequestDTO): Promise<ListMemosResponseDTO> => {
-    return ApiClient.fetch<ListMemosResponseDTO>(`/decisions${buildQueryString(params)}`);
+    return ApiClient.fetch<ListMemosResponseDTO>(`/cio/decisions${buildQueryString(params)}`);
   }
 };
 """,
@@ -130,7 +130,7 @@ import { buildQueryString } from "../utils/query-string";
 
 export const GovernanceApi = {
   listPostMortems: (params: ListPostMortemsRequestDTO): Promise<ListPostMortemsResponseDTO> => {
-    return ApiClient.fetch<ListPostMortemsResponseDTO>(`/governance/postmortems${buildQueryString(params)}`);
+    return ApiClient.fetch<ListPostMortemsResponseDTO>(`/post-mortem/records${buildQueryString(params)}`);
   }
 };
 """,

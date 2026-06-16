@@ -235,11 +235,10 @@ def test_duplicate_decision_journal_ref_rejected(service_setup):
 
 def test_api_endpoints(service_setup):
     dec_svc, orch_svc, *_ = service_setup
-    api_module._decision_service = dec_svc
-    api_module._orchestration_service = orch_svc
-    
     from fastapi import FastAPI
     app = FastAPI()
+    app.dependency_overrides[get_decision_service] = lambda: dec_svc
+    app.dependency_overrides[get_orchestration_service] = lambda: orch_svc
     app.include_router(router)
     client = TestClient(app)
 

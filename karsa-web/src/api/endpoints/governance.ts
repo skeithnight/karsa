@@ -5,6 +5,6 @@ import { buildQueryString } from "../utils/query-string";
 
 export const GovernanceApi = {
   listPostMortems: (params: ListPostMortemsRequestDTO): Promise<ListPostMortemsResponseDTO> => {
-    return ApiClient.fetch<ListPostMortemsResponseDTO>(`/governance/postmortems${buildQueryString(params)}`);
+    return ApiClient.fetch<ListPostMortemsResponseDTO>(`/post-mortem/records${buildQueryString(params)}`);
   }
 };

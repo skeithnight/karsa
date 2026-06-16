@@ -17,4 +17,4 @@ COPY alembic /app/alembic
 
 RUN uv sync --frozen
 
-CMD ["uv", "run", "pytest", "tests"]
+CMD ["uv", "run", "uvicorn", "karsa.app:app", "--host", "0.0.0.0", "--port", "8000"]

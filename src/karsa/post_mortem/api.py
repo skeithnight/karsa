@@ -19,23 +19,11 @@ from karsa.shared.infrastructure.uow import ConcurrencyConflictError
 
 router = APIRouter(prefix="/post-mortem", tags=["Post-Mortem Engine"])
 
-_post_mortem_service: Optional[PostMortemService] = None
-_recommendation_registry_service: Optional[RecommendationRegistryService] = None
-
 def get_post_mortem_service() -> PostMortemService:
-    if _post_mortem_service is None:
-        raise RuntimeError("PostMortemService not configured for API.")
-    return _post_mortem_service
+    raise NotImplementedError("Dependency must be overridden in app bootstrap")
 
 def get_recommendation_registry_service() -> RecommendationRegistryService:
-    if _recommendation_registry_service is None:
-        raise RuntimeError("RecommendationRegistryService not configured for API.")
-    return _recommendation_registry_service
-
-def configure_api(pm_service: PostMortemService, rec_service: RecommendationRegistryService):
-    global _post_mortem_service, _recommendation_registry_service
-    _post_mortem_service = pm_service
-    _recommendation_registry_service = rec_service
+    raise NotImplementedError("Dependency must be overridden in app bootstrap")
 
 class FailureClassificationSchema(BaseModel):
     failure_type: str
@@ -115,6 +103,34 @@ def create_post_mortem(
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=str(e))
     except ValueError as e:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+
+@router.get("/records")
+def list_records(
+    page: int = 1,
+    size: int = 50,
+    service: PostMortemService = Depends(get_post_mortem_service)
+):
+    offset = (page - 1) * size
+    records = service.list_records(limit=size, offset=offset)
+    
+    data = []
+    for r in records:
+        data.append({
+            "postmortem_id": r.postmortem_id,
+            "incident_ref": r.incident_ref.incident_ref,
+            "failure_type": r.failure_classification.failure_type,
+            "severity": r.failure_classification.severity,
+            "created_at": r.created_at.isoformat()
+        })
+    
+    return {
+        "data": data,
+        "pagination": {
+            "page": page,
+            "size": size,
+            "total_items": len(data)
+        }
+    }
 
 @router.get("/records/{postmortem_id}")
 def get_post_mortem(
