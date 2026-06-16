@@ -1,0 +1,14 @@
+import { ApiError } from "../../api/errors/api-error";
+import { useQuery } from "@tanstack/react-query";
+import { queryKeys } from "../query-keys";
+import { AnalystsApi } from "../../api/endpoints/analysts";
+import { mapListAnalysts } from "../../features/analysts/utils/mappers";
+import { ListAnalystsVM } from "../../features/analysts/types/viewmodels";
+
+export function useAnalystsMetrics() {
+  return useQuery<ListAnalystsVM, ApiError>({
+    queryKey: queryKeys.analysts.metrics(),
+    queryFn: () => AnalystsApi.listMetrics().then(mapListAnalysts),
+    staleTime: 60 * 1000,
+  });
+}

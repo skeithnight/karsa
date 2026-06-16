@@ -1,0 +1,1231 @@
+The plugin "vite-tsconfig-paths" is detected. Vite now supports tsconfig paths resolution natively via the resolve.tsconfigPaths option. You can remove the plugin and set resolve.tsconfigPaths: true in your Vite config instead.
+
+[1m[30m[46m RUN [49m[39m[22m [36mv4.1.9 [39m[90m/Users/dwiki.nugraha/dwikicode/karsa/karsa-web[39m
+
+ [31m❯[39m src/components/error/__tests__/GlobalErrorBoundary.test.tsx [2m([22m[2m1 test[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 52[2mms[22m[39m
+[31m     [31m×[31m catches error and renders fallback[39m[32m 49[2mms[22m[39m
+[90mstderr[2m | src/app/oversight/__tests__/page.test.tsx[2m > [22m[2mOversightWorkspace[2m > [22m[2mrenders primary content
+[22m[39mAG Grid: error #272 No AG Grid modules are registered! It is recommended to start with all Community features via the AllCommunityModule:
+
+import { AgGridProvider, AgGridReact } from 'ag-grid-react'; 
+import { AllCommunityModule } from 'ag-grid-community';
+
+const modules = [ AllCommunityModule ];
+
+function App() {
+    return (
+        <AgGridProvider modules={modules}>
+            <AgGridReact /* ... props */ />
+        </AgGridProvider>
+    );
+}
+ 
+Visit https://www.ag-grid.com/react-data-grid/errors/272?_version_=35.3.1
+
+[90mstderr[2m | src/app/analysts/__tests__/page.test.tsx[2m > [22m[2mAnalystsWorkspace[2m > [22m[2mrenders primary content
+[22m[39mAG Grid: error #272 No AG Grid modules are registered! It is recommended to start with all Community features via the AllCommunityModule:
+
+import { AgGridProvider, AgGridReact } from 'ag-grid-react'; 
+import { AllCommunityModule } from 'ag-grid-community';
+
+const modules = [ AllCommunityModule ];
+
+function App() {
+    return (
+        <AgGridProvider modules={modules}>
+            <AgGridReact /* ... props */ />
+        </AgGridProvider>
+    );
+}
+ 
+Visit https://www.ag-grid.com/react-data-grid/errors/272?_version_=35.3.1
+
+[90mstderr[2m | src/app/theses/__tests__/page.test.tsx[2m > [22m[2mThesesWorkspace[2m > [22m[2mrenders primary content and navigates on row click
+[22m[39mAG Grid: error #272 No AG Grid modules are registered! It is recommended to start with all Community features via the AllCommunityModule:
+
+import { AgGridProvider, AgGridReact } from 'ag-grid-react'; 
+import { AllCommunityModule } from 'ag-grid-community';
+
+const modules = [ AllCommunityModule ];
+
+function App() {
+    return (
+        <AgGridProvider modules={modules}>
+            <AgGridReact /* ... props */ />
+        </AgGridProvider>
+    );
+}
+ 
+Visit https://www.ag-grid.com/react-data-grid/errors/272?_version_=35.3.1
+
+ [31m❯[39m src/app/analysts/__tests__/page.test.tsx [2m([22m[2m1 test[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 40[2mms[22m[39m
+[31m     [31m×[31m renders primary content[39m[32m 39[2mms[22m[39m
+ [31m❯[39m src/app/theses/__tests__/page.test.tsx [2m([22m[2m4 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[32m 42[2mms[22m[39m
+[31m     [31m×[31m renders LoadingSkeleton[39m[32m 30[2mms[22m[39m
+     [32m✓[39m renders ErrorState[32m 1[2mms[22m[39m
+     [32m✓[39m renders EmptyState[32m 2[2mms[22m[39m
+[31m     [31m×[31m renders primary content and navigates on row click[39m[32m 7[2mms[22m[39m
+ [31m❯[39m src/app/oversight/__tests__/page.test.tsx [2m([22m[2m1 test[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 38[2mms[22m[39m
+[31m     [31m×[31m renders primary content[39m[32m 37[2mms[22m[39m
+ [31m❯[39m src/app/theses/[id]/__tests__/page.test.tsx [2m([22m[2m3 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[32m 36[2mms[22m[39m
+[31m     [31m×[31m renders LoadingSkeleton[39m[32m 28[2mms[22m[39m
+     [32m✓[39m renders ErrorState[32m 1[2mms[22m[39m
+[31m     [31m×[31m renders primary content[39m[32m 5[2mms[22m[39m
+ [31m❯[39m src/app/__tests__/page.test.tsx [2m([22m[2m4 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 51[2mms[22m[39m
+[31m     [31m×[31m renders LoadingSkeleton when loading[39m[32m 39[2mms[22m[39m
+     [32m✓[39m renders ErrorState when error[32m 2[2mms[22m[39m
+     [32m✓[39m renders EmptyState when empty[32m 3[2mms[22m[39m
+     [32m✓[39m renders Primary content when data exists[32m 6[2mms[22m[39m
+[90mstderr[2m | src/app/research/__tests__/page.test.tsx[2m > [22m[2mResearchWorkspace[2m > [22m[2mrenders primary content
+[22m[39mAG Grid: error #272 No AG Grid modules are registered! It is recommended to start with all Community features via the AllCommunityModule:
+
+import { AgGridProvider, AgGridReact } from 'ag-grid-react'; 
+import { AllCommunityModule } from 'ag-grid-community';
+
+const modules = [ AllCommunityModule ];
+
+function App() {
+    return (
+        <AgGridProvider modules={modules}>
+            <AgGridReact /* ... props */ />
+        </AgGridProvider>
+    );
+}
+ 
+Visit https://www.ag-grid.com/react-data-grid/errors/272?_version_=35.3.1
+
+ [31m❯[39m src/app/research/__tests__/page.test.tsx [2m([22m[2m4 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[32m 66[2mms[22m[39m
+[31m     [31m×[31m renders LoadingSkeleton[39m[32m 34[2mms[22m[39m
+     [32m✓[39m renders ErrorState[32m 1[2mms[22m[39m
+     [32m✓[39m renders EmptyState[32m 2[2mms[22m[39m
+[31m     [31m×[31m renders primary content[39m[32m 26[2mms[22m[39m
+[90mstderr[2m | src/app/portfolio/__tests__/page.test.tsx[2m > [22m[2mPortfolioWorkspace[2m > [22m[2mrenders primary content
+[22m[39mAG Grid: error #272 No AG Grid modules are registered! It is recommended to start with all Community features via the AllCommunityModule:
+
+import { AgGridProvider, AgGridReact } from 'ag-grid-react'; 
+import { AllCommunityModule } from 'ag-grid-community';
+
+const modules = [ AllCommunityModule ];
+
+function App() {
+    return (
+        <AgGridProvider modules={modules}>
+            <AgGridReact /* ... props */ />
+        </AgGridProvider>
+    );
+}
+ 
+Visit https://www.ag-grid.com/react-data-grid/errors/272?_version_=35.3.1
+
+ [31m❯[39m src/app/portfolio/__tests__/page.test.tsx [2m([22m[2m4 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[32m 79[2mms[22m[39m
+[31m     [31m×[31m renders LoadingSkeleton[39m[32m 39[2mms[22m[39m
+     [32m✓[39m renders ErrorState[32m 3[2mms[22m[39m
+     [32m✓[39m renders EmptyState[32m 4[2mms[22m[39m
+[31m     [31m×[31m renders primary content[39m[32m 31[2mms[22m[39m
+ [31m❯[39m src/components/shared/__tests__/SearchCommandPalette.test.tsx [2m([22m[2m1 test[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 44[2mms[22m[39m
+[31m     [31m×[31m renders properly[39m[32m 42[2mms[22m[39m
+ [32m✓[39m src/app/infrastructure/__tests__/page.test.tsx [2m([22m[2m1 test[22m[2m)[22m[32m 20[2mms[22m[39m
+ [32m✓[39m src/components/shared/__tests__/EmptyState.test.tsx [2m([22m[2m1 test[22m[2m)[22m[32m 26[2mms[22m[39m
+ [32m✓[39m src/components/shared/__tests__/MetricCard.test.tsx [2m([22m[2m1 test[22m[2m)[22m[32m 28[2mms[22m[39m
+ [31m❯[39m src/components/error/__tests__/WorkspaceErrorBoundary.test.tsx [2m([22m[2m1 test[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 33[2mms[22m[39m
+[31m     [31m×[31m catches error and renders fallback[39m[32m 32[2mms[22m[39m
+ [32m✓[39m src/components/shared/__tests__/ErrorState.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[32m 37[2mms[22m[39m
+[90mstderr[2m | src/app/memos/__tests__/page.test.tsx[2m > [22m[2mMemosWorkspace[2m > [22m[2mrenders primary content
+[22m[39mAG Grid: error #272 No AG Grid modules are registered! It is recommended to start with all Community features via the AllCommunityModule:
+
+import { AgGridProvider, AgGridReact } from 'ag-grid-react'; 
+import { AllCommunityModule } from 'ag-grid-community';
+
+const modules = [ AllCommunityModule ];
+
+function App() {
+    return (
+        <AgGridProvider modules={modules}>
+            <AgGridReact /* ... props */ />
+        </AgGridProvider>
+    );
+}
+ 
+Visit https://www.ag-grid.com/react-data-grid/errors/272?_version_=35.3.1
+
+[90mstderr[2m | src/app/performance/__tests__/page.test.tsx[2m > [22m[2mPerformanceWorkspace[2m > [22m[2mrenders primary content
+[22m[39mAG Grid: error #272 No AG Grid modules are registered! It is recommended to start with all Community features via the AllCommunityModule:
+
+import { AgGridProvider, AgGridReact } from 'ag-grid-react'; 
+import { AllCommunityModule } from 'ag-grid-community';
+
+const modules = [ AllCommunityModule ];
+
+function App() {
+    return (
+        <AgGridProvider modules={modules}>
+            <AgGridReact /* ... props */ />
+        </AgGridProvider>
+    );
+}
+ 
+Visit https://www.ag-grid.com/react-data-grid/errors/272?_version_=35.3.1
+
+ [31m❯[39m src/app/memos/__tests__/page.test.tsx [2m([22m[2m1 test[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 34[2mms[22m[39m
+[31m     [31m×[31m renders primary content[39m[32m 32[2mms[22m[39m
+ [31m❯[39m src/app/performance/__tests__/page.test.tsx [2m([22m[2m1 test[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 38[2mms[22m[39m
+[31m     [31m×[31m renders primary content[39m[32m 35[2mms[22m[39m
+ [32m✓[39m src/hooks/__tests__/hooks.test.tsx [2m([22m[2m20 tests[22m[2m)[22m[33m 1253[2mms[22m[39m
+ [32m✓[39m src/features/portfolio/utils/__tests__/mappers.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 28[2mms[22m[39m
+ [32m✓[39m src/features/theses/utils/__tests__/mappers.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m src/features/search/utils/__tests__/mappers.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m src/features/memos/utils/__tests__/mappers.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m src/features/governance/utils/__tests__/mappers.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32m✓[39m src/features/research/utils/__tests__/mappers.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 17[2mms[22m[39m
+ [32m✓[39m src/features/analysts/utils/__tests__/mappers.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+ [32m✓[39m src/features/performance/utils/__tests__/mappers.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 21[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 16 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/app/__tests__/page.test.tsx[2m > [22mCioDashboardWorkspace[2m > [22mrenders LoadingSkeleton when loading
+[31m[1mTestingLibraryElementError[22m: Unable to find an element by: [data-testid="loading-skeleton"]
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"flex justify-between items-center pb-4 border-b mb-6"[31m
+    [36m>[31m
+      [36m<div>[31m
+        [36m<h1[31m
+          [33mclass[31m=[32m"text-2xl font-semibold tracking-tight"[31m
+        [36m>[31m
+          [0mCIO Dashboard[0m
+        [36m</h1>[31m
+        [36m<p[31m
+          [33mclass[31m=[32m"text-sm text-muted-foreground"[31m
+        [36m>[31m
+          [0mExecutive macro overview[0m
+        [36m</p>[31m
+      [36m</div>[31m
+    [36m</div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"grid grid-cols-1 md:grid-cols-3 gap-6 mt-6"[31m
+    [36m>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"p-4 border rounded-xl space-y-3"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"animate-pulse rounded-md bg-muted h-4 w-[100px]"[31m
+          [33mdata-slot[31m=[32m"skeleton"[31m
+        [36m/>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"animate-pulse rounded-md bg-muted h-8 w-[200px]"[31m
+          [33mdata-slot[31m=[32m"skeleton"[31m
+        [36m/>[31m
+      [36m</div>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"p-4 border rounded-xl space-y-3"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"animate-pulse rounded-md bg-muted h-4 w-[100px]"[31m
+          [33mdata-slot[31m=[32m"skeleton"[31m
+        [36m/>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"animate-pulse rounded-md bg-muted h-8 w-[200px]"[31m
+          [33mdata-slot[31m=[32m"skeleton"[31m
+        [36m/>[31m
+      [36m</div>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"p-4 border rounded-xl space-y-3"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"animate-pulse rounded-md bg-muted h-4 w-[100px]"[31m
+          [33mdata-slot[31m=[32m"skeleton"[31m
+        [36m/>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"animate-pulse rounded-md bg-muted h-8 w-[200px]"[31m
+          [33mdata-slot[31m=[32m"skeleton"[31m
+        [36m/>[31m
+      [36m</div>[31m
+    [36m</div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"mt-8"[31m
+    [36m>[31m
+      [36m<h2[31m
+        [33mclass[31m=[32m"text-xl font-bold mb-4"[31m
+      [36m>[31m
+        [0mSector Exposure[0m
+      [36m</h2>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"p-4 border rounded-xl space-y-3"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"animate-pulse rounded-md bg-muted h-4 w-[100px]"[31m
+          [33mdata-slot[31m=[32m"skeleton"[31m
+        [36m/>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"animate-pulse rounded-md bg-muted h-8 w-[200px]"[31m
+          [33mdata-slot[31m=[32m"skeleton"[31m
+        [36m/>[31m
+      [36m</div>[31m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+[90m [2m❯[22m Object.getElementError node_modules/@testing-library/dom/dist/config.js:[2m37:19[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m76:38[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m109:15[22m[39m
+[36m [2m❯[22m src/app/__tests__/page.test.tsx:[2m20:19[22m[39m
+    [90m 18|[39m     vi.mocked(usePortfolioExposure).mockReturnValue({ isLoading: true …
+    [90m 19|[39m     [34mrender[39m([33m<[39m[33mCioDashboardWorkspace[39m [33m/[39m[33m>[39m)[33m;[39m
+    [90m 20|[39m     expect(screen.getAllByTestId('loading-skeleton').length).toBeGreat…
+    [90m   |[39m                   [31m^[39m
+    [90m 21|[39m   })[33m;[39m
+    [90m 22|[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/16]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/app/analysts/__tests__/page.test.tsx[2m > [22mAnalystsWorkspace[2m > [22mrenders primary content
+[31m[1mTestingLibraryElementError[22m: Unable to find an element with the text: A1. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"flex justify-between items-center pb-4 border-b mb-6"[31m
+    [36m>[31m
+      [36m<div>[31m
+        [36m<h1[31m
+          [33mclass[31m=[32m"text-2xl font-semibold tracking-tight"[31m
+        [36m>[31m
+          [0mAnalysts Workspace[0m
+        [36m</h1>[31m
+        [36m<p[31m
+          [33mclass[31m=[32m"text-sm text-muted-foreground"[31m
+        [36m>[31m
+          [0mWorker performance and output[0m
+        [36m</p>[31m
+      [36m</div>[31m
+    [36m</div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"grid grid-cols-1 md:grid-cols-2 gap-6 mt-6 mb-8"[31m
+    [36m>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl bg-card py-(--card-spacing) text-sm text-card-foreground ring-1 ring-foreground/10 [--card-spacing:--spacing(4)] has-data-[slot=card-footer]:pb-0 has-[>img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(3)] data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl"[31m
+        [33mdata-size[31m=[32m"default"[31m
+        [33mdata-slot[31m=[32m"card"[31m
+        [33mdata-testid[31m=[32m"metric-card"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"group/card-header @container/card-header auto-rows-min gap-1 rounded-t-xl px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-(--card-spacing) flex flex-row items-center justify-between space-y-0 pb-2"[31m
+          [33mdata-slot[31m=[32m"card-header"[31m
+        [36m>[31m
+          [36m<div[31m
+            [33mclass[31m=[32m"font-heading group-data-[size=sm]/card:text-sm text-sm font-medium"[31m
+            [33mdata-slot[31m=[32m"card-title"[31m
+          [36m>[31m
+            [0mTotal Analysts[0m
+          [36m</div>[31m
+        [36m</div>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"px-(--card-spacing)"[31m
+          [33mdata-slot[31m=[32m"card-content"[31m
+        [36m>[31m
+          [36m<div[31m
+            [33mclass[31m=[32m"text-2xl font-bold"[31m
+          [36m>[31m
+            [0m1[0m
+          [36m</div>[31m
+        [36m</div>[31m
+      [36m</div>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl bg-card py-(--card-spacing) text-sm text-card-foreground ring-1 ring-foreground/10 [--card-spacing:--spacing(4)] has-data-[slot=card-footer]:pb-0 has-[>img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(3)] data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl"[31m
+        [33mdata-size[31m=[32m"default"[31m
+        [33mdata-slot[31m=[32m"card"[31m
+        [33mdata-testid[31m=[32m"metric-card"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"group/card-header @container/card-header auto-rows-min gap-1 rounded-t-xl px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-(--card-spacing) flex flex-row items-center justify-between space-y-0 pb-2"[31m
+          [33mdata-slot[31m=[32m"card-header"[31m
+        [36m>[31m
+          [36m<div[31m
+            [33mclass[31m=[32m"font-heading group-data-[size=sm]/card:text-sm text-sm font-medium"[31m
+            [33mdata-slot[31m=[32m"card-title"[31m
+          [36m>[31m
+            [0mActive Coverage[0m
+          [36m</div>[31m
+        [36m</div>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"px-(--card-spacing)"[31m
+          [33mdata-slot[31m=[32m"card-content"[31m
+        [36m>[31m
+          [36m<div[31m
+            [33mclass[31m=[32m"text-2xl font-bold"[31m
+          [36m>[31m
+            [0mCoverage Health[0m
+          [36m</div>[31m
+        [36m</div>[31m
+      [36m</div>[31m
+    [36m</div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"ag-theme-alpine w-full h-[600px]"[31m
+    [36m>[31m
+      [36m<div[31m
+        [33mstyle[31m=[32m"height: 100%;"[31m
+      [36m/>[31m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+[90m [2m❯[22m Object.getElementError node_modules/@testing-library/dom/dist/config.js:[2m37:19[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m76:38[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m52:17[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m95:19[22m[39m
+[36m [2m❯[22m src/app/analysts/__tests__/page.test.tsx:[2m19:19[22m[39m
+    [90m 17|[39m     vi.mocked(useAnalystsMetrics).mockReturnValue({ data: { data: [{ a…
+    [90m 18|[39m     [34mrender[39m([33m<[39m[33mAnalystsWorkspace[39m [33m/[39m[33m>[39m)[33m;[39m
+    [90m 19|[39m     [34mexpect[39m(screen[33m.[39m[34mgetByText[39m([32m'A1'[39m))[33m.[39m[34mtoBeDefined[39m()[33m;[39m
+    [90m   |[39m                   [31m^[39m
+    [90m 20|[39m   })[33m;[39m
+    [90m 21|[39m })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/16]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/app/oversight/__tests__/page.test.tsx[2m > [22mOversightWorkspace[2m > [22mrenders primary content
+[31m[1mTestingLibraryElementError[22m: Unable to find an element with the text: 1. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"flex justify-between items-center pb-4 border-b mb-6"[31m
+    [36m>[31m
+      [36m<div>[31m
+        [36m<h1[31m
+          [33mclass[31m=[32m"text-2xl font-semibold tracking-tight"[31m
+        [36m>[31m
+          [0mOversight Workspace[0m
+        [36m</h1>[31m
+        [36m<p[31m
+          [33mclass[31m=[32m"text-sm text-muted-foreground"[31m
+        [36m>[31m
+          [0mGovernance and post-mortem review[0m
+        [36m</p>[31m
+      [36m</div>[31m
+    [36m</div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"mt-6"[31m
+    [36m>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"ag-theme-alpine w-full h-[600px]"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33mstyle[31m=[32m"height: 100%;"[31m
+        [36m/>[31m
+      [36m</div>[31m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+[90m [2m❯[22m Object.getElementError node_modules/@testing-library/dom/dist/config.js:[2m37:19[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m76:38[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m52:17[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m95:19[22m[39m
+[36m [2m❯[22m src/app/oversight/__tests__/page.test.tsx:[2m19:19[22m[39m
+    [90m 17|[39m     vi.mocked(useGovernancePostMortems).mockReturnValue({ data: { data…
+    [90m 18|[39m     [34mrender[39m([33m<[39m[33mOversightWorkspace[39m [33m/[39m[33m>[39m)[33m;[39m
+    [90m 19|[39m     [34mexpect[39m(screen[33m.[39m[34mgetByText[39m([32m'1'[39m))[33m.[39m[34mtoBeDefined[39m()[33m;[39m
+    [90m   |[39m                   [31m^[39m
+    [90m 20|[39m   })[33m;[39m
+    [90m 21|[39m })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/16]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/app/performance/__tests__/page.test.tsx[2m > [22mPerformanceWorkspace[2m > [22mrenders primary content
+[31m[1mTestingLibraryElementError[22m: Unable to find an element with the text: Jan 1. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"flex justify-between items-center pb-4 border-b mb-6"[31m
+    [36m>[31m
+      [36m<div>[31m
+        [36m<h1[31m
+          [33mclass[31m=[32m"text-2xl font-semibold tracking-tight"[31m
+        [36m>[31m
+          [0mPerformance Workspace[0m
+        [36m</h1>[31m
+        [36m<p[31m
+          [33mclass[31m=[32m"text-sm text-muted-foreground"[31m
+        [36m>[31m
+          [0mReturn attribution and alpha analysis[0m
+        [36m</p>[31m
+      [36m</div>[31m
+    [36m</div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"mt-6 mb-8 h-64 border rounded-xl flex items-center justify-center bg-white dark:bg-slate-900"[31m
+    [36m>[31m
+      [36m<span[31m
+        [33mclass[31m=[32m"text-slate-400"[31m
+      [36m>[31m
+        [0mAttribution Chart (Recharts)[0m
+      [36m</span>[31m
+    [36m</div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"ag-theme-alpine w-full h-[600px]"[31m
+    [36m>[31m
+      [36m<div[31m
+        [33mstyle[31m=[32m"height: 100%;"[31m
+      [36m/>[31m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+[90m [2m❯[22m Object.getElementError node_modules/@testing-library/dom/dist/config.js:[2m37:19[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m76:38[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m52:17[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m95:19[22m[39m
+[36m [2m❯[22m src/app/performance/__tests__/page.test.tsx:[2m19:19[22m[39m
+    [90m 17|[39m     vi.mocked(usePerformanceAttribution).mockReturnValue({ data: { dat…
+    [90m 18|[39m     [34mrender[39m([33m<[39m[33mPerformanceWorkspace[39m [33m/[39m[33m>[39m)[33m;[39m
+    [90m 19|[39m     [34mexpect[39m(screen[33m.[39m[34mgetByText[39m([32m'Jan 1'[39m))[33m.[39m[34mtoBeDefined[39m()[33m;[39m
+    [90m   |[39m                   [31m^[39m
+    [90m 20|[39m   })[33m;[39m
+    [90m 21|[39m })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/16]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/app/memos/__tests__/page.test.tsx[2m > [22mMemosWorkspace[2m > [22mrenders primary content
+[31m[1mTestingLibraryElementError[22m: Unable to find an element with the text: long. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"flex justify-between items-center pb-4 border-b mb-6"[31m
+    [36m>[31m
+      [36m<div>[31m
+        [36m<h1[31m
+          [33mclass[31m=[32m"text-2xl font-semibold tracking-tight"[31m
+        [36m>[31m
+          [0mMemos Workspace[0m
+        [36m</h1>[31m
+        [36m<p[31m
+          [33mclass[31m=[32m"text-sm text-muted-foreground"[31m
+        [36m>[31m
+          [0mFormalized investment decisions[0m
+        [36m</p>[31m
+      [36m</div>[31m
+    [36m</div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"mt-6"[31m
+    [36m>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"ag-theme-alpine w-full h-[600px]"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33mstyle[31m=[32m"height: 100%;"[31m
+        [36m/>[31m
+      [36m</div>[31m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+[90m [2m❯[22m Object.getElementError node_modules/@testing-library/dom/dist/config.js:[2m37:19[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m76:38[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m52:17[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m95:19[22m[39m
+[36m [2m❯[22m src/app/memos/__tests__/page.test.tsx:[2m19:19[22m[39m
+    [90m 17|[39m     vi.mocked(useListMemos).mockReturnValue({ data: { data: [{ decisio…
+    [90m 18|[39m     [34mrender[39m([33m<[39m[33mMemosWorkspace[39m [33m/[39m[33m>[39m)[33m;[39m
+    [90m 19|[39m     [34mexpect[39m(screen[33m.[39m[34mgetByText[39m([32m'long'[39m))[33m.[39m[34mtoBeDefined[39m()[33m;[39m
+    [90m   |[39m                   [31m^[39m
+    [90m 20|[39m   })[33m;[39m
+    [90m 21|[39m })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/16]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/app/portfolio/__tests__/page.test.tsx[2m > [22mPortfolioWorkspace[2m > [22mrenders LoadingSkeleton
+[31m[1mTestingLibraryElementError[22m: Unable to find an element by: [data-testid="loading-skeleton"]
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"flex justify-between items-center pb-4 border-b mb-6"[31m
+    [36m>[31m
+      [36m<div>[31m
+        [36m<h1[31m
+          [33mclass[31m=[32m"text-2xl font-semibold tracking-tight"[31m
+        [36m>[31m
+          [0mPortfolio Workspace[0m
+        [36m</h1>[31m
+        [36m<p[31m
+          [33mclass[31m=[32m"text-sm text-muted-foreground"[31m
+        [36m>[31m
+          [0mAsset allocation and exposure analysis[0m
+        [36m</p>[31m
+      [36m</div>[31m
+    [36m</div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"mt-6 mb-8 h-64 border rounded-xl flex items-center justify-center bg-white dark:bg-slate-900"[31m
+    [36m>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"p-4 border rounded-xl space-y-3"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"animate-pulse rounded-md bg-muted h-4 w-[100px]"[31m
+          [33mdata-slot[31m=[32m"skeleton"[31m
+        [36m/>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"animate-pulse rounded-md bg-muted h-8 w-[200px]"[31m
+          [33mdata-slot[31m=[32m"skeleton"[31m
+        [36m/>[31m
+      [36m</div>[31m
+    [36m</div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"space-y-4"[31m
+    [36m>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"animate-pulse rounded-md bg-muted h-10 w-full"[31m
+        [33mdata-slot[31m=[32m"skeleton"[31m
+      [36m/>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"animate-pulse rounded-md bg-muted h-10 w-full"[31m
+        [33mdata-slot[31m=[32m"skeleton"[31m
+      [36m/>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"animate-pulse rounded-md bg-muted h-10 w-full"[31m
+        [33mdata-slot[31m=[32m"skeleton"[31m
+      [36m/>[31m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+[90m [2m❯[22m Object.getElementError node_modules/@testing-library/dom/dist/config.js:[2m37:19[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m76:38[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m109:15[22m[39m
+[36m [2m❯[22m src/app/portfolio/__tests__/page.test.tsx:[2m19:19[22m[39m
+    [90m 17|[39m     vi.mocked(usePortfolioExposure).mockReturnValue({ isLoading: true …
+    [90m 18|[39m     [34mrender[39m([33m<[39m[33mPortfolioWorkspace[39m [33m/[39m[33m>[39m)[33m;[39m
+    [90m 19|[39m     expect(screen.getAllByTestId('loading-skeleton').length).toBeGreat…
+    [90m   |[39m                   [31m^[39m
+    [90m 20|[39m   })[33m;[39m
+    [90m 21|[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/16]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/app/portfolio/__tests__/page.test.tsx[2m > [22mPortfolioWorkspace[2m > [22mrenders primary content
+[31m[1mTestingLibraryElementError[22m: Unable to find an element with the text: Tech. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"flex justify-between items-center pb-4 border-b mb-6"[31m
+    [36m>[31m
+      [36m<div>[31m
+        [36m<h1[31m
+          [33mclass[31m=[32m"text-2xl font-semibold tracking-tight"[31m
+        [36m>[31m
+          [0mPortfolio Workspace[0m
+        [36m</h1>[31m
+        [36m<p[31m
+          [33mclass[31m=[32m"text-sm text-muted-foreground"[31m
+        [36m>[31m
+          [0mAsset allocation and exposure analysis[0m
+        [36m</p>[31m
+      [36m</div>[31m
+    [36m</div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"mt-6 mb-8 h-64 border rounded-xl flex items-center justify-center bg-white dark:bg-slate-900"[31m
+    [36m>[31m
+      [36m<span[31m
+        [33mclass[31m=[32m"text-slate-400"[31m
+      [36m>[31m
+        [0mExposure Chart[0m
+      [36m</span>[31m
+    [36m</div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"ag-theme-alpine w-full h-[600px]"[31m
+    [36m>[31m
+      [36m<div[31m
+        [33mstyle[31m=[32m"height: 100%;"[31m
+      [36m/>[31m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+[90m [2m❯[22m Object.getElementError node_modules/@testing-library/dom/dist/config.js:[2m37:19[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m76:38[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m52:17[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m95:19[22m[39m
+[36m [2m❯[22m src/app/portfolio/__tests__/page.test.tsx:[2m37:19[22m[39m
+    [90m 35|[39m     vi.mocked(usePortfolioExposure).mockReturnValue({ data: { sectors:…
+    [90m 36|[39m     [34mrender[39m([33m<[39m[33mPortfolioWorkspace[39m [33m/[39m[33m>[39m)[33m;[39m
+    [90m 37|[39m     [34mexpect[39m(screen[33m.[39m[34mgetByText[39m([32m'Tech'[39m))[33m.[39m[34mtoBeDefined[39m()[33m;[39m
+    [90m   |[39m                   [31m^[39m
+    [90m 38|[39m   })[33m;[39m
+    [90m 39|[39m })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/16]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/app/research/__tests__/page.test.tsx[2m > [22mResearchWorkspace[2m > [22mrenders LoadingSkeleton
+[31m[1mTestingLibraryElementError[22m: Unable to find an element by: [data-testid="loading-skeleton"]
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"flex justify-between items-center pb-4 border-b mb-6"[31m
+    [36m>[31m
+      [36m<div>[31m
+        [36m<h1[31m
+          [33mclass[31m=[32m"text-2xl font-semibold tracking-tight"[31m
+        [36m>[31m
+          [0mResearch Workspace[0m
+        [36m</h1>[31m
+        [36m<p[31m
+          [33mclass[31m=[32m"text-sm text-muted-foreground"[31m
+        [36m>[31m
+          [0mMarket intelligence and signals[0m
+        [36m</p>[31m
+      [36m</div>[31m
+    [36m</div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"mt-6"[31m
+    [36m>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"space-y-4"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"animate-pulse rounded-md bg-muted h-10 w-full"[31m
+          [33mdata-slot[31m=[32m"skeleton"[31m
+        [36m/>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"animate-pulse rounded-md bg-muted h-10 w-full"[31m
+          [33mdata-slot[31m=[32m"skeleton"[31m
+        [36m/>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"animate-pulse rounded-md bg-muted h-10 w-full"[31m
+          [33mdata-slot[31m=[32m"skeleton"[31m
+        [36m/>[31m
+      [36m</div>[31m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+[90m [2m❯[22m Object.getElementError node_modules/@testing-library/dom/dist/config.js:[2m37:19[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m76:38[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m109:15[22m[39m
+[36m [2m❯[22m src/app/research/__tests__/page.test.tsx:[2m19:19[22m[39m
+    [90m 17|[39m     vi.mocked(useListResearchReports).mockReturnValue({ isLoading: tru…
+    [90m 18|[39m     [34mrender[39m([33m<[39m[33mResearchWorkspace[39m [33m/[39m[33m>[39m)[33m;[39m
+    [90m 19|[39m     expect(screen.getAllByTestId('loading-skeleton').length).toBeGreat…
+    [90m   |[39m                   [31m^[39m
+    [90m 20|[39m   })[33m;[39m
+    [90m 21|[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/16]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/app/research/__tests__/page.test.tsx[2m > [22mResearchWorkspace[2m > [22mrenders primary content
+[31m[1mTestingLibraryElementError[22m: Unable to find an element with the text: AAPL. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"flex justify-between items-center pb-4 border-b mb-6"[31m
+    [36m>[31m
+      [36m<div>[31m
+        [36m<h1[31m
+          [33mclass[31m=[32m"text-2xl font-semibold tracking-tight"[31m
+        [36m>[31m
+          [0mResearch Workspace[0m
+        [36m</h1>[31m
+        [36m<p[31m
+          [33mclass[31m=[32m"text-sm text-muted-foreground"[31m
+        [36m>[31m
+          [0mMarket intelligence and signals[0m
+        [36m</p>[31m
+      [36m</div>[31m
+    [36m</div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"mt-6"[31m
+    [36m>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"ag-theme-alpine w-full h-[600px]"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33mstyle[31m=[32m"height: 100%;"[31m
+        [36m/>[31m
+      [36m</div>[31m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+[90m [2m❯[22m Object.getElementError node_modules/@testing-library/dom/dist/config.js:[2m37:19[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m76:38[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m52:17[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m95:19[22m[39m
+[36m [2m❯[22m src/app/research/__tests__/page.test.tsx:[2m37:19[22m[39m
+    [90m 35|[39m     vi.mocked(useListResearchReports).mockReturnValue({ data: { data: …
+    [90m 36|[39m     [34mrender[39m([33m<[39m[33mResearchWorkspace[39m [33m/[39m[33m>[39m)[33m;[39m
+    [90m 37|[39m     [34mexpect[39m(screen[33m.[39m[34mgetByText[39m([32m'AAPL'[39m))[33m.[39m[34mtoBeDefined[39m()[33m;[39m
+    [90m   |[39m                   [31m^[39m
+    [90m 38|[39m   })[33m;[39m
+    [90m 39|[39m })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/16]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/app/theses/__tests__/page.test.tsx[2m > [22mThesesWorkspace[2m > [22mrenders LoadingSkeleton
+[31m[1mTestingLibraryElementError[22m: Unable to find an element by: [data-testid="loading-skeleton"]
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"flex justify-between items-center pb-4 border-b mb-6"[31m
+    [36m>[31m
+      [36m<div>[31m
+        [36m<h1[31m
+          [33mclass[31m=[32m"text-2xl font-semibold tracking-tight"[31m
+        [36m>[31m
+          [0mTheses Workspace[0m
+        [36m</h1>[31m
+        [36m<p[31m
+          [33mclass[31m=[32m"text-sm text-muted-foreground"[31m
+        [36m>[31m
+          [0mActive investment conviction tracking[0m
+        [36m</p>[31m
+      [36m</div>[31m
+    [36m</div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"mt-6"[31m
+    [36m>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"space-y-4"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"animate-pulse rounded-md bg-muted h-10 w-full"[31m
+          [33mdata-slot[31m=[32m"skeleton"[31m
+        [36m/>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"animate-pulse rounded-md bg-muted h-10 w-full"[31m
+          [33mdata-slot[31m=[32m"skeleton"[31m
+        [36m/>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"animate-pulse rounded-md bg-muted h-10 w-full"[31m
+          [33mdata-slot[31m=[32m"skeleton"[31m
+        [36m/>[31m
+      [36m</div>[31m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+[90m [2m❯[22m Object.getElementError node_modules/@testing-library/dom/dist/config.js:[2m37:19[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m76:38[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m109:15[22m[39m
+[36m [2m❯[22m src/app/theses/__tests__/page.test.tsx:[2m22:19[22m[39m
+    [90m 20|[39m     vi.mocked(useListTheses).mockReturnValue({ isLoading: true } as an…
+    [90m 21|[39m     [34mrender[39m([33m<[39m[33mThesesWorkspace[39m [33m/[39m[33m>[39m)[33m;[39m
+    [90m 22|[39m     expect(screen.getAllByTestId('loading-skeleton').length).toBeGreat…
+    [90m   |[39m                   [31m^[39m
+    [90m 23|[39m   })[33m;[39m
+    [90m 24|[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/16]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/app/theses/__tests__/page.test.tsx[2m > [22mThesesWorkspace[2m > [22mrenders primary content and navigates on row click
+[31m[1mTestingLibraryElementError[22m: Unable to find an element with the text: AAPL. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"flex justify-between items-center pb-4 border-b mb-6"[31m
+    [36m>[31m
+      [36m<div>[31m
+        [36m<h1[31m
+          [33mclass[31m=[32m"text-2xl font-semibold tracking-tight"[31m
+        [36m>[31m
+          [0mTheses Workspace[0m
+        [36m</h1>[31m
+        [36m<p[31m
+          [33mclass[31m=[32m"text-sm text-muted-foreground"[31m
+        [36m>[31m
+          [0mActive investment conviction tracking[0m
+        [36m</p>[31m
+      [36m</div>[31m
+    [36m</div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"mt-6"[31m
+    [36m>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"ag-theme-alpine w-full h-[600px]"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33mstyle[31m=[32m"height: 100%;"[31m
+        [36m/>[31m
+      [36m</div>[31m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+[90m [2m❯[22m Object.getElementError node_modules/@testing-library/dom/dist/config.js:[2m37:19[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m76:38[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m52:17[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m95:19[22m[39m
+[36m [2m❯[22m src/app/theses/__tests__/page.test.tsx:[2m44:19[22m[39m
+    [90m 42|[39m     vi.mocked(useListTheses).mockReturnValue({ data: { data: [{ thesis…
+    [90m 43|[39m     [34mrender[39m([33m<[39m[33mThesesWorkspace[39m [33m/[39m[33m>[39m)[33m;[39m
+    [90m 44|[39m     [34mexpect[39m(screen[33m.[39m[34mgetByText[39m([32m'AAPL'[39m))[33m.[39m[34mtoBeDefined[39m()[33m;[39m
+    [90m   |[39m                   [31m^[39m
+    [90m 45|[39m
+    [90m 46|[39m     [90m// Simulate row click[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/16]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/components/error/__tests__/GlobalErrorBoundary.test.tsx[2m > [22mGlobalErrorBoundary[2m > [22mcatches error and renders fallback
+[31m[1mTestingLibraryElementError[22m: Unable to find an element with the text: Something went wrong!. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"min-h-screen flex items-center justify-center bg-slate-50"[31m
+    [36m>[31m
+      [36m<div[31m
+        [33maria-live[31m=[32m"assertive"[31m
+        [33mclass[31m=[32m"flex flex-col items-center justify-center p-8 border border-red-200 bg-red-50 text-red-800 rounded-md"[31m
+        [33mdata-testid[31m=[32m"error-state"[31m
+        [33mrole[31m=[32m"alert"[31m
+      [36m>[31m
+        [36m<h3[31m
+          [33mclass[31m=[32m"text-lg font-semibold mb-2"[31m
+        [36m>[31m
+          [0mAn error occurred[0m
+        [36m</h3>[31m
+        [36m<p[31m
+          [33mclass[31m=[32m"text-sm mb-4"[31m
+        [36m>[31m
+          [0mCatastrophic Failure: Global crash[0m
+        [36m</p>[31m
+        [36m<button[31m
+          [33mclass[31m=[32m"group/button inline-flex shrink-0 items-center justify-center rounded-lg border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:ring-3 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30 dark:focus-visible:ring-destructive/40 h-8 gap-1.5 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2"[31m
+          [33mdata-slot[31m=[32m"button"[31m
+          [33mdata-testid[31m=[32m"error-retry-button"[31m
+          [33mtabindex[31m=[32m"0"[31m
+          [33mtype[31m=[32m"button"[31m
+        [36m>[31m
+          [0mRetry[0m
+        [36m</button>[31m
+      [36m</div>[31m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+[90m [2m❯[22m Object.getElementError node_modules/@testing-library/dom/dist/config.js:[2m37:19[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m76:38[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m52:17[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m95:19[22m[39m
+[36m [2m❯[22m src/components/error/__tests__/GlobalErrorBoundary.test.tsx:[2m18:19[22m[39m
+    [90m 16|[39m       [33m<[39m[33m/[39m[33mGlobalErrorBoundary[39m[33m>[39m
+    [90m 17|[39m     )[33m;[39m
+    [90m 18|[39m     [34mexpect[39m(screen[33m.[39m[34mgetByText[39m([32m'Something went wrong!'[39m))[33m.[39m[34mtoBeDefined[39m()[33m;[39m
+    [90m   |[39m                   [31m^[39m
+    [90m 19|[39m   })[33m;[39m
+    [90m 20|[39m })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/16]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/components/error/__tests__/WorkspaceErrorBoundary.test.tsx[2m > [22mWorkspaceErrorBoundary[2m > [22mcatches error and renders fallback
+[31m[1mTestingLibraryElementError[22m: Unable to find an element with the text: Workspace crash. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"p-6"[31m
+    [36m>[31m
+      [36m<div[31m
+        [33maria-live[31m=[32m"assertive"[31m
+        [33mclass[31m=[32m"flex flex-col items-center justify-center p-8 border border-red-200 bg-red-50 text-red-800 rounded-md"[31m
+        [33mdata-testid[31m=[32m"error-state"[31m
+        [33mrole[31m=[32m"alert"[31m
+      [36m>[31m
+        [36m<h3[31m
+          [33mclass[31m=[32m"text-lg font-semibold mb-2"[31m
+        [36m>[31m
+          [0mAn error occurred[0m
+        [36m</h3>[31m
+        [36m<p[31m
+          [33mclass[31m=[32m"text-sm mb-4"[31m
+        [36m>[31m
+          [0mWorkspace Error: Workspace crash[0m
+        [36m</p>[31m
+        [36m<button[31m
+          [33mclass[31m=[32m"group/button inline-flex shrink-0 items-center justify-center rounded-lg border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:ring-3 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30 dark:focus-visible:ring-destructive/40 h-8 gap-1.5 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2"[31m
+          [33mdata-slot[31m=[32m"button"[31m
+          [33mdata-testid[31m=[32m"error-retry-button"[31m
+          [33mtabindex[31m=[32m"0"[31m
+          [33mtype[31m=[32m"button"[31m
+        [36m>[31m
+          [0mRetry[0m
+        [36m</button>[31m
+      [36m</div>[31m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+[90m [2m❯[22m Object.getElementError node_modules/@testing-library/dom/dist/config.js:[2m37:19[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m76:38[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m52:17[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m95:19[22m[39m
+[36m [2m❯[22m src/components/error/__tests__/WorkspaceErrorBoundary.test.tsx:[2m18:19[22m[39m
+    [90m 16|[39m       [33m<[39m[33m/[39m[33mWorkspaceErrorBoundary[39m[33m>[39m
+    [90m 17|[39m     )[33m;[39m
+    [90m 18|[39m     [34mexpect[39m(screen[33m.[39m[34mgetByText[39m([32m'Workspace crash'[39m))[33m.[39m[34mtoBeDefined[39m()[33m;[39m
+    [90m   |[39m                   [31m^[39m
+    [90m 19|[39m   })[33m;[39m
+    [90m 20|[39m })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/16]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/components/shared/__tests__/SearchCommandPalette.test.tsx[2m > [22mSearchCommandPalette[2m > [22mrenders properly
+[31m[1mTypeError[22m: Cannot read properties of undefined (reading 'subscribe')[39m
+[90m [2m❯[22m P node_modules/cmdk/dist/index.mjs:[2m1:10192[22m[39m
+[90m [2m❯[22m node_modules/cmdk/dist/index.mjs:[2m1:7672[22m[39m
+[90m [2m❯[22m Object.react_stack_bottom_frame node_modules/react-dom/cjs/react-dom-client.development.js:[2m25904:20[22m[39m
+[90m [2m❯[22m renderWithHooks node_modules/react-dom/cjs/react-dom-client.development.js:[2m7662:22[22m[39m
+[90m [2m❯[22m updateForwardRef node_modules/react-dom/cjs/react-dom-client.development.js:[2m9724:19[22m[39m
+[90m [2m❯[22m beginWork node_modules/react-dom/cjs/react-dom-client.development.js:[2m12117:18[22m[39m
+[90m [2m❯[22m runWithFiberInDEV node_modules/react-dom/cjs/react-dom-client.development.js:[2m874:13[22m[39m
+[90m [2m❯[22m performUnitOfWork node_modules/react-dom/cjs/react-dom-client.development.js:[2m17641:22[22m[39m
+[90m [2m❯[22m workLoopSync node_modules/react-dom/cjs/react-dom-client.development.js:[2m17469:41[22m[39m
+[90m [2m❯[22m renderRootSync node_modules/react-dom/cjs/react-dom-client.development.js:[2m17450:11[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[14/16]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/app/theses/[id]/__tests__/page.test.tsx[2m > [22mThesisDetailWorkspace[2m > [22mrenders LoadingSkeleton
+[31m[1mTestingLibraryElementError[22m: Unable to find an element by: [data-testid="loading-skeleton"]
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"flex justify-between items-center pb-4 border-b mb-6"[31m
+    [36m>[31m
+      [36m<div>[31m
+        [36m<h1[31m
+          [33mclass[31m=[32m"text-2xl font-semibold tracking-tight"[31m
+        [36m>[31m
+          [0mLoading Thesis...[0m
+        [36m</h1>[31m
+        [36m<p[31m
+          [33mclass[31m=[32m"text-sm text-muted-foreground"[31m
+        [36m>[31m
+          [0mRetrieving deep conviction logic[0m
+        [36m</p>[31m
+      [36m</div>[31m
+    [36m</div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"space-y-6 p-6"[31m
+    [36m>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"animate-pulse rounded-md bg-muted h-12 w-1/3"[31m
+        [33mdata-slot[31m=[32m"skeleton"[31m
+      [36m/>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"grid grid-cols-3 gap-4"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"animate-pulse rounded-md bg-muted h-32 w-full"[31m
+          [33mdata-slot[31m=[32m"skeleton"[31m
+        [36m/>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"animate-pulse rounded-md bg-muted h-32 w-full"[31m
+          [33mdata-slot[31m=[32m"skeleton"[31m
+        [36m/>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"animate-pulse rounded-md bg-muted h-32 w-full"[31m
+          [33mdata-slot[31m=[32m"skeleton"[31m
+        [36m/>[31m
+      [36m</div>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"animate-pulse rounded-md bg-muted h-64 w-full"[31m
+        [33mdata-slot[31m=[32m"skeleton"[31m
+      [36m/>[31m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+[90m [2m❯[22m Object.getElementError node_modules/@testing-library/dom/dist/config.js:[2m37:19[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m76:38[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m109:15[22m[39m
+[36m [2m❯[22m src/app/theses/[id]/__tests__/page.test.tsx:[2m24:19[22m[39m
+    [90m 22|[39m     vi.mocked(useThesisLineage).mockReturnValue({ isLoading: true } as…
+    [90m 23|[39m     [34mrender[39m([33m<[39m[33mThesisDetailWorkspace[39m [33mparams[39m[33m=[39m[33m{[39m{ id[33m:[39m [32m'1'[39m } [35mas[39m any[33m}[39m [33m/[39m[33m>[39m)[33m;[39m
+    [90m 24|[39m     expect(screen.getAllByTestId('loading-skeleton').length).toBeGreat…
+    [90m   |[39m                   [31m^[39m
+    [90m 25|[39m   })[33m;[39m
+    [90m 26|[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[15/16]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/app/theses/[id]/__tests__/page.test.tsx[2m > [22mThesisDetailWorkspace[2m > [22mrenders primary content
+[31m[1mTestingLibraryElementError[22m[39m: Found multiple elements with the text: AAPL
+
+Here are the matching elements:
+
+Ignored nodes: comments, script, style
+[36m<h1[39m
+  [33mclass[39m=[32m"text-2xl font-semibold tracking-tight"[39m
+[36m>[39m
+  [0mAAPL[0m
+[36m</h1>[39m
+
+Ignored nodes: comments, script, style
+[36m<div[39m
+  [33mclass[39m=[32m"text-2xl font-bold"[39m
+[36m>[39m
+  [0mAAPL[0m
+[36m</div>[39m
+
+(If this is intentional, then use the `*AllBy*` variant of the query (like `queryAllByText`, `getAllByText`, or `findAllByText`)).
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"flex justify-between items-center pb-4 border-b mb-6"[39m
+    [36m>[39m
+      [36m<div>[39m
+        [36m<h1[39m
+          [33mclass[39m=[32m"text-2xl font-semibold tracking-tight"[39m
+        [36m>[39m
+          [0mAAPL[0m
+        [36m</h1>[39m
+        [36m<p[39m
+          [33mclass[39m=[32m"text-sm text-muted-foreground"[39m
+        [36m>[39m
+          [0m1[0m
+        [36m</p>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"grid grid-cols-1 md:grid-cols-4 gap-6 mt-6"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl bg-card py-(--card-spacing) text-sm text-card-foreground ring-1 ring-foreground/10 [--card-spacing:--spacing(4)] has-data-[slot=card-footer]:pb-0 has-[>img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(3)] data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl"[39m
+        [33mdata-size[39m=[32m"default"[39m
+        [33mdata-slot[39m=[32m"card"[39m
+        [33mdata-testid[39m=[32m"metric-card"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"group/card-header @container/card-header auto-rows-min gap-1 rounded-t-xl px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-(--card-spacing) flex flex-row items-center justify-between space-y-0 pb-2"[39m
+          [33mdata-slot[39m=[32m"card-header"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"font-heading group-data-[size=sm]/card:text-sm text-sm font-medium"[39m
+            [33mdata-slot[39m=[32m"card-title"[39m
+          [36m>[39m
+            [0mTicker[0m
+          [36m</div>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"px-(--card-spacing)"[39m
+          [33mdata-slot[39m=[32m"card-content"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"text-2xl font-bold"[39m
+          [36m>[39m
+            [0mAAPL[0m
+          [36m</div>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"grid grid-cols-1 md:grid-cols-3 gap-6 mt-8"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"col-span-1 border rounded-xl p-4 bg-white dark:bg-slate-900"[39m
+      [36m>[39m
+        [36m<h3[39m
+          [33mclass[39m=[32m"font-semibold mb-2"[39m
+        [36m>[39m
+          [0mThesis Summary[0m
+        [36m</h3>[39m
+        [36m<p[39m
+          [33mclass[39m=[32m"text-sm text-slate-600"[39m
+        [36m>[39m
+          [0mNo summary available in VM.[0m
+        [36m</p>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"col-span-1 border rounded-xl p-4 bg-white dark:bg-slate-900"[39m
+      [36m>[39m
+        [36m<h3[39m
+          [33mclass[39m=[32m"font-semibold mb-2"[39m
+        [36m>[39m
+          [0mThesis Narrative[0m
+        [36m</h3>[39m
+        [36m<p[39m
+          [33mclass[39m=[32m"text-sm text-slate-600"[39m
+        [36m>[39m
+          [0mPrimary investment logic goes here.[0m
+        [36m</p>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"col-span-1 border rounded-xl p-4 bg-white dark:bg-slate-900"[39m
+      [36m>[39m
+        [36m<h3[39m
+          [33mclass[39m=[32m"font-semibold mb-2"[39m
+        [36m>[39m
+          [0mInvalidation Criteria[0m
+        [36m</h3>[39m
+        [36m<ul[39m
+          [33mclass[39m=[32m"list-disc pl-4 text-sm text-slate-600"[39m
+        [36m>[39m
+          [36m<li>[39m
+            [0mCr 1[0m
+          [36m</li>[39m
+        [36m</ul>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"mt-8 border-t pt-6"[39m
+    [36m>[39m
+      [36m<h3[39m
+        [33mclass[39m=[32m"text-lg font-semibold mb-4"[39m
+      [36m>[39m
+        [0mLineage & Related Artifacts[0m
+      [36m</h3>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"flex space-x-4"[39m
+      [36m>[39m
+        [36m<button[39m
+          [33mclass[39m=[32m"px-4 py-2 bg-slate-100 text-slate-800 rounded-md"[39m
+        [36m>[39m
+          [0mLineage ([0m
+          [0m1[0m
+          [0m)[0m
+        [36m</button>[39m
+        [36m<button[39m
+          [33mclass[39m=[32m"px-4 py-2 bg-slate-100 text-slate-800 rounded-md"[39m
+        [36m>[39m
+          [0mRelated Research[0m
+        [36m</button>[39m
+        [36m<button[39m
+          [33mclass[39m=[32m"px-4 py-2 bg-slate-100 text-slate-800 rounded-md"[39m
+        [36m>[39m
+          [0mRelated Memos[0m
+        [36m</button>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+[90m [2m❯[22m Object.getElementError node_modules/@testing-library/dom/dist/config.js:[2m37:19[22m[39m
+[90m [2m❯[22m getElementError node_modules/@testing-library/dom/dist/query-helpers.js:[2m20:35[22m[39m
+[90m [2m❯[22m getMultipleElementsFoundError node_modules/@testing-library/dom/dist/query-helpers.js:[2m23:10[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m55:13[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m95:19[22m[39m
+[36m [2m❯[22m src/app/theses/[id]/__tests__/page.test.tsx:[2m38:19[22m[39m
+    [90m 36|[39m     vi.mocked(useThesisLineage).mockReturnValue({ data: { sourceResear…
+    [90m 37|[39m     [34mrender[39m([33m<[39m[33mThesisDetailWorkspace[39m [33mparams[39m[33m=[39m[33m{[39m{ id[33m:[39m [32m'1'[39m } [35mas[39m any[33m}[39m [33m/[39m[33m>[39m)[33m;[39m
+    [90m 38|[39m     [34mexpect[39m(screen[33m.[39m[34mgetByText[39m([32m'AAPL'[39m))[33m.[39m[34mtoBeDefined[39m()[33m;[39m
+    [90m   |[39m                   [31m^[39m
+    [90m 39|[39m     [34mexpect[39m(screen[33m.[39m[34mgetByText[39m([32m'Cr 1'[39m))[33m.[39m[34mtoBeDefined[39m()[33m;[39m
+    [90m 40|[39m   })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[16/16]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m12 failed[39m[22m[2m | [22m[1m[32m13 passed[39m[22m[90m (25)[39m
+[2m      Tests [22m [1m[31m16 failed[39m[22m[2m | [22m[1m[32m75 passed[39m[22m[90m (91)[39m
+[2m   Start at [22m 09:45:55
+[2m   Duration [22m 5.38s[2m (transform 2.75s, setup 0ms, import 10.46s, tests 2.03s, environment 29.67s)[22m
+
