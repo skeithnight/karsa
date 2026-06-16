@@ -27,7 +27,7 @@ class PostgresRegimeSessionRepository(RegimeSessionRepository):
         
         if result:
             current_version = result[0]
-            if domain_session.aggregate_version != current_version + 1 and domain_session.aggregate_version != current_version:
+            if domain_session.aggregate_version != current_version + 1:
                 raise ConcurrencyError("OCC violation")
             
             update_stmt = sa.text("""
@@ -101,7 +101,7 @@ class PostgresRegimeSnapshotRepository(RegimeSnapshotRepository):
             self.session.execute(stmt, {
                 "urn": snapshot.snapshot_urn, "seg": snapshot.segment_urn, "hor": snapshot.horizon_urn,
                 "sdate": snapshot.snapshot_date, "rc": json.dumps(snapshot.regime_classification.to_dict()),
-                "cs": snapshot.confidence_score.value, "rmh": snapshot.regime_manifest_hash,
+                "cs": float(snapshot.confidence_score.value), "rmh": snapshot.regime_manifest_hash,
                 "emh": snapshot.evidence_manifest_hash, "mm": json.dumps(snapshot.methodology_metadata),
                 "av": 1, "ca": datetime.datetime.now(), "ia": True
             })
@@ -136,7 +136,7 @@ class PostgresRegimeTransitionRepository(RegimeTransitionRepository):
         
         if res:
             curr_ver = res[0]
-            if transition.aggregate_version != curr_ver + 1 and transition.aggregate_version != curr_ver:
+            if transition.aggregate_version != curr_ver + 1:
                 raise ConcurrencyError("OCC violation")
             up_stmt = sa.text("""
                 UPDATE regime_transitions

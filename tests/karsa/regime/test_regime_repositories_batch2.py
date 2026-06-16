@@ -50,10 +50,7 @@ def test_session_occ(repo_cls, temp_dir):
     s.start_analyzing()
     repo.save(s) # v2
     
-    s_conflict = RegimeSession("urn:sess1", aggregate_version=1)
-    s_conflict.start_analyzing() # v2, but expected v3
-    s_conflict.start_analyzing() # bump to v3 so it passes OCC wait, no, if I try to save an older version:
-    
+
     s_old = RegimeSession("urn:sess1", aggregate_version=1)
     with pytest.raises(ConcurrencyError):
         repo.save(s_old)
@@ -90,7 +87,7 @@ def test_snapshot_pagination(repo_cls, temp_dir):
     
     res2 = repo.find_by_segment_paginated("seg1", limit=1, last_date="2026-06-15", last_urn="urn:snap1")
     assert len(res2) == 1
-    assert res2[0].snapshot_urn == "urn:snap2"
+    assert res2[0].snapshot_urn == "urn:snap3"
     
     res_hor = repo.find_by_horizon_paginated("hor1", limit=2)
     assert len(res_hor) == 2

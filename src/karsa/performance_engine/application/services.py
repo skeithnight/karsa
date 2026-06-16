@@ -10,9 +10,9 @@ class EvaluatePerformanceService:
     def execute(self, eval_urn, outcome_urn, journal_urn, expected, actual, regime_dict):
         error = abs(Decimal(expected) - Decimal(actual))
         regime = RegimeDistribution(
-            bull=Decimal(regime_dict.get('bull', 0)),
-            bear=Decimal(regime_dict.get('bear', 0)),
-            sideways=Decimal(regime_dict.get('sideways', 0))
+            bull=Decimal(str(regime_dict.get('bull', 0))),
+            bear=Decimal(str(regime_dict.get('bear', 0))),
+            sideways=Decimal(str(regime_dict.get('sideways', 0)))
         )
         eval_obj = PerformanceEvaluation(eval_urn, outcome_urn, journal_urn, error, regime, datetime.utcnow())
         with self.uow:

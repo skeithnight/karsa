@@ -3,18 +3,28 @@ import pytest
 from unittest.mock import patch
 import sys
 import os
+from pathlib import Path
 
-# Append the current directory so we can import the migration
-sys.path.append("/Users/dwiki.nugraha/dwikicode/karsa/alembic/versions")
+# Resolve project root dynamically
+PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent.parent
+ALEMBIC_VERSIONS_DIR = PROJECT_ROOT / "alembic" / "versions"
 
-# The module name starts with a number, so we use importlib
+sys.path.append(str(ALEMBIC_VERSIONS_DIR))
+
+import alembic.op
 import importlib
 import importlib.machinery
-mig = importlib.machinery.SourceFileLoader("mig", "/Users/dwiki.nugraha/dwikicode/karsa/alembic/versions/47_thesis_evolution_init.py").load_module()
+mig_path = ALEMBIC_VERSIONS_DIR / "47_thesis_evolution_init.py"
+mig = importlib.machinery.SourceFileLoader("mig", str(mig_path)).load_module()
 
 @pytest.fixture(scope="module")
 def conn():
-    connection = psycopg2.connect(dbname="postgres", user="postgres", password="postgres", host="localhost", port=5433)
+    db_name = os.environ.get("POSTGRES_DB", "postgres")
+    db_user = os.environ.get("POSTGRES_USER", "postgres")
+    db_pass = os.environ.get("POSTGRES_PASSWORD", "postgres")
+    db_host = os.environ.get("POSTGRES_HOST", "localhost")
+    db_port = int(os.environ.get("POSTGRES_PORT", 5433))
+    connection = psycopg2.connect(dbname=db_name, user=db_user, password=db_pass, host=db_host, port=db_port)
     connection.autocommit = True
     yield connection
     connection.close()
@@ -26,7 +36,7 @@ def execute_mock(conn, sql):
 @pytest.fixture(scope="module", autouse=True)
 def run_migrations(conn):
     # Downgrade first just in case
-    with patch('alembic.op.execute', side_effect=lambda sql: execute_mock(conn, sql)):
+    with patch('alembic.op.execute', side_effect=lambda sql: execute_mock(conn, sql), create=True):
         mig.downgrade()
         # Test Upgrade
         mig.upgrade()
@@ -34,7 +44,7 @@ def run_migrations(conn):
     # We leave the schema up for other tests, or we could tear it down.
 
 def test_migration_upgrade_downgrade(conn):
-    with patch('alembic.op.execute', side_effect=lambda sql: execute_mock(conn, sql)):
+    with patch('alembic.op.execute', side_effect=lambda sql: execute_mock(conn, sql), create=True):
         mig.downgrade()
         mig.upgrade()
         # Verify tables exist

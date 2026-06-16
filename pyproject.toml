@@ -13,6 +13,9 @@ dependencies = [
     "httpx>=0.28.1",
     "psycopg[pool]>=3.3.4",
     "psycopg-binary>=3.3.4",
+    "sqlalchemy>=2.0.51",
+    "psycopg2-binary>=2.9.12",
+    "alembic>=1.18.4",
 ]
 
 [project.scripts]
@@ -20,6 +23,7 @@ karsa = "karsa.cli:app"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+pythonpath = ["."]
 
 [build-system]
 requires = ["hatchling"]

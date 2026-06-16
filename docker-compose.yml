@@ -34,5 +34,10 @@ services:
         condition: service_healthy
     environment:
       POSTGRES_URL: "postgresql://karsa:karsa_password@postgres:5432/karsa_db"
+      POSTGRES_HOST: "postgres"
+      POSTGRES_PORT: "5432"
+      POSTGRES_DB: "karsa_db"
+      POSTGRES_USER: "karsa"
+      POSTGRES_PASSWORD: "karsa_password"
       MINIO_URL: "http://minio:9000"
     restart: on-failure

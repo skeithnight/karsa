@@ -15,7 +15,13 @@ from karsa.thesis.infrastructure.storage.postgres.postgres_repo import (
 
 @pytest.fixture
 def conn():
-    connection = psycopg2.connect(dbname="postgres", user="postgres", password="postgres", host="localhost", port=5433)
+    import os
+    db_name = os.environ.get("POSTGRES_DB", "postgres")
+    db_user = os.environ.get("POSTGRES_USER", "postgres")
+    db_pass = os.environ.get("POSTGRES_PASSWORD", "postgres")
+    db_host = os.environ.get("POSTGRES_HOST", "localhost")
+    db_port = int(os.environ.get("POSTGRES_PORT", 5433))
+    connection = psycopg2.connect(dbname=db_name, user=db_user, password=db_pass, host=db_host, port=db_port)
     connection.autocommit = True
     c = connection.cursor()
     

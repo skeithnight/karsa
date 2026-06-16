@@ -1,13 +1,20 @@
-FROM python:3.9-slim
+FROM ghcr.io/astral-sh/uv:python3.13-bookworm-slim
 
 WORKDIR /app
-COPY pyproject.toml /app/
-RUN pip install "psycopg[binary]"
-RUN pip install pytest
 
-COPY src/ /app/src/
-COPY tests/ /app/tests/
+ENV UV_COMPILE_BYTECODE=1
+ENV UV_LINK_MODE=copy
 
-ENV PYTHONPATH=/app/src
-CMD ["python", "-m", "pytest", "tests"]
-RUN pip install cryptography testcontainers psycopg_pool
+# Install system dependencies if necessary (e.g. libpq for psycopg)
+RUN apt-get update && apt-get install -y libpq-dev gcc && rm -rf /var/lib/apt/lists/*
+
+COPY uv.lock pyproject.toml README.md /app/
+RUN uv sync --frozen --no-install-project
+
+COPY src /app/src
+COPY tests /app/tests
+COPY alembic /app/alembic
+
+RUN uv sync --frozen
+
+CMD ["uv", "run", "pytest", "tests"]

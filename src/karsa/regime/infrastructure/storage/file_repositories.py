@@ -32,7 +32,7 @@ class FileRegimeSessionRepository(RegimeSessionRepository):
     def __init__(self, base_path: str):
         self.base_path = Path(base_path)
         self.base_path.mkdir(parents=True, exist_ok=True)
-        self._lock = threading.Lock()
+        self._lock = threading.RLock()
 
     def _get_path(self, session_urn: str) -> Path:
         safe_name = session_urn.replace(":", "_") + ".json"
@@ -56,7 +56,7 @@ class FileRegimeSessionRepository(RegimeSessionRepository):
         with self._lock:
             existing = self.find_by_urn(session.session_urn)
             if existing:
-                if session.aggregate_version != existing.aggregate_version + 1 and session.aggregate_version != existing.aggregate_version:
+                if session.aggregate_version != existing.aggregate_version + 1:
                     raise ConcurrencyError("OCC violation")
             else:
                 if session.aggregate_version != 1:
@@ -89,7 +89,7 @@ class FileRegimeSnapshotRepository(RegimeSnapshotRepository):
     def __init__(self, base_path: str):
         self.base_path = Path(base_path)
         self.base_path.mkdir(parents=True, exist_ok=True)
-        self._lock = threading.Lock()
+        self._lock = threading.RLock()
 
     def _get_path(self, snapshot_urn: str) -> Path:
         safe_name = snapshot_urn.replace(":", "_") + ".json"
@@ -185,7 +185,7 @@ class FileRegimeTransitionRepository(RegimeTransitionRepository):
     def __init__(self, base_path: str):
         self.base_path = Path(base_path)
         self.base_path.mkdir(parents=True, exist_ok=True)
-        self._lock = threading.Lock()
+        self._lock = threading.RLock()
 
     def _get_path(self, transition_urn: str) -> Path:
         safe_name = transition_urn.replace(":", "_") + ".json"
@@ -217,7 +217,7 @@ class FileRegimeTransitionRepository(RegimeTransitionRepository):
         with self._lock:
             existing = self.find_by_urn(transition.transition_urn)
             if existing:
-                if transition.aggregate_version != existing.aggregate_version + 1 and transition.aggregate_version != existing.aggregate_version:
+                if transition.aggregate_version != existing.aggregate_version + 1:
                     raise ConcurrencyError("OCC violation")
             else:
                 if transition.aggregate_version != 1:
