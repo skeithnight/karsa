@@ -7,8 +7,7 @@ from karsa.portfolio.services import PortfolioProjectionService
 from karsa.attribution.application.projections import AttributionProjectionService
 import json
 
-def process_events():
-    pool = get_postgres_pool()
+def process_events(pool):
     with pool.connection() as conn:
         journal_repo = EventJournalRepository(conn)
         checkpoint_repo = ProjectionCheckpointRepository(conn)
@@ -64,16 +63,17 @@ def process_events():
 
 def main():
     print("Starting projection worker...")
-    while True:
-        try:
-            count = process_events()
-            if count == 0:
-                time.sleep(1.0)
-            else:
-                print(f"Processed {count} events.")
-        except Exception as e:
-            print(f"Worker crashed: {e}")
-            time.sleep(5.0)
+    with get_postgres_pool() as pool:
+        while True:
+            try:
+                count = process_events(pool)
+                if count == 0:
+                    time.sleep(1.0)
+                else:
+                    print(f"Processed {count} events.")
+            except Exception as e:
+                print(f"Worker crashed: {e}")
+                time.sleep(5.0)
 
 if __name__ == "__main__":
     main()
