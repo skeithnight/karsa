@@ -17,24 +17,8 @@ class PostgresThesisRepository(ThesisRepository):
     def __init__(self, conn: Any):
         self.conn = conn
 
-    def save(self, thesis: Thesis) -> None:
-        c = self.conn.cursor()
-        if thesis.aggregate_version == 1:
-            try:
-                c.execute(
-                    "INSERT INTO theses (thesis_urn, current_snapshot_urn, current_status, aggregate_version) VALUES (%s, %s, %s, %s)",
-                    (thesis.thesis_urn, thesis.current_snapshot_urn, thesis.current_status.value, thesis.aggregate_version)
-                )
-            except psycopg2.IntegrityError:
-                raise ConcurrencyDriftError()
-        else:
-            expected_v = thesis.aggregate_version - 1
-            c.execute(
-                "UPDATE theses SET current_snapshot_urn=%s, current_status=%s, aggregate_version=%s WHERE thesis_urn=%s AND aggregate_version=%s",
-                (thesis.current_snapshot_urn, thesis.current_status.value, thesis.aggregate_version, thesis.thesis_urn, expected_v)
-            )
-            if c.rowcount == 0:
-                raise ConcurrencyDriftError()
+    def __init__(self, conn: Any):
+        self.conn = conn
 
     def get_by_urn(self, urn: str) -> Optional[Thesis]:
         c = self.conn.cursor()
@@ -57,16 +41,8 @@ class PostgresThesisSnapshotRepository(ThesisSnapshotRepository):
     def __init__(self, conn: Any):
         self.conn = conn
 
-    def save(self, snapshot: ThesisSnapshot) -> None:
-        c = self.conn.cursor()
-        c.execute("SELECT 1 FROM thesis_snapshots WHERE snapshot_urn = %s", (snapshot.snapshot_urn,))
-        if c.fetchone():
-            raise ImmutableMutationError()
-            
-        c.execute(
-            "INSERT INTO thesis_snapshots (snapshot_urn, snapshot_version, lifecycle_state, origin_regime_snapshot_urn, supersedes_snapshot_urn, invalidates_snapshot_urn) VALUES (%s, %s, %s, %s, %s, %s)",
-            (snapshot.snapshot_urn, snapshot.snapshot_version, snapshot.lifecycle_state.value, snapshot.origin_regime_snapshot_urn, snapshot.supersedes_snapshot_urn, snapshot.invalidates_snapshot_urn)
-        )
+    def __init__(self, conn: Any):
+        self.conn = conn
 
     def get_by_urn(self, urn: str) -> Optional[ThesisSnapshot]:
         c = self.conn.cursor()
@@ -105,16 +81,8 @@ class PostgresThesisTransitionRepository(ThesisTransitionRepository):
     def __init__(self, conn: Any):
         self.conn = conn
 
-    def save(self, transition: ThesisTransition) -> None:
-        c = self.conn.cursor()
-        c.execute("SELECT 1 FROM thesis_transitions WHERE transition_urn = %s", (transition.transition_urn,))
-        if c.fetchone():
-            raise ImmutableMutationError()
-            
-        c.execute(
-            "INSERT INTO thesis_transitions (transition_urn, supersedes_transition_urn, invalidates_transition_urn, delta_urn, delta_manifest_hash, added_assumptions, removed_assumptions) VALUES (%s, %s, %s, %s, %s, %s, %s)",
-            (transition.transition_urn, transition.supersedes_transition_urn, transition.invalidates_transition_urn, transition.delta.delta_urn, transition.delta.delta_manifest_hash, json.dumps(transition.delta.added_assumptions), json.dumps(transition.delta.removed_assumptions))
-        )
+    def __init__(self, conn: Any):
+        self.conn = conn
 
     def get_by_urn(self, urn: str) -> Optional[ThesisTransition]:
         c = self.conn.cursor()
@@ -155,9 +123,8 @@ class PostgresAssumptionIdentityRepository(AssumptionIdentityRepository):
     def __init__(self, conn: Any):
         self.conn = conn
 
-    def save(self, identity: ThesisAssumptionIdentity) -> None:
-        c = self.conn.cursor()
-        c.execute("INSERT INTO thesis_assumption_identities (assumption_urn) VALUES (%s) ON CONFLICT (assumption_urn) DO NOTHING", (identity.assumption_urn,))
+    def __init__(self, conn: Any):
+        self.conn = conn
 
     def get_by_urn(self, urn: str) -> Optional[ThesisAssumptionIdentity]:
         c = self.conn.cursor()
@@ -169,20 +136,8 @@ class PostgresAssumptionVersionRepository(AssumptionVersionRepository):
     def __init__(self, conn: Any):
         self.conn = conn
 
-    def save(self, version: ThesisAssumptionVersion) -> None:
-        c = self.conn.cursor()
-        c.execute("SELECT 1 FROM thesis_assumption_versions WHERE assumption_urn = %s AND assumption_version = %s", (version.assumption_urn, version.assumption_version))
-        if c.fetchone():
-            raise ImmutableMutationError()
-        
-        cal_urn = version.calibrated_confidence_reference.calibration_urn if version.calibrated_confidence_reference else None
-        cal_hash = version.calibrated_confidence_reference.calibration_manifest_hash if version.calibrated_confidence_reference else None
-        
-        c.execute("""
-            INSERT INTO thesis_assumption_versions 
-            (assumption_urn, assumption_version, assumption_statement, raw_confidence, lifecycle_state, assumption_manifest_hash, cal_urn, cal_hash) 
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
-        """, (version.assumption_urn, version.assumption_version, version.assumption_statement, version.raw_confidence, version.lifecycle_state.value, version.assumption_manifest_hash, cal_urn, cal_hash))
+    def __init__(self, conn: Any):
+        self.conn = conn
 
     def get_by_urn_and_version(self, urn: str, version: int) -> Optional[ThesisAssumptionVersion]:
         c = self.conn.cursor()

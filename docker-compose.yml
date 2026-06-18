@@ -72,3 +72,33 @@ services:
       POSTGRES_USER: "karsa"
       POSTGRES_PASSWORD: "karsa_password"
     restart: always
+
+  karsa-bootstrap-producer:
+    build: .
+    command: ["uv", "run", "python", "src/karsa/workers/bootstrap_producer.py"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      POSTGRES_URL: "postgresql://karsa:karsa_password@postgres:5432/karsa_db"
+      POSTGRES_HOST: "postgres"
+      POSTGRES_PORT: "5432"
+      POSTGRES_DB: "karsa_db"
+      POSTGRES_USER: "karsa"
+      POSTGRES_PASSWORD: "karsa_password"
+    restart: "no"
+
+  karsa-cio-producer:
+    build: .
+    command: ["uv", "run", "python", "src/karsa/workers/cio_producer.py"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      POSTGRES_URL: "postgresql://karsa:karsa_password@postgres:5432/karsa_db"
+      POSTGRES_HOST: "postgres"
+      POSTGRES_PORT: "5432"
+      POSTGRES_DB: "karsa_db"
+      POSTGRES_USER: "karsa"
+      POSTGRES_PASSWORD: "karsa_password"
+    restart: always

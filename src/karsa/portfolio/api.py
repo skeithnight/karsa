@@ -37,24 +37,35 @@ from fastapi import APIRouter, Depends, HTTPException, status
 
 router = APIRouter(prefix="/portfolio", tags=["Portfolio Engine"])
 
-def get_portfolio_api() -> PortfolioAPI:
-    raise NotImplementedError("Dependency must be overridden in app bootstrap")
+from fastapi import Request
+
+def get_portfolio_api(request: Request) -> PortfolioAPI:
+    return request.app.state.container.portfolio_api
+
+@router.get("/test")
+def test_endpoint():
+    return {"status": "ok", "message": "reached"}
 
 @router.get("/summary")
-def get_portfolio_summary(api: PortfolioAPI = Depends(get_portfolio_api)):
-    # We use a hardcoded default portfolio ID 'MAIN' for MVP since it's a single fund context
-    val = api.get_valuation("MAIN")
-    if not val:
-        # Return empty state if no valuation exists yet
-        return {
-            "net_asset_value": "0.0",
-            "cash_balance": "0.0",
-            "exposures": []
-        }
-    return val
+def get_portfolio_summary(request: Request):
+    try:
+        api = request.app.state.container.portfolio_api
+        val = api.get_valuation("MAIN")
+        if not val:
+            return {
+                "net_asset_value": "0.0",
+                "cash_balance": "0.0",
+                "exposures": []
+            }
+        return val
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/exposure")
-def get_portfolio_exposure(api: PortfolioAPI = Depends(get_portfolio_api)):
+def get_portfolio_exposure(request: Request):
+    api = request.app.state.container.portfolio_api
     val = api.get_valuation("MAIN")
     if not val:
         return {

@@ -121,7 +121,11 @@ class CIODecisionService:
                 "actor_type": "AGENT" if action_type != "OVERRIDE" else "HUMAN"
             },
             action_type=action_type,
-            payload={"allocated_weights": allocated_weights},
+            payload={
+                "allocated_weights": allocated_weights,
+                "votes": [{"voter_id": v.voter_id, "vote_type": v.vote_type, "timestamp": v.timestamp.isoformat()} for v in votes],
+                "override_reason": {"justification": override_reason.justification, "referenced_incident_urn": override_reason.referenced_incident_urn} if override_reason else None
+            },
             rationale={
                 "summary": override_reason.justification if override_reason else "Committee consensus allocation",
                 "references": [decision_journal_ref]

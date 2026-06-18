@@ -1,18 +1,40 @@
 from karsa.thesis.domain.models import Thesis, ThesisSnapshot, ThesisTransition, ThesisDelta
 from karsa.thesis.domain.value_objects import LifecycleState
 from karsa.thesis.domain.exceptions import InvalidLifecycleTransitionError
+from karsa.shared.domain.event import DomainEvent
+from typing import Any
+
+class EventJournalRepository:
+    def append_events(self, stream_id: str, events: list[DomainEvent], expected_version: int):
+        pass
+    def load_events(self, stream_id: str) -> list[DomainEvent]:
+        pass
 
 class ThesisLifecycleService:
-    def activate_thesis(self, thesis: Thesis) -> Thesis:
-        if thesis.current_status != LifecycleState.PROPOSED:
-            raise InvalidLifecycleTransitionError("Only PROPOSED theses can be activated.")
-        thesis.update_snapshot(thesis.current_snapshot_urn, LifecycleState.ACTIVE)
+    def __init__(self, event_journal: EventJournalRepository):
+        self.event_journal = event_journal
+
+    def activate_thesis(self, thesis_urn: str, causation_id: str, correlation_id: str, new_snapshot_urn: str) -> Thesis:
+        stream_id = f"Thesis:{thesis_urn}"
+        events = self.event_journal.load_events(stream_id)
+        if not events:
+            raise ValueError(f"Thesis {thesis_urn} not found")
+            
+        thesis = Thesis(thesis_urn, "", LifecycleState.PROPOSED, 0)
+        for event in events:
+            thesis.apply(event)
+            thesis._version += 1
+            thesis.aggregate_version += 1
+            
+        thesis.activate(new_snapshot_urn, causation_id, correlation_id)
+        new_events = thesis.pull_domain_events()
+        self.event_journal.append_events(stream_id, new_events, thesis.aggregate_version - len(new_events))
         return thesis
 
     def invalidate_thesis(self, thesis: Thesis) -> Thesis:
         if thesis.current_status != LifecycleState.ACTIVE:
             raise InvalidLifecycleTransitionError("Only ACTIVE theses can be invalidated.")
-        thesis.update_snapshot(thesis.current_snapshot_urn, LifecycleState.INVALIDATED)
+        # OOS for foundation sprint, but left as stub
         return thesis
 
 class ThesisChallengeEvaluationService:

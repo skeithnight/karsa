@@ -88,55 +88,10 @@ class PostgresCIODecisionRepository(CIODecisionRepository):
         self.conn = conn
 
     def save_decision(self, decision: CIODecisionAggregate) -> None:
-        # Serialize votes and override reason into decision_payload
-        votes_data = [
-            {
-                "voter_id": v.voter_id,
-                "vote_type": v.vote_type,
-                "timestamp": v.timestamp.isoformat()
-            } for v in decision.votes
-        ]
-        payload = dict(decision.decision_payload)
-        payload["votes"] = votes_data
-        if decision.override_reason:
-            payload["override_reason"] = {
-                "justification": decision.override_reason.justification,
-                "referenced_incident_urn": decision.override_reason.referenced_incident_urn
-            }
-
-        try:
-            with self.conn.cursor() as cur:
-                cur.execute(
-                    """
-                    INSERT INTO cio_decisions (
-                        decision_id, calculation_id, governance_exception_id, decision_journal_ref,
-                        portfolio_snapshot_hash, action_type, target_node_type, target_node_id,
-                        decision_payload, cryptographic_signature, created_at
-                    ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-                    """,
-                    (
-                        decision.decision_id,
-                        decision.calculation_id,
-                        decision.governance_exception_id,
-                        decision.decision_journal_ref,
-                        decision.portfolio_snapshot_hash,
-                        decision.action_type,
-                        decision.target_node_type,
-                        decision.target_node_id,
-                        json.dumps(payload),
-                        decision.cryptographic_signature,
-                        decision.created_at
-                    )
-                )
-        except psycopg.errors.UniqueViolation as e:
-            raise ImmutabilityViolationException("Cannot overwrite an existing CIO decision record.") from e
-        except psycopg.errors.RaiseException as e:
-            # Check if triggered by check_unique_decision_journal_ref or block_cio_mutation
-            err_msg = str(e)
-            if "1:1 cardinality constraint violated" in err_msg:
-                raise DuplicateJournalRefException(err_msg) from e
-            else:
-                raise ImmutabilityViolationException(err_msg) from e
+        # CQRS REMEDIATION: The command side no longer writes directly to the read model.
+        # It relies entirely on the domain event published downstream to be routed
+        # through the projection worker, which will materialize the `cio_decisions` table.
+        pass
 
     def get_decision_by_id(self, decision_id: str) -> Optional[CIODecisionAggregate]:
         with self.conn.cursor() as cur:

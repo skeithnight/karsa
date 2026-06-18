@@ -176,8 +176,11 @@ class ApplicationContainer:
         self.val_repo = PostgresValuationRepository(self.pool)
         self.pos_repo = PostgresPositionRepository(self.pool)
         self.cash_repo = PostgresCashLedgerRepository(self.pool)
-        self.portfolio_proj_service = PortfolioProjectionService(self.val_repo, self.pos_repo, self.cash_repo)
-        self.portfolio_val_service = PortfolioValuationService(self.val_repo, self.pos_repo, self.cash_repo)
+        from karsa.portfolio.services import ExposureCalculationService, BenchmarkRegistryService
+        self.exposure_service = ExposureCalculationService()
+        self.benchmark_service = BenchmarkRegistryService()
+        self.portfolio_val_service = PortfolioValuationService(self.val_repo, self.exposure_service, self.benchmark_service)
+        self.portfolio_proj_service = PortfolioProjectionService(self.pos_repo, self.cash_repo, self.portfolio_val_service)
         self.portfolio_api = PortfolioAPI(
             self.portfolio_proj_service, self.portfolio_val_service, self.val_repo, self.pos_repo, self.cash_repo
         )

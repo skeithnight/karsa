@@ -53,15 +53,37 @@ class ThesisSnapshot:
         self.invalidates_snapshot_urn = invalidates_snapshot_urn
         self.assumptions = assumptions
 
-class Thesis:
+from karsa.shared.domain.aggregate import VersionedAggregate
+from karsa.shared.domain.event import DomainEvent
+from .events import ThesisProposedEvent, ThesisActivatedEvent
+
+class Thesis(VersionedAggregate):
     def __init__(self, thesis_urn: str, current_snapshot_urn: str,
                  current_status: LifecycleState, aggregate_version: int = 1):
+        super().__init__(aggregate_version)
         self.thesis_urn = thesis_urn
+        self.aggregate_id = thesis_urn
         self.current_snapshot_urn = current_snapshot_urn
         self.current_status = current_status
-        self.aggregate_version = aggregate_version
 
-    def update_snapshot(self, new_snapshot_urn: str, new_status: LifecycleState):
-        self.current_snapshot_urn = new_snapshot_urn
-        self.current_status = new_status
-        self.aggregate_version += 1
+    def apply(self, event: DomainEvent):
+        if isinstance(event, ThesisProposedEvent):
+            self.current_status = LifecycleState.PROPOSED
+            self.current_snapshot_urn = event.payload.get("snapshot_urn", self.current_snapshot_urn)
+        elif isinstance(event, ThesisActivatedEvent):
+            self.current_status = LifecycleState.ACTIVE
+            self.current_snapshot_urn = event.payload.get("snapshot_urn", self.current_snapshot_urn)
+
+    def activate(self, new_snapshot_urn: str, causation_id: str, correlation_id: str):
+        if self.current_status != LifecycleState.PROPOSED:
+            from .exceptions import InvalidLifecycleTransitionError
+            raise InvalidLifecycleTransitionError("Only PROPOSED theses can be activated.")
+            
+        event = ThesisActivatedEvent(
+            correlation_id=correlation_id,
+            causation_id=causation_id,
+            stream_version=self.version + 1,
+            payload={"snapshot_urn": new_snapshot_urn}
+        )
+        self.apply(event)
+        self.record_event(event)

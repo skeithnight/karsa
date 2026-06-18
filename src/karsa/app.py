@@ -68,9 +68,6 @@ async def lifespan(app: FastAPI):
     app.dependency_overrides[get_snapshot_service] = lambda: container.snapshot_service
     app.dependency_overrides[get_event_bus] = lambda: container.event_bus
 
-    # Portfolio
-    app.dependency_overrides[get_portfolio_api] = lambda: container.portfolio_api
-
     yield
     
     # Cleanup

@@ -7,10 +7,10 @@ from karsa.attribution.domain.model.repositories import (
     PerformanceAttributionRepository
 )
 from karsa.attribution.domain.model.value_objects import (
-    CompoundingStrategy,
-    FrongelloCompounding,
-    CarinoCompounding,
-    MencheroCompounding,
-    CanonicalManifestSerializer,
-    BenchmarkSnapshot
+    OutcomeSequenceIdentity,
+    AttributionIdentity,
+    ContributionWeight,
+    PolicyInputSnapshot,
+    GovernanceAuditContext,
+    AttributedValue
 )

@@ -1,118 +1,96 @@
 import uuid
-from typing import List, Dict, Any, Optional
-from datetime import datetime, timezone
+import datetime
+import psycopg2
+from typing import Any
+from karsa.attribution.application.commands import ProcessRealizedOutcomeCommand, ApplyAttributionRestatementCommand
+from karsa.attribution.domain.model.lineage import AttributionLineage
+from karsa.attribution.domain.model.value_objects import OutcomeSequenceIdentity
+from karsa.attribution.domain.service.attribution_service import AttributionService
+from karsa.attribution.domain.registry.policy_registry import AttributionPolicyRegistry
+from karsa.attribution.events.attribution_events import AttributionCalculatedPayload, AttributionReversedPayload
+from karsa.shared.events.envelope import PlatformEventEnvelope
 
-from karsa.shared.infrastructure.event_journal import EventJournalRepository
-from karsa.attribution.infrastructure.repositories import AttributionRepository
-from karsa.attribution.events.events import (
-    DecisionLineageCreatedEvent,
-    LineageNodeAddedEvent,
-    AttributionFactGeneratedEvent,
-    AttributionAssessmentSealedEvent
-)
+class AttributionApplicationService:
+    def __init__(self, uow):
+        self.uow = uow
 
-class AttributionLineageService:
-    """Service responsible for creating and expanding lineages."""
-    def __init__(
-        self,
-        event_journal: EventJournalRepository,
-        attribution_repo: AttributionRepository
-    ):
-        self.event_journal = event_journal
-        self.attribution_repo = attribution_repo
+    def process_outcome(self, cmd: ProcessRealizedOutcomeCommand):
+        with self.uow:
+            identity = OutcomeSequenceIdentity(cmd.outcome_id, cmd.sequence_id)
+            existing = self.uow.attribution_lineage_repository.get_by_id(identity)
+            if existing: return # Idempotent handling of existing Gen 1
+            
+            contributors = self.uow.attribution_projection_store.get_by_id(cmd.source_context_id)
+            policy = AttributionPolicyRegistry.get_policy("v1")
+            
+            allocations = AttributionService.calculate_allocations(cmd.gross_pnl, cmd.currency, contributors, policy)
+            
+            attr_id = str(uuid.uuid4())
+            lineage = AttributionLineage(identity, attr_id, 1)
+            self.uow.attribution_lineage_repository.save(lineage)
+            
+            payload = AttributionCalculatedPayload(
+                attribution_id=attr_id,
+                outcome_id=cmd.outcome_id,
+                source_context_id=cmd.source_context_id,
+                attribution_generation=1,
+                outcome_sequence=cmd.sequence_id,
+                policy_input_snapshot=policy.__dict__,
+                allocations=[a.__dict__ for a in allocations]
+            )
+            
+            env = PlatformEventEnvelope(
+                event_id=str(uuid.uuid4()),
+                event_type="AttributionCalculatedEvent",
+                aggregate_type="Attribution",
+                aggregate_id=attr_id,
+                aggregate_version=1,
+                schema_version="1.0",
+                occurred_at=datetime.datetime.utcnow().isoformat(),
+                payload=payload.__dict__
+            )
+            self.uow.outbox_repository.save(env)
+            self.uow.commit()
 
-    def create_lineage(self, decision_id: str, forecast_id: str) -> str:
-        lineage_id = str(uuid.uuid4())
-        event = DecisionLineageCreatedEvent(
-            event_id=str(uuid.uuid4()),
-            correlation_id=lineage_id,
-            causation_id=decision_id,
-            lineage_id=lineage_id,
-            decision_id=decision_id,
-            forecast_id=forecast_id
-        )
-        event.stream_id = lineage_id
-        version = self.event_journal.get_current_stream_version(lineage_id) + 1
-        self.event_journal.append(event, stream_version=version)
-        return lineage_id
-
-    def add_lineage_node(
-        self,
-        lineage_id: str,
-        capability_id: str,
-        worker_urn: str,
-        role: str
-    ) -> str:
-        # We can optionally query attribution_repo here for invariants
-        # e.g., linege_id exists, but in a reactive design we might skip if we trust the caller.
-        
-        node_id = str(uuid.uuid4())
-        event = LineageNodeAddedEvent(
-            event_id=str(uuid.uuid4()),
-            correlation_id=lineage_id,
-            causation_id=lineage_id,
-            lineage_id=lineage_id,
-            node_id=node_id,
-            capability_id=capability_id,
-            worker_urn=worker_urn,
-            role=role
-        )
-        event.stream_id = lineage_id
-        version = self.event_journal.get_current_stream_version(lineage_id) + 1
-        self.event_journal.append(event, stream_version=version)
-        return node_id
-
-
-class AttributionAssessmentService:
-    """Service responsible for generating factual assessments."""
-    def __init__(
-        self,
-        event_journal: EventJournalRepository,
-        attribution_repo: AttributionRepository
-    ):
-        self.event_journal = event_journal
-        self.attribution_repo = attribution_repo
-
-    def generate_fact(
-        self,
-        lineage_id: str,
-        assessment_id: str,
-        dimensions: Dict[str, Any]
-    ) -> str:
-        fact_id = str(uuid.uuid4())
-        event = AttributionFactGeneratedEvent(
-            event_id=str(uuid.uuid4()),
-            correlation_id=lineage_id,
-            causation_id=assessment_id,
-            lineage_id=lineage_id,
-            fact_id=fact_id,
-            assessment_id=assessment_id,
-            dimensions=dimensions
-        )
-        event.stream_id = assessment_id
-        version = self.event_journal.get_current_stream_version(assessment_id) + 1
-        self.event_journal.append(event, stream_version=version)
-        return fact_id
-
-    def seal_assessment(
-        self,
-        assessment_id: str,
-        lineage_id: str,
-        fact_ids: List[str],
-        provenance_urn: str
-    ) -> None:
-        event = AttributionAssessmentSealedEvent(
-            event_id=str(uuid.uuid4()),
-            correlation_id=lineage_id,
-            causation_id=assessment_id,
-            assessment_id=assessment_id,
-            lineage_id=lineage_id,
-            fact_ids_list=fact_ids,
-            fact_count=len(fact_ids),
-            provenance_urn=provenance_urn
-        )
-        # Note: the event_journal logic often propagates to event_outbox directly,
-        # but the schema enforces outbox writing if needed.
-        event.stream_id = assessment_id
-        version = self.event_journal.get_current_stream_version(assessment_id) + 1
-        self.event_journal.append(event, stream_version=version)
+    def apply_approved_restatement(self, cmd: ApplyAttributionRestatementCommand):
+        with self.uow:
+            cur = self.uow.connection.cursor()
+            try:
+                cur.execute("INSERT INTO attribution_lineage_restatement (outcome_id, sequence_id, approval_reference, generation, created_at) VALUES (%s, %s, %s, %s, %s)",
+                           (cmd.outcome_id, cmd.sequence_id, cmd.governance_audit_context.approval_reference, 0, datetime.datetime.utcnow()))
+            except psycopg2.IntegrityError:
+                self.uow.rollback()
+                return # Duplicate approval reference, no-op
+                
+            identity = OutcomeSequenceIdentity(cmd.outcome_id, cmd.sequence_id)
+            lineage = self.uow.attribution_lineage_repository.get_by_id(identity)
+            if not lineage: raise Exception("Cannot restate missing outcome")
+            
+            parent_id = lineage.active_attribution_id
+            new_attr_id = str(uuid.uuid4())
+            lineage.advance_generation(new_attr_id)
+            self.uow.attribution_lineage_repository.save(lineage)
+            
+            contributors = self.uow.attribution_projection_store.get_by_id(cmd.source_context_id)
+            policy = AttributionPolicyRegistry.get_policy("v1")
+            allocations = AttributionService.calculate_allocations(cmd.gross_pnl, cmd.currency, contributors, policy)
+            
+            rev_payload = AttributionReversedPayload(parent_id, cmd.governance_audit_context.__dict__, "Restatement Approved")
+            env_rev = PlatformEventEnvelope(str(uuid.uuid4()), "AttributionReversedEvent", "Attribution", parent_id, lineage.aggregate_version, "1.0", datetime.datetime.utcnow().isoformat(), rev_payload.__dict__)
+            self.uow.outbox_repository.save(env_rev)
+            
+            calc_payload = AttributionCalculatedPayload(
+                attribution_id=new_attr_id,
+                outcome_id=cmd.outcome_id,
+                source_context_id=cmd.source_context_id,
+                attribution_generation=lineage.current_generation,
+                outcome_sequence=cmd.sequence_id,
+                policy_input_snapshot=policy.__dict__,
+                allocations=[a.__dict__ for a in allocations],
+                governance_audit_context=cmd.governance_audit_context.__dict__,
+                parent_attribution_id=parent_id
+            )
+            env_calc = PlatformEventEnvelope(str(uuid.uuid4()), "AttributionCalculatedEvent", "Attribution", new_attr_id, lineage.aggregate_version, "1.0", datetime.datetime.utcnow().isoformat(), calc_payload.__dict__)
+            self.uow.outbox_repository.save(env_calc)
+            
+            self.uow.commit()
