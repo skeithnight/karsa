@@ -29,8 +29,6 @@ from karsa.attribution.events.events import (
     AttributionRecomputedEvent
 )
 from karsa.attribution.application.service import (
-    AttributionCalculationService,
-    AttributionRecomputationService,
-    AttributionInvalidationService,
-    AttributionReplayService
+    AttributionLineageService,
+    AttributionAssessmentService
 )

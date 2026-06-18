@@ -4,6 +4,7 @@ from karsa.bootstrap import get_postgres_pool
 from karsa.shared.infrastructure.event_journal import EventJournalRepository, ProjectionCheckpointRepository
 from karsa.portfolio.infrastructure.storage.postgres_read_repositories import PostgresValuationRepository, PostgresPositionRepository, PostgresCashLedgerRepository
 from karsa.portfolio.services import PortfolioProjectionService
+from karsa.attribution.application.projections import AttributionProjectionService
 import json
 
 def process_events():
@@ -16,6 +17,8 @@ def process_events():
         cash_repo = PostgresCashLedgerRepository(conn)
         
         proj_service = PortfolioProjectionService(val_repo, pos_repo, cash_repo)
+
+        attr_service = AttributionProjectionService(conn)
 
         projection_name = "portfolio_read_models"
         
@@ -37,6 +40,16 @@ def process_events():
                     proj_service.consume_order_filled(payload)
                 elif event_type == "PortfolioRebalancedEvent":
                     pass # Or relevant handlers
+                
+                elif event_type == "DecisionLineageCreatedEvent":
+                    attr_service.consume_decision_lineage_created(payload)
+                elif event_type == "LineageNodeAddedEvent":
+                    attr_service.consume_lineage_node_added(payload)
+                elif event_type == "AttributionFactGeneratedEvent":
+                    attr_service.consume_attribution_fact_generated(payload)
+                elif event_type == "AttributionAssessmentSealedEvent":
+                    attr_service.consume_attribution_assessment_sealed(payload)
+
                 
                 last_seq = event["global_sequence"]
             except Exception as e:

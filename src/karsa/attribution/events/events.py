@@ -95,3 +95,111 @@ class AttributionRecomputedEvent(DomainEvent):
             "recomputed_at": self.recomputed_at.isoformat(),
             "event_version": self.event_version
         }
+
+
+@dataclass
+class DecisionLineageCreatedEvent(DomainEvent):
+    event_id: str = ""
+    correlation_id: str = "" # lineage_id
+    causation_id: str = ""
+    lineage_id: str = ""
+    decision_id: str = ""
+    forecast_id: str = ""
+    created_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
+    event_version: int = 1
+    event_type: str = "DecisionLineageCreatedEvent"
+
+    def to_dict(self) -> dict:
+        return {
+            "event_id": self.event_id,
+            "event_type": self.event_type,
+            "correlation_id": self.correlation_id,
+            "causation_id": self.causation_id,
+            "lineage_id": self.lineage_id,
+            "decision_id": self.decision_id,
+            "forecast_id": self.forecast_id,
+            "created_at": self.created_at.isoformat(),
+            "event_version": self.event_version
+        }
+
+
+@dataclass
+class LineageNodeAddedEvent(DomainEvent):
+    event_id: str = ""
+    correlation_id: str = "" # lineage_id
+    causation_id: str = ""
+    lineage_id: str = ""
+    node_id: str = ""
+    capability_id: str = ""
+    worker_urn: str = ""
+    role: str = ""
+    event_version: int = 1
+    event_type: str = "LineageNodeAddedEvent"
+
+    def to_dict(self) -> dict:
+        return {
+            "event_id": self.event_id,
+            "event_type": self.event_type,
+            "correlation_id": self.correlation_id,
+            "causation_id": self.causation_id,
+            "lineage_id": self.lineage_id,
+            "node_id": self.node_id,
+            "capability_id": self.capability_id,
+            "worker_urn": self.worker_urn,
+            "role": self.role,
+            "event_version": self.event_version
+        }
+
+
+@dataclass
+class AttributionFactGeneratedEvent(DomainEvent):
+    event_id: str = ""
+    correlation_id: str = "" # lineage_id
+    causation_id: str = ""
+    lineage_id: str = ""
+    fact_id: str = ""
+    assessment_id: str = ""
+    dimensions: Dict[str, Any] = field(default_factory=dict)
+    event_version: int = 1
+    event_type: str = "AttributionFactGeneratedEvent"
+
+    def to_dict(self) -> dict:
+        return {
+            "event_id": self.event_id,
+            "event_type": self.event_type,
+            "correlation_id": self.correlation_id,
+            "causation_id": self.causation_id,
+            "lineage_id": self.lineage_id,
+            "fact_id": self.fact_id,
+            "assessment_id": self.assessment_id,
+            "dimensions": self.dimensions,
+            "event_version": self.event_version
+        }
+
+
+@dataclass
+class AttributionAssessmentSealedEvent(DomainEvent):
+    event_id: str = ""
+    correlation_id: str = "" # lineage_id
+    causation_id: str = ""
+    assessment_id: str = ""
+    lineage_id: str = ""
+    fact_ids_list: List[str] = field(default_factory=list)
+    fact_count: int = 0
+    provenance_urn: str = ""
+    event_version: int = 1
+    event_type: str = "AttributionAssessmentSealedEvent"
+
+    def to_dict(self) -> dict:
+        return {
+            "event_id": self.event_id,
+            "event_type": self.event_type,
+            "correlation_id": self.correlation_id,
+            "causation_id": self.causation_id,
+            "assessment_id": self.assessment_id,
+            "lineage_id": self.lineage_id,
+            "fact_ids_list": self.fact_ids_list,
+            "fact_count": self.fact_count,
+            "provenance_urn": self.provenance_urn,
+            "event_version": self.event_version
+        }
