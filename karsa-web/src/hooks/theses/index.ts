@@ -9,7 +9,10 @@ import { ListThesesRequestDTO } from "../../types/theses/list-theses-request.dto
 export function useListTheses(params: ListThesesRequestDTO) {
   return useQuery<ListThesesVM, ApiError>({
     queryKey: queryKeys.theses.list(params),
-    queryFn: async () => ({ data: [], totalPages: 0, totalElements: 0 }),
+    queryFn: async () => {
+      const res = await ThesesApi.list(params);
+      return mapListTheses(res);
+    },
     staleTime: 30 * 1000,
   });
 }
@@ -17,7 +20,10 @@ export function useListTheses(params: ListThesesRequestDTO) {
 export function useThesisDetail(id: string) {
   return useQuery<ThesisDetailVM, ApiError>({
     queryKey: queryKeys.theses.detail(id),
-    queryFn: async () => ({ thesisUrn: id, ticker: "N/A", invalidationCriteria: [] }),
+    queryFn: async () => {
+      const res = await ThesesApi.getById(id);
+      return mapThesisDetail(res);
+    },
     staleTime: 5 * 60 * 1000,
   });
 }

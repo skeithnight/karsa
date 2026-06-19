@@ -7,10 +7,10 @@ import { buildQueryString } from "../utils/query-string";
 
 export const ThesesApi = {
   list: (params: ListThesesRequestDTO): Promise<ListThesesResponseDTO> => {
-    return ApiClient.fetch<ListThesesResponseDTO>(`/theses${buildQueryString(params)}`);
+    return ApiClient.fetch<ListThesesResponseDTO>(`/thesis${buildQueryString(params)}`);
   },
   getById: (id: string): Promise<ThesisDetailResponseDTO> => {
-    return ApiClient.fetch<ThesisDetailResponseDTO>(`/theses/${id}`);
+    return ApiClient.fetch<ThesisDetailResponseDTO>(`/thesis/${id}`);
   },
   getLineage: (id: string): Promise<ThesisLineageResponseDTO> => {
     return ApiClient.fetch<ThesisLineageResponseDTO>(`/theses/${id}/lineage`);

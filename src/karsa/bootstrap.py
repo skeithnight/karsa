@@ -185,6 +185,10 @@ class ApplicationContainer:
             self.portfolio_proj_service, self.portfolio_val_service, self.val_repo, self.pos_repo, self.cash_repo
         )
         
+        # Thesis Setup
+        from karsa.thesis.api.router import thesis_router
+        self.thesis_router = thesis_router
+        
         # Memory / MinIO
         self.blob_storage = LocalBlobStorage("/tmp/minio")
         self.schema_repo = InMemorySchemaRepository()
