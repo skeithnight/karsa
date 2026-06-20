@@ -88,6 +88,9 @@ class ApplicationContainer:
         self.conn = self.pool.getconn()
         self.conn.autocommit = True
         
+        # Event Bus (shared across services)
+        self.event_bus = PostgresEventBus(self.pool)
+
         # Risk Setup
         self.risk_repo = PostgresRiskEvaluationRepository(self.conn)
         self.cov_repo = PostgresCovarianceForecastRepository(self.conn)
@@ -124,7 +127,7 @@ class ApplicationContainer:
             decision_repo=self.cio_repo,
             journal_port=self.decision_journal,
             governance_port=self.gov_port,
-            event_publisher=self.risk_publisher,
+            event_publisher=self.event_bus,
             private_key=dummy_cio_key
         )
         self.orchestration_service = PortfolioOrchestrationService(self.cio_repo)
@@ -176,11 +179,18 @@ class ApplicationContainer:
         self.val_repo = PostgresValuationRepository(self.pool)
         self.pos_repo = PostgresPositionRepository(self.pool)
         self.cash_repo = PostgresCashLedgerRepository(self.pool)
-        self.portfolio_proj_service = PortfolioProjectionService(self.val_repo, self.pos_repo, self.cash_repo)
-        self.portfolio_val_service = PortfolioValuationService(self.val_repo, self.pos_repo, self.cash_repo)
+        from karsa.portfolio.services import ExposureCalculationService, BenchmarkRegistryService
+        self.exposure_service = ExposureCalculationService()
+        self.benchmark_service = BenchmarkRegistryService()
+        self.portfolio_val_service = PortfolioValuationService(self.val_repo, self.exposure_service, self.benchmark_service)
+        self.portfolio_proj_service = PortfolioProjectionService(self.pos_repo, self.cash_repo, self.portfolio_val_service)
         self.portfolio_api = PortfolioAPI(
             self.portfolio_proj_service, self.portfolio_val_service, self.val_repo, self.pos_repo, self.cash_repo
         )
+        
+        # Thesis Setup
+        from karsa.thesis.api.router import thesis_router
+        self.thesis_router = thesis_router
         
         # Memory / MinIO
         self.blob_storage = LocalBlobStorage("/tmp/minio")
@@ -188,7 +198,46 @@ class ApplicationContainer:
         self.snapshot_repo = InMemorySnapshotRepository()
         self.registry_service = SchemaRegistryService(self.schema_repo)
         self.snapshot_service = SnapshotService(self.registry_service, self.snapshot_repo, self.blob_storage)
-        self.event_bus = PostgresEventBus(self.pool)
+
+        # Attribution Setup
+        from karsa.attribution.infrastructure.repositories import AttributionRepository
+        self.attribution_repo = AttributionRepository(self.conn)
+
+        # Intelligence Setup
+        from sqlalchemy import create_engine
+        from karsa.firm_intelligence.repository.data_mart_repo import PostgresIntelligenceDataMartRepository
+        from karsa.firm_intelligence.application.query_service import FirmIntelligenceQueryService
+
+        db_name = os.environ.get("POSTGRES_DB", "karsa_db")
+        db_user = os.environ.get("POSTGRES_USER", "karsa")
+        db_pass = os.environ.get("POSTGRES_PASSWORD", "karsa_password")
+        db_host = os.environ.get("POSTGRES_HOST", "postgres")
+        db_port = os.environ.get("POSTGRES_PORT", "5432")
+        db_url = f"postgresql://{db_user}:{db_pass}@{db_host}:{db_port}/{db_name}"
+
+        self.sa_engine = create_engine(db_url)
+        self.intelligence_mart_repo = PostgresIntelligenceDataMartRepository(self.sa_engine)
+        self.intelligence_service = FirmIntelligenceQueryService(self.intelligence_mart_repo)
+
+        # Allocation Setup (Sprint-06)
+        from karsa.allocation.infrastructure.persistence.postgres_allocation_proposal_repository import PostgresAllocationProposalRepository
+        from karsa.allocation.infrastructure.persistence.postgres_proposal_status_projection_repository import PostgresProposalStatusProjectionRepository
+        from karsa.allocation.application.service.proportional_weighting_strategy import ProportionalWeightingStrategy
+        from karsa.allocation.application.service.allocation_recommendation_service import AllocationRecommendationService
+
+        self.proposal_repo = PostgresAllocationProposalRepository(self.conn)
+        self.proposal_projection_repo = PostgresProposalStatusProjectionRepository(self.conn)
+        self.weighting_strategy = ProportionalWeightingStrategy()
+        self.allocation_recommendation_service = AllocationRecommendationService(
+            proposal_repo=self.proposal_repo,
+            weighting_strategy=self.weighting_strategy,
+            intelligence_query_service=self.intelligence_service,
+            event_publisher=self.event_bus,
+        )
+
+        # Update CIO service with proposal repos
+        self.decision_service.proposal_repo = self.proposal_repo
+        self.decision_service.projection_repo = self.proposal_projection_repo
 
     def close(self):
         if hasattr(self, 'conn') and self.conn:

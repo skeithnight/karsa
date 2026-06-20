@@ -18,10 +18,18 @@ class PostgresValuationRepository(ValuationRepository):
                 row = cur.fetchone()
                 if not row:
                     return None
+                import uuid
+                from datetime import datetime
+                from decimal import Decimal
                 return ValuationAggregate(
+                    valuation_id=str(uuid.uuid4()),
                     portfolio_id=portfolio_id,
-                    net_asset_value=row[0],
-                    cash_balance=row[1]
+                    net_asset_value=Decimal(str(row[0])),
+                    cash_balance=Decimal(str(row[1])),
+                    asset_valuations={},
+                    exposures=[],
+                    benchmark_values={},
+                    calculated_at=datetime.utcnow()
                 )
 
     def save(self, valuation: ValuationAggregate) -> None:
@@ -59,15 +67,15 @@ class PostgresPositionRepository(PositionRepository):
                     (portfolio_id,)
                 )
                 rows = cur.fetchall()
+                import uuid
+                from decimal import Decimal
                 return [
                     PositionAggregate(
+                        position_id=str(uuid.uuid4()),
                         portfolio_id=portfolio_id,
                         asset_id=row[0],
-                        quantity=row[1],
-                        average_cost=row[2],
-                        market_value=row[3],
-                        exposure_pct=row[4],
-                        exposure_value=row[5]
+                        units=Decimal(str(row[1])),
+                        average_cost=Decimal(str(row[2]))
                     ) for row in rows
                 ]
 
@@ -85,14 +93,14 @@ class PostgresPositionRepository(PositionRepository):
                 row = cur.fetchone()
                 if not row:
                     return None
+                import uuid
+                from decimal import Decimal
                 return PositionAggregate(
+                    position_id=str(uuid.uuid4()),
                     portfolio_id=portfolio_id,
                     asset_id=asset_id,
-                    quantity=row[0],
-                    average_cost=row[1],
-                    market_value=row[2],
-                    exposure_pct=row[3],
-                    exposure_value=row[4]
+                    units=Decimal(str(row[0])),
+                    average_cost=Decimal(str(row[1]))
                 )
 
     def save(self, position: PositionAggregate) -> None:
@@ -110,7 +118,7 @@ class PostgresPositionRepository(PositionRepository):
                         exposure_value = EXCLUDED.exposure_value,
                         updated_at = NOW()
                     """,
-                    (position.asset_id, position.portfolio_id, position.quantity, position.average_cost, position.market_value, position.exposure_pct, position.exposure_value)
+                    (position.asset_id, position.portfolio_id, float(position.units), float(position.average_cost), 0.0, 0.0, 0.0)
                 )
 
     def list_active_by_portfolio(self, portfolio_id: str) -> List[PositionAggregate]:
@@ -130,9 +138,11 @@ class PostgresCashLedgerRepository(CashLedgerRepository):
                 row = cur.fetchone()
                 if not row:
                     return None
+                from decimal import Decimal
                 return CashLedgerAggregate(
                     portfolio_id=portfolio_id,
-                    balance=row[0]
+                    available_balance=Decimal(str(row[0])),
+                    held_balance=Decimal("0.0")
                 )
 
     def save(self, ledger: CashLedgerAggregate) -> None:
@@ -146,6 +156,6 @@ class PostgresCashLedgerRepository(CashLedgerRepository):
                         balance = EXCLUDED.balance,
                         updated_at = NOW()
                     """,
-                    (ledger.portfolio_id, ledger.balance)
+                    (ledger.portfolio_id, float(ledger.available_balance))
                 )
 

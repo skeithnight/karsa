@@ -598,3 +598,94 @@ class PostgresPerformanceAttributionRepository(PerformanceAttributionRepository)
     def clear(self) -> None:
         cur = self.conn.cursor()
         cur.execute("TRUNCATE TABLE performance_attribution_records CASCADE;")
+
+
+# ==========================================
+# 4. V4.1 Attribution Read Repository
+# ==========================================
+
+from dataclasses import dataclass
+from typing import Dict, Any
+
+@dataclass
+class LineageGraphDTO:
+    lineage_id: str
+    decision_id: str
+    forecast_id: str
+    nodes: List[Dict[str, str]]
+
+@dataclass
+class AssessmentDTO:
+    assessment_id: str
+    lineage_id: str
+    fact_count: int
+    provenance_urn: str
+
+@dataclass
+class FactDTO:
+    fact_id: str
+    assessment_id: str
+    dimensions: Dict[str, Any]
+
+class AttributionRepository:
+    """Read-only and invariant query repository returning pure DTOs."""
+    def __init__(self, connection):
+        self.conn = connection
+
+    def get_lineage(self, lineage_id: str) -> Optional[LineageGraphDTO]:
+        cur = self.conn.cursor()
+        cur.execute(
+            "SELECT decision_id, forecast_id FROM attribution_lineages WHERE lineage_id = %s",
+            (lineage_id,)
+        )
+        row = cur.fetchone()
+        if not row:
+            return None
+
+        cur.execute(
+            "SELECT node_id, capability_id FROM attribution_lineage_nodes WHERE lineage_id = %s",
+            (lineage_id,)
+        )
+        nodes = [{"node_id": r[0], "capability_id": r[1]} for r in cur.fetchall()]
+
+        return LineageGraphDTO(
+            lineage_id=lineage_id,
+            decision_id=row[0],
+            forecast_id=row[1],
+            nodes=nodes
+        )
+
+    def get_assessment(self, assessment_id: str) -> Optional[AssessmentDTO]:
+        cur = self.conn.cursor()
+        cur.execute(
+            "SELECT lineage_id, fact_count, provenance_urn FROM attribution_assessments WHERE assessment_id = %s",
+            (assessment_id,)
+        )
+        row = cur.fetchone()
+        if not row:
+            return None
+        return AssessmentDTO(
+            assessment_id=assessment_id,
+            lineage_id=row[0],
+            fact_count=row[1],
+            provenance_urn=row[2]
+        )
+
+    def get_fact(self, fact_id: str) -> Optional[FactDTO]:
+        cur = self.conn.cursor()
+        cur.execute(
+            "SELECT assessment_id, dimensions FROM attribution_facts WHERE fact_id = %s",
+            (fact_id,)
+        )
+        row = cur.fetchone()
+        if not row:
+            return None
+        dims = row[1]
+        if isinstance(dims, str):
+            dims = json.loads(dims)
+        return FactDTO(
+            fact_id=fact_id,
+            assessment_id=row[0],
+            dimensions=dims
+        )
+

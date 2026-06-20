@@ -1,0 +1,66 @@
+{
+  "data": [
+    {
+      "worker_urn": "urn:karsa:worker:analyst-1",
+      "subject_type": "ANALYST",
+      "alpha_delta": "0.0500",
+      "regime_type": null
+    },
+    {
+      "worker_urn": "urn:karsa:worker:analyst-1",
+      "subject_type": "ANALYST",
+      "alpha_delta": "0.0500",
+      "regime_type": null
+    },
+    {
+      "worker_urn": "urn:karsa:worker:analyst-1",
+      "subject_type": "ANALYST",
+      "alpha_delta": "0.0500",
+      "regime_type": null
+    },
+    {
+      "worker_urn": "urn:karsa:worker:analyst-2",
+      "subject_type": "ANALYST",
+      "alpha_delta": "0.1000",
+      "regime_type": null
+    },
+    {
+      "worker_urn": "urn:karsa:worker:analyst-1",
+      "subject_type": "ANALYST",
+      "alpha_delta": "0.0500",
+      "regime_type": null
+    },
+    {
+      "worker_urn": "urn:karsa:worker:analyst-2",
+      "subject_type": "ANALYST",
+      "alpha_delta": "0.1000",
+      "regime_type": null
+    },
+    {
+      "worker_urn": "urn:karsa:worker:analyst-3",
+      "subject_type": "ANALYST",
+      "alpha_delta": "0.1500",
+      "regime_type": null
+    },
+    {
+      "worker_urn": "urn:karsa:worker:analyst-4",
+      "subject_type": "ANALYST",
+      "alpha_delta": "0.2000",
+      "regime_type": null
+    },
+    {
+      "worker_urn": "urn:karsa:worker:analyst-5",
+      "subject_type": "ANALYST",
+      "alpha_delta": "0.5500",
+      "regime_type": null
+    },
+    {
+      "worker_urn": "urn:karsa:worker:analyst-6",
+      "subject_type": "ANALYST",
+      "alpha_delta": "0.6600",
+      "regime_type": null
+    }
+  ],
+  "last_processed_sequence": 439,
+  "generated_at": "2026-06-19T16:37:21.672041"
+}

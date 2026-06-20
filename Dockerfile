@@ -14,7 +14,8 @@ RUN uv sync --frozen --no-install-project
 COPY src /app/src
 COPY tests /app/tests
 COPY alembic /app/alembic
+COPY alembic.ini /app/alembic.ini
 
 RUN uv sync --frozen
 
-CMD ["uv", "run", "uvicorn", "karsa.app:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["sh", "-c", "uv run alembic upgrade head && uv run uvicorn karsa.app:app --host 0.0.0.0 --port 8000"]

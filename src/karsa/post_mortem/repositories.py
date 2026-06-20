@@ -197,19 +197,18 @@ class PostgresPostMortemRecordRepository(PostMortemRecordRepository):
             return self._row_to_record(row)
 
     def list_records(self, limit: int = 50, offset: int = 0) -> List[PostMortemRecord]:
-        with self.conn.connection() as conn:
-            with conn.cursor() as cur:
-                cur.execute(
-                    """
-                    SELECT postmortem_id, incident_ref, failure_classification, root_causes, findings, created_at
-                    FROM post_mortem_records
-                    ORDER BY created_at DESC
-                    LIMIT %s OFFSET %s
-                    """,
-                    (limit, offset)
-                )
-                rows = cur.fetchall()
-                return [self._row_to_record(row) for row in rows]
+        with self.conn.cursor() as cur:
+            cur.execute(
+                """
+                SELECT postmortem_id, incident_ref, failure_classification, root_causes, findings, created_at
+                FROM post_mortem_records
+                ORDER BY created_at DESC
+                LIMIT %s OFFSET %s
+                """,
+                (limit, offset)
+            )
+            rows = cur.fetchall()
+            return [self._row_to_record(row) for row in rows]
 
     def _row_to_record(self, row) -> PostMortemRecord:
         fc_data = row[2] if isinstance(row[2], dict) else json.loads(row[2])

@@ -1,49 +1,16 @@
-from dataclasses import dataclass
-from datetime import datetime
-from typing import Optional, List
+from typing import Optional
+from karsa.shared.domain.aggregate import VersionedAggregate
+from karsa.attribution.domain.model.value_objects import OutcomeSequenceIdentity
 
-@dataclass(frozen=True)
-class RecomputationLineage:
-    """Tracks historical restatements and superseding chains for attribution audits."""
-    session_id: str
-    superseded_session_id: str
-    recomputation_timestamp: datetime
+class AttributionLineage(VersionedAggregate):
+    def __init__(self, identity: OutcomeSequenceIdentity, active_attribution_id: str, current_generation: int, version: int = 1):
+        super().__init__()
+        self.identity = identity
+        self.active_attribution_id = active_attribution_id
+        self.current_generation = current_generation
+        self._aggregate_version = version
 
-
-def reconstruct_lineage_chain(records: list) -> str:
-    """
-    Deterministically reconstruct the lineage transitions for a set of records
-    without using chronological sorting or timestamps.
-    """
-    superseded_map = {}
-    invalidated_map = {}
-    versions = set()
-    
-    for r in records:
-        v = r.attribution_version
-        versions.add(v)
-        if r.superseded_by_version is not None:
-            superseded_map[v] = r.superseded_by_version
-        if r.invalidated_by_version is not None:
-            invalidated_map[v] = r.invalidated_by_version
-            
-    if not versions:
-        return ""
-        
-    current = min(versions)
-    path = [f"Version {current}"]
-    
-    while True:
-        if current in superseded_map:
-            nxt = superseded_map[current]
-            path.append(f"\u2192 superseded by Version {nxt}")
-            current = nxt
-        elif current in invalidated_map:
-            nxt = invalidated_map[current]
-            path.append(f"\u2192 invalidated by Version {nxt}")
-            current = nxt
-        else:
-            break
-            
-    return "\n".join(path)
-
+    def advance_generation(self, new_attribution_id: str):
+        self.current_generation += 1
+        self.active_attribution_id = new_attribution_id
+        self.increment_version()

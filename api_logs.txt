@@ -1,0 +1,12 @@
+karsa-api-1  |    Building karsa @ file:///app
+karsa-api-1  |       Built karsa @ file:///app
+karsa-api-1  | Uninstalled 1 package in 0.27ms
+karsa-api-1  | Installed 1 package in 0.48ms
+karsa-api-1  | Bytecode compiled 2638 files in 136ms
+karsa-api-1  | INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+karsa-api-1  | INFO  [alembic.runtime.migration] Will assume transactional DDL.
+karsa-api-1  | Bytecode compiled 2638 files in 63ms
+karsa-api-1  | INFO:     Started server process [36]
+karsa-api-1  | INFO:     Waiting for application startup.
+karsa-api-1  | INFO:     Application startup complete.
+karsa-api-1  | INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)

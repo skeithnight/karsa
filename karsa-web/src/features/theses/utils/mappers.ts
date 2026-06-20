@@ -4,42 +4,42 @@ import { ThesisDetailResponseDTO } from "../../../types/theses/thesis-detail-res
 import { ThesisLineageResponseDTO } from "../../../types/theses/thesis-lineage-response.dto";
 import { formatStatus } from "../../../lib/formatters/status";
 import { formatPercentage } from "../../../lib/formatters/percentage";
-import { ThesisVM, ListThesesVM, ThesisDetailVM, ThesisLineageVM } from "../types/viewmodels";
+import { ThesisVM, ListThesesVM, ThesisDetailVM } from "../types/viewmodels";
 
-export function mapThesis(dto: ThesisDTO): ThesisVM {
+export function mapListTheses(dto: any): ListThesesVM {
+  // If backend returns Array, handle it. If it returns { data: [] }, handle it.
+  const dataArray = Array.isArray(dto) ? dto : (dto.data ?? []);
   return {
-    thesisUrn: dto.thesis_urn,
-    ticker: dto.ticker,
-    direction: dto.direction,
-    stateRaw: dto.state,
-    stateBadge: formatStatus(dto.state),
-    convictionScoreRaw: dto.conviction_score,
-    convictionScoreDisplay: dto.conviction_score.toString(), // assuming raw score
-    expectedHorizonDaysRaw: dto.expected_horizon_days,
-    expectedHorizonDaysDisplay: `${dto.expected_horizon_days} days`,
-  };
-}
-
-export function mapListTheses(dto: ListThesesResponseDTO): ListThesesVM {
-  return {
-    data: (dto.data ?? []).map(mapThesis),
+    data: dataArray.map((item: any) => ({
+      urn: item.urn,
+      title: item.title,
+      status: item.status,
+      confidence: item.confidence,
+      version: item.version,
+      author_urn: item.author_urn,
+      regime_urn: item.regime_urn,
+    })),
     totalPages: dto.pagination?.total_pages ?? 1,
-    totalElements: dto.pagination?.total_elements ?? 0,
+    totalElements: dto.pagination?.total_elements ?? dataArray.length,
   };
 }
 
-export function mapThesisDetail(dto: ThesisDetailResponseDTO): ThesisDetailVM {
+export function mapThesisDetail(dto: any): ThesisDetailVM {
   return {
-    thesisUrn: dto.thesis_urn,
-    ticker: dto.ticker,
-    invalidationCriteria: dto.invalidation_criteria ?? [],
-  };
-}
-
-export function mapThesisLineage(dto: ThesisLineageResponseDTO): ThesisLineageVM {
-  return {
-    sourceResearchIds: dto.source_research_ids ?? [],
-    decisionUrns: dto.decision_urns ?? [],
-    governanceReviewIds: dto.governance_review_ids ?? [],
+    urn: dto.urn,
+    current_snapshot_urn: dto.current_snapshot_urn,
+    title: dto.title,
+    summary: dto.summary,
+    rationale: dto.rationale,
+    confidence: dto.confidence,
+    author_urn: dto.author_urn,
+    regime_urn: dto.regime_urn,
+    status: dto.status,
+    version: dto.version,
+    assumptions: (dto.assumptions ?? []).map((a: any) => ({
+      urn: a.urn,
+      statement: a.statement,
+      is_valid: a.is_valid,
+    })),
   };
 }

@@ -36,6 +36,15 @@ from karsa.portfolio.api import (
     router as portfolio_router,
     get_portfolio_api
 )
+from karsa.thesis.api.router import thesis_router
+from karsa.attribution.api import router as attribution_router
+from karsa.firm_intelligence.api.routes import router as intelligence_router
+from karsa.allocation.api.routes import (
+    router as allocation_router,
+    get_recommendation_service as get_allocation_recommendation_service,
+    get_decision_service as get_allocation_decision_service,
+    get_projection_repo as get_allocation_projection_repo,
+)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -68,8 +77,18 @@ async def lifespan(app: FastAPI):
     app.dependency_overrides[get_snapshot_service] = lambda: container.snapshot_service
     app.dependency_overrides[get_event_bus] = lambda: container.event_bus
 
-    # Portfolio
-    app.dependency_overrides[get_portfolio_api] = lambda: container.portfolio_api
+    # Attribution
+    from karsa.attribution.api import get_attribution_repo
+    app.dependency_overrides[get_attribution_repo] = lambda: container.attribution_repo
+
+    # Intelligence
+    from karsa.firm_intelligence.api.routes import get_query_service
+    app.dependency_overrides[get_query_service] = lambda: container.intelligence_service
+
+    # Allocation (Sprint-06)
+    app.dependency_overrides[get_allocation_recommendation_service] = lambda: container.allocation_recommendation_service
+    app.dependency_overrides[get_allocation_decision_service] = lambda: container.decision_service
+    app.dependency_overrides[get_allocation_projection_repo] = lambda: container.proposal_projection_repo
 
     yield
     
@@ -89,3 +108,7 @@ app.include_router(pm_router)
 app.include_router(execution_router)
 app.include_router(artifacts_router)
 app.include_router(portfolio_router)
+app.include_router(thesis_router)
+app.include_router(attribution_router)
+app.include_router(intelligence_router)
+app.include_router(allocation_router)

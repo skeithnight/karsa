@@ -154,3 +154,168 @@ class AllocationInvalidatedEvent(DomainEvent):
             record_urn=data["record_urn"],
             invalidated_by_version=int(data["invalidated_by_version"])
         )
+
+
+# --- Sprint-06 Proposal Events ---
+
+@dataclass(frozen=True)
+class AllocationProposalGeneratedEvent:
+    """Emitted when a new allocation proposal is generated."""
+    event_id: str
+    proposal_id: str
+    policy_id: str
+    journal_ref: str
+    proposed_weights: Dict[str, Any]
+    total_capital: float
+    proposal_rationale: str
+    context_hash: str
+    generated_at: datetime
+    event_sequence: int = 0
+    event_type: str = "AllocationProposalGeneratedEvent"
+    event_version: int = 1
+
+    def __post_init__(self):
+        if not self.proposal_id:
+            raise ValueError("proposal_id cannot be empty.")
+        if not self.journal_ref:
+            raise ValueError("journal_ref cannot be empty.")
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "event_id": self.event_id,
+            "proposal_id": self.proposal_id,
+            "policy_id": self.policy_id,
+            "journal_ref": self.journal_ref,
+            "proposed_weights": self.proposed_weights,
+            "total_capital": float(self.total_capital),
+            "proposal_rationale": self.proposal_rationale,
+            "context_hash": self.context_hash,
+            "generated_at": self.generated_at.isoformat(),
+            "event_sequence": self.event_sequence,
+            "event_type": self.event_type,
+            "event_version": self.event_version,
+        }
+
+
+@dataclass(frozen=True)
+class AllocationProposalApprovedEvent:
+    """Emitted when CIO approves a proposal."""
+    event_id: str
+    proposal_id: str
+    decision_id: str
+    approved_by: str
+    approved_at: datetime
+    event_sequence: int = 0
+    event_type: str = "AllocationProposalApprovedEvent"
+    event_version: int = 1
+
+    def __post_init__(self):
+        if not self.proposal_id:
+            raise ValueError("proposal_id cannot be empty.")
+        if not self.decision_id:
+            raise ValueError("decision_id cannot be empty.")
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "event_id": self.event_id,
+            "proposal_id": self.proposal_id,
+            "decision_id": self.decision_id,
+            "approved_by": self.approved_by,
+            "approved_at": self.approved_at.isoformat(),
+            "event_sequence": self.event_sequence,
+            "event_type": self.event_type,
+            "event_version": self.event_version,
+        }
+
+
+@dataclass(frozen=True)
+class AllocationProposalRejectedEvent:
+    """Emitted when CIO rejects a proposal."""
+    event_id: str
+    proposal_id: str
+    decision_id: str
+    rejected_by: str
+    rejection_reason: str
+    rejected_at: datetime
+    event_sequence: int = 0
+    event_type: str = "AllocationProposalRejectedEvent"
+    event_version: int = 1
+
+    def __post_init__(self):
+        if not self.proposal_id:
+            raise ValueError("proposal_id cannot be empty.")
+        if not self.decision_id:
+            raise ValueError("decision_id cannot be empty.")
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "event_id": self.event_id,
+            "proposal_id": self.proposal_id,
+            "decision_id": self.decision_id,
+            "rejected_by": self.rejected_by,
+            "rejection_reason": self.rejection_reason,
+            "rejected_at": self.rejected_at.isoformat(),
+            "event_sequence": self.event_sequence,
+            "event_type": self.event_type,
+            "event_version": self.event_version,
+        }
+
+
+@dataclass(frozen=True)
+class AllocationProposalModifiedEvent:
+    """Emitted when CIO modifies a proposal."""
+    event_id: str
+    original_proposal_id: str
+    decision_id: str
+    modified_weights: Dict[str, float]
+    modification_reason: str
+    modified_by: str
+    modified_at: datetime
+    event_sequence: int = 0
+    event_type: str = "AllocationProposalModifiedEvent"
+    event_version: int = 1
+
+    def __post_init__(self):
+        if not self.original_proposal_id:
+            raise ValueError("original_proposal_id cannot be empty.")
+        if not self.decision_id:
+            raise ValueError("decision_id cannot be empty.")
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "event_id": self.event_id,
+            "original_proposal_id": self.original_proposal_id,
+            "decision_id": self.decision_id,
+            "modified_weights": self.modified_weights,
+            "modification_reason": self.modification_reason,
+            "modified_by": self.modified_by,
+            "modified_at": self.modified_at.isoformat(),
+            "event_sequence": self.event_sequence,
+            "event_type": self.event_type,
+            "event_version": self.event_version,
+        }
+
+
+@dataclass(frozen=True)
+class AllocationProposalExpiredEvent:
+    """Emitted when a proposal expires."""
+    event_id: str
+    proposal_id: str
+    expired_at: datetime
+    event_sequence: int = 0
+    event_type: str = "AllocationProposalExpiredEvent"
+    event_version: int = 1
+
+    def __post_init__(self):
+        if not self.proposal_id:
+            raise ValueError("proposal_id cannot be empty.")
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "event_id": self.event_id,
+            "proposal_id": self.proposal_id,
+            "expired_at": self.expired_at.isoformat(),
+            "event_sequence": self.event_sequence,
+            "event_type": self.event_type,
+            "event_version": self.event_version,
+        }

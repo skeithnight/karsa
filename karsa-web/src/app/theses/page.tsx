@@ -8,6 +8,7 @@ import { ErrorState } from '../../components/shared/ErrorState';
 import { EmptyState } from '../../components/shared/EmptyState';
 import { useListTheses } from '../../hooks/theses';
 import { ThesisVM } from '../../features/theses/types/viewmodels';
+import { ThesisGrid } from '../../features/thesis/components/ThesisGrid';
 
 export default function ThesesWorkspace() {
   const router = useRouter();
@@ -22,11 +23,7 @@ export default function ThesesWorkspace() {
         {isLoading ? (
           <LoadingSkeleton variant="table" />
         ) : (data?.data?.length ?? 0) > 0 ? (
-          <DataTable 
-            rowData={data?.data ?? []} 
-            columnDefs={[{ field: 'ticker' }, { field: 'direction' }, { field: 'convictionScoreDisplay' }]} 
-            onRowClick={(row: ThesisVM) => router.push(`/theses/${row.thesisUrn}`)}
-          />
+          <ThesisGrid data={data?.data ?? []} />
         ) : (
           <EmptyState title="No Data" description="No active theses found" />
         )}

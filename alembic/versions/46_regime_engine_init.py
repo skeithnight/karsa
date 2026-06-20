@@ -11,7 +11,7 @@ from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
 revision = '46_regime_engine_init'
-down_revision = '45'
+down_revision = '45_capital_allocation_init'
 branch_labels = None
 depends_on = None
 
@@ -47,7 +47,7 @@ def upgrade() -> None:
     # unless partition key is part of it. We'll enforce at app level or uniquely inside partitions.
     # Actually, we can add a unique index if calculated_at is included, but we'll manage via code or add unique on (segment, horizon, date)
     op.execute("CREATE TABLE regime_snapshots_default PARTITION OF regime_snapshots DEFAULT;")
-    op.execute("CREATE UNIQUE INDEX ix_regime_snapshots_nk ON regime_snapshots (segment_urn, horizon_urn, snapshot_date);")
+    op.execute("CREATE UNIQUE INDEX ix_regime_snapshots_nk ON regime_snapshots (segment_urn, horizon_urn, snapshot_date, calculated_at);")
 
     # 3. regime_transitions (partitioned)
     op.execute("""

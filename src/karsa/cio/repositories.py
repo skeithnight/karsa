@@ -30,6 +30,16 @@ class CIODecisionRepository(ABC):
         pass
 
     @abstractmethod
+    def get_decisions_by_proposal_id(self, proposal_id: str) -> List[CIODecisionAggregate]:
+        """Retrieves all CIO decisions linked to a proposal."""
+        pass
+
+    @abstractmethod
+    def exists_by_journal_ref(self, journal_ref: str) -> bool:
+        """Checks whether a decision exists for a given journal reference (1:1 enforcement)."""
+        pass
+
+    @abstractmethod
     def save_portfolio_state(self, state: PortfolioStateProjection) -> None:
         """Saves a projected portfolio tree state."""
         pass
@@ -70,6 +80,12 @@ class InMemoryCIODecisionRepository(CIODecisionRepository):
         decisions = sorted(self._decisions.values(), key=lambda d: d.created_at, reverse=True)
         return decisions[offset:offset+limit]
 
+    def get_decisions_by_proposal_id(self, proposal_id: str) -> List[CIODecisionAggregate]:
+        return [d for d in self._decisions.values() if d.proposal_id == proposal_id]
+
+    def exists_by_journal_ref(self, journal_ref: str) -> bool:
+        return any(d.decision_journal_ref == journal_ref for d in self._decisions.values())
+
     def save_portfolio_state(self, state: PortfolioStateProjection) -> None:
         # Check uniqueness to simulate trigger
         for existing in self._states:
@@ -88,55 +104,10 @@ class PostgresCIODecisionRepository(CIODecisionRepository):
         self.conn = conn
 
     def save_decision(self, decision: CIODecisionAggregate) -> None:
-        # Serialize votes and override reason into decision_payload
-        votes_data = [
-            {
-                "voter_id": v.voter_id,
-                "vote_type": v.vote_type,
-                "timestamp": v.timestamp.isoformat()
-            } for v in decision.votes
-        ]
-        payload = dict(decision.decision_payload)
-        payload["votes"] = votes_data
-        if decision.override_reason:
-            payload["override_reason"] = {
-                "justification": decision.override_reason.justification,
-                "referenced_incident_urn": decision.override_reason.referenced_incident_urn
-            }
-
-        try:
-            with self.conn.cursor() as cur:
-                cur.execute(
-                    """
-                    INSERT INTO cio_decisions (
-                        decision_id, calculation_id, governance_exception_id, decision_journal_ref,
-                        portfolio_snapshot_hash, action_type, target_node_type, target_node_id,
-                        decision_payload, cryptographic_signature, created_at
-                    ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-                    """,
-                    (
-                        decision.decision_id,
-                        decision.calculation_id,
-                        decision.governance_exception_id,
-                        decision.decision_journal_ref,
-                        decision.portfolio_snapshot_hash,
-                        decision.action_type,
-                        decision.target_node_type,
-                        decision.target_node_id,
-                        json.dumps(payload),
-                        decision.cryptographic_signature,
-                        decision.created_at
-                    )
-                )
-        except psycopg.errors.UniqueViolation as e:
-            raise ImmutabilityViolationException("Cannot overwrite an existing CIO decision record.") from e
-        except psycopg.errors.RaiseException as e:
-            # Check if triggered by check_unique_decision_journal_ref or block_cio_mutation
-            err_msg = str(e)
-            if "1:1 cardinality constraint violated" in err_msg:
-                raise DuplicateJournalRefException(err_msg) from e
-            else:
-                raise ImmutabilityViolationException(err_msg) from e
+        # CQRS REMEDIATION: The command side no longer writes directly to the read model.
+        # It relies entirely on the domain event published downstream to be routed
+        # through the projection worker, which will materialize the `cio_decisions` table.
+        pass
 
     def get_decision_by_id(self, decision_id: str) -> Optional[CIODecisionAggregate]:
         with self.conn.cursor() as cur:
@@ -173,21 +144,44 @@ class PostgresCIODecisionRepository(CIODecisionRepository):
             return self._row_to_aggregate(row)
 
     def list_decisions(self, limit: int = 50, offset: int = 0) -> List[CIODecisionAggregate]:
-        with self.conn.connection() as conn:
-            with conn.cursor() as cur:
-                cur.execute(
-                    """
-                    SELECT decision_id, calculation_id, governance_exception_id, decision_journal_ref,
-                           portfolio_snapshot_hash, action_type, target_node_type, target_node_id,
-                           decision_payload, cryptographic_signature, created_at
-                    FROM cio_decisions
-                    ORDER BY created_at DESC
-                    LIMIT %s OFFSET %s
-                    """,
-                    (limit, offset)
-                )
-                rows = cur.fetchall()
-                return [self._row_to_aggregate(row) for row in rows]
+        with self.conn.cursor() as cur:
+            cur.execute(
+                """
+                SELECT decision_id, calculation_id, governance_exception_id, decision_journal_ref,
+                       portfolio_snapshot_hash, action_type, target_node_type, target_node_id,
+                       decision_payload, cryptographic_signature, created_at
+                FROM cio_decisions
+                ORDER BY created_at DESC
+                LIMIT %s OFFSET %s
+                """,
+                (limit, offset)
+            )
+            rows = cur.fetchall()
+            return [self._row_to_aggregate(row) for row in rows]
+
+    def get_decisions_by_proposal_id(self, proposal_id: str) -> List[CIODecisionAggregate]:
+        with self.conn.cursor() as cur:
+            cur.execute(
+                """
+                SELECT decision_id, calculation_id, governance_exception_id, decision_journal_ref,
+                       portfolio_snapshot_hash, action_type, target_node_type, target_node_id,
+                       decision_payload, cryptographic_signature, created_at
+                FROM cio_decisions
+                WHERE proposal_id = %s
+                ORDER BY created_at DESC
+                """,
+                (proposal_id,)
+            )
+            rows = cur.fetchall()
+            return [self._row_to_aggregate(row) for row in rows]
+
+    def exists_by_journal_ref(self, journal_ref: str) -> bool:
+        with self.conn.cursor() as cur:
+            cur.execute(
+                "SELECT 1 FROM cio_decisions WHERE decision_journal_ref = %s LIMIT 1",
+                (journal_ref,)
+            )
+            return cur.fetchone() is not None
 
     def save_portfolio_state(self, state: PortfolioStateProjection) -> None:
         try:
