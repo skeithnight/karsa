@@ -1,8 +1,9 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Optional, Dict, Any, List
 from karsa.cio.exceptions import ImmutabilityViolationException
 from karsa.cio.value_objects import CommitteeVote, OverrideReason
+from karsa.allocation.domain.model.value_objects import ExpectedOutcome, RiskAssessment, ReviewHorizon
 
 class ImmutableAggregate:
     """Base class for strictly immutable aggregates that prevent property modification at runtime."""
@@ -29,6 +30,10 @@ class CIODecisionAggregate(ImmutableAggregate):
     created_at: datetime
     votes: List[CommitteeVote]
     override_reason: Optional[OverrideReason] = None
+    proposal_id: Optional[str] = None
+    expected_outcome: Optional[ExpectedOutcome] = None
+    risk_assessment: Optional[RiskAssessment] = None
+    review_horizon: Optional[ReviewHorizon] = None
 
     def __post_init__(self):
         if not self.decision_id or not self.decision_id.strip():

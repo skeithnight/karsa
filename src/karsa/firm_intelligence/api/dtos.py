@@ -2,11 +2,18 @@ from pydantic import BaseModel
 from datetime import datetime
 from typing import List, Optional
 
+class AllocationRankingExplanation(BaseModel):
+    reward_factor: float
+    risk_penalty: float
+    final_score: float
+
 class AllocationReadinessDTO(BaseModel):
     worker_urn: str
-    subject_type: str
-    alpha_delta: float
-    regime_type: Optional[str]
+    eligibility_status: str
+    cumulative_alpha: float
+    max_drawdown: float
+    observation_count: int
+    ranking_explanation: AllocationRankingExplanation
 
 class GovernanceSuspensionDTO(BaseModel):
     worker_urn: str

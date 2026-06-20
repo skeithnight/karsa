@@ -30,6 +30,16 @@ class CIODecisionRepository(ABC):
         pass
 
     @abstractmethod
+    def get_decisions_by_proposal_id(self, proposal_id: str) -> List[CIODecisionAggregate]:
+        """Retrieves all CIO decisions linked to a proposal."""
+        pass
+
+    @abstractmethod
+    def exists_by_journal_ref(self, journal_ref: str) -> bool:
+        """Checks whether a decision exists for a given journal reference (1:1 enforcement)."""
+        pass
+
+    @abstractmethod
     def save_portfolio_state(self, state: PortfolioStateProjection) -> None:
         """Saves a projected portfolio tree state."""
         pass
@@ -69,6 +79,12 @@ class InMemoryCIODecisionRepository(CIODecisionRepository):
     def list_decisions(self, limit: int = 50, offset: int = 0) -> List[CIODecisionAggregate]:
         decisions = sorted(self._decisions.values(), key=lambda d: d.created_at, reverse=True)
         return decisions[offset:offset+limit]
+
+    def get_decisions_by_proposal_id(self, proposal_id: str) -> List[CIODecisionAggregate]:
+        return [d for d in self._decisions.values() if d.proposal_id == proposal_id]
+
+    def exists_by_journal_ref(self, journal_ref: str) -> bool:
+        return any(d.decision_journal_ref == journal_ref for d in self._decisions.values())
 
     def save_portfolio_state(self, state: PortfolioStateProjection) -> None:
         # Check uniqueness to simulate trigger
@@ -142,6 +158,30 @@ class PostgresCIODecisionRepository(CIODecisionRepository):
             )
             rows = cur.fetchall()
             return [self._row_to_aggregate(row) for row in rows]
+
+    def get_decisions_by_proposal_id(self, proposal_id: str) -> List[CIODecisionAggregate]:
+        with self.conn.cursor() as cur:
+            cur.execute(
+                """
+                SELECT decision_id, calculation_id, governance_exception_id, decision_journal_ref,
+                       portfolio_snapshot_hash, action_type, target_node_type, target_node_id,
+                       decision_payload, cryptographic_signature, created_at
+                FROM cio_decisions
+                WHERE proposal_id = %s
+                ORDER BY created_at DESC
+                """,
+                (proposal_id,)
+            )
+            rows = cur.fetchall()
+            return [self._row_to_aggregate(row) for row in rows]
+
+    def exists_by_journal_ref(self, journal_ref: str) -> bool:
+        with self.conn.cursor() as cur:
+            cur.execute(
+                "SELECT 1 FROM cio_decisions WHERE decision_journal_ref = %s LIMIT 1",
+                (journal_ref,)
+            )
+            return cur.fetchone() is not None
 
     def save_portfolio_state(self, state: PortfolioStateProjection) -> None:
         try:

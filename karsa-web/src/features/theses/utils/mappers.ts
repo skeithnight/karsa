@@ -4,7 +4,7 @@ import { ThesisDetailResponseDTO } from "../../../types/theses/thesis-detail-res
 import { ThesisLineageResponseDTO } from "../../../types/theses/thesis-lineage-response.dto";
 import { formatStatus } from "../../../lib/formatters/status";
 import { formatPercentage } from "../../../lib/formatters/percentage";
-import { ThesisVM, ListThesesVM, ThesisDetailVM, ThesisLineageVM } from "../types/viewmodels";
+import { ThesisVM, ListThesesVM, ThesisDetailVM } from "../types/viewmodels";
 
 export function mapListTheses(dto: any): ListThesesVM {
   // If backend returns Array, handle it. If it returns { data: [] }, handle it.

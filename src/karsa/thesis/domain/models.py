@@ -1,4 +1,10 @@
 from typing import List, Optional
+from karsa.shared.domain.aggregate import VersionedAggregate
+from karsa.shared.domain.event import DomainEvent
+from .events import (
+    ThesisProposedEvent, ThesisActivatedEvent, ThesisChallengedEvent, 
+    ThesisRefinedEvent, ThesisInvalidatedEvent, ThesisRetiredEvent
+)
 from .value_objects import (
     LifecycleState, AssumptionLifecycleState, 
     ReviewReference, CalibrationReference, AssumptionOutcomeReference
@@ -53,7 +59,7 @@ class ThesisSnapshot:
         self.invalidates_snapshot_urn = invalidates_snapshot_urn
         self.assumptions = assumptions
 
-class ThesisAssumption(Entity):
+class ThesisAssumption:
     def __init__(self, assumption_urn: str, statement: str):
         self.assumption_urn = assumption_urn
         self.statement = statement

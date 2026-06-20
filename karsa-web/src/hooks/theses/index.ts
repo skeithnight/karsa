@@ -2,7 +2,7 @@ import { ApiError } from "../../api/errors/api-error";
 import { useQuery } from "@tanstack/react-query";
 import { queryKeys } from "../query-keys";
 import { ThesesApi } from "../../api/endpoints/theses";
-import { mapListTheses, mapThesisDetail, mapThesisLineage } from "../../features/theses/utils/mappers";
+import { mapListTheses, mapThesisDetail } from "../../features/theses/utils/mappers";
 import { ListThesesVM, ThesisDetailVM, ThesisLineageVM } from "../../features/theses/types/viewmodels";
 import { ListThesesRequestDTO } from "../../types/theses/list-theses-request.dto";
 

@@ -35,30 +35,32 @@ class CioProjectionService:
         
         # reconstruct some fields not fully detailed in event for simplicity
         # or just save what we have
-        decision_journal_ref = rationale.get("references", [None])[0]
+        refs = rationale.get("references", [])
+        decision_journal_ref = refs[0] if refs else "unknown"
         
         try:
-            with self.conn.cursor() as cur:
-                cur.execute(
-                    """
-                    INSERT INTO cio_decisions (
-                        decision_id, calculation_id, decision_journal_ref,
-                        portfolio_snapshot_hash, action_type, target_node_type, target_node_id,
-                        decision_payload, cryptographic_signature, created_at
-                    ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, NOW())
-                    ON CONFLICT DO NOTHING
-                    """,
-                    (
-                        decision_id,
-                        causation_id,
-                        decision_journal_ref,
-                        "unknown", # snapshot hash
-                        action_type,
-                        "PORTFOLIO",
-                        portfolio_id,
-                        json.dumps(decision_payload),
-                        json.dumps(signature)
+            with self.conn.transaction():
+                with self.conn.cursor() as cur:
+                    cur.execute(
+                        """
+                        INSERT INTO cio_decisions (
+                            decision_id, calculation_id, decision_journal_ref,
+                            portfolio_snapshot_hash, action_type, target_node_type, target_node_id,
+                            decision_payload, cryptographic_signature, created_at
+                        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, NOW())
+                        ON CONFLICT DO NOTHING
+                        """,
+                        (
+                            decision_id,
+                            causation_id,
+                            decision_journal_ref,
+                            "unknown", # snapshot hash
+                            action_type,
+                            "PORTFOLIO",
+                            portfolio_id,
+                            json.dumps(decision_payload),
+                            json.dumps(signature)
+                        )
                     )
-                )
         except psycopg.errors.RaiseException as e:
             pass # ignore block_cio_mutation trigger if replaying

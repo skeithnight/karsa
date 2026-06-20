@@ -60,8 +60,9 @@ def get_portfolio_summary(request: Request):
         return val
     except Exception as e:
         import traceback
-        traceback.print_exc()
-        raise HTTPException(status_code=500, detail=str(e))
+        tb = traceback.format_exc()
+        from fastapi.responses import JSONResponse
+        return JSONResponse(status_code=500, content={"detail": tb})
 
 @router.get("/exposure")
 def get_portfolio_exposure(request: Request):

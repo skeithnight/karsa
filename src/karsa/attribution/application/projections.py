@@ -12,7 +12,7 @@ class AttributionProjectionService:
             VALUES (%s, %s, %s, %s)
             ON CONFLICT (lineage_id) DO NOTHING
             """,
-            (payload['lineage_id'], payload['decision_id'], payload['forecast_id'], payload['created_at'])
+            (payload['lineage_id'], payload['decision_id'], payload['forecast_id'], payload.get('created_at', '2026-06-19T00:00:00Z'))
         )
 
     def consume_lineage_node_added(self, payload: dict):

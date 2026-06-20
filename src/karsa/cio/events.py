@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, List
 
 @dataclass(frozen=True)
 class PortfolioDecisionMadeEvent:
@@ -39,3 +39,65 @@ class PortfolioDecisionMadeEvent:
             raise ValueError("action_type cannot be empty.")
         if "key_id" not in self.cryptographic_signature or "signature_hex" not in self.cryptographic_signature:
             raise ValueError("cryptographic_signature must contain key_id and signature_hex.")
+
+
+# --- Sprint-06 Proposal CIO Events ---
+
+@dataclass(frozen=True)
+class AllocationProposalApprovedEvent:
+    """Emitted when CIO approves an allocation proposal."""
+    event_id: str
+    proposal_id: str
+    decision_id: str
+    approved_by: str
+    approved_at: datetime
+    event_sequence: int = 0
+    event_type: str = "AllocationProposalApprovedEvent"
+    event_version: int = 1
+
+    def __post_init__(self):
+        if not self.proposal_id:
+            raise ValueError("proposal_id cannot be empty.")
+        if not self.decision_id:
+            raise ValueError("decision_id cannot be empty.")
+
+
+@dataclass(frozen=True)
+class AllocationProposalRejectedEvent:
+    """Emitted when CIO rejects an allocation proposal."""
+    event_id: str
+    proposal_id: str
+    decision_id: str
+    rejected_by: str
+    rejection_reason: str
+    rejected_at: datetime
+    event_sequence: int = 0
+    event_type: str = "AllocationProposalRejectedEvent"
+    event_version: int = 1
+
+    def __post_init__(self):
+        if not self.proposal_id:
+            raise ValueError("proposal_id cannot be empty.")
+        if not self.decision_id:
+            raise ValueError("decision_id cannot be empty.")
+
+
+@dataclass(frozen=True)
+class AllocationProposalModifiedEvent:
+    """Emitted when CIO modifies an allocation proposal."""
+    event_id: str
+    original_proposal_id: str
+    decision_id: str
+    modified_weights: Dict[str, float]
+    modification_reason: str
+    modified_by: str
+    modified_at: datetime
+    event_sequence: int = 0
+    event_type: str = "AllocationProposalModifiedEvent"
+    event_version: int = 1
+
+    def __post_init__(self):
+        if not self.original_proposal_id:
+            raise ValueError("original_proposal_id cannot be empty.")
+        if not self.decision_id:
+            raise ValueError("decision_id cannot be empty.")

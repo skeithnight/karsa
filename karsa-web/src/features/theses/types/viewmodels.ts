@@ -35,3 +35,9 @@ export interface ThesisDetailVM {
   version: number;
   assumptions: AssumptionVM[];
 }
+
+export interface ThesisLineageVM {
+  sourceResearchIds: string[];
+  decisionUrns: string[];
+  governanceReviewIds: string[];
+}

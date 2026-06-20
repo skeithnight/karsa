@@ -5,22 +5,20 @@ class PostgresIntelligenceDataMartRepository:
         self.engine = engine
 
     def get_allocation_readiness(self, date_target=None):
-        # Sample logic for querying facts
-        # Real implementation would join fact_capability_transition, fact_alpha_generation, etc.
         query = """
-            SELECT w.worker_urn, w.subject_type, f.alpha_delta, r.regime_type
-            FROM fact_alpha_generation f
-            JOIN dim_worker w ON f.dim_worker_id = w.dim_worker_id
-            LEFT JOIN dim_regime r ON f.dim_regime_id = r.dim_regime_id
+            SELECT worker_urn, eligibility_status, cumulative_alpha, max_drawdown, observation_count
+            FROM vw_allocation_readiness
         """
         params = {}
-        if date_target:
-            query += " WHERE f.event_timestamp <= :dt AND w.effective_from <= :dt AND w.effective_to > :dt"
-            params["dt"] = date_target
-        
         with self.engine.connect() as conn:
             result = conn.execute(text(query), params).fetchall()
-            return [{"worker_urn": r[0], "subject_type": r[1], "alpha_delta": r[2], "regime_type": r[3]} for r in result]
+            return [{
+                "worker_urn": r[0],
+                "eligibility_status": r[1] if r[1] else "LIMITED",
+                "cumulative_alpha": float(r[2]) if r[2] is not None else 0.0,
+                "max_drawdown": float(r[3]) if r[3] is not None else 0.0,
+                "observation_count": int(r[4]) if r[4] is not None else 0
+            } for r in result]
 
     def get_suspensions(self, since=None):
         query = """
@@ -31,7 +29,7 @@ class PostgresIntelligenceDataMartRepository:
         if since:
             query += " WHERE event_timestamp >= :since"
             params["since"] = since
-            
+
         with self.engine.connect() as conn:
             result = conn.execute(text(query), params).fetchall()
             return [{"worker_urn": r[0], "old_state": r[1], "new_state": r[2], "authority": r[3], "reason": r[4], "event_timestamp": r[5]} for r in result]

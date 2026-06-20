@@ -6,9 +6,9 @@ import { MetricCard } from '../../../../components/shared/MetricCard';
 import { LoadingSkeleton } from '../../../../components/shared/LoadingSkeleton';
 import { ErrorState } from '../../../../components/shared/ErrorState';
 
-export default function ThesisIntelligenceWorkspace({ params }: { params: Promise<{ urn: string }> }) {
+export default function ThesisIntelligenceWorkspace({ params }: { params: Promise<{ id: string }> }) {
     const resolvedParams = use(params);
-    const { urn } = resolvedParams;
+    const { id: urn } = resolvedParams;
 
     const { data: health, isLoading: isHealthLoading, isError: isHealthError } = useThesisHealth(urn);
     const { data: timeline, isLoading: isTimelineLoading, isError: isTimelineError } = useThesisTimeline(urn);
@@ -35,10 +35,10 @@ export default function ThesisIntelligenceWorkspace({ params }: { params: Promis
             <section>
                 <h2 className="text-xl font-bold mb-4">Health Overview</h2>
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                    <MetricCard title="Health Score" metric={`${health.health_score.toFixed(1)}%`} statusIndicator={health.health_status.toLowerCase()} />
-                    <MetricCard title="Status" metric={health.health_status} statusIndicator={health.health_status.toLowerCase()} />
+                    <MetricCard title="Health Score" metric={`${health.health_score.toFixed(1)}%`} statusIndicator={health.health_status === "HEALTHY" ? "positive" : "negative"} />
+                    <MetricCard title="Status" metric={health.health_status} statusIndicator={health.health_status === "HEALTHY" ? "positive" : "negative"} />
                     <MetricCard title="Valid Assumptions" metric={`${health.valid_assumptions} / ${health.total_assumptions}`} statusIndicator="neutral" />
-                    <MetricCard title="Invalid Assumptions" metric={`${health.invalid_assumptions}`} statusIndicator={health.invalid_assumptions > 0 ? "error" : "success"} />
+                    <MetricCard title="Invalid Assumptions" metric={`${health.invalid_assumptions}`} statusIndicator={health.invalid_assumptions > 0 ? "negative" : "positive"} />
                 </div>
             </section>
 

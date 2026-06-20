@@ -111,8 +111,8 @@ class PortfolioProjectionService:
 
     def consume_order_filled(self, payload: dict, asset_prices: Optional[Dict[str, Decimal]] = None) -> ValuationAggregate:
         portfolio_id = payload["portfolio_id"]
-        asset_id = payload["asset_id"]
-        units_delta = Decimal(payload["units"])
+        asset_id = payload.get("asset_id", payload.get("symbol"))
+        units_delta = Decimal(payload.get("units", payload.get("quantity", 0)))
         price = Decimal(payload["price"])
         timestamp = datetime.fromisoformat(payload["timestamp"]) if isinstance(payload["timestamp"], str) else payload["timestamp"]
         correlation_id = payload.get("correlation_id", portfolio_id)
@@ -174,7 +174,10 @@ class PortfolioProjectionService:
                 causation_id=causation_id
             ))
 
-        cash_delta = -(units_delta * price)
+        if payload.get("order_type") == "DEPOSIT":
+            cash_delta = (units_delta * price)
+        else:
+            cash_delta = -(units_delta * price)
         commission = Decimal(payload.get("commission_bps", "0.0"))
         if commission > 0:
             cash_delta -= abs(units_delta * price) * (commission / Decimal("10000"))

@@ -15,19 +15,31 @@ class PostgresEventBus:
         try:
             with self.pool.connection() as conn:
                 with conn.cursor() as cur:
+                    import uuid as _uuid
+                    event_id = getattr(event, 'event_id', str(_uuid.uuid4()))
+                    record_id = _uuid.uuid4().hex
+                    aggregate_id = getattr(event, 'proposal_id', getattr(event, 'causation_id', getattr(event, 'correlation_id', 'unknown')))
+                    # Get next stream version
+                    cur.execute(
+                        "SELECT COALESCE(MAX(stream_version), 0) + 1 FROM event_journal WHERE stream_id = %s",
+                        (f"Allocation-{aggregate_id}",)
+                    )
+                    next_version = cur.fetchone()[0]
                     cur.execute(
                         """
-                        INSERT INTO event_journal (event_id, event_type, aggregate_type, aggregate_id, aggregate_version, payload, occurred_at)
-                        VALUES (%s, %s, %s, %s, %s, %s, %s)
+                        INSERT INTO event_journal (id, stream_id, stream_version, event_id, event_type, aggregate_type, aggregate_id, payload, occurred_at)
+                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
                         ON CONFLICT DO NOTHING
                         """,
                         (
-                            event.event_id,
+                            record_id,
+                            f"Allocation-{aggregate_id}",
+                            next_version,
+                            event_id,
                             event.__class__.__name__,
-                            "Unknown", # Aggregate type is not always accessible on base DomainEvent
-                            getattr(event, 'causation_id', getattr(event, 'correlation_id', 'unknown')),
-                            1,
-                            json.dumps(event.__dict__, default=str),
+                            "Allocation",
+                            aggregate_id,
+                            json.dumps(event.to_dict() if hasattr(event, 'to_dict') else event.__dict__, default=str),
                             datetime.utcnow()
                         )
                     )
