@@ -1,0 +1,299 @@
+tests/unit/allocation/test_proportional_weighting_strategy.py
+  8489a70462f73142 1-142
+alembic/versions/75_outbox_events.py
+  8489a70462f73142 1-44
+tests/unit/review/test_aggregates.py
+  8489a70462f73142 1-300
+tests/unit/allocation/test_portfolio_context_builder.py
+  8489a70462f73142 1-91
+src/karsa/review/infrastructure/postgres_review_record_repository.py
+  8489a70462f73142 1-112
+src/karsa/allocation/events/__init__.py
+  8489a70462f73142 1-123
+tests/integration/review/test_closure_audit.py
+  8489a70462f73142 1-355
+src/karsa/review/domain/events/review_events.py
+  8489a70462f73142 1-273
+src/karsa/allocation/domain/events.py
+  8489a70462f73142 157-321
+src/karsa/allocation/application/service/proposal_projection_rebuilder.py
+  8489a70462f73142 1-99
+src/karsa/review/application/execute_review_service.py
+  8489a70462f73142 1-277
+karsa-web/src/config/navigation.ts
+  8489a70462f73142 18
+src/karsa/review/infrastructure/postgres_capability_score_adjustment_repository.py
+  8489a70462f73142 1-103
+tests/unit/review/test_value_objects.py
+  8489a70462f73142 1-160
+tests/integration/review/test_event_contracts.py
+  8489a70462f73142 1-291
+src/karsa/allocation/domain/repository/allocation_proposal_repository.py
+  8489a70462f73142 1-30
+src/karsa/review/application/dto.py
+  8489a70462f73142 1-99
+tests/integration/cio/test_cio_decision_repository_extensions.py
+  8489a70462f73142 1-82
+src/karsa/cio/models.py
+  8489a70462f73142 1,6,33-36
+src/karsa/review/infrastructure/postgres_review_coverage_projection_repository.py
+  8489a70462f73142 1-236
+karsa-web/src/hooks/allocation/index.ts
+  8489a70462f73142 1-63
+src/karsa/review/domain/aggregates/__init__.py
+  8489a70462f73142 1-5
+src/karsa/review/domain/events/__init__.py
+  8489a70462f73142 1-9
+src/karsa/review/infrastructure/postgres_attribution_entry_repository.py
+  8489a70462f73142 1-124
+tests/integration/review/test_outbox_repository.py
+  8489a70462f73142 1-140
+tests/integration/events/test_allocation_event_publishing.py
+  8489a70462f73142 1-292
+karsa-web/src/app/proposals/page.tsx
+  8489a70462f73142 1-140
+src/karsa/allocation/domain/repository/proposal_status_projection_repository.py
+  8489a70462f73142 1-46
+src/karsa/review/infrastructure/postgres_outbox_repository.py
+  8489a70462f73142 1-131
+src/karsa/allocation/domain/model/proposal_status_projection.py
+  8489a70462f73142 1-25
+src/karsa/cio/api.py
+  8489a70462f73142 46-89,257-400
+src/karsa/allocation/application/service/context_hash_service.py
+  8489a70462f73142 1-48
+src/karsa/allocation/infrastructure/persistence/postgres_allocation_proposal_repository.py
+  8489a70462f73142 1-128
+tests/unit/review/test_application_services.py
+  8489a70462f73142 1-635
+tests/integration/events/test_allocation_event_registration.py
+  8489a70462f73142 1-137
+src/karsa/review/infrastructure/postgres_review_cycle_repository.py
+  8489a70462f73142 1-140
+src/karsa/allocation/application/service/weighting_strategy.py
+  8489a70462f73142 1-29
+src/karsa/allocation/application/service/allocation_recommendation_service.py
+  8489a70462f73142 1-176
+tests/integration/review/test_concurrent_service.py
+  8489a70462f73142 1-230
+alembic/versions/72_review_records.py
+  8489a70462f73142 1-72
+src/karsa/allocation/application/service/proportional_weighting_strategy.py
+  8489a70462f73142 1-114
+src/karsa/review/domain/repositories/review_record_repository.py
+  8489a70462f73142 1-59
+src/karsa/review/domain/aggregates/outbox_event.py
+  8489a70462f73142 1-66
+src/karsa/memory/infrastructure/event/postgres_event_bus.py
+  8489a70462f73142 18-22,24-27,30-31,35-38,40-42
+alembic/versions/70_sprint06_indexes.py
+  8489a70462f73142 1-26
+tests/unit/cio/test_cio_decision_extensions.py
+  8489a70462f73142 1-127
+karsa-web/src/features/allocation/types/viewmodels.ts
+  8489a70462f73142 1-52
+alembic/versions/68_proposal_status_projection.py
+  8489a70462f73142 1-34
+karsa-web/src/app/proposals/[id]/page.tsx
+  8489a70462f73142 1-56
+src/karsa/review/application/rebuild_projection_service.py
+  8489a70462f73142 1-74
+tests/integration/api/test_allocation_proposal_api.py
+  8489a70462f73142 1-321
+tests/unit/allocation/test_allocation_proposal.py
+  8489a70462f73142 1-146
+tests/integration/api/test_cio_decision_api.py
+  8489a70462f73142 1-431
+src/karsa/review/domain/aggregates/attribution_entry.py
+  8489a70462f73142 1-72
+tests/unit/review/test_events.py
+  8489a70462f73142 1-187
+tests/integration/events/test_allocation_event_idempotency.py
+  8489a70462f73142 1-183
+karsa-web/src/features/allocation/utils/mappers.ts
+  8489a70462f73142 1-101
+src/karsa/review/domain/repositories/review_cycle_repository.py
+  8489a70462f73142 1-74
+src/karsa/review/application/__init__.py
+  8489a70462f73142 1-6
+karsa-web/src/app/proposals/[id]/components/ProposalDetailView.tsx
+  8489a70462f73142 1-258
+tests/integration/review/test_concurrency.py
+  8489a70462f73142 1-112
+tests/integration/review/test_runtime_verification.py
+  8489a70462f73142 1-534
+src/karsa/review/domain/aggregates/review_record.py
+  8489a70462f73142 1-56
+src/karsa/review/domain/value_objects/actual_outcome_snapshot.py
+  8489a70462f73142 1-41
+src/karsa/allocation/api/routes.py
+  8489a70462f73142 1-112
+src/karsa/review/domain/value_objects/review_template.py
+  8489a70462f73142 1-47
+src/karsa/allocation/domain/model/allocation_proposal.py
+  8489a70462f73142 1-65
+alembic/versions/76_capability_score_projection.py
+  8489a70462f73142 1-36
+tests/unit/allocation/test_value_objects.py
+  8489a70462f73142 1-236
+src/karsa/projection_worker.py
+  8489a70462f73142 18,23,35-40,42,47,56,68,82-93,101
+src/karsa/review/domain/repositories/review_cycle_status_projection_repository.py
+  8489a70462f73142 1-58
+src/karsa/review/domain/value_objects/variance_analysis.py
+  8489a70462f73142 1-63
+tests/integration/projections/test_projection_idempotency.py
+  8489a70462f73142 1-196
+src/karsa/review/domain/repositories/__init__.py
+  8489a70462f73142 1-20
+src/karsa/review/domain/repositories/capability_score_adjustment_repository.py
+  8489a70462f73142 1-62
+src/karsa/review/infrastructure/postgres_capability_score_projection_repository.py
+  8489a70462f73142 1-98
+src/karsa/allocation/domain/model/value_objects.py
+  8489a70462f73142 1-131
+src/karsa/review/domain/value_objects/schedule_policy.py
+  8489a70462f73142 1-43
+alembic/versions/74_capability_score_adjustments.py
+  8489a70462f73142 1-69
+tests/integration/projections/test_projection_replay.py
+  8489a70462f73142 1-253
+alembic/versions/78_review_cycle_status_projection.py
+  8489a70462f73142 1-37
+tests/integration/review/test_postgres_repositories.py
+  8489a70462f73142 1-330
+karsa-web/src/app/proposals/[id]/components/ApprovalForm.tsx
+  8489a70462f73142 1-370
+src/karsa/review/infrastructure/jsonb_serializers.py
+  8489a70462f73142 1-218
+src/karsa/allocation/infrastructure/persistence/mappers.py
+  8489a70462f73142 1-99
+src/karsa/cio/events.py
+  8489a70462f73142 3,42-103
+src/karsa/cio/services.py
+  8489a70462f73142 14-19,22,31-33,41-42,85,153-445,447-535
+karsa-web/src/types/allocation/decision.ts
+  8489a70462f73142 1-68
+tests/unit/allocation/test_context_hash_service.py
+  8489a70462f73142 1-67
+alembic/versions/71_review_cycles.py
+  8489a70462f73142 1-71
+docs/audit/SPRINT05_REMEDIATION_PLAN.md
+  8489a70462f73142 1-542
+src/karsa/allocation/api/dtos.py
+  8489a70462f73142 1-172
+tests/unit/review/test_repositories.py
+  8489a70462f73142 1-227
+src/karsa/review/application/schedule_review_service.py
+  8489a70462f73142 1-199
+tests/integration/events/test_allocation_event_serialization.py
+  8489a70462f73142 1-290
+src/karsa/review/application/apply_capability_adjustment_service.py
+  8489a70462f73142 1-107
+tests/integration/review/test_wave3_verification.py
+  8489a70462f73142 1-479
+alembic/versions/67_allocation_proposals.py
+  8489a70462f73142 1-59
+tests/integration/projections/test_projection_worker_integration.py
+  8489a70462f73142 1-233
+src/karsa/review/domain/value_objects/decision_snapshot.py
+  8489a70462f73142 1-64
+src/karsa/allocation/api/mappers.py
+  8489a70462f73142 1-133
+karsa-web/src/types/allocation/proposal.ts
+  8489a70462f73142 1-80
+tests/integration/review/test_jsonb_roundtrip.py
+  8489a70462f73142 1-142
+tests/integration/review/test_rebuild_verification.py
+  8489a70462f73142 1-480
+src/karsa/review/domain/value_objects/__init__.py
+  8489a70462f73142 1-6
+src/karsa/review/domain/repositories/outbox_repository.py
+  8489a70462f73142 1-100
+tests/integration/allocation/test_proposal_status_projection_repository.py
+  8489a70462f73142 1-220
+alembic/versions/79_review_engine_indexes.py
+  8489a70462f73142 1-26
+src/karsa/review/infrastructure/postgres_review_cycle_status_projection_repository.py
+  8489a70462f73142 1-206
+tests/unit/cio/test_expected_outcome.py
+  8489a70462f73142 1-112
+tests/unit/allocation/test_allocation_recommendation_service.py
+  8489a70462f73142 1-170
+src/karsa/review/domain/aggregates/capability_score_adjustment.py
+  8489a70462f73142 1-64
+tests/integration/projections/test_proposal_status_projection_service.py
+  8489a70462f73142 1-281
+tests/unit/cio/test_proposal_decision_workflow.py
+  8489a70462f73142 1-475
+src/karsa/review/domain/repositories/capability_score_projection_repository.py
+  8489a70462f73142 1-82
+src/karsa/allocation/application/service/portfolio_context_builder.py
+  8489a70462f73142 1-67
+src/karsa/cio/repositories.py
+  8489a70462f73142 33-41,83-88,162-185
+src/karsa/app.py
+  8489a70462f73142 42-47,88-92,114
+src/karsa/allocation/application/service/proposal_status_projection_service.py
+  8489a70462f73142 1-112
+src/karsa/bootstrap.py
+  8489a70462f73142 91-93,130,210,217,221-240
+karsa-web/src/api/endpoints/allocation.ts
+  8489a70462f73142 1-57
+alembic/versions/73_attribution_entries.py
+  8489a70462f73142 1-70
+alembic/versions/69_cio_decisions_extensions.py
+  8489a70462f73142 1-28
+src/karsa/review/application/publish_outbox_service.py
+  8489a70462f73142 1-70
+tests/integration/allocation/test_allocation_proposal_repository.py
+  8489a70462f73142 1-160
+alembic/versions/77_review_coverage_projection.py
+  8489a70462f73142 1-46
+src/karsa/firm_intelligence/projections.py
+  8489a70462f73142 12,14,32,43-44,46-52,56-59,61-84,86-87,89-94
+src/karsa/allocation/infrastructure/persistence/postgres_proposal_status_projection_repository.py
+  8489a70462f73142 1-119
+src/karsa/firm_intelligence/repository/data_mart_repo.py
+  8489a70462f73142 16,18,32
+tests/integration/review/test_projections.py
+  8489a70462f73142 1-261
+tests/integration/allocation/test_mappers.py
+  8489a70462f73142 1-120
+alembic/versions/80_review_cycles_decision_id_unique.py
+  8489a70462f73142 1-28
+tests/unit/cio/test_cio_events.py
+  8489a70462f73142 1-220
+tests/unit/cio/test_review_horizon.py
+  8489a70462f73142 1-39
+src/karsa/review/domain/repositories/attribution_entry_repository.py
+  8489a70462f73142 1-77
+src/karsa/review/domain/value_objects/review_verdict.py
+  8489a70462f73142 1-31
+src/karsa/review/infrastructure/__init__.py
+  8489a70462f73142 1-9
+src/karsa/review/domain/aggregates/review_cycle.py
+  8489a70462f73142 1-57
+src/karsa/review/domain/repositories/review_coverage_projection_repository.py
+  8489a70462f73142 1-124
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.23",
+  "base_commit_sha": "0b3badcf485602095f8b8ede069b0b1ba7878074",
+  "prompts": {
+    "8489a70462f73142": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a4322521-5c92-4680-86d3-d38c5f09bb7d",
+        "model": "mimo-v2.5-pro"
+      },
+      "human_author": "skeithnight <skeithnight@gmail.com>",
+      "messages": [],
+      "total_additions": 19099,
+      "total_deletions": 274,
+      "accepted_lines": 18908,
+      "overriden_lines": 0
+    }
+  }
+}
