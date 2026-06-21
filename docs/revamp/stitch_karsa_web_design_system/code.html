@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>KARSA - CIO Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;family=JetBrains+Mono:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-highest": "#353437",
+                        "on-tertiary-fixed": "#2a1700",
+                        "on-primary-fixed-variant": "#454748",
+                        "on-background": "#e5e1e4",
+                        "primary-fixed": "#e1e3e4",
+                        "on-primary": "#2e3132",
+                        "on-secondary": "#003824",
+                        "secondary": "#4edea3",
+                        "error-container": "#93000a",
+                        "on-surface-variant": "#c4c7c8",
+                        "on-tertiary-container": "#8d5900",
+                        "secondary-fixed": "#6ffbbe",
+                        "tertiary": "#ffffff",
+                        "outline-variant": "#444749",
+                        "on-error-container": "#ffdad6",
+                        "inverse-primary": "#5c5f60",
+                        "primary": "#ffffff",
+                        "on-surface": "#e5e1e4",
+                        "secondary-fixed-dim": "#4edea3",
+                        "surface": "#131315",
+                        "on-secondary-fixed": "#002113",
+                        "surface-container": "#201f21",
+                        "inverse-surface": "#e5e1e4",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "on-secondary-fixed-variant": "#005236",
+                        "surface-dim": "#131315",
+                        "primary-fixed-dim": "#c5c7c8",
+                        "inverse-on-surface": "#303032",
+                        "error": "#ffb4ab",
+                        "surface-container-lowest": "#0e0e10",
+                        "tertiary-fixed": "#ffddb8",
+                        "surface-tint": "#c5c7c8",
+                        "on-tertiary": "#472a00",
+                        "on-primary-fixed": "#191c1d",
+                        "outline": "#8e9193",
+                        "background": "#131315",
+                        "surface-container-high": "#2a2a2c",
+                        "on-primary-container": "#626566",
+                        "surface-bright": "#39393b",
+                        "on-secondary-container": "#00311f",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "on-error": "#690005",
+                        "secondary-container": "#00a572",
+                        "primary-container": "#e1e3e4",
+                        "surface-container-low": "#1b1b1d",
+                        "surface-variant": "#353437",
+                        "tertiary-container": "#ffddb8"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sm": "8px",
+                        "xl": "32px",
+                        "xs": "4px",
+                        "md": "16px",
+                        "margin-mobile": "16px",
+                        "gutter": "24px",
+                        "lg": "24px",
+                        "unit": "4px",
+                        "margin-desktop": "24px"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["Hanken Grotesk"],
+                        "body-base": ["Hanken Grotesk"],
+                        "stat-lg": ["JetBrains Mono"],
+                        "label-caps": ["JetBrains Mono"],
+                        "headline-md": ["Hanken Grotesk"],
+                        "display-lg": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "700" }],
+                        "body-base": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "stat-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "label-caps": ["11px", { "lineHeight": "14px", "letterSpacing": "0.05em", "fontWeight": "700" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "display-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { background-color: #121214; color: #e5e1e4; }
+        .glass-panel {
+            background-color: #1A1A1E;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .status-glow-green { box-shadow: 0 0 4px #4edea3; }
+        .status-glow-amber { box-shadow: 0 0 4px #ffb95f; }
+        .zebra-row:nth-child(even) { background-color: rgba(255, 255, 255, 0.02); }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden bg-background text-on-background font-body-base antialiased">
+<!-- SideNavBar -->
+<nav class="flex flex-col h-screen sticky left-0 top-0 py-md bg-surface-container-low dark:bg-surface-container-low border-r border-outline-variant w-64 shrink-0">
+<div class="px-lg mb-xl">
+<h1 class="font-headline-md text-headline-md text-primary tracking-tight">KARSA</h1>
+<div class="mt-lg flex items-center gap-sm">
+<img alt="CIO Profile" class="w-10 h-10 rounded-full object-cover border border-outline-variant" data-alt="A small, professional avatar headshot of a Chief Investment Officer wearing a dark suit against a minimalist dark grey background, studio lighting. The aesthetic is corporate and premium." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJTbtDBtlwnKhf8xdc9FxuNz0j9tvXkNaBKxjpNZTn528M7GssLK6dWfhEjzQL2Xif4Sw39yT4ZaYAxG12eTcEmphIC-L7tYleFw9QCaPPW9EkPHFExox-oTiqqYQs2O8A3-sUlQG3JHZRTepixq4NfDMr_XzAoAb2jCsg9T0BqUvkmj4F8QXLbzRL09aobdcf6GBRKbeJz_osiaG1CLdx4Blr4lLSS62yOYXaVZPjU5lNoeftE_KgE_Qma9QlH-MargHePxqqlDyB"/>
+<div>
+<div class="font-label-caps text-label-caps text-on-surface">CIO Dashboard</div>
+<div class="text-xs text-on-surface-variant font-medium mt-xs">Global Equities</div>
+</div>
+</div>
+</div>
+<div class="flex-1 flex flex-col gap-xs px-md">
+<a class="flex items-center gap-md px-sm py-sm rounded bg-surface-container-high border-r-2 border-secondary text-secondary hover:bg-surface-container-highest transition-all" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="pie_chart">pie_chart</span>
+<span class="font-label-caps text-label-caps tracking-widest">Portfolio</span>
+</a>
+<a class="flex items-center gap-md px-sm py-sm rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-all" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="warning">warning</span>
+<span class="font-label-caps text-label-caps tracking-widest">Risk</span>
+</a>
+<a class="flex items-center gap-md px-sm py-sm rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-all" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="gavel">gavel</span>
+<span class="font-label-caps text-label-caps tracking-widest">Decisions</span>
+</a>
+<a class="flex items-center gap-md px-sm py-sm rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-all" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="analytics">analytics</span>
+<span class="font-label-caps text-label-caps tracking-widest">Analysis</span>
+</a>
+</div>
+<div class="mt-auto px-md flex flex-col gap-xs">
+<a class="flex items-center gap-md px-sm py-sm rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-all" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="help">help</span>
+<span class="font-label-caps text-label-caps tracking-widest">Support</span>
+</a>
+<a class="flex items-center gap-md px-sm py-sm rounded text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-all" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="logout">logout</span>
+<span class="font-label-caps text-label-caps tracking-widest">Sign Out</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-1 h-screen overflow-y-auto px-margin-desktop py-lg grid grid-cols-12 gap-gutter content-start">
+<!-- Portfolio Status Row (Top Section) -->
+<section class="col-span-12 grid grid-cols-6 gap-sm mb-sm">
+<div class="glass-panel p-md rounded flex flex-col justify-between">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">NAV</span>
+<span class="font-stat-lg text-stat-lg text-primary mt-xs">Rp 2.45T</span>
+</div>
+<div class="glass-panel p-md rounded flex flex-col justify-between">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Today's Return</span>
+<span class="font-stat-lg text-stat-lg text-secondary mt-xs">+1.24%</span>
+</div>
+<div class="glass-panel p-md rounded flex flex-col justify-between">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">YTD Return</span>
+<span class="font-stat-lg text-stat-lg text-secondary mt-xs">+18.5%</span>
+</div>
+<div class="glass-panel p-md rounded flex flex-col justify-between">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Sharpe Ratio</span>
+<span class="font-stat-lg text-stat-lg text-primary mt-xs">1.85</span>
+</div>
+<div class="glass-panel p-md rounded flex flex-col justify-between">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Max Drawdown</span>
+<span class="font-stat-lg text-stat-lg text-error mt-xs">-4.2%</span>
+</div>
+<div class="glass-panel p-md rounded flex flex-col justify-between">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Active Holdings</span>
+<span class="font-stat-lg text-stat-lg text-primary mt-xs">12</span>
+</div>
+</section>
+<!-- Left Column (Wide) -->
+<div class="col-span-8 flex flex-col gap-gutter">
+<!-- Today's Investment Decisions -->
+<section class="glass-panel rounded flex flex-col p-md">
+<div class="flex justify-between items-center mb-md pb-sm border-b border-outline-variant/30">
+<h2 class="font-headline-md text-headline-md text-primary">Today's Investment Decisions</h2>
+</div>
+<div class="grid grid-cols-3 gap-sm">
+<!-- MEDC Card -->
+<div class="bg-surface-container p-md rounded border border-outline-variant/50 hover:bg-surface-container-high transition-colors cursor-pointer">
+<div class="flex justify-between items-start mb-sm">
+<span class="font-stat-lg text-stat-lg text-primary">MEDC</span>
+<span class="px-2 py-1 rounded bg-secondary/10 text-secondary border border-secondary/20 font-label-caps text-label-caps">Approved</span>
+</div>
+<div class="text-sm text-on-surface mb-md">Increase weight to 12% (High Conviction)</div>
+<div class="flex justify-between items-end">
+<div class="flex flex-col">
+<span class="text-xs text-on-surface-variant mb-1">Target Price</span>
+<span class="font-mono text-primary">Rp 1,500</span>
+</div>
+<button class="bg-primary text-on-primary px-3 py-1 rounded text-sm font-medium hover:bg-primary-fixed transition-colors active:scale-95">Execute</button>
+</div>
+</div>
+<!-- ASII Card -->
+<div class="bg-surface-container p-md rounded border border-outline-variant/50 hover:bg-surface-container-high transition-colors cursor-pointer">
+<div class="flex justify-between items-start mb-sm">
+<span class="font-stat-lg text-stat-lg text-primary">ASII</span>
+<span class="px-2 py-1 rounded bg-surface-bright text-on-surface border border-outline-variant font-label-caps text-label-caps">Pending</span>
+</div>
+<div class="text-sm text-on-surface mb-md">Hold current position (Medium Conviction)</div>
+<div class="flex justify-between items-end">
+<div class="flex flex-col">
+<span class="text-xs text-on-surface-variant mb-1">Target Price</span>
+<span class="font-mono text-primary">Rp 5,800</span>
+</div>
+<button class="border border-outline-variant text-primary px-3 py-1 rounded text-sm font-medium hover:bg-surface-bright transition-colors active:scale-95">Review</button>
+</div>
+</div>
+<!-- BKSL Card -->
+<div class="bg-surface-container p-md rounded border border-outline-variant/50 hover:bg-surface-container-high transition-colors cursor-pointer">
+<div class="flex justify-between items-start mb-sm">
+<span class="font-stat-lg text-stat-lg text-primary">BKSL</span>
+<span class="px-2 py-1 rounded bg-surface-bright text-on-surface border border-outline-variant font-label-caps text-label-caps">Review</span>
+</div>
+<div class="text-sm text-on-surface mb-md">Exit strategy triggered (Low Conviction)</div>
+<div class="flex justify-between items-end">
+<div class="flex flex-col">
+<span class="text-xs text-on-surface-variant mb-1">Current Price</span>
+<span class="font-mono text-error">Rp 52</span>
+</div>
+<button class="border border-outline-variant text-primary px-3 py-1 rounded text-sm font-medium hover:bg-surface-bright transition-colors active:scale-95">Details</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Holdings Table -->
+<section class="glass-panel rounded flex flex-col p-md flex-1">
+<div class="flex justify-between items-center mb-md pb-sm border-b border-outline-variant/30">
+<h2 class="font-headline-md text-headline-md text-primary">Holdings (12 Stocks)</h2>
+<button class="flex items-center gap-xs text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="filter_list">filter_list</span>
+<span class="text-sm font-medium">Filter</span>
+</button>
+</div>
+<div class="w-full overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-[#1E1E22] border-b border-outline-variant/50">
+<th class="p-2 font-label-caps text-label-caps text-on-surface-variant tracking-wider uppercase">Ticker</th>
+<th class="p-2 font-label-caps text-label-caps text-on-surface-variant tracking-wider uppercase">Status</th>
+<th class="p-2 font-label-caps text-label-caps text-on-surface-variant tracking-wider uppercase text-right">Price</th>
+<th class="p-2 font-label-caps text-label-caps text-on-surface-variant tracking-wider uppercase text-right">Entry</th>
+<th class="p-2 font-label-caps text-label-caps text-on-surface-variant tracking-wider uppercase text-right">Target</th>
+<th class="p-2 font-label-caps text-label-caps text-on-surface-variant tracking-wider uppercase text-center">Conviction</th>
+<th class="p-2 font-label-caps text-label-caps text-on-surface-variant tracking-wider uppercase text-right">Size</th>
+</tr>
+</thead>
+<tbody class="font-mono text-sm">
+<tr class="zebra-row border-b border-outline-variant/20 hover:bg-surface-container-high transition-colors">
+<td class="p-2 font-semibold text-primary">MEDC</td>
+<td class="p-2"><div class="w-2 h-2 rounded-full bg-secondary status-glow-green"></div></td>
+<td class="p-2 text-right text-secondary">Rp 1,350</td>
+<td class="p-2 text-right text-on-surface-variant">Rp 1,100</td>
+<td class="p-2 text-right text-on-surface">Rp 1,500</td>
+<td class="p-2 text-center text-primary">High</td>
+<td class="p-2 text-right text-primary">12%</td>
+</tr>
+<tr class="zebra-row border-b border-outline-variant/20 hover:bg-surface-container-high transition-colors">
+<td class="p-2 font-semibold text-primary">ASII</td>
+<td class="p-2"><div class="w-2 h-2 rounded-full bg-secondary status-glow-green"></div></td>
+<td class="p-2 text-right text-secondary">Rp 5,400</td>
+<td class="p-2 text-right text-on-surface-variant">Rp 5,200</td>
+<td class="p-2 text-right text-on-surface">Rp 5,800</td>
+<td class="p-2 text-center text-on-surface">Med</td>
+<td class="p-2 text-right text-primary">8%</td>
+</tr>
+<tr class="zebra-row border-b border-outline-variant/20 hover:bg-surface-container-high transition-colors">
+<td class="p-2 font-semibold text-primary">BKSL</td>
+<td class="p-2"><div class="w-2 h-2 rounded-full bg-tertiary-fixed-dim status-glow-amber"></div></td>
+<td class="p-2 text-right text-error">Rp 52</td>
+<td class="p-2 text-right text-on-surface-variant">Rp 60</td>
+<td class="p-2 text-right text-on-surface">Exit</td>
+<td class="p-2 text-center text-on-surface-variant">Low</td>
+<td class="p-2 text-right text-primary">2%</td>
+</tr>
+<!-- More rows would follow the same pattern to total 12, truncated for brevity but maintaining structural integrity of the request -->
+<tr class="zebra-row border-b border-outline-variant/20 hover:bg-surface-container-high transition-colors">
+<td class="p-2 font-semibold text-primary">BBCA</td>
+<td class="p-2"><div class="w-2 h-2 rounded-full bg-secondary status-glow-green"></div></td>
+<td class="p-2 text-right text-secondary">Rp 9,800</td>
+<td class="p-2 text-right text-on-surface-variant">Rp 9,200</td>
+<td class="p-2 text-right text-on-surface">Rp 10,500</td>
+<td class="p-2 text-center text-primary">High</td>
+<td class="p-2 text-right text-primary">15%</td>
+</tr>
+<tr class="zebra-row border-b border-outline-variant/20 hover:bg-surface-container-high transition-colors">
+<td class="p-2 font-semibold text-primary">TLKM</td>
+<td class="p-2"><div class="w-2 h-2 rounded-full bg-secondary status-glow-green"></div></td>
+<td class="p-2 text-right text-secondary">Rp 3,100</td>
+<td class="p-2 text-right text-on-surface-variant">Rp 2,800</td>
+<td class="p-2 text-right text-on-surface">Rp 3,500</td>
+<td class="p-2 text-center text-on-surface">Med</td>
+<td class="p-2 text-right text-primary">10%</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</div>
+<!-- Right Column (Narrow) -->
+<div class="col-span-4 flex flex-col gap-gutter">
+<!-- Risk Status -->
+<section class="glass-panel p-md rounded flex flex-col">
+<h3 class="font-headline-md text-headline-md text-primary mb-md flex items-center gap-2">
+                    Risk Status
+                    <span class="px-2 py-0.5 rounded-full bg-secondary/10 text-secondary text-xs border border-secondary/20">All Green</span>
+</h3>
+<div class="flex flex-col gap-sm">
+<div class="flex items-center justify-between p-sm rounded bg-surface-container-lowest border border-outline-variant/20">
+<span class="text-sm text-on-surface">Market Risk</span>
+<div class="w-3 h-3 rounded-full bg-secondary status-glow-green"></div>
+</div>
+<div class="flex items-center justify-between p-sm rounded bg-surface-container-lowest border border-outline-variant/20">
+<span class="text-sm text-on-surface">Liquidity Risk</span>
+<div class="w-3 h-3 rounded-full bg-secondary status-glow-green"></div>
+</div>
+<div class="flex items-center justify-between p-sm rounded bg-surface-container-lowest border border-outline-variant/20">
+<span class="text-sm text-on-surface">Credit Risk</span>
+<div class="w-3 h-3 rounded-full bg-secondary status-glow-green"></div>
+</div>
+</div>
+</section>
+<!-- Sector Allocation -->
+<section class="glass-panel p-md rounded flex flex-col flex-1">
+<h3 class="font-headline-md text-headline-md text-primary mb-md border-b border-outline-variant/30 pb-sm">Sector Allocation</h3>
+<div class="flex flex-col gap-md mb-xl">
+<div>
+<div class="flex justify-between text-xs mb-1 font-mono">
+<span class="text-on-surface">Financials</span>
+<span class="text-primary">35%</span>
+</div>
+<div class="w-full bg-surface-container-highest rounded-full h-1.5">
+<div class="bg-primary h-1.5 rounded-full" style="width: 35%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-xs mb-1 font-mono">
+<span class="text-on-surface">Energy</span>
+<span class="text-primary">25%</span>
+</div>
+<div class="w-full bg-surface-container-highest rounded-full h-1.5">
+<div class="bg-primary h-1.5 rounded-full" style="width: 25%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-xs mb-1 font-mono">
+<span class="text-on-surface">Consumer</span>
+<span class="text-primary">20%</span>
+</div>
+<div class="w-full bg-surface-container-highest rounded-full h-1.5">
+<div class="bg-primary h-1.5 rounded-full" style="width: 20%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-xs mb-1 font-mono">
+<span class="text-on-surface">Infra</span>
+<span class="text-primary">20%</span>
+</div>
+<div class="w-full bg-surface-container-highest rounded-full h-1.5">
+<div class="bg-primary h-1.5 rounded-full" style="width: 20%"></div>
+</div>
+</div>
+</div>
+<!-- YTD Attribution -->
+<h3 class="font-headline-md text-headline-md text-primary mb-md border-b border-outline-variant/30 pb-sm">YTD Attribution</h3>
+<div class="flex flex-col gap-xs font-mono text-sm">
+<div class="flex justify-between items-center py-1 border-b border-outline-variant/10">
+<span class="text-on-surface-variant">Stock Selection</span>
+<span class="text-secondary">+12.5%</span>
+</div>
+<div class="flex justify-between items-center py-1 border-b border-outline-variant/10">
+<span class="text-on-surface-variant">Sector Allocation</span>
+<span class="text-secondary">+4.2%</span>
+</div>
+<div class="flex justify-between items-center py-1 border-b border-outline-variant/10">
+<span class="text-on-surface-variant">Market Timing</span>
+<span class="text-secondary">+1.8%</span>
+</div>
+</div>
+</section>
+</div>
+</main>
+</body></html>

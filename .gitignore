@@ -72,3 +72,4 @@ Thumbs.db
 .env.*
 *.pem
 *.key
+graphify-out/cost.json

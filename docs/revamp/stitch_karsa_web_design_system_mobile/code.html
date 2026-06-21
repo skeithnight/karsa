@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>KARSA CIO Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;family=JetBrains+Mono:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary": "#2e3132",
+                        "background": "#131315",
+                        "secondary-fixed": "#6ffbbe",
+                        "outline": "#8e9193",
+                        "tertiary-container": "#ffddb8",
+                        "surface-container-high": "#2a2a2c",
+                        "on-tertiary-container": "#8d5900",
+                        "primary": "#ffffff",
+                        "surface-dim": "#131315",
+                        "on-error": "#690005",
+                        "inverse-surface": "#e5e1e4",
+                        "on-secondary-fixed": "#002113",
+                        "surface": "#131315",
+                        "on-primary-fixed-variant": "#454748",
+                        "secondary-fixed-dim": "#4edea3",
+                        "error": "#ffb4ab",
+                        "on-secondary": "#003824",
+                        "surface-container-low": "#1b1b1d",
+                        "outline-variant": "#444749",
+                        "on-secondary-fixed-variant": "#005236",
+                        "surface-container-lowest": "#0e0e10",
+                        "primary-container": "#e1e3e4",
+                        "inverse-on-surface": "#303032",
+                        "surface-variant": "#353437",
+                        "surface-container": "#201f21",
+                        "inverse-primary": "#5c5f60",
+                        "surface-container-highest": "#353437",
+                        "on-surface": "#e5e1e4",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "on-surface-variant": "#c4c7c8",
+                        "primary-fixed": "#e1e3e4",
+                        "on-error-container": "#ffdad6",
+                        "tertiary-fixed": "#ffddb8",
+                        "surface-tint": "#c5c7c8",
+                        "on-tertiary-fixed": "#2a1700",
+                        "on-background": "#e5e1e4",
+                        "error-container": "#93000a",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "secondary-container": "#00a572",
+                        "tertiary": "#ffffff",
+                        "on-secondary-container": "#00311f",
+                        "on-primary-container": "#626566",
+                        "primary-fixed-dim": "#c5c7c8",
+                        "secondary": "#4edea3",
+                        "surface-bright": "#39393b",
+                        "on-primary-fixed": "#191c1d",
+                        "on-tertiary": "#472a00"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sm": "8px",
+                        "xs": "4px",
+                        "xl": "32px",
+                        "md": "16px",
+                        "lg": "24px",
+                        "unit": "4px",
+                        "margin-mobile": "16px",
+                        "margin-desktop": "24px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "stat-lg": ["JetBrains Mono"],
+                        "headline-md": ["Hanken Grotesk"],
+                        "headline-lg-mobile": ["Hanken Grotesk"],
+                        "display-lg": ["Hanken Grotesk"],
+                        "body-base": ["Hanken Grotesk"],
+                        "label-caps": ["JetBrains Mono"]
+                    },
+                    "fontSize": {
+                        "stat-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "700" }],
+                        "display-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-base": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "label-caps": ["11px", { "lineHeight": "14px", "letterSpacing": "0.05em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-panel {
+            background-color: theme('colors.surface-container-low');
+            border: 1px solid theme('colors.surface-variant');
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-base min-h-screen pt-16 pb-24 md:pb-8">
+<!-- TopAppBar -->
+<header class="bg-surface border-b border-outline-variant fixed top-0 w-full flex justify-between items-center px-margin-mobile h-16 z-50">
+<button class="text-on-surface-variant hover:bg-surface-variant rounded-full p-2 transition-transform duration-150 active:scale-95">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary">KARSA CIO Dashboard</h1>
+<button class="text-on-surface-variant hover:bg-surface-variant rounded-full p-2 transition-transform duration-150 active:scale-95">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+</header>
+<main class="px-margin-mobile md:px-margin-desktop py-lg flex flex-col gap-xl max-w-7xl mx-auto">
+<!-- Updated Timestamp -->
+<div class="flex justify-end -mt-sm mb-xs">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Updated 2026-06-21 14:35 WIB</span>
+</div>
+<!-- Portfolio Status -->
+<section class="glass-panel rounded-xl p-md flex flex-col gap-lg">
+<h2 class="font-headline-md text-headline-md text-primary">Portfolio Status</h2>
+<div class="grid grid-cols-2 md:grid-cols-3 gap-y-lg gap-x-md">
+<div class="flex flex-col gap-xs">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">NAV</span>
+<span class="font-stat-lg text-stat-lg text-primary">IDR 10.2B</span>
+</div>
+<div class="flex flex-col gap-xs">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Today</span>
+<span class="font-stat-lg text-stat-lg text-secondary">+0.86%</span>
+</div>
+<div class="flex flex-col gap-xs">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">YTD Return</span>
+<span class="font-stat-lg text-stat-lg text-secondary">+15.31%</span>
+</div>
+<div class="flex flex-col gap-xs">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Sharpe (YTD)</span>
+<span class="font-stat-lg text-stat-lg text-primary">1.82</span>
+</div>
+<div class="flex flex-col gap-xs">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Max Drawdown</span>
+<span class="font-stat-lg text-stat-lg text-primary">-8.2%</span>
+</div>
+<div class="flex flex-col gap-xs">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Holdings</span>
+<span class="font-stat-lg text-stat-lg text-primary">12</span>
+</div>
+</div>
+</section>
+<!-- Risk Status -->
+<section class="glass-panel rounded-xl p-md flex flex-col gap-md">
+<div class="flex items-center gap-xs">
+<h2 class="font-headline-md text-headline-md text-primary">Risk Status (All Green</h2>
+<span class="material-symbols-outlined text-secondary text-[20px]" data-icon="check_box" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check_box</span>
+<h2 class="font-headline-md text-headline-md text-primary">)</h2>
+</div>
+<div class="grid grid-cols-2 gap-md pt-sm">
+<div class="flex items-start gap-sm">
+<div class="w-3 h-3 rounded-full bg-secondary mt-1 shadow-[0_0_8px_theme(colors.secondary)]"></div>
+<div class="flex flex-col">
+<span class="font-body-base text-body-base text-primary">Volatility</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant">18% (limit 22%)</span>
+</div>
+</div>
+<div class="flex items-start gap-sm">
+<div class="w-3 h-3 rounded-full bg-secondary mt-1 shadow-[0_0_8px_theme(colors.secondary)]"></div>
+<div class="flex flex-col">
+<span class="font-body-base text-body-base text-primary">Beta</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant">1.05 (range 0.8-1.3)</span>
+</div>
+</div>
+<div class="flex items-start gap-sm">
+<div class="w-3 h-3 rounded-full bg-secondary mt-1 shadow-[0_0_8px_theme(colors.secondary)]"></div>
+<div class="flex flex-col">
+<span class="font-body-base text-body-base text-primary">Concentration</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant">52% (limit 60%)</span>
+</div>
+</div>
+<div class="flex items-start gap-sm">
+<div class="w-3 h-3 rounded-full bg-secondary mt-1 shadow-[0_0_8px_theme(colors.secondary)]"></div>
+<div class="flex flex-col">
+<span class="font-body-base text-body-base text-primary">Finance Sector</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant">28% (limit 30%)</span>
+</div>
+</div>
+<div class="flex items-start gap-sm">
+<div class="w-3 h-3 rounded-full bg-secondary mt-1 shadow-[0_0_8px_theme(colors.secondary)]"></div>
+<div class="flex flex-col">
+<span class="font-body-base text-body-base text-primary">Liquidity</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant">All &lt; 5-day close</span>
+</div>
+</div>
+<div class="flex items-start gap-sm">
+<div class="w-3 h-3 rounded-full bg-secondary mt-1 shadow-[0_0_8px_theme(colors.secondary)]"></div>
+<div class="flex flex-col">
+<span class="font-body-base text-body-base text-primary">Downside Risk</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant">Max -15% per pos</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Investment Decisions -->
+<section class="glass-panel rounded-xl p-md flex flex-col gap-md">
+<h2 class="font-headline-md text-headline-md text-primary">Today's Investment Decisions</h2>
+<div class="flex flex-col gap-sm">
+<!-- Card 1 -->
+<div class="bg-surface-container rounded-lg p-md border border-surface-variant flex flex-col gap-xs">
+<div class="flex justify-between items-start mb-xs">
+<div class="font-body-base text-body-base text-primary font-semibold">
+                            [NEW BUY <span class="text-secondary">✓</span>] MEDC (Medco Energi)
+                        </div>
+<span class="font-label-caps text-label-caps text-primary uppercase tracking-widest">APPROVED</span>
+</div>
+<div class="font-body-base text-body-base text-on-surface-variant">
+                        Conviction: <span class="text-secondary font-semibold">STRONG (79%)</span> | Entry: 285-300 | Target: 320
+                    </div>
+<div class="font-body-base text-[13px] text-on-surface-variant mt-xs">
+                        Dividend yield 4.2%, recovery from energy dip. Risk officer cleared.
+                    </div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-container rounded-lg p-md border border-surface-variant flex flex-col gap-xs">
+<div class="flex justify-between items-start mb-xs">
+<div class="font-body-base text-body-base text-primary font-semibold">
+                            [POSITION UP ⏳] ASII (Astra International)
+                        </div>
+<span class="font-label-caps text-label-caps text-tertiary-fixed-dim uppercase tracking-widest">PENDING</span>
+</div>
+<div class="font-body-base text-body-base text-on-surface-variant">
+                        Conviction: <span class="text-tertiary-fixed-dim font-semibold">MEDIUM (62%)</span> | Add 0.5% if dips to 6,700
+                    </div>
+<div class="font-body-base text-[13px] text-on-surface-variant mt-xs">
+                        Automotive cyclical strength, FX tailwind. Awaiting PM approval.
+                    </div>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface-container rounded-lg p-md border border-surface-variant flex flex-col gap-xs">
+<div class="flex justify-between items-start mb-xs">
+<div class="font-body-base text-body-base text-primary font-semibold">
+                            [ALERT 🔍] BKSL (Bakrie Sumatera)
+                        </div>
+<span class="font-label-caps text-label-caps text-primary uppercase tracking-widest">REVIEW</span>
+</div>
+<div class="font-body-base text-body-base text-on-surface-variant">
+                        Current: 820 IDR | Risk: Dividend cut flagged
+                    </div>
+<div class="font-body-base text-[13px] text-on-surface-variant mt-xs">
+                        Monitoring, will trigger exit if cut confirmed. Risk under assessment.
+                    </div>
+</div>
+</div>
+</section>
+<!-- Holdings -->
+<section class="glass-panel rounded-xl p-md flex flex-col gap-md overflow-x-auto">
+<h2 class="font-headline-md text-headline-md text-primary whitespace-nowrap">Holdings (12 stocks)</h2>
+<div class="min-w-[600px]">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container border-b border-surface-variant font-label-caps text-label-caps text-on-surface-variant uppercase h-10">
+<th class="px-2 font-normal w-8">#</th>
+<th class="px-2 font-normal w-20">Ticker</th>
+<th class="px-2 font-normal w-20">Status</th>
+<th class="px-2 text-right font-normal">Price</th>
+<th class="px-2 text-right font-normal">Entry</th>
+<th class="px-2 text-right font-normal">Target</th>
+<th class="px-2 text-center font-normal">Conv</th>
+<th class="px-2 text-right font-normal w-16">Size</th>
+</tr>
+</thead>
+<tbody class="font-label-caps text-label-caps text-primary font-medium">
+<tr class="border-b border-surface-variant/50 h-12 hover:bg-surface-variant/30 transition-colors">
+<td class="px-2 text-on-surface-variant">1</td>
+<td class="px-2">BBCA</td>
+<td class="px-2">HOLD</td>
+<td class="px-2 text-right">8,750</td>
+<td class="px-2 text-right flex flex-col items-end justify-center h-12">8,500<span class="text-secondary text-[9px] font-bold">↑2.9%</span></td>
+<td class="px-2 text-right"><div class="flex flex-col items-end">9,200<span class="text-secondary text-[9px] font-bold">↑5.1%</span></div></td>
+<td class="px-2 text-center text-secondary">STR<br/>88%</td>
+<td class="px-2 text-right">2.5%</td>
+</tr>
+<tr class="border-b border-surface-variant/50 h-12 hover:bg-surface-variant/30 transition-colors">
+<td class="px-2 text-on-surface-variant">2</td>
+<td class="px-2">ASII</td>
+<td class="px-2">HOLD</td>
+<td class="px-2 text-right">6,895</td>
+<td class="px-2 text-right"><div class="flex flex-col items-end">6,850<span class="text-secondary text-[9px] font-bold">↑0.7%</span></div></td>
+<td class="px-2 text-right"><div class="flex flex-col items-end">7,400<span class="text-secondary text-[9px] font-bold">↑7.3%</span></div></td>
+<td class="px-2 text-center text-tertiary-fixed-dim">MED<br/>62%</td>
+<td class="px-2 text-right">2.3%</td>
+</tr>
+<tr class="border-b border-surface-variant/50 h-12 hover:bg-surface-variant/30 transition-colors">
+<td class="px-2 text-on-surface-variant">3</td>
+<td class="px-2">BBRI</td>
+<td class="px-2">HOLD</td>
+<td class="px-2 text-right">4,520</td>
+<td class="px-2 text-right"><div class="flex flex-col items-end">4,450<span class="text-secondary text-[9px] font-bold">↑1.6%</span></div></td>
+<td class="px-2 text-right"><div class="flex flex-col items-end">4,900<span class="text-secondary text-[9px] font-bold">↑8.4%</span></div></td>
+<td class="px-2 text-center text-secondary">STR<br/>85%</td>
+<td class="px-2 text-right">2.8%</td>
+</tr>
+<tr class="border-b border-surface-variant/50 h-12 hover:bg-surface-variant/30 transition-colors">
+<td class="px-2 text-on-surface-variant">4</td>
+<td class="px-2">GGRM</td>
+<td class="px-2 text-on-surface-variant bg-surface-variant rounded px-1 text-[10px]">HOLD</td>
+<td class="px-2 text-right">27,100</td>
+<td class="px-2 text-right"><div class="flex flex-col items-end">26,500<span class="text-secondary text-[9px] font-bold">↑2.3%</span></div></td>
+<td class="px-2 text-right"><div class="flex flex-col items-end">29,800<span class="text-secondary text-[9px] font-bold">↑10%</span></div></td>
+<td class="px-2 text-center text-tertiary-fixed-dim">MED<br/>65%</td>
+<td class="px-2 text-right">2.0%</td>
+</tr>
+<tr class="h-12 hover:bg-surface-variant/30 transition-colors">
+<td class="px-2 text-on-surface-variant">5</td>
+<td class="px-2">MEDC</td>
+<td class="px-2">NEW<br/>BUY</td>
+<td class="px-2 text-right">297</td>
+<td class="px-2 text-right"><div class="flex flex-col items-end">290<span class="text-on-surface-variant text-[9px]">(entry)</span></div></td>
+<td class="px-2 text-right"><div class="flex flex-col items-end">320<span class="text-secondary text-[9px] font-bold">↑7.8%</span></div></td>
+<td class="px-2 text-center text-secondary">STR<br/>79%</td>
+<td class="px-2 text-right">1.8%</td>
+</tr>
+</tbody>
+</table>
+<div class="text-center py-sm mt-xs border-t border-surface-variant/50">
+<span class="font-body-base text-[13px] text-on-surface-variant italic">... 7 more holdings (12 total)</span>
+</div>
+</div>
+</section>
+<!-- Footer Grids -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-lg">
+<!-- Sector Allocation -->
+<section class="glass-panel rounded-xl p-md flex flex-col gap-md">
+<h2 class="font-headline-md text-headline-md text-primary">Sector Allocation</h2>
+<div class="flex flex-col gap-sm mt-xs">
+<div class="flex flex-col gap-xs">
+<div class="flex justify-between font-body-base text-[13px] text-primary">
+<span>Finance</span>
+<span class="font-label-caps text-label-caps">28% / 30%</span>
+</div>
+<div class="w-full bg-surface-variant h-1.5 rounded-full overflow-hidden relative">
+<div class="bg-secondary h-full rounded-full w-[90%] relative">
+<div class="absolute right-0 top-1/2 -translate-y-1/2 w-2 h-2 bg-secondary rounded-full shadow-[0_0_4px_theme(colors.secondary)] scale-150 translate-x-1"></div>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-xs">
+<div class="flex justify-between font-body-base text-[13px] text-primary">
+<span>Energy</span>
+<span class="font-label-caps text-label-caps">15% / 20%</span>
+</div>
+<div class="w-full bg-surface-variant h-1.5 rounded-full overflow-hidden relative">
+<div class="bg-secondary h-full rounded-full w-[75%] relative">
+<div class="absolute right-0 top-1/2 -translate-y-1/2 w-2 h-2 bg-secondary rounded-full shadow-[0_0_4px_theme(colors.secondary)] scale-150 translate-x-1"></div>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-xs">
+<div class="flex justify-between font-body-base text-[13px] text-primary">
+<span>Technology</span>
+<span class="font-label-caps text-label-caps">12% (no limit)</span>
+</div>
+<div class="w-full bg-surface-variant h-1.5 rounded-full overflow-hidden relative">
+<div class="bg-secondary h-full rounded-full w-[40%] relative">
+<div class="absolute right-0 top-1/2 -translate-y-1/2 w-2 h-2 bg-secondary rounded-full shadow-[0_0_4px_theme(colors.secondary)] scale-150 translate-x-1"></div>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-xs">
+<div class="flex justify-between font-body-base text-[13px] text-primary">
+<span>Consumer</span>
+<span class="font-label-caps text-label-caps">18% / 25%</span>
+</div>
+<div class="w-full bg-surface-variant h-1.5 rounded-full overflow-hidden relative">
+<div class="bg-secondary h-full rounded-full w-[72%] relative">
+<div class="absolute right-0 top-1/2 -translate-y-1/2 w-2 h-2 bg-secondary rounded-full shadow-[0_0_4px_theme(colors.secondary)] scale-150 translate-x-1"></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- YTD Attribution -->
+<section class="glass-panel rounded-xl p-md flex flex-col gap-md">
+<h2 class="font-headline-md text-headline-md text-primary">YTD Attribution</h2>
+<div class="flex flex-col gap-3 mt-xs">
+<div class="flex justify-between items-center font-body-base text-[14px]">
+<span class="text-primary">Selection (stock picking)</span>
+<span class="font-label-caps text-label-caps text-primary">+8.2%</span>
+</div>
+<div class="flex justify-between items-center font-body-base text-[14px]">
+<span class="text-primary">Allocation (position sizing)</span>
+<span class="font-label-caps text-label-caps text-primary">+3.1%</span>
+</div>
+<div class="flex justify-between items-center font-body-base text-[14px]">
+<span class="text-primary">Beta (market exposure)</span>
+<span class="font-label-caps text-label-caps text-primary">+2.4%</span>
+</div>
+<div class="flex justify-between items-center font-body-base text-[14px]">
+<span class="text-primary">Residual (fees, friction)</span>
+<span class="font-label-caps text-label-caps text-primary">-0.2%</span>
+</div>
+<div class="h-px bg-surface-variant w-full my-1"></div>
+<div class="flex justify-between items-center font-body-base text-[14px]">
+<span class="text-primary font-semibold">Total alpha vs IHSG</span>
+<div class="flex items-center gap-2">
+<span class="font-label-caps text-label-caps text-primary font-bold">+15.3%</span>
+<span class="material-symbols-outlined text-secondary text-[16px]" data-icon="check_box" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check_box</span>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="bg-surface-container border-t border-outline-variant shadow-lg fixed bottom-0 w-full z-50 flex justify-around items-center px-4 py-2 rounded-t-xl md:hidden">
+<button class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-full px-4 py-1 hover:text-primary transition-colors active:scale-95 transition-transform duration-150">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-caps text-label-caps mt-1">Portfolio</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors active:scale-95 transition-transform duration-150 px-4 py-1">
+<span class="material-symbols-outlined" data-icon="security">security</span>
+<span class="font-label-caps text-label-caps mt-1">Risk</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors active:scale-95 transition-transform duration-150 px-4 py-1">
+<span class="material-symbols-outlined" data-icon="gavel">gavel</span>
+<span class="font-label-caps text-label-caps mt-1">Decisions</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors active:scale-95 transition-transform duration-150 px-4 py-1">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="font-label-caps text-label-caps mt-1">Analysis</span>
+</button>
+</nav>
+</body></html>

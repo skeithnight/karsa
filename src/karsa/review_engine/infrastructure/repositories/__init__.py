@@ -1,0 +1,5 @@
+"""Review Engine repository contracts — Sprint-10."""
+from karsa.review_engine.infrastructure.repositories.review_assessment_repository import ReviewAssessmentRepository
+from karsa.review_engine.infrastructure.repositories.review_version_registry_repository import ReviewVersionRegistryRepository
+from karsa.review_engine.infrastructure.repositories.review_projection_repository import ReviewProjectionRepository
+from karsa.review_engine.infrastructure.repositories.review_outbox_repository import ReviewOutboxRepository

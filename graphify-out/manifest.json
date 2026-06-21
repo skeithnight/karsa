@@ -1,0 +1,2402 @@
+{
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/DOCUMENTATION_STYLE_GUIDE.md": {
+    "mtime": 1781534855.8979936,
+    "ast_hash": "a90a0d8a5ec0da3304471c9c2205d04d",
+    "semantic_hash": "a90a0d8a5ec0da3304471c9c2205d04d"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/ENGINEERING_STANDARDS.md": {
+    "mtime": 1781534882.0447185,
+    "ast_hash": "cd8d88af8734b6578b90c3f4da9a8d99",
+    "semantic_hash": "cd8d88af8734b6578b90c3f4da9a8d99"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/README.md": {
+    "mtime": 1781189253.2466598,
+    "ast_hash": "a8527bb2e38f8a655ca45dbc0c8eed0d",
+    "semantic_hash": "a8527bb2e38f8a655ca45dbc0c8eed0d"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/TRACEABILITY_MATRIX.md": {
+    "mtime": 1781431635.5314672,
+    "ast_hash": "938a0f46458bf13dd7387ac31fbc1907",
+    "semantic_hash": "938a0f46458bf13dd7387ac31fbc1907"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/WORKFLOW_RULES.md": {
+    "mtime": 1781665753.1002984,
+    "ast_hash": "49b0909f66bda31c04cbdbe915dc614e",
+    "semantic_hash": "49b0909f66bda31c04cbdbe915dc614e"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-001-workspace-lineage.md": {
+    "mtime": 1781255397.4756863,
+    "ast_hash": "eeeb4320943a24755516f7d83e078fd7",
+    "semantic_hash": "eeeb4320943a24755516f7d83e078fd7"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-002-hybrid-persistence.md": {
+    "mtime": 1781280444.2736285,
+    "ast_hash": "800788451b5b0855ba41658abde10915",
+    "semantic_hash": "800788451b5b0855ba41658abde10915"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-003-capability-based-security.md": {
+    "mtime": 1781279216.9036734,
+    "ast_hash": "532f3086af40f4366baff44c23afbc53",
+    "semantic_hash": "532f3086af40f4366baff44c23afbc53"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-004-cost-governance.md": {
+    "mtime": 1781280444.2787027,
+    "ast_hash": "10638027953d7eb0fc5cdc19708249d6",
+    "semantic_hash": "10638027953d7eb0fc5cdc19708249d6"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-005-execution-contracts.md": {
+    "mtime": 1781280444.282165,
+    "ast_hash": "a60066a08cf9813b74c9f6eda8a2e7ce",
+    "semantic_hash": "a60066a08cf9813b74c9f6eda8a2e7ce"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-006-docker-sandbox-execution.md": {
+    "mtime": 1781279216.9042647,
+    "ast_hash": "37f1d847099e72de6ef35afb12503a5f",
+    "semantic_hash": "37f1d847099e72de6ef35afb12503a5f"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-007-governance-layer.md": {
+    "mtime": 1781279216.9045267,
+    "ast_hash": "402fb63b8ebe4d593899687b28566466",
+    "semantic_hash": "402fb63b8ebe4d593899687b28566466"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-008-multi-agent-coordination.md": {
+    "mtime": 1781279216.9047167,
+    "ast_hash": "7de4b56ebe7c21c5f0eb49a26a1fdfd2",
+    "semantic_hash": "7de4b56ebe7c21c5f0eb49a26a1fdfd2"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-009-observability-platform.md": {
+    "mtime": 1781279216.904901,
+    "ast_hash": "96b5d142528ec391d698a9088022faf1",
+    "semantic_hash": "96b5d142528ec391d698a9088022faf1"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-010-phase1-architecture-freeze.md": {
+    "mtime": 1781286783.2184083,
+    "ast_hash": "fca75d09e7de18e1449605680992317f",
+    "semantic_hash": "fca75d09e7de18e1449605680992317f"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-011-eventbus-design.md": {
+    "mtime": 1781370419.0512238,
+    "ast_hash": "cc9397c86370987aae3c691b71f51f62",
+    "semantic_hash": "cc9397c86370987aae3c691b71f51f62"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-012-artifact-vs-evidence.md": {
+    "mtime": 1781370419.0560117,
+    "ast_hash": "915a12a0b958100fc9c3553204f6f14c",
+    "semantic_hash": "915a12a0b958100fc9c3553204f6f14c"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-013-git-worktree-sandbox.md": {
+    "mtime": 1781370419.0604725,
+    "ast_hash": "b31cdb45d4b8b1ce10949ca2eb165676",
+    "semantic_hash": "b31cdb45d4b8b1ce10949ca2eb165676"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-014-execution-planner.md": {
+    "mtime": 1781370419.064271,
+    "ast_hash": "101511c49baa42818314c90048e9dbbf",
+    "semantic_hash": "101511c49baa42818314c90048e9dbbf"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-015-job-queue-architecture.md": {
+    "mtime": 1781370419.0678144,
+    "ast_hash": "a54bd7965f351d470e3b54a8bfa29754",
+    "semantic_hash": "a54bd7965f351d470e3b54a8bfa29754"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-016-capability-identity-registration.md": {
+    "mtime": 1781388967.3768952,
+    "ast_hash": "13f2d12d6bd7c903e99a0a1040ec589c",
+    "semantic_hash": "13f2d12d6bd7c903e99a0a1040ec589c"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-017-execution-contract-replay.md": {
+    "mtime": 1781388971.694463,
+    "ast_hash": "0fbc694295a5f35ac5071ffbb9891cda",
+    "semantic_hash": "0fbc694295a5f35ac5071ffbb9891cda"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-018-provider-registry-lifecycle.md": {
+    "mtime": 1781390798.9204593,
+    "ast_hash": "7dea844b81ba0d36633fd73297ed9ae2",
+    "semantic_hash": "7dea844b81ba0d36633fd73297ed9ae2"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-019-provider-routing-telemetry-cost.md": {
+    "mtime": 1781390801.2505171,
+    "ast_hash": "ee94c8e07a2a1ef5a21b9a7079f73232",
+    "semantic_hash": "ee94c8e07a2a1ef5a21b9a7079f73232"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-020-capability-registry-governance.md": {
+    "mtime": 1781391231.0799787,
+    "ast_hash": "3e4d2172a024d9f6fabb01f004093a32",
+    "semantic_hash": "3e4d2172a024d9f6fabb01f004093a32"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-021-capability-dependency-resolution.md": {
+    "mtime": 1781391232.9014328,
+    "ast_hash": "83b591304dbf60045fe3d4f66ccb187e",
+    "semantic_hash": "83b591304dbf60045fe3d4f66ccb187e"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-022-governance-engine-ownership.md": {
+    "mtime": 1781393040.7309482,
+    "ast_hash": "68c361f5b96023ac0d49cae7e2229063",
+    "semantic_hash": "68c361f5b96023ac0d49cae7e2229063"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-023-pdp-pep-architecture.md": {
+    "mtime": 1781393043.0243258,
+    "ast_hash": "084b7cb61e7d13e52e1cdfd3d8218330",
+    "semantic_hash": "084b7cb61e7d13e52e1cdfd3d8218330"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-024-observability-trace-model.md": {
+    "mtime": 1781394607.126957,
+    "ast_hash": "feeeeee3e5e57889e479b1f212a3f2d8",
+    "semantic_hash": "feeeeee3e5e57889e479b1f212a3f2d8"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-025-observability-correlation-strategy.md": {
+    "mtime": 1781394609.4652565,
+    "ast_hash": "79239f8b3f198c4fc3c4a7f9fc97eb53",
+    "semantic_hash": "79239f8b3f198c4fc3c4a7f9fc97eb53"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-026-observability-retention-and-archival.md": {
+    "mtime": 1781394612.2274084,
+    "ast_hash": "63ca4d2d1b0da30291f05d34371c6bcf",
+    "semantic_hash": "63ca4d2d1b0da30291f05d34371c6bcf"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-027-attribution-engine-ownership.md": {
+    "mtime": 1781395614.7980056,
+    "ast_hash": "ae63a8f00eaed122c69120418129f422",
+    "semantic_hash": "ae63a8f00eaed122c69120418129f422"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-028-cost-attribution-model.md": {
+    "mtime": 1781395608.3128421,
+    "ast_hash": "a1afce9aad813b3a82c2d5427afe84ca",
+    "semantic_hash": "a1afce9aad813b3a82c2d5427afe84ca"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-029-thesis-engine-ownership.md": {
+    "mtime": 1781397623.076166,
+    "ast_hash": "6f383beaa039ad7dac6bf47925bf8755",
+    "semantic_hash": "6f383beaa039ad7dac6bf47925bf8755"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-030-thesis-lifecycle-and-versioning.md": {
+    "mtime": 1781397626.983937,
+    "ast_hash": "970892041293a6eabb479ae2f756b278",
+    "semantic_hash": "970892041293a6eabb479ae2f756b278"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-031-performance-engine-ownership.md": {
+    "mtime": 1781397976.316599,
+    "ast_hash": "0777a6d3bc4222603e474b1c920ad7af",
+    "semantic_hash": "0777a6d3bc4222603e474b1c920ad7af"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-032-performance-evaluation-model.md": {
+    "mtime": 1781397978.8323107,
+    "ast_hash": "0b8761898f334639a11e8b64ff2f5cd7",
+    "semantic_hash": "0b8761898f334639a11e8b64ff2f5cd7"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-033-review-engine-ownership.md": {
+    "mtime": 1781398801.5704384,
+    "ast_hash": "79ae686b0ddd156f150dd1f913c0ec43",
+    "semantic_hash": "79ae686b0ddd156f150dd1f913c0ec43"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-034-qualitative-review-and-learning-feedback-model.md": {
+    "mtime": 1781398803.8402617,
+    "ast_hash": "804d72bdef9e649d21b4af37408944f5",
+    "semantic_hash": "804d72bdef9e649d21b4af37408944f5"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-035-governance-engine-ownership.md": {
+    "mtime": 1781399817.858032,
+    "ast_hash": "25267f987a68e2c097b8759679ec0d87",
+    "semantic_hash": "25267f987a68e2c097b8759679ec0d87"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-036-policy-evaluation-and-enforcement-model.md": {
+    "mtime": 1781400114.6843941,
+    "ast_hash": "6aa14aad1f744116e1f8b9cba2494387",
+    "semantic_hash": "6aa14aad1f744116e1f8b9cba2494387"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-037-attribution-engine-ownership.md": {
+    "mtime": 1781400597.016577,
+    "ast_hash": "7b96b1754c71bb29d2186a1d8a366d96",
+    "semantic_hash": "7b96b1754c71bb29d2186a1d8a366d96"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-038-causal-attribution-and-contribution-model.md": {
+    "mtime": 1781400740.3060539,
+    "ast_hash": "41852e0f84ceffb9f9f6198eb519c2a9",
+    "semantic_hash": "41852e0f84ceffb9f9f6198eb519c2a9"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-039-decision-journal-ownership.md": {
+    "mtime": 1781401200.9742603,
+    "ast_hash": "7281ca9219bde8704f64708e455f6f8d",
+    "semantic_hash": "7281ca9219bde8704f64708e455f6f8d"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-040-decision-journal-immutable-record-model.md": {
+    "mtime": 1781401423.7400756,
+    "ast_hash": "eb8d21aae68c2ae7d92ce6772aba453b",
+    "semantic_hash": "eb8d21aae68c2ae7d92ce6772aba453b"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-041-post-mortem-engine-ownership.md": {
+    "mtime": 1781402204.816014,
+    "ast_hash": "3239f8b2ef3fc7a60a0f96a524f142f6",
+    "semantic_hash": "3239f8b2ef3fc7a60a0f96a524f142f6"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-042-root-cause-and-organizational-learning-model.md": {
+    "mtime": 1781402213.3097806,
+    "ast_hash": "0bd834cc2c1391fba84a5b5e035b6e32",
+    "semantic_hash": "0bd834cc2c1391fba84a5b5e035b6e32"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-043-capital-allocation-engine-ownership.md": {
+    "mtime": 1781402912.2318285,
+    "ast_hash": "ccee7b3c59271327cbb24a0992ce7ac1",
+    "semantic_hash": "ccee7b3c59271327cbb24a0992ce7ac1"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-044-capital-allocation-and-evidence-weighting-model.md": {
+    "mtime": 1781403084.4356687,
+    "ast_hash": "67c2569aaff5a9283098f4887a435cbe",
+    "semantic_hash": "67c2569aaff5a9283098f4887a435cbe"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-045-observability-platform-ownership.md": {
+    "mtime": 1781403439.6271105,
+    "ast_hash": "42b3ec3db6a20f89f30296cc3e1b8b67",
+    "semantic_hash": "42b3ec3db6a20f89f30296cc3e1b8b67"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-046-telemetry-lineage-and-traceability-model.md": {
+    "mtime": 1781403441.9653828,
+    "ast_hash": "8996713ae890cdc18d8002fab5f02294",
+    "semantic_hash": "8996713ae890cdc18d8002fab5f02294"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-047-cio-engine-ownership.md": {
+    "mtime": 1781404111.4226754,
+    "ast_hash": "741a369d39f3aabb00fd25f48a93dcfe",
+    "semantic_hash": "741a369d39f3aabb00fd25f48a93dcfe"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-048-cio-decision-and-orchestration-model.md": {
+    "mtime": 1781404113.600067,
+    "ast_hash": "b6548e7b43db38afb3684a7a73e60243",
+    "semantic_hash": "b6548e7b43db38afb3684a7a73e60243"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-049-risk-ownership.md": {
+    "mtime": 1781405123.8257556,
+    "ast_hash": "9a7e4edaa1891a76ceae21c7140ad925",
+    "semantic_hash": "9a7e4edaa1891a76ceae21c7140ad925"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-050-execution-engine-pep.md": {
+    "mtime": 1781405187.7273018,
+    "ast_hash": "d2978eb428001810ada10baab359c731",
+    "semantic_hash": "d2978eb428001810ada10baab359c731"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-051-decision-journal-aggregate-and-table-decomposition.md": {
+    "mtime": 1781411687.810311,
+    "ast_hash": "06445ea09866123ac23593a82d119e3b",
+    "semantic_hash": "06445ea09866123ac23593a82d119e3b"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-052-cio-engine-authority-and-ledger-design.md": {
+    "mtime": 1781413234.9036262,
+    "ast_hash": "c0fb908a0a3bc65a183b507746775539",
+    "semantic_hash": "c0fb908a0a3bc65a183b507746775539"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-053-risk-engine-ownership.md": {
+    "mtime": 1781430868.250764,
+    "ast_hash": "b5a9b118ca123da9926a31505e54f182",
+    "semantic_hash": "b5a9b118ca123da9926a31505e54f182"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-054-ex-ante-risk-modeling.md": {
+    "mtime": 1781430871.3384147,
+    "ast_hash": "14a3de6170431cd7f3bc08adbf2336fb",
+    "semantic_hash": "14a3de6170431cd7f3bc08adbf2336fb"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-055-governance-authority.md": {
+    "mtime": 1781455977.9321735,
+    "ast_hash": "d35b720a366f47f676f88424416f74d7",
+    "semantic_hash": "d35b720a366f47f676f88424416f74d7"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-056-governance-ledger.md": {
+    "mtime": 1781455980.5416954,
+    "ast_hash": "5a1a2dfaf5b79a85dbde1214f36f6e17",
+    "semantic_hash": "5a1a2dfaf5b79a85dbde1214f36f6e17"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-057-engine-runtime-separation.md": {
+    "mtime": 1781523894.060489,
+    "ast_hash": "d084d2150c7692d483dcb2f4fb8b2ea9",
+    "semantic_hash": "d084d2150c7692d483dcb2f4fb8b2ea9"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-058-governance-limits.md": {
+    "mtime": 1781523900.348583,
+    "ast_hash": "f347c6de1dc2fac666455588092c2c2b",
+    "semantic_hash": "f347c6de1dc2fac666455588092c2c2b"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-059-factor-model-versioning.md": {
+    "mtime": 1781524458.2476537,
+    "ast_hash": "f24796e8504747ac8f368897e89e6d10",
+    "semantic_hash": "f24796e8504747ac8f368897e89e6d10"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-060-governance-subject-polymorphism.md": {
+    "mtime": 1781524458.2749996,
+    "ast_hash": "b9d4d9a14fe9dc6dceb57c44e43ca441",
+    "semantic_hash": "b9d4d9a14fe9dc6dceb57c44e43ca441"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-061-decision-journal-integration.md": {
+    "mtime": 1781524464.8354855,
+    "ast_hash": "87ab3640df9e6b37ea30e0dff25ca112",
+    "semantic_hash": "87ab3640df9e6b37ea30e0dff25ca112"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-064-telemetry-retention-tiers.md": {
+    "mtime": 1781534283.189581,
+    "ast_hash": "c9d03045ab41ea0d545705091e134aa3",
+    "semantic_hash": "c9d03045ab41ea0d545705091e134aa3"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-065-metric-cardinality-governance.md": {
+    "mtime": 1781534283.197682,
+    "ast_hash": "c754d85b47676ad64ee413b1f114e00f",
+    "semantic_hash": "c754d85b47676ad64ee413b1f114e00f"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-066-projection-retry-storm-protection.md": {
+    "mtime": 1781534283.4305964,
+    "ast_hash": "2efd09938c0f08b30172d30c0a00b93b",
+    "semantic_hash": "2efd09938c0f08b30172d30c0a00b93b"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-067-telemetry-sampling-and-fidelity.md": {
+    "mtime": 1781534619.2436016,
+    "ast_hash": "b75ab1781caec071f6b7086619af05d5",
+    "semantic_hash": "b75ab1781caec071f6b7086619af05d5"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-068-meta-observability-heartbeats.md": {
+    "mtime": 1781534622.7875667,
+    "ast_hash": "76d28e93a08adf7f0cb32fd830f23619",
+    "semantic_hash": "76d28e93a08adf7f0cb32fd830f23619"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-069-bounded-batch-memory-management.md": {
+    "mtime": 1781534622.7999704,
+    "ast_hash": "927d609cd389fb4acff9d104245f2587",
+    "semantic_hash": "927d609cd389fb4acff9d104245f2587"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-070-cold-storage-rehydration-protocol.md": {
+    "mtime": 1781534622.8213854,
+    "ast_hash": "044516cf0ef65d3ea7518599dbce2a45",
+    "semantic_hash": "044516cf0ef65d3ea7518599dbce2a45"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-071-portfolio-read-models.md": {
+    "mtime": 1781665753.1004558,
+    "ast_hash": "b7097b8627e17bc368b49eae05f793da",
+    "semantic_hash": "b7097b8627e17bc368b49eae05f793da"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-095-investment-intelligence-projection-ownership.md": {
+    "mtime": 1781981637.2230842,
+    "ast_hash": "daea8dbc1888564354a3b212eab087f8",
+    "semantic_hash": "daea8dbc1888564354a3b212eab087f8"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-096-evidence-registry-vs-event-journal.md": {
+    "mtime": 1781981637.223214,
+    "ast_hash": "f1ea87517ac0b039e8f7c3ca27371a48",
+    "semantic_hash": "f1ea87517ac0b039e8f7c3ca27371a48"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-097-research-findings-thesis-contract.md": {
+    "mtime": 1781981637.2233634,
+    "ast_hash": "919d48e69f84c43e21e763d0bdfd3d97",
+    "semantic_hash": "919d48e69f84c43e21e763d0bdfd3d97"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/adr/ADR-125-context-identity-standard.md": {
+    "mtime": 1781981637.2236118,
+    "ast_hash": "fdcbd5f895f88111092db0343f2f78f3",
+    "semantic_hash": "fdcbd5f895f88111092db0343f2f78f3"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/api/API_REGISTRATION_STANDARD.md": {
+    "mtime": 1781981637.2238631,
+    "ast_hash": "86a4221d1fe792fd785d1fda046a7574",
+    "semantic_hash": "86a4221d1fe792fd785d1fda046a7574"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/01-system-overview.md": {
+    "mtime": 1781255397.4752667,
+    "ast_hash": "b2b48f6cac4419c8cde60bfccd0f0ba7",
+    "semantic_hash": "b2b48f6cac4419c8cde60bfccd0f0ba7"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/02-multi-agent-coordination.md": {
+    "mtime": 1781279216.902419,
+    "ast_hash": "c73b0632b538c62a35a956644e1ad17f",
+    "semantic_hash": "c73b0632b538c62a35a956644e1ad17f"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/03-governance-and-security.md": {
+    "mtime": 1781279216.9026334,
+    "ast_hash": "69295d2ae9484ec3bc7897cc1afaa7d1",
+    "semantic_hash": "69295d2ae9484ec3bc7897cc1afaa7d1"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/04-workspace-and-registries.md": {
+    "mtime": 1781279216.902829,
+    "ast_hash": "b8879bfe1b3061d1cde10c8f94afd8e7",
+    "semantic_hash": "b8879bfe1b3061d1cde10c8f94afd8e7"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/05-distributed-execution.md": {
+    "mtime": 1781279216.9030213,
+    "ast_hash": "9ebf0f22e3b605573e42aaa3a4f21596",
+    "semantic_hash": "9ebf0f22e3b605573e42aaa3a4f21596"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/06-observability.md": {
+    "mtime": 1781279216.9032009,
+    "ast_hash": "5b19ad9523168c92a931eec1aa0e1a72",
+    "semantic_hash": "5b19ad9523168c92a931eec1aa0e1a72"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/07-capability-engine.md": {
+    "mtime": 1781389155.3409543,
+    "ast_hash": "7f06ff7afd14fb1d506bbb6bfc8a4854",
+    "semantic_hash": "7f06ff7afd14fb1d506bbb6bfc8a4854"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/08-provider-abstraction.md": {
+    "mtime": 1781390897.0454757,
+    "ast_hash": "39925c6820e27b269179b93b4d4c98ca",
+    "semantic_hash": "39925c6820e27b269179b93b4d4c98ca"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/09-capability-registry.md": {
+    "mtime": 1781391228.2119308,
+    "ast_hash": "26e363ef36707ab975543c4cb8947807",
+    "semantic_hash": "26e363ef36707ab975543c4cb8947807"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/10-governance-engine.md": {
+    "mtime": 1781393038.7838337,
+    "ast_hash": "3469315ae8d8eff2a39c54ccf3eb0d47",
+    "semantic_hash": "3469315ae8d8eff2a39c54ccf3eb0d47"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/11-observability-platform.md": {
+    "mtime": 1781394604.731711,
+    "ast_hash": "d0469fc342b8ffca2795d6ae2ad1c65e",
+    "semantic_hash": "d0469fc342b8ffca2795d6ae2ad1c65e"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/12-attribution-engine.md": {
+    "mtime": 1781395604.300159,
+    "ast_hash": "17d968269d9731ef80796ad1f5c21c85",
+    "semantic_hash": "17d968269d9731ef80796ad1f5c21c85"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/13-thesis-engine.md": {
+    "mtime": 1781397620.3657432,
+    "ast_hash": "0f38e2de89438a3b75b38ebb9c926ef8",
+    "semantic_hash": "0f38e2de89438a3b75b38ebb9c926ef8"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/14-performance-engine.md": {
+    "mtime": 1781397973.9323378,
+    "ast_hash": "f8fd7c1ac2cecedc486065ced150f727",
+    "semantic_hash": "f8fd7c1ac2cecedc486065ced150f727"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/15-review-engine.md": {
+    "mtime": 1781398809.8178465,
+    "ast_hash": "b17813f553571c596c9775618d5ea015",
+    "semantic_hash": "b17813f553571c596c9775618d5ea015"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/16-governance-engine.md": {
+    "mtime": 1781400130.4343927,
+    "ast_hash": "64ec9cc23e0bd52e524ec1fa772c2bbd",
+    "semantic_hash": "64ec9cc23e0bd52e524ec1fa772c2bbd"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/17-attribution-engine.md": {
+    "mtime": 1781400750.754363,
+    "ast_hash": "1b01a78cff531db494be783c7e3dc302",
+    "semantic_hash": "1b01a78cff531db494be783c7e3dc302"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/18-decision-journal.md": {
+    "mtime": 1781401432.7253833,
+    "ast_hash": "3284d3c4a52e6005e84a32103c8fb520",
+    "semantic_hash": "3284d3c4a52e6005e84a32103c8fb520"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/19-post-mortem-engine.md": {
+    "mtime": 1781416750.0287733,
+    "ast_hash": "0864e0686f6ff89055a3249166bb48dd",
+    "semantic_hash": "0864e0686f6ff89055a3249166bb48dd"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/20-capital-allocation-engine.md": {
+    "mtime": 1781403090.7807045,
+    "ast_hash": "dbcfcf2309040280fca8bc44b0c1a9f9",
+    "semantic_hash": "dbcfcf2309040280fca8bc44b0c1a9f9"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/21-observability-platform.md": {
+    "mtime": 1781403437.4005775,
+    "ast_hash": "ea7f6dfe450d9ed21911886849d67deb",
+    "semantic_hash": "ea7f6dfe450d9ed21911886849d67deb"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/22-cio-engine.md": {
+    "mtime": 1781413247.995923,
+    "ast_hash": "75f9d977c3f2ba8bf5e3bbba1789722e",
+    "semantic_hash": "75f9d977c3f2ba8bf5e3bbba1789722e"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/23-vif-master-delta-analysis.md": {
+    "mtime": 1781407992.2497826,
+    "ast_hash": "ed6e86806ed2ec0fb80f7cb44286b14e",
+    "semantic_hash": "ed6e86806ed2ec0fb80f7cb44286b14e"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/24-execution-engine.md": {
+    "mtime": 1781405201.2012582,
+    "ast_hash": "7a00f557ffee7a6c5ad3044613dd9800",
+    "semantic_hash": "7a00f557ffee7a6c5ad3044613dd9800"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/25-dependency-and-critical-path-audit.md": {
+    "mtime": 1781412167.3109019,
+    "ast_hash": "e12a8fe7b480dedaae27bba8a3926d8b",
+    "semantic_hash": "e12a8fe7b480dedaae27bba8a3926d8b"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/26-risk-engine.md": {
+    "mtime": 1781430880.6348553,
+    "ast_hash": "0adfec017695859ede5d746fa88b190c",
+    "semantic_hash": "0adfec017695859ede5d746fa88b190c"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/27-vif-master-delta-analysis.md": {
+    "mtime": 1781433665.7262073,
+    "ast_hash": "4f6e90ac77f0cf9a900b299a2812b5a7",
+    "semantic_hash": "4f6e90ac77f0cf9a900b299a2812b5a7"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/28-critical-path-revalidation.md": {
+    "mtime": 1781433767.735175,
+    "ast_hash": "b20fdbefba62823efbbaea33ecf642f4",
+    "semantic_hash": "b20fdbefba62823efbbaea33ecf642f4"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/29-sprint-41-decision-audit.md": {
+    "mtime": 1781433903.6842635,
+    "ast_hash": "a1455f6806af43ddc4e800edea5e1df8",
+    "semantic_hash": "a1455f6806af43ddc4e800edea5e1df8"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/30-governance-engine-design.md": {
+    "mtime": 1781434246.641809,
+    "ast_hash": "6f6f679e0dd0b9887c2358acf55f4b08",
+    "semantic_hash": "6f6f679e0dd0b9887c2358acf55f4b08"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/31-governance-engine-challenge.md": {
+    "mtime": 1781434375.6663692,
+    "ast_hash": "5c50b795dd80d61f063daa5a48525f58",
+    "semantic_hash": "5c50b795dd80d61f063daa5a48525f58"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/32-governance-engine-closure.md": {
+    "mtime": 1781434508.857696,
+    "ast_hash": "edda220fd0743035b3dff25bc10b3155",
+    "semantic_hash": "edda220fd0743035b3dff25bc10b3155"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/33-attribution-engine-design.md": {
+    "mtime": 1781460244.5723658,
+    "ast_hash": "791f840ea9d94029bc458245d66dbd39",
+    "semantic_hash": "791f840ea9d94029bc458245d66dbd39"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/34-attribution-engine-challenge.md": {
+    "mtime": 1781460060.4695203,
+    "ast_hash": "8b174c6a34163e0458fa3c036a1502c8",
+    "semantic_hash": "8b174c6a34163e0458fa3c036a1502c8"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/35-attribution-engine-revision.md": {
+    "mtime": 1781460050.7212138,
+    "ast_hash": "0d3190dcdd5ff6df005675dfb8d3eac9",
+    "semantic_hash": "0d3190dcdd5ff6df005675dfb8d3eac9"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/36-attribution-engine-challenge-r2.md": {
+    "mtime": 1781460248.003744,
+    "ast_hash": "2f9a15a7007c1ccfbd7efbe705a4ed38",
+    "semantic_hash": "2f9a15a7007c1ccfbd7efbe705a4ed38"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/37-attribution-engine-revision-r2.md": {
+    "mtime": 1781460239.2623186,
+    "ast_hash": "8055a515aef2bc2c8c7673e678c33644",
+    "semantic_hash": "8055a515aef2bc2c8c7673e678c33644"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/38-attribution-engine-closure.md": {
+    "mtime": 1781460345.5686853,
+    "ast_hash": "2f5a6e8682edd2d92210d418b292a939",
+    "semantic_hash": "2f5a6e8682edd2d92210d418b292a939"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/39-performance-engine-design.md": {
+    "mtime": 1781476730.6633444,
+    "ast_hash": "3fa15d9a1b74d83751a38de30e62ab60",
+    "semantic_hash": "3fa15d9a1b74d83751a38de30e62ab60"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/40-performance-engine-challenge.md": {
+    "mtime": 1781476887.6825418,
+    "ast_hash": "8453f0e459019c8d5aaff307fc036e34",
+    "semantic_hash": "8453f0e459019c8d5aaff307fc036e34"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/41-performance-engine-challenge-r2.md": {
+    "mtime": 1781477024.0334957,
+    "ast_hash": "b5895c8ac6f4739f5b3f90d94d07e0a5",
+    "semantic_hash": "b5895c8ac6f4739f5b3f90d94d07e0a5"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/42-performance-engine-closure.md": {
+    "mtime": 1781477121.5045404,
+    "ast_hash": "064bf40e15c1c54aae09e5c1ffb12f4f",
+    "semantic_hash": "064bf40e15c1c54aae09e5c1ffb12f4f"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/43-review-postmortem-design.md": {
+    "mtime": 1781478904.8835964,
+    "ast_hash": "f1d0448b0cee92e8985eb745361b4f82",
+    "semantic_hash": "f1d0448b0cee92e8985eb745361b4f82"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/44-review-postmortem-challenge.md": {
+    "mtime": 1781478557.2943332,
+    "ast_hash": "3e19d1a0f2e362ff675e6fbb39cc49cd",
+    "semantic_hash": "3e19d1a0f2e362ff675e6fbb39cc49cd"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/44-review-postmortem-closure.md": {
+    "mtime": 1781479148.4559534,
+    "ast_hash": "dc5c5298472cc45486c8630bc4a5d276",
+    "semantic_hash": "dc5c5298472cc45486c8630bc4a5d276"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/45-review-postmortem-revision.md": {
+    "mtime": 1781478731.1599963,
+    "ast_hash": "326687c7eb206c082421a26ace4d723f",
+    "semantic_hash": "326687c7eb206c082421a26ace4d723f"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/46-review-postmortem-challenge-r2.md": {
+    "mtime": 1781478898.611237,
+    "ast_hash": "b2d99678032ad546da26f6fa4db9c0f3",
+    "semantic_hash": "b2d99678032ad546da26f6fa4db9c0f3"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/47-capital-allocation-design.md": {
+    "mtime": 1781483431.8145754,
+    "ast_hash": "65c2cf2755af624049df1238505daf79",
+    "semantic_hash": "65c2cf2755af624049df1238505daf79"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/48-capital-allocation-challenge.md": {
+    "mtime": 1781482741.4836333,
+    "ast_hash": "d9a561c5100b2d7b7f7363a6cdc5505f",
+    "semantic_hash": "d9a561c5100b2d7b7f7363a6cdc5505f"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/49-capital-allocation-revision.md": {
+    "mtime": 1781482806.2904294,
+    "ast_hash": "6e8275401e5bfab6d2826f68a4d1db4d",
+    "semantic_hash": "6e8275401e5bfab6d2826f68a4d1db4d"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/50-capital-allocation-challenge-r2.md": {
+    "mtime": 1781482962.9222567,
+    "ast_hash": "e46db4b8b644ac832d45228e07ddb372",
+    "semantic_hash": "e46db4b8b644ac832d45228e07ddb372"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/51-capital-allocation-revision-r2.md": {
+    "mtime": 1781483426.5598595,
+    "ast_hash": "11020781532a0d808678120189c649ee",
+    "semantic_hash": "11020781532a0d808678120189c649ee"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/52-capital-allocation-closure.md": {
+    "mtime": 1781483610.3874547,
+    "ast_hash": "852ce07c09a802c6e7cdc6797c113c29",
+    "semantic_hash": "852ce07c09a802c6e7cdc6797c113c29"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/53-regime-engine-design.md": {
+    "mtime": 1781492792.087132,
+    "ast_hash": "1b774e6a0fa029a036f13fcabb539e79",
+    "semantic_hash": "1b774e6a0fa029a036f13fcabb539e79"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/54-thesis-engine-design.md": {
+    "mtime": 1781504477.1391988,
+    "ast_hash": "37d22d2604dc3d3ca3d39c48b68eceda",
+    "semantic_hash": "37d22d2604dc3d3ca3d39c48b68eceda"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/56-unified-post-outcome-evaluation-design.md": {
+    "mtime": 1781524450.0969186,
+    "ast_hash": "b73cdcc5366c7e6055ec90f2f6c13765",
+    "semantic_hash": "b73cdcc5366c7e6055ec90f2f6c13765"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/57-observability-platform-design-audit-v2.md": {
+    "mtime": 1781534459.2648907,
+    "ast_hash": "33cddd1aa3c45296263adeb0c4419cc3",
+    "semantic_hash": "33cddd1aa3c45296263adeb0c4419cc3"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/57-observability-platform-design-audit.md": {
+    "mtime": 1781533801.973068,
+    "ast_hash": "9811b58d2d3bbdb6f4ccc5d95d62d1c0",
+    "semantic_hash": "9811b58d2d3bbdb6f4ccc5d95d62d1c0"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/57-observability-platform-design.md": {
+    "mtime": 1781535073.560164,
+    "ast_hash": "716ccff45a26f0aacf6b7734bb00bbc8",
+    "semantic_hash": "716ccff45a26f0aacf6b7734bb00bbc8"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/58-karsa-web-console.md": {
+    "mtime": 1781539402.5739987,
+    "ast_hash": "637c5585be37ddae4d54f71aba77ab49",
+    "semantic_hash": "637c5585be37ddae4d54f71aba77ab49"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/59-idx-research-platform.md": {
+    "mtime": 1781981637.2243865,
+    "ast_hash": "be6d8c9395ba76c32a46e0833f6744f3",
+    "semantic_hash": "be6d8c9395ba76c32a46e0833f6744f3"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/60-idx-research-platform-r3.md": {
+    "mtime": 1781981637.2245932,
+    "ast_hash": "13a0b934f7a29ccd76648879d6bd131a",
+    "semantic_hash": "13a0b934f7a29ccd76648879d6bd131a"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/61-idx-research-platform-r4.md": {
+    "mtime": 1781981637.2249184,
+    "ast_hash": "4e03e224747d9f76693e76f9bcacf751",
+    "semantic_hash": "4e03e224747d9f76693e76f9bcacf751"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/62-idx-research-platform-r5.md": {
+    "mtime": 1781981637.2252886,
+    "ast_hash": "a64d18f8ffd067b04a667b330ea5f5d7",
+    "semantic_hash": "a64d18f8ffd067b04a667b330ea5f5d7"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/63-idx-research-platform-r6.md": {
+    "mtime": 1781981637.225535,
+    "ast_hash": "b950fccd8a9314404012fc1823c34ad0",
+    "semantic_hash": "b950fccd8a9314404012fc1823c34ad0"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/64-idx-research-platform-r7.md": {
+    "mtime": 1781981637.225951,
+    "ast_hash": "8cd86a02a963c79608747ae07a7a6a44",
+    "semantic_hash": "8cd86a02a963c79608747ae07a7a6a44"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/65-idx-research-platform-r8.md": {
+    "mtime": 1781981637.2262943,
+    "ast_hash": "8cabf14fd7a0d5bada9e6e97c4cf076d",
+    "semantic_hash": "8cabf14fd7a0d5bada9e6e97c4cf076d"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/66-idx-research-platform-r9.md": {
+    "mtime": 1781981637.2266042,
+    "ast_hash": "e1c3cb8a085cb22df297979b5c50585e",
+    "semantic_hash": "e1c3cb8a085cb22df297979b5c50585e"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/67-idx-research-platform-r10.md": {
+    "mtime": 1781981637.2268662,
+    "ast_hash": "8283ce9cd7d161b64d51190817e5d5a3",
+    "semantic_hash": "8283ce9cd7d161b64d51190817e5d5a3"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/architecture/worker-extension-contract.md": {
+    "mtime": 1781981637.2272027,
+    "ast_hash": "9354768f031022c682aadcad875fcda3",
+    "semantic_hash": "9354768f031022c682aadcad875fcda3"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/2026-q2-consolidation/AGENT_CATALOG.md": {
+    "mtime": 1781113560.0298839,
+    "ast_hash": "bfc837ebe5f5a7705ea16839f4395339",
+    "semantic_hash": "bfc837ebe5f5a7705ea16839f4395339"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/2026-q2-consolidation/ARCHITECTURAL_ASSUMPTIONS_REVIEW.md": {
+    "mtime": 1781112546.4195175,
+    "ast_hash": "f5d9ad96919f3d5420813dae85df8dd4",
+    "semantic_hash": "f5d9ad96919f3d5420813dae85df8dd4"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/2026-q2-consolidation/ARCHITECTURE_COMPLIANCE.md": {
+    "mtime": 1781187326.623499,
+    "ast_hash": "84138cb83415b6b5a32f445cd2131354",
+    "semantic_hash": "84138cb83415b6b5a32f445cd2131354"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/2026-q2-consolidation/ARCHIVE_REASON.md": {
+    "mtime": 1781188795.358804,
+    "ast_hash": "e7b0906534cf6738d2c84d3b6f986d22",
+    "semantic_hash": "e7b0906534cf6738d2c84d3b6f986d22"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/2026-q2-consolidation/ARTIFACT_QUALITY_AUDIT.md": {
+    "mtime": 1781147607.0613372,
+    "ast_hash": "f2dcd9ee85d4ffc4f53f9401b7f4e63b",
+    "semantic_hash": "f2dcd9ee85d4ffc4f53f9401b7f4e63b"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/2026-q2-consolidation/BENCHMARK_ARCHITECTURE.md": {
+    "mtime": 1781177920.8938613,
+    "ast_hash": "e799ab7273ad3f4418112a87b678d8b0",
+    "semantic_hash": "e799ab7273ad3f4418112a87b678d8b0"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/2026-q2-consolidation/BENCHMARK_EXECUTION_BLUEPRINT.md": {
+    "mtime": 1781178090.8639567,
+    "ast_hash": "2a6042bf07a4f20f11a9b7475c2ee62d",
+    "semantic_hash": "2a6042bf07a4f20f11a9b7475c2ee62d"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/2026-q2-consolidation/BENCHMARK_SCENARIOS_AND_METHODOLOGY.md": {
+    "mtime": 1781177920.9072738,
+    "ast_hash": "17d81b4123a367444a5bac82b754a7b3",
+    "semantic_hash": "17d81b4123a367444a5bac82b754a7b3"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/2026-q2-consolidation/BOOTSTRAP_PLAN.md": {
+    "mtime": 1781114114.7421312,
+    "ast_hash": "7fa1aaafb10aea0ca50c79a28df4e880",
+    "semantic_hash": "7fa1aaafb10aea0ca50c79a28df4e880"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/2026-q2-consolidation/CORE_DOMAIN_MODEL_ARCHITECTURE.md": {
+    "mtime": 1781181274.562173,
+    "ast_hash": "25d07d66f1b8690a534bfd51d7db95c2",
+    "semantic_hash": "25d07d66f1b8690a534bfd51d7db95c2"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/2026-q2-consolidation/COST_ATTRIBUTION_AUDIT.md": {
+    "mtime": 1781187308.1360276,
+    "ast_hash": "aabcd227112a2e0a3c52d77dec7c9f67",
+    "semantic_hash": "aabcd227112a2e0a3c52d77dec7c9f67"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/2026-q2-consolidation/COST_ESTIMATION_AND_PRE_EXECUTION_GOVERNANCE.md": {
+    "mtime": 1781180559.1959803,
+    "ast_hash": "afb1032d94005cba0b67b624a882f2a3",
+    "semantic_hash": "afb1032d94005cba0b67b624a882f2a3"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/2026-q2-consolidation/COST_OBSERVABILITY_ARCHITECTURE.md": {
+    "mtime": 1781177187.9662368,
+    "ast_hash": "28299bdf6074b50c8f9274481e386acd",
+    "semantic_hash": "28299bdf6074b50c8f9274481e386acd"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/2026-q2-consolidation/COST_OBSERVABILITY_AUDIT.md": {
+    "mtime": 1781177002.5062602,
+    "ast_hash": "92719e7739854f24ee33fd9fdecae6fa",
+    "semantic_hash": "92719e7739854f24ee33fd9fdecae6fa"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/2026-q2-consolidation/COST_OBSERVABILITY_IMPLEMENTATION_PLAN.md": {
+    "mtime": 1781177199.1339467,
+    "ast_hash": "a04035203709713111e07a6003bce86d",
+    "semantic_hash": "a04035203709713111e07a6003bce86d"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/2026-q2-consolidation/DATA_MODEL_DESIGN.md": {
+    "mtime": 1781177187.9602497,
+    "ast_hash": "5688c28c6bf6fe262c13625730f68cc7",
+    "semantic_hash": "5688c28c6bf6fe262c13625730f68cc7"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/2026-q2-consolidation/EVENTBUS_AUDIT.md": {
+    "mtime": 1781187322.2472284,
+    "ast_hash": "afde9115ef552aab441fea53e2fc52f3",
+    "semantic_hash": "afde9115ef552aab441fea53e2fc52f3"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/2026-q2-consolidation/EXECUTION_BLUEPRINT.md": {
+    "mtime": 1781114338.563655,
+    "ast_hash": "2eb91e72e2a164de596b980f4de57d79",
+    "semantic_hash": "2eb91e72e2a164de596b980f4de57d79"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/2026-q2-consolidation/EXECUTION_CONTRACTS_AND_COST_FORECASTING.md": {
+    "mtime": 1781180820.351453,
+    "ast_hash": "593e8cb1c715214e24623882012b13fa",
+    "semantic_hash": "593e8cb1c715214e24623882012b13fa"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/2026-q2-consolidation/EXECUTION_HIERARCHY.md": {
+    "mtime": 1781180379.2807782,
+    "ast_hash": "a4dfa13478e050f42dd8e629376650a3",
+    "semantic_hash": "a4dfa13478e050f42dd8e629376650a3"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/2026-q2-consolidation/EXECUTION_METRICS_EVIDENCE.md": {
+    "mtime": 1781187308.1206443,
+    "ast_hash": "f6d62bc7f7ff45f6b46d0ec56f0b1db0",
+    "semantic_hash": "f6d62bc7f7ff45f6b46d0ec56f0b1db0"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/2026-q2-consolidation/FAILURE_TAXONOMY.md": {
+    "mtime": 1781180150.690079,
+    "ast_hash": "a26082e825dc260b96c5aeb5b7611544",
+    "semantic_hash": "a26082e825dc260b96c5aeb5b7611544"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/2026-q2-consolidation/GOVERNANCE_INTERACTION_MODEL.md": {
+    "mtime": 1781180170.7247496,
+    "ast_hash": "aa2b7dc0bec36f3fdcccb42140391d91",
+    "semantic_hash": "aa2b7dc0bec36f3fdcccb42140391d91"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/2026-q2-consolidation/IMPLEMENTATION_FOUNDATION_ARCHITECTURE.md": {
+    "mtime": 1781181150.8197205,
+    "ast_hash": "5abaedb4b6d42d987b9cdc15a0fa93a2",
+    "semantic_hash": "5abaedb4b6d42d987b9cdc15a0fa93a2"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/2026-q2-consolidation/IMPLEMENTATION_READINESS_REVIEW.md": {
+    "mtime": 1781181072.8871047,
+    "ast_hash": "40b40a542c99c14223bec8ca3823f99d",
+    "semantic_hash": "40b40a542c99c14223bec8ca3823f99d"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/2026-q2-consolidation/IMPLEMENTATION_STRATEGY.md": {
+    "mtime": 1781113820.637493,
+    "ast_hash": "a48f29c0faafeec424ee4827908c79cf",
+    "semantic_hash": "a48f29c0faafeec424ee4827908c79cf"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/2026-q2-consolidation/KNOWN_GAPS.md": {
+    "mtime": 1781187326.6552582,
+    "ast_hash": "aa867b32b068c4a30b699c46e88d7ff0",
+    "semantic_hash": "aa867b32b068c4a30b699c46e88d7ff0"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/2026-q2-consolidation/META_GPT_FIT_ANALYSIS.md": {
+    "mtime": 1781113986.9394069,
+    "ast_hash": "eeec87dbcf3bc1947b512f5461ff1a3d",
+    "semantic_hash": "eeec87dbcf3bc1947b512f5461ff1a3d"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/2026-q2-consolidation/MVP_DELIVERY_READINESS_REVIEW.md": {
+    "mtime": 1781181434.3307467,
+    "ast_hash": "b5e9d85d380d29f39b322ef983e14249",
+    "semantic_hash": "b5e9d85d380d29f39b322ef983e14249"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/2026-q2-consolidation/MVP_KARSA.md": {
+    "mtime": 1781113077.5059083,
+    "ast_hash": "27f55c12fe1fa200c831be76f7174f94",
+    "semantic_hash": "27f55c12fe1fa200c831be76f7174f94"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/2026-q2-consolidation/OPTIMIZATION_ROADMAP.md": {
+    "mtime": 1781177043.7221696,
+    "ast_hash": "03662870b5be604d3b0ccf1d25d3d89e",
+    "semantic_hash": "03662870b5be604d3b0ccf1d25d3d89e"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/2026-q2-consolidation/README.md": {
+    "mtime": 1781187902.6620724,
+    "ast_hash": "dc45f0065e261eeb6ee9e04b6f68daea",
+    "semantic_hash": "dc45f0065e261eeb6ee9e04b6f68daea"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/2026-q2-consolidation/REASONING_QUALITY_AUDIT.md": {
+    "mtime": 1781148306.9015954,
+    "ast_hash": "f0f6304c6ab75b8535670970bd123200",
+    "semantic_hash": "f0f6304c6ab75b8535670970bd123200"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/2026-q2-consolidation/ROADMAP_REVALIDATION.md": {
+    "mtime": 1781180170.7454479,
+    "ast_hash": "2b48caa86e62f268c6f78574f1981602",
+    "semantic_hash": "2b48caa86e62f268c6f78574f1981602"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/2026-q2-consolidation/SPRINT1_REMEDIATION_REPORT.md": {
+    "mtime": 1781187746.2017393,
+    "ast_hash": "ac8f9300e520bd2a69049f8e40d3d400",
+    "semantic_hash": "ac8f9300e520bd2a69049f8e40d3d400"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/2026-q2-consolidation/SUCCESS_CRITERIA.md": {
+    "mtime": 1781180150.7137089,
+    "ast_hash": "3e45f2d63fae336bbced435d5e274a3b",
+    "semantic_hash": "3e45f2d63fae336bbced435d5e274a3b"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/2026-q2-consolidation/TEST_STRATEGY.md": {
+    "mtime": 1781177043.474254,
+    "ast_hash": "a13862c814f418ad5cb6c56cc6f8aa9f",
+    "semantic_hash": "a13862c814f418ad5cb6c56cc6f8aa9f"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/2026-q2-consolidation/TOKENIZATION_AUDIT.md": {
+    "mtime": 1781187308.1324098,
+    "ast_hash": "8ea8e1749c24292ea679374945456fa9",
+    "semantic_hash": "8ea8e1749c24292ea679374945456fa9"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/2026-q2-consolidation/WALKTHROUGH_DIFF.md": {
+    "mtime": 1781187326.6351247,
+    "ast_hash": "b57eee854007c1f0932d5dcaff6f9927",
+    "semantic_hash": "b57eee854007c1f0932d5dcaff6f9927"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/2026-q2-consolidation/WORKFLOW_DURABILITY_AND_RECOVERY_ARCHITECTURE.md": {
+    "mtime": 1781180968.5683155,
+    "ast_hash": "32f38b06f90a60aeb3d240d9673db5b4",
+    "semantic_hash": "32f38b06f90a60aeb3d240d9673db5b4"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/2026-q2-consolidation/WORKFLOW_MODEL.md": {
+    "mtime": 1781113385.5578973,
+    "ast_hash": "fff0dcf93130a9be3445b224769dfd6b",
+    "semantic_hash": "fff0dcf93130a9be3445b224769dfd6b"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/2026-q2-consolidation/WORKFLOW_STATE_MACHINE.md": {
+    "mtime": 1781180150.6758459,
+    "ast_hash": "752c9f52e4bdcfc44cc503bc1953e85b",
+    "semantic_hash": "752c9f52e4bdcfc44cc503bc1953e85b"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/55-performance-engine-design-v2.md": {
+    "mtime": 1781521566.9634352,
+    "ast_hash": "ecf56321a2bb10bbcd793b44b75af93d",
+    "semantic_hash": "ecf56321a2bb10bbcd793b44b75af93d"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/55-performance-engine-design.md": {
+    "mtime": 1781521149.2508907,
+    "ast_hash": "2d6055d6a38a90f3acddbdb5cced487c",
+    "semantic_hash": "2d6055d6a38a90f3acddbdb5cced487c"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/architecture/ARCHITECTURE_BASELINE_V2_1.md": {
+    "mtime": 1781370419.0787897,
+    "ast_hash": "2888cf804bf274a0c94724b0d29f64fa",
+    "semantic_hash": "2888cf804bf274a0c94724b0d29f64fa"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/architecture_iterations/sprint-14/architecture_v1.md": {
+    "mtime": 1781363082.0658884,
+    "ast_hash": "bd627241434aeed081a8142b877c51b4",
+    "semantic_hash": "bd627241434aeed081a8142b877c51b4"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/architecture_iterations/sprint-14/plan_v1.md": {
+    "mtime": 1781363259.7269256,
+    "ast_hash": "6bc16be30bb9f798c69b2adca56301ac",
+    "semantic_hash": "6bc16be30bb9f798c69b2adca56301ac"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/architecture_iterations/sprint-14/plan_v2.md": {
+    "mtime": 1781363473.9206846,
+    "ast_hash": "dedd7e0c6feb522de4e1fc47d6a1c089",
+    "semantic_hash": "dedd7e0c6feb522de4e1fc47d6a1c089"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/architecture_iterations/sprint-14/plan_v3.md": {
+    "mtime": 1781363659.8063655,
+    "ast_hash": "7a9385236d4ad6c407b81bafcd0b5142",
+    "semantic_hash": "7a9385236d4ad6c407b81bafcd0b5142"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/architecture_iterations/sprint-14/plan_v4.md": {
+    "mtime": 1781363825.5041747,
+    "ast_hash": "ded3b87227235bce5e457c3ddae9a1a2",
+    "semantic_hash": "ded3b87227235bce5e457c3ddae9a1a2"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/architecture_iterations/sprint-14/plan_v5.md": {
+    "mtime": 1781364086.9775603,
+    "ast_hash": "7e6f251929c438a99325e921e768d2ea",
+    "semantic_hash": "7e6f251929c438a99325e921e768d2ea"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/architecture_iterations/sprint-14/plan_v6.md": {
+    "mtime": 1781364227.4945152,
+    "ast_hash": "de75547a899ed77892554cbf2c0e453b",
+    "semantic_hash": "de75547a899ed77892554cbf2c0e453b"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/architecture_iterations/sprint-15/architecture_v1.md": {
+    "mtime": 1781365549.6267858,
+    "ast_hash": "5b2dc07901a21e25fa36ea162867ed09",
+    "semantic_hash": "5b2dc07901a21e25fa36ea162867ed09"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/architecture_iterations/sprint-15/architecture_v2.md": {
+    "mtime": 1781365747.198319,
+    "ast_hash": "ef58212d0b866d2bd0451dcfc794ee3b",
+    "semantic_hash": "ef58212d0b866d2bd0451dcfc794ee3b"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/architecture_iterations/sprint-15/architecture_v3.md": {
+    "mtime": 1781365911.5101743,
+    "ast_hash": "d2fe49090b5afd9c1f8e5e2e8bcb3ec5",
+    "semantic_hash": "d2fe49090b5afd9c1f8e5e2e8bcb3ec5"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/architecture_iterations/sprint-15/architecture_v4.md": {
+    "mtime": 1781366024.1496754,
+    "ast_hash": "16bbc45257685e2bc9e59aa35ab9d08e",
+    "semantic_hash": "16bbc45257685e2bc9e59aa35ab9d08e"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/architecture_iterations/sprint-15/architecture_v5.md": {
+    "mtime": 1781366124.4878745,
+    "ast_hash": "417004229c33e65739d27072518097d9",
+    "semantic_hash": "417004229c33e65739d27072518097d9"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/architecture_iterations/sprint-15/architecture_v6.md": {
+    "mtime": 1781366358.774754,
+    "ast_hash": "bb1bb8d8ef1b740d1bec0db3ade2dbf1",
+    "semantic_hash": "bb1bb8d8ef1b740d1bec0db3ade2dbf1"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/product/PRD.md": {
+    "mtime": 1781255397.4697106,
+    "ast_hash": "b86714ae93cb4e6d962410ef30164c92",
+    "semantic_hash": "b86714ae93cb4e6d962410ef30164c92"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/sprint-artifacts/sprint-11.5/audit_report.md": {
+    "mtime": 1781359094.6951478,
+    "ast_hash": "839a3b29e1a2137031ff215df01a4236",
+    "semantic_hash": "839a3b29e1a2137031ff215df01a4236"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/sprint-artifacts/sprint-11/architecture_delta_review.md": {
+    "mtime": 1781330945.2073443,
+    "ast_hash": "7406602eaa00b472fb7d23ae1b712a44",
+    "semantic_hash": "7406602eaa00b472fb7d23ae1b712a44"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/sprint-artifacts/sprint-12/implementation_plan.md": {
+    "mtime": 1781360927.5398662,
+    "ast_hash": "77bf75a0f16d42a641e1e634c79fc9c3",
+    "semantic_hash": "77bf75a0f16d42a641e1e634c79fc9c3"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/sprint-artifacts/sprint-12/plan_vFinal.md": {
+    "mtime": 1781360778.5290751,
+    "ast_hash": "2b827a51085ba20e4b37c187ca0bbe27",
+    "semantic_hash": "2b827a51085ba20e4b37c187ca0bbe27"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/sprint-artifacts/sprint-13/implementation_plan.md": {
+    "mtime": 1781362480.5292723,
+    "ast_hash": "983886d2eb4765653f344217d3346422",
+    "semantic_hash": "983886d2eb4765653f344217d3346422"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/sprint-artifacts/sprint-13/plan_v1.md": {
+    "mtime": 1781362174.5993977,
+    "ast_hash": "593ecc84153992edad293ff9e11a1de0",
+    "semantic_hash": "593ecc84153992edad293ff9e11a1de0"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/sprint-artifacts/sprint-13/plan_v2.md": {
+    "mtime": 1781362303.7504256,
+    "ast_hash": "630e3d41b76dd2f084341a875b340b7d",
+    "semantic_hash": "630e3d41b76dd2f084341a875b340b7d"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/sprint-artifacts/sprint-14/audit_remediation_report.md": {
+    "mtime": 1781365388.3124628,
+    "ast_hash": "31bdaa9f148c8af7fbe00c8982c93820",
+    "semantic_hash": "31bdaa9f148c8af7fbe00c8982c93820"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/sprint-artifacts/sprint-14/execution_package.md": {
+    "mtime": 1781365042.8077571,
+    "ast_hash": "9571bed41387518d1cc5542720f3966d",
+    "semantic_hash": "9571bed41387518d1cc5542720f3966d"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/sprint-artifacts/sprint-14/final_implementation_plan.md": {
+    "mtime": 1781364903.412344,
+    "ast_hash": "5d0c26b984d13387301077eb64dafd9b",
+    "semantic_hash": "5d0c26b984d13387301077eb64dafd9b"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/sprint-artifacts/sprint-14/implementation_plan.md": {
+    "mtime": 1781364352.9980702,
+    "ast_hash": "64a0b3ae3d039bb1c8be03260346e4f2",
+    "semantic_hash": "64a0b3ae3d039bb1c8be03260346e4f2"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/sprint-artifacts/sprint-14/implementation_plan_review.md": {
+    "mtime": 1781364453.0562673,
+    "ast_hash": "548c97e741b1d9b997d9af4f569be7fd",
+    "semantic_hash": "548c97e741b1d9b997d9af4f569be7fd"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/sprint-artifacts/sprint-15/execution_hardening_review.md": {
+    "mtime": 1781367749.6879864,
+    "ast_hash": "9bf40067c95ba0ce73f814b286a72afd",
+    "semantic_hash": "9bf40067c95ba0ce73f814b286a72afd"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/sprint-artifacts/sprint-15/execution_review.md": {
+    "mtime": 1781367587.1528232,
+    "ast_hash": "866c0eb36ba4317b0dcb578fa0a8a18c",
+    "semantic_hash": "866c0eb36ba4317b0dcb578fa0a8a18c"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/sprint-artifacts/sprint-15/final_architecture_challenge.md": {
+    "mtime": 1781368002.1849208,
+    "ast_hash": "73e115c61bce631fb7294349e837b1ab",
+    "semantic_hash": "73e115c61bce631fb7294349e837b1ab"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/sprint-artifacts/sprint-15/final_closure_challenge.md": {
+    "mtime": 1781368217.0379303,
+    "ast_hash": "11724a9a76b966668c6f5821d7656db7",
+    "semantic_hash": "11724a9a76b966668c6f5821d7656db7"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/sprint-artifacts/sprint-15/final_closure_remediation.md": {
+    "mtime": 1781367325.8066127,
+    "ast_hash": "d8e8fbc331f1afeeeb7cf0db920184bf",
+    "semantic_hash": "d8e8fbc331f1afeeeb7cf0db920184bf"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/sprint-artifacts/sprint-15/final_domain_consistency_challenge.md": {
+    "mtime": 1781368520.1421418,
+    "ast_hash": "042137b0c5c8a9cdf6c9877b3dff577e",
+    "semantic_hash": "042137b0c5c8a9cdf6c9877b3dff577e"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/sprint-artifacts/sprint-15/final_final_challenge.md": {
+    "mtime": 1781368359.575216,
+    "ast_hash": "93428b81c12bc9efa5f9ec605b003e29",
+    "semantic_hash": "93428b81c12bc9efa5f9ec605b003e29"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/sprint-artifacts/sprint-15/final_hardening_review.md": {
+    "mtime": 1781367866.5694757,
+    "ast_hash": "61090777b672618739ad9ef35ff9d8eb",
+    "semantic_hash": "61090777b672618739ad9ef35ff9d8eb"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/sprint-artifacts/sprint-15/final_implementation_audit.md": {
+    "mtime": 1781367136.6280248,
+    "ast_hash": "0beb0f1c32c83721cb3a31a8a6688f8e",
+    "semantic_hash": "0beb0f1c32c83721cb3a31a8a6688f8e"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/sprint-artifacts/sprint-15/final_performance_challenge.md": {
+    "mtime": 1781368100.6628072,
+    "ast_hash": "b735139a5770d1dfa2108df8b5058db9",
+    "semantic_hash": "b735139a5770d1dfa2108df8b5058db9"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/sprint-artifacts/sprint-15/implementation_execution.md": {
+    "mtime": 1781368967.6783617,
+    "ast_hash": "2cee209e44f54ffc9c84c652ab177701",
+    "semantic_hash": "2cee209e44f54ffc9c84c652ab177701"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/sprint-artifacts/sprint-15/implementation_execution_plan.md": {
+    "mtime": 1781368589.1599264,
+    "ast_hash": "2870a457207e3954f91482758007d55f",
+    "semantic_hash": "2870a457207e3954f91482758007d55f"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/sprint-artifacts/sprint-15/implementation_execution_plan_corrected.md": {
+    "mtime": 1781368670.731452,
+    "ast_hash": "7c4e996abb48eeb2f65d7fb00923615a",
+    "semantic_hash": "7c4e996abb48eeb2f65d7fb00923615a"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/sprint-artifacts/sprint-15/implementation_plan.md": {
+    "mtime": 1781366593.9887125,
+    "ast_hash": "f95944112aeecec7cf8efcba7ed34308",
+    "semantic_hash": "f95944112aeecec7cf8efcba7ed34308"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/sprint-artifacts/sprint-15/implementation_plan_remediation.md": {
+    "mtime": 1781366986.1330314,
+    "ast_hash": "90117e1d1cc48c5cd49550712605526a",
+    "semantic_hash": "90117e1d1cc48c5cd49550712605526a"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/sprint-artifacts/sprint-37/architecture.md": {
+    "mtime": 1781411498.7364025,
+    "ast_hash": "db89f190eb0bc1bcf0908d54ac76f87d",
+    "semantic_hash": "db89f190eb0bc1bcf0908d54ac76f87d"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/sprint-artifacts/sprint-37/challenge-review.md": {
+    "mtime": 1781411502.0033386,
+    "ast_hash": "33d6625a4cedf66f362213f9d237d5b4",
+    "semantic_hash": "33d6625a4cedf66f362213f9d237d5b4"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/sprint-artifacts/sprint-44/execution-plan.md": {
+    "mtime": 1781479528.0101526,
+    "ast_hash": "29ae624d37704160d38efcb75131a524",
+    "semantic_hash": "29ae624d37704160d38efcb75131a524"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/sprint_48_governance_remediation_report.md": {
+    "mtime": 1781523715.0477936,
+    "ast_hash": "c283963e5238ac76c0ff16c98af3e012",
+    "semantic_hash": "c283963e5238ac76c0ff16c98af3e012"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/sprint_48_readiness_review.md": {
+    "mtime": 1781522022.428529,
+    "ast_hash": "93638734a64a927b74e7bc8c6cc4beb1",
+    "semantic_hash": "93638734a64a927b74e7bc8c6cc4beb1"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/v2-refactor/CONSOLIDATION_REPORT.md": {
+    "mtime": 1781188795.3288689,
+    "ast_hash": "c6d09e14b25c4563160f3170a2e7155e",
+    "semantic_hash": "c6d09e14b25c4563160f3170a2e7155e"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/v2-refactor/DOCUMENTATION_GOVERNANCE.md": {
+    "mtime": 1781188556.6032388,
+    "ast_hash": "23fc962622f7c7a76af0a945bc820dc5",
+    "semantic_hash": "23fc962622f7c7a76af0a945bc820dc5"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/v2-refactor/DOCUMENTATION_QUALITY_GATE.md": {
+    "mtime": 1781188817.8104582,
+    "ast_hash": "35ef500bfd2e520db6cf1315e7364593",
+    "semantic_hash": "35ef500bfd2e520db6cf1315e7364593"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/v2-refactor/DOCUMENT_INVENTORY.md": {
+    "mtime": 1781188795.3366525,
+    "ast_hash": "329da30ecbff0a2dd7960421d1a5bceb",
+    "semantic_hash": "329da30ecbff0a2dd7960421d1a5bceb"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/v2-refactor/DOCUMENT_REVIEW_POLICY.md": {
+    "mtime": 1781188817.791647,
+    "ast_hash": "a222decdd5eb2130277827644f83e549",
+    "semantic_hash": "a222decdd5eb2130277827644f83e549"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/v2-refactor/GOVERNANCE_HARDENING_REPORT.md": {
+    "mtime": 1781188817.81442,
+    "ast_hash": "8f33359b6790f2f79fa9f8f52479cf9a",
+    "semantic_hash": "8f33359b6790f2f79fa9f8f52479cf9a"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/v2-refactor/KARSA_ROADMAP.md": {
+    "mtime": 1781188795.3249345,
+    "ast_hash": "fd5a092615f2e435a5a19495d2a4775d",
+    "semantic_hash": "fd5a092615f2e435a5a19495d2a4775d"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/v2-refactor/ORGANIZATION_MODEL.md": {
+    "mtime": 1781111576.8235338,
+    "ast_hash": "296b4cac237e71e65dcca6799ae53840",
+    "semantic_hash": "296b4cac237e71e65dcca6799ae53840"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/v2-refactor/PROJECT_DASHBOARD.md": {
+    "mtime": 1781188795.332085,
+    "ast_hash": "32226712c654ebe1fa0584a10105cc08",
+    "semantic_hash": "32226712c654ebe1fa0584a10105cc08"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/v2-refactor/PROJECT_STATUS.md": {
+    "mtime": 1781188795.311645,
+    "ast_hash": "037adedd4ae7105ac219bc0c036e37b2",
+    "semantic_hash": "037adedd4ae7105ac219bc0c036e37b2"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/v2-refactor/READINESS_REVIEW.md": {
+    "mtime": 1781188795.345434,
+    "ast_hash": "09a9fd4524c81d11e68ef91f90fbbdfe",
+    "semantic_hash": "09a9fd4524c81d11e68ef91f90fbbdfe"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/v2-refactor/REVIEW_PARSER_AUDIT.md": {
+    "mtime": 1781169712.5178006,
+    "ast_hash": "d00aeb41a91851ce70b43ebf144bdecf",
+    "semantic_hash": "d00aeb41a91851ce70b43ebf144bdecf"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/v2-refactor/SPRINT_01_AUDIT.md": {
+    "mtime": 1781188795.3411326,
+    "ast_hash": "6369e51a125d2c8f0de7e9faa18cb4b0",
+    "semantic_hash": "6369e51a125d2c8f0de7e9faa18cb4b0"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/v2-refactor/SSOT_MATRIX.md": {
+    "mtime": 1781188813.2788098,
+    "ast_hash": "feb2fdf761dcece7aa21c59cd28dcb4f",
+    "semantic_hash": "feb2fdf761dcece7aa21c59cd28dcb4f"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/v2-refactor/VISION.md": {
+    "mtime": 1781110046.092369,
+    "ast_hash": "2117ef466f80f940705502d6ee066483",
+    "semantic_hash": "2117ef466f80f940705502d6ee066483"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/v2-refactor/WORKFLOW_STATE_AUDIT.md": {
+    "mtime": 1781176341.873466,
+    "ast_hash": "8c5f054ae8d48efb1394feda56725732",
+    "semantic_hash": "8c5f054ae8d48efb1394feda56725732"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/archive/vision/VISION.md": {
+    "mtime": 1781255397.4636014,
+    "ast_hash": "8f62a8d46b2943687db64064c7ef9ff0",
+    "semantic_hash": "8f62a8d46b2943687db64064c7ef9ff0"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/audit/SPRINT05_REMEDIATION_PLAN.md": {
+    "mtime": 1781981637.22746,
+    "ast_hash": "36d3d80f44e0e60ec84d3a934f271874",
+    "semantic_hash": "36d3d80f44e0e60ec84d3a934f271874"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/audit/audit-claude.md": {
+    "mtime": 1781982321.124745,
+    "ast_hash": "e6cd92f43dc0c7639802fd70f76ce980",
+    "semantic_hash": "e6cd92f43dc0c7639802fd70f76ce980"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/audits/attribution-consolidation-final-audit.md": {
+    "mtime": 1781981637.2279856,
+    "ast_hash": "87dcda78d4db2af6c31b17ff678d8462",
+    "semantic_hash": "87dcda78d4db2af6c31b17ff678d8462"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/audits/attribution_test_cleanup_audit.md": {
+    "mtime": 1781981637.2281687,
+    "ast_hash": "729ea23a52c62854e57f385c73f20d3c",
+    "semantic_hash": "729ea23a52c62854e57f385c73f20d3c"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/audits/docker_delta_remediation.md": {
+    "mtime": 1781981637.2286556,
+    "ast_hash": "7208289abfed62df2daa9928db484b8d",
+    "semantic_hash": "7208289abfed62df2daa9928db484b8d"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/audits/event_store_validation_remediation.md": {
+    "mtime": 1781981637.22893,
+    "ast_hash": "ad2a5deb83d1d6c3bf529ae09122eab8",
+    "semantic_hash": "ad2a5deb83d1d6c3bf529ae09122eab8"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/audits/repository_health_post_remediation.md": {
+    "mtime": 1781981637.2291934,
+    "ast_hash": "c777d7f6a125c19797b0a0e982193c2f",
+    "semantic_hash": "c777d7f6a125c19797b0a0e982193c2f"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/audits/sprint_1_final_compliance_audit.md": {
+    "mtime": 1781981637.2296593,
+    "ast_hash": "2d4455abffcae29156105f73529e0dc8",
+    "semantic_hash": "2d4455abffcae29156105f73529e0dc8"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation/sprint-01/design.md": {
+    "mtime": 1781981637.2300904,
+    "ast_hash": "360c799961e761e70a84ed04767214a4",
+    "semantic_hash": "360c799961e761e70a84ed04767214a4"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation/sprint-02/design.md": {
+    "mtime": 1781981637.230352,
+    "ast_hash": "1afee23bd246cc779692ff8b5093e627",
+    "semantic_hash": "1afee23bd246cc779692ff8b5093e627"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation/sprint-03/design.md": {
+    "mtime": 1781981637.2308385,
+    "ast_hash": "39885e4c71c14c46068261367296c51f",
+    "semantic_hash": "39885e4c71c14c46068261367296c51f"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation/sprint-04/design.md": {
+    "mtime": 1781981637.231148,
+    "ast_hash": "cb9cebecc88a06203accb4a8f392bcf9",
+    "semantic_hash": "cb9cebecc88a06203accb4a8f392bcf9"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation/sprint-04/implementation-plan.md": {
+    "mtime": 1781981637.2313774,
+    "ast_hash": "c4f6765072d409660348390c99e09390",
+    "semantic_hash": "c4f6765072d409660348390c99e09390"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-01/audit.md": {
+    "mtime": 1781981637.231596,
+    "ast_hash": "6369e51a125d2c8f0de7e9faa18cb4b0",
+    "semantic_hash": "6369e51a125d2c8f0de7e9faa18cb4b0"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-01/implementation.md": {
+    "mtime": 1781981637.2317035,
+    "ast_hash": "9c89588d34ee3762dd5c168b2923adb0",
+    "semantic_hash": "9c89588d34ee3762dd5c168b2923adb0"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-01/plan.md": {
+    "mtime": 1781981637.2318015,
+    "ast_hash": "407b2d12ddc4f408b9ac41433d74dd66",
+    "semantic_hash": "407b2d12ddc4f408b9ac41433d74dd66"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-01/remediation.md": {
+    "mtime": 1781981637.2320375,
+    "ast_hash": "ac8f9300e520bd2a69049f8e40d3d400",
+    "semantic_hash": "ac8f9300e520bd2a69049f8e40d3d400"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-02/audit.md": {
+    "mtime": 1781981637.2322285,
+    "ast_hash": "c6c6a633339a29f2a22fcb4c715fcd27",
+    "semantic_hash": "c6c6a633339a29f2a22fcb4c715fcd27"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-02/implementation.md": {
+    "mtime": 1781981637.2323244,
+    "ast_hash": "722b694c1779c1b7d9fde6a091a46851",
+    "semantic_hash": "722b694c1779c1b7d9fde6a091a46851"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-02/plan.md": {
+    "mtime": 1781981637.2324612,
+    "ast_hash": "dfe16bd02fe62f4de270b1800d906b25",
+    "semantic_hash": "dfe16bd02fe62f4de270b1800d906b25"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-02/remediation.md": {
+    "mtime": 1781981637.2326183,
+    "ast_hash": "ef53644ab658a1bc95c0a30cc787596c",
+    "semantic_hash": "ef53644ab658a1bc95c0a30cc787596c"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-03/audit.md": {
+    "mtime": 1781981637.2327428,
+    "ast_hash": "6ae654413c514edd7484297bcef95cd9",
+    "semantic_hash": "6ae654413c514edd7484297bcef95cd9"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-03/implementation.md": {
+    "mtime": 1781981637.2328286,
+    "ast_hash": "b96519706650d345e14c18c6aeac437c",
+    "semantic_hash": "b96519706650d345e14c18c6aeac437c"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-03/plan.md": {
+    "mtime": 1781981637.2329679,
+    "ast_hash": "df1230849b78b70f33042a25cd393325",
+    "semantic_hash": "df1230849b78b70f33042a25cd393325"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-03/remediation.md": {
+    "mtime": 1781981637.2330706,
+    "ast_hash": "6509f34df376be0fc22895d9f248623c",
+    "semantic_hash": "6509f34df376be0fc22895d9f248623c"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-04/audit.md": {
+    "mtime": 1781981637.23319,
+    "ast_hash": "a701e0c42a7b607ecbded2ae060e1bd9",
+    "semantic_hash": "a701e0c42a7b607ecbded2ae060e1bd9"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-04/implementation.md": {
+    "mtime": 1781981637.2332804,
+    "ast_hash": "e44712bfea664ca9b3f8181e44092206",
+    "semantic_hash": "e44712bfea664ca9b3f8181e44092206"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-04/plan.md": {
+    "mtime": 1781981637.2333696,
+    "ast_hash": "f1f321b0ff16faab793bfd8a02c16ec6",
+    "semantic_hash": "f1f321b0ff16faab793bfd8a02c16ec6"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-04/remediation.md": {
+    "mtime": 1781981637.2334595,
+    "ast_hash": "33050d46a1ad694323f744d40ab9d360",
+    "semantic_hash": "33050d46a1ad694323f744d40ab9d360"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-05/audit.md": {
+    "mtime": 1781981637.2336464,
+    "ast_hash": "4e8f493bedc69709ad05de69e2743c22",
+    "semantic_hash": "4e8f493bedc69709ad05de69e2743c22"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-05/implementation.md": {
+    "mtime": 1781981637.2338037,
+    "ast_hash": "4cb5652e6c051a5b7f321932b4438d4f",
+    "semantic_hash": "4cb5652e6c051a5b7f321932b4438d4f"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-05/plan.md": {
+    "mtime": 1781981637.2339056,
+    "ast_hash": "b4e5877418d57bb439652c769dd298ab",
+    "semantic_hash": "b4e5877418d57bb439652c769dd298ab"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-05/remediation.md": {
+    "mtime": 1781981637.233997,
+    "ast_hash": "2ecb1a4f862bed447b2279a06e2e52b9",
+    "semantic_hash": "2ecb1a4f862bed447b2279a06e2e52b9"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-06/audit.md": {
+    "mtime": 1781981637.2341292,
+    "ast_hash": "16be7f301f3d78bd0d9ba2736612f9b3",
+    "semantic_hash": "16be7f301f3d78bd0d9ba2736612f9b3"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-06/implementation.md": {
+    "mtime": 1781981637.234217,
+    "ast_hash": "e235ec4f15e567a0af232409044ff4c4",
+    "semantic_hash": "e235ec4f15e567a0af232409044ff4c4"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-06/plan.md": {
+    "mtime": 1781981637.23431,
+    "ast_hash": "c43f649e9888a9b30ba6ca9c99833c48",
+    "semantic_hash": "c43f649e9888a9b30ba6ca9c99833c48"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-06/remediation.md": {
+    "mtime": 1781981637.2343884,
+    "ast_hash": "a54b2bada50c94bd8bbf0c416ff4fc95",
+    "semantic_hash": "a54b2bada50c94bd8bbf0c416ff4fc95"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-07/audit.md": {
+    "mtime": 1781981637.2345128,
+    "ast_hash": "635fe7c913a3a93b74e07e99c8193590",
+    "semantic_hash": "635fe7c913a3a93b74e07e99c8193590"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-07/implementation.md": {
+    "mtime": 1781981637.234606,
+    "ast_hash": "ff94f9d1f5c4a53fed5e22ad57dd308a",
+    "semantic_hash": "ff94f9d1f5c4a53fed5e22ad57dd308a"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-07/plan.md": {
+    "mtime": 1781981637.2346861,
+    "ast_hash": "a6fc703388e7d34b81362b32637e9e21",
+    "semantic_hash": "a6fc703388e7d34b81362b32637e9e21"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-07/remediation.md": {
+    "mtime": 1781981637.2347696,
+    "ast_hash": "c5dc4bd8183425a199512167d7eb3135",
+    "semantic_hash": "c5dc4bd8183425a199512167d7eb3135"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-08/audit.md": {
+    "mtime": 1781981637.2348785,
+    "ast_hash": "b672cc475bfb30d44ecaa824dbc181bf",
+    "semantic_hash": "b672cc475bfb30d44ecaa824dbc181bf"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-08/implementation.md": {
+    "mtime": 1781981637.2349615,
+    "ast_hash": "8e564b89d839783f7c8680460908ed5d",
+    "semantic_hash": "8e564b89d839783f7c8680460908ed5d"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-08/plan.md": {
+    "mtime": 1781981637.235105,
+    "ast_hash": "0a29766ef5ff3d6f80cd22ecf0ff02ef",
+    "semantic_hash": "0a29766ef5ff3d6f80cd22ecf0ff02ef"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-08/remediation.md": {
+    "mtime": 1781981637.2351882,
+    "ast_hash": "4542409874a004042ca49efe411213af",
+    "semantic_hash": "4542409874a004042ca49efe411213af"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-09/audit.md": {
+    "mtime": 1781981637.235303,
+    "ast_hash": "87cfd5fc457f6e49a0b6041b72684184",
+    "semantic_hash": "87cfd5fc457f6e49a0b6041b72684184"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-09/implementation.md": {
+    "mtime": 1781981637.235388,
+    "ast_hash": "b9ef51601b7b6f3a4b58feadef9c7b07",
+    "semantic_hash": "b9ef51601b7b6f3a4b58feadef9c7b07"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-09/plan.md": {
+    "mtime": 1781981637.235525,
+    "ast_hash": "84b5a1e91fb83698ecec7c7d253349cb",
+    "semantic_hash": "84b5a1e91fb83698ecec7c7d253349cb"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-09/remediation.md": {
+    "mtime": 1781981637.2356172,
+    "ast_hash": "8033a23c74631a0233cd1cae7dee49b4",
+    "semantic_hash": "8033a23c74631a0233cd1cae7dee49b4"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-10/audit.md": {
+    "mtime": 1781981637.2357361,
+    "ast_hash": "ee5e60812211e55b499a3652f17997e8",
+    "semantic_hash": "ee5e60812211e55b499a3652f17997e8"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-10/implementation.md": {
+    "mtime": 1781981637.2358282,
+    "ast_hash": "7da7a082a035cb7ce752c1fb289e8f14",
+    "semantic_hash": "7da7a082a035cb7ce752c1fb289e8f14"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-10/plan.md": {
+    "mtime": 1781981637.2359746,
+    "ast_hash": "301a8411230e319ffc1ac7b9f276e4af",
+    "semantic_hash": "301a8411230e319ffc1ac7b9f276e4af"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-10/remediation.md": {
+    "mtime": 1781981637.2360551,
+    "ast_hash": "e9f0bc5d20e16437289edfb6472a80de",
+    "semantic_hash": "e9f0bc5d20e16437289edfb6472a80de"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-11.5/audit.md": {
+    "mtime": 1781981637.2362227,
+    "ast_hash": "01cdcc91d06120e746213953ddb1dce9",
+    "semantic_hash": "01cdcc91d06120e746213953ddb1dce9"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-11.5/plan.md": {
+    "mtime": 1781981637.2363675,
+    "ast_hash": "384d07a4e1945159ce19c0d9da8ccb08",
+    "semantic_hash": "384d07a4e1945159ce19c0d9da8ccb08"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-11/audit.md": {
+    "mtime": 1781981637.2364793,
+    "ast_hash": "6597f29e31e66b5d068563ff3c4a2a89",
+    "semantic_hash": "6597f29e31e66b5d068563ff3c4a2a89"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-11/implementation.md": {
+    "mtime": 1781981637.2365654,
+    "ast_hash": "14a5147e9858181712888066029c5861",
+    "semantic_hash": "14a5147e9858181712888066029c5861"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-11/plan.md": {
+    "mtime": 1781981637.2367165,
+    "ast_hash": "2cec59f41ec19a307c1097c2179204d4",
+    "semantic_hash": "2cec59f41ec19a307c1097c2179204d4"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-11/remediation.md": {
+    "mtime": 1781981637.2367961,
+    "ast_hash": "f846231ee6b56145a6546a9b45c96abc",
+    "semantic_hash": "f846231ee6b56145a6546a9b45c96abc"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-12/audit.md": {
+    "mtime": 1781981637.2369652,
+    "ast_hash": "3084f63bdadafff97f2a23d134f623a9",
+    "semantic_hash": "3084f63bdadafff97f2a23d134f623a9"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-12/implementation.md": {
+    "mtime": 1781981637.2370503,
+    "ast_hash": "661212d5c1ee5701969ba3a2690ce003",
+    "semantic_hash": "661212d5c1ee5701969ba3a2690ce003"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-12/plan.md": {
+    "mtime": 1781981637.237186,
+    "ast_hash": "884908af3332aae0872d2b4590403879",
+    "semantic_hash": "884908af3332aae0872d2b4590403879"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-12/remediation.md": {
+    "mtime": 1781981637.237261,
+    "ast_hash": "2c61de445d02efa9cd929faa1046d60e",
+    "semantic_hash": "2c61de445d02efa9cd929faa1046d60e"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-13/audit.md": {
+    "mtime": 1781981637.2374253,
+    "ast_hash": "67f337ff508fafd6c42ab8954878338b",
+    "semantic_hash": "67f337ff508fafd6c42ab8954878338b"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-13/implementation.md": {
+    "mtime": 1781981637.2375028,
+    "ast_hash": "0b4b439f29e7e96fb106fd66298ae959",
+    "semantic_hash": "0b4b439f29e7e96fb106fd66298ae959"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-13/plan.md": {
+    "mtime": 1781981637.237637,
+    "ast_hash": "73d36f9a96161c345e33480c470db880",
+    "semantic_hash": "73d36f9a96161c345e33480c470db880"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-13/remediation.md": {
+    "mtime": 1781981637.23772,
+    "ast_hash": "3f18fcd140c8fcecc547fdf84be2d728",
+    "semantic_hash": "3f18fcd140c8fcecc547fdf84be2d728"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-14/audit.md": {
+    "mtime": 1781981637.2378397,
+    "ast_hash": "a308f5662aa0a9516d88fa06e410c093",
+    "semantic_hash": "a308f5662aa0a9516d88fa06e410c093"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-14/implementation.md": {
+    "mtime": 1781981637.237937,
+    "ast_hash": "b1873716e247f2ef53c38e4236c796d9",
+    "semantic_hash": "b1873716e247f2ef53c38e4236c796d9"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-14/plan.md": {
+    "mtime": 1781981637.2380505,
+    "ast_hash": "ad7852cc57a59097cf4e05aa8933c40d",
+    "semantic_hash": "ad7852cc57a59097cf4e05aa8933c40d"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-14/remediation.md": {
+    "mtime": 1781981637.238156,
+    "ast_hash": "815871903ef678c9819c1ad1527d9711",
+    "semantic_hash": "815871903ef678c9819c1ad1527d9711"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-15/audit.md": {
+    "mtime": 1781981637.2382643,
+    "ast_hash": "50f32c596380ae5d64a96bf12e150569",
+    "semantic_hash": "50f32c596380ae5d64a96bf12e150569"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-15/implementation.md": {
+    "mtime": 1781981637.2383835,
+    "ast_hash": "c200561c1d58a1a25350fef11cab8d32",
+    "semantic_hash": "c200561c1d58a1a25350fef11cab8d32"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-15/plan.md": {
+    "mtime": 1781981637.2384768,
+    "ast_hash": "3a37b48eeaf0d17f107261c883f9f0b2",
+    "semantic_hash": "3a37b48eeaf0d17f107261c883f9f0b2"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-15/remediation.md": {
+    "mtime": 1781981637.238562,
+    "ast_hash": "80b46f5c0f797e38e1e4f24cac845f7c",
+    "semantic_hash": "80b46f5c0f797e38e1e4f24cac845f7c"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-16/audit.md": {
+    "mtime": 1781981637.2386935,
+    "ast_hash": "8410929d3d889d3cb363418d94af489d",
+    "semantic_hash": "8410929d3d889d3cb363418d94af489d"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-16/implementation.md": {
+    "mtime": 1781981637.238794,
+    "ast_hash": "e87e01c813171cfe472df4021156c890",
+    "semantic_hash": "e87e01c813171cfe472df4021156c890"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-16/plan.md": {
+    "mtime": 1781981637.2388859,
+    "ast_hash": "debf4aad995f8b90494e32dc7a94d754",
+    "semantic_hash": "debf4aad995f8b90494e32dc7a94d754"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-16/remediation.md": {
+    "mtime": 1781981637.2389674,
+    "ast_hash": "ecca5ab77dbccaa1687dc3cc17481591",
+    "semantic_hash": "ecca5ab77dbccaa1687dc3cc17481591"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-17/audit.md": {
+    "mtime": 1781981637.239089,
+    "ast_hash": "3de6a4a3572051c4663a2c58e30be9f2",
+    "semantic_hash": "3de6a4a3572051c4663a2c58e30be9f2"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-17/implementation.md": {
+    "mtime": 1781981637.239178,
+    "ast_hash": "82c8d25a24ed28f4b127cccc637c80ab",
+    "semantic_hash": "82c8d25a24ed28f4b127cccc637c80ab"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-17/plan.md": {
+    "mtime": 1781981637.239262,
+    "ast_hash": "1cf5dd219860b7fee87cd2a77789b197",
+    "semantic_hash": "1cf5dd219860b7fee87cd2a77789b197"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-17/remediation.md": {
+    "mtime": 1781981637.2393472,
+    "ast_hash": "c516bbb56e357913c05be5fd16cd97db",
+    "semantic_hash": "c516bbb56e357913c05be5fd16cd97db"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-18/audit.md": {
+    "mtime": 1781981637.2394607,
+    "ast_hash": "87149ff84e087bf7cb95bf37071842d7",
+    "semantic_hash": "87149ff84e087bf7cb95bf37071842d7"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-18/implementation.md": {
+    "mtime": 1781981637.2395463,
+    "ast_hash": "33393e403377948d65428fca3b6da611",
+    "semantic_hash": "33393e403377948d65428fca3b6da611"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-18/plan.md": {
+    "mtime": 1781981637.2396274,
+    "ast_hash": "b67db29e61df65d1b9a7002486ba44ac",
+    "semantic_hash": "b67db29e61df65d1b9a7002486ba44ac"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-18/remediation.md": {
+    "mtime": 1781981637.2397077,
+    "ast_hash": "1d36d62c4ce371becbcbb2cd02b6f708",
+    "semantic_hash": "1d36d62c4ce371becbcbb2cd02b6f708"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-19/audit.md": {
+    "mtime": 1781981637.2398376,
+    "ast_hash": "c8a8619baccd215af5e9d46a0796e853",
+    "semantic_hash": "c8a8619baccd215af5e9d46a0796e853"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-19/implementation.md": {
+    "mtime": 1781981637.23994,
+    "ast_hash": "e87b37027f0f1931c0cdccfad8900c2a",
+    "semantic_hash": "e87b37027f0f1931c0cdccfad8900c2a"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-19/plan.md": {
+    "mtime": 1781981637.240044,
+    "ast_hash": "537fa243cc28cb5da9439299d28f0f7d",
+    "semantic_hash": "537fa243cc28cb5da9439299d28f0f7d"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-19/remediation.md": {
+    "mtime": 1781981637.2401268,
+    "ast_hash": "d266220ee1865f3b2d2f20e5c9fa567d",
+    "semantic_hash": "d266220ee1865f3b2d2f20e5c9fa567d"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-20/audit.md": {
+    "mtime": 1781981637.240238,
+    "ast_hash": "e4f05df0f6e8d4300fb11e5eae07ce19",
+    "semantic_hash": "e4f05df0f6e8d4300fb11e5eae07ce19"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-20/implementation.md": {
+    "mtime": 1781981637.2403755,
+    "ast_hash": "4804da6438c5d5f71c30eea6c040e39c",
+    "semantic_hash": "4804da6438c5d5f71c30eea6c040e39c"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-20/plan.md": {
+    "mtime": 1781981637.240459,
+    "ast_hash": "441865474d5bc6427c9f26601aeac1cc",
+    "semantic_hash": "441865474d5bc6427c9f26601aeac1cc"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-20/remediation.md": {
+    "mtime": 1781981637.240546,
+    "ast_hash": "42357e5f68906df789e3e3f483270200",
+    "semantic_hash": "42357e5f68906df789e3e3f483270200"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-21/implementation.md": {
+    "mtime": 1781981637.2406714,
+    "ast_hash": "bcff085ddd67ffd62b06949bf244628e",
+    "semantic_hash": "bcff085ddd67ffd62b06949bf244628e"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-21/plan.md": {
+    "mtime": 1781981637.2407572,
+    "ast_hash": "72123d8dc40c9ed28862eecbd3b0e2cc",
+    "semantic_hash": "72123d8dc40c9ed28862eecbd3b0e2cc"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-22/audit.md": {
+    "mtime": 1781981637.2409484,
+    "ast_hash": "d49648402b974ca788f77e9c75b296c0",
+    "semantic_hash": "d49648402b974ca788f77e9c75b296c0"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-22/implementation.md": {
+    "mtime": 1781981637.2410471,
+    "ast_hash": "a04570bdd87402f1790146e32a684ac3",
+    "semantic_hash": "a04570bdd87402f1790146e32a684ac3"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-22/plan.md": {
+    "mtime": 1781981637.2411351,
+    "ast_hash": "20479b4a559f26ee0acc58c92ed31ec7",
+    "semantic_hash": "20479b4a559f26ee0acc58c92ed31ec7"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-22/remediation.md": {
+    "mtime": 1781981637.241221,
+    "ast_hash": "a7b5eb910ef9ad8c2ce5253f08d0f057",
+    "semantic_hash": "a7b5eb910ef9ad8c2ce5253f08d0f057"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-23/plan.md": {
+    "mtime": 1781981637.2413354,
+    "ast_hash": "0743cccf3c2a2288a28a681303839bbd",
+    "semantic_hash": "0743cccf3c2a2288a28a681303839bbd"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-24/audit.md": {
+    "mtime": 1781981637.2414505,
+    "ast_hash": "6007ef296d7d566e4a1f1ee74620cb82",
+    "semantic_hash": "6007ef296d7d566e4a1f1ee74620cb82"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-24/implementation.md": {
+    "mtime": 1781981637.2415473,
+    "ast_hash": "0af89ffee46b7e68d8b71a0058e4c329",
+    "semantic_hash": "0af89ffee46b7e68d8b71a0058e4c329"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-24/plan.md": {
+    "mtime": 1781981637.2416308,
+    "ast_hash": "a4f0d80c64015467f4215d327d086bd7",
+    "semantic_hash": "a4f0d80c64015467f4215d327d086bd7"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-24/remediation.md": {
+    "mtime": 1781981637.2417197,
+    "ast_hash": "3b5bea2c030c603a4eb658799f7ce560",
+    "semantic_hash": "3b5bea2c030c603a4eb658799f7ce560"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-25/audit.md": {
+    "mtime": 1781981637.2418442,
+    "ast_hash": "cdc4705915a08179371bae014fef98ef",
+    "semantic_hash": "cdc4705915a08179371bae014fef98ef"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-25/implementation.md": {
+    "mtime": 1781981637.24195,
+    "ast_hash": "b1700267847a62760c83553b409b879b",
+    "semantic_hash": "b1700267847a62760c83553b409b879b"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-25/plan.md": {
+    "mtime": 1781981637.2420368,
+    "ast_hash": "74b4f772bf2cbb9e0824e238c03a2c20",
+    "semantic_hash": "74b4f772bf2cbb9e0824e238c03a2c20"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-25/remediation.md": {
+    "mtime": 1781981637.2421157,
+    "ast_hash": "ac48ba24382fe1fe83c61cae1173c2e3",
+    "semantic_hash": "ac48ba24382fe1fe83c61cae1173c2e3"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-26/plan.md": {
+    "mtime": 1781981637.2422297,
+    "ast_hash": "541cf1afd2e9c33434b1b9d447b22897",
+    "semantic_hash": "541cf1afd2e9c33434b1b9d447b22897"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-27/plan.md": {
+    "mtime": 1781981637.2423434,
+    "ast_hash": "1ee73a7f69df32b6c3685d9eaebf0b49",
+    "semantic_hash": "1ee73a7f69df32b6c3685d9eaebf0b49"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-28/audit.md": {
+    "mtime": 1781981637.2425127,
+    "ast_hash": "a05e2e7eefbc1e04cc7c4e05d1b63053",
+    "semantic_hash": "a05e2e7eefbc1e04cc7c4e05d1b63053"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-28/implementation.md": {
+    "mtime": 1781981637.242595,
+    "ast_hash": "128a2a6b82e3639ea63ae0b47cb81b54",
+    "semantic_hash": "128a2a6b82e3639ea63ae0b47cb81b54"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-28/plan.md": {
+    "mtime": 1781981637.2426758,
+    "ast_hash": "6ea4351c7b5a3af390aed4a5660d1ec4",
+    "semantic_hash": "6ea4351c7b5a3af390aed4a5660d1ec4"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-28/remediation.md": {
+    "mtime": 1781981637.242815,
+    "ast_hash": "5e9fb09454fa8a80ab14270d5850f43f",
+    "semantic_hash": "5e9fb09454fa8a80ab14270d5850f43f"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-29/audit.md": {
+    "mtime": 1781981637.243007,
+    "ast_hash": "4d3b8a1c2d1bf45f718affbea2eeb8a9",
+    "semantic_hash": "4d3b8a1c2d1bf45f718affbea2eeb8a9"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-29/implementation.md": {
+    "mtime": 1781981637.243099,
+    "ast_hash": "aeec4379ec8421ceac9556fa88e924a2",
+    "semantic_hash": "aeec4379ec8421ceac9556fa88e924a2"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-29/plan.md": {
+    "mtime": 1781981637.243181,
+    "ast_hash": "7d12dd251a37066ebf52bcb94f0e607f",
+    "semantic_hash": "7d12dd251a37066ebf52bcb94f0e607f"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-29/remediation.md": {
+    "mtime": 1781981637.243321,
+    "ast_hash": "2aff5171700079d15ea27e8f36ea22c2",
+    "semantic_hash": "2aff5171700079d15ea27e8f36ea22c2"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-30/audit.md": {
+    "mtime": 1781981637.2434855,
+    "ast_hash": "6c350e3a4cf1322af4e87a8281395d66",
+    "semantic_hash": "6c350e3a4cf1322af4e87a8281395d66"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-30/implementation.md": {
+    "mtime": 1781981637.2435708,
+    "ast_hash": "7ed3d2cc5385511311f80f80478b037a",
+    "semantic_hash": "7ed3d2cc5385511311f80f80478b037a"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-30/plan.md": {
+    "mtime": 1781981637.243655,
+    "ast_hash": "786502aebceeb74247ce5b439c2b97aa",
+    "semantic_hash": "786502aebceeb74247ce5b439c2b97aa"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-30/remediation.md": {
+    "mtime": 1781981637.2437513,
+    "ast_hash": "1bc666d354bd993eb34e6fd4e522cffd",
+    "semantic_hash": "1bc666d354bd993eb34e6fd4e522cffd"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-31/audit.md": {
+    "mtime": 1781981637.2438796,
+    "ast_hash": "cd328d04f12e66093c3e107d1210977d",
+    "semantic_hash": "cd328d04f12e66093c3e107d1210977d"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-31/plan.md": {
+    "mtime": 1781981637.2439713,
+    "ast_hash": "7fd6b9e936c4724f166c076863ee74b8",
+    "semantic_hash": "7fd6b9e936c4724f166c076863ee74b8"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-31/remediation.md": {
+    "mtime": 1781981637.2440681,
+    "ast_hash": "c3c534ba3b8530b742d4f4640d797b3e",
+    "semantic_hash": "c3c534ba3b8530b742d4f4640d797b3e"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-32/audit.md": {
+    "mtime": 1781981637.244238,
+    "ast_hash": "4a809aae194ebce2a12262a65122855e",
+    "semantic_hash": "4a809aae194ebce2a12262a65122855e"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-32/plan.md": {
+    "mtime": 1781981637.244324,
+    "ast_hash": "b378086bd5132cadb8f453851249cfd5",
+    "semantic_hash": "b378086bd5132cadb8f453851249cfd5"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-32/remediation.md": {
+    "mtime": 1781981637.2444282,
+    "ast_hash": "c0ed910a5e5c48c15385ba108b676008",
+    "semantic_hash": "c0ed910a5e5c48c15385ba108b676008"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-33/audit.md": {
+    "mtime": 1781981637.2446122,
+    "ast_hash": "2a3eb44c654810fa47c05af44f03726c",
+    "semantic_hash": "2a3eb44c654810fa47c05af44f03726c"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-33/execution-evidence.md": {
+    "mtime": 1781981637.2446918,
+    "ast_hash": "cc72c4e03707b1311d86855cefe37867",
+    "semantic_hash": "cc72c4e03707b1311d86855cefe37867"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-33/implementation.md": {
+    "mtime": 1781981637.2448301,
+    "ast_hash": "a2c7f220d62ddcabc477d8df771388d6",
+    "semantic_hash": "a2c7f220d62ddcabc477d8df771388d6"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-33/plan.md": {
+    "mtime": 1781981637.2449133,
+    "ast_hash": "27964bbb8c7124a8e24b31accd81f407",
+    "semantic_hash": "27964bbb8c7124a8e24b31accd81f407"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-33/remediation.md": {
+    "mtime": 1781981637.245003,
+    "ast_hash": "13edd0477a298902cd89f5147bde90c1",
+    "semantic_hash": "13edd0477a298902cd89f5147bde90c1"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-33/roadmap-consistency-audit.md": {
+    "mtime": 1781981637.245108,
+    "ast_hash": "aa9997e090a03f8b1bec289b62932a44",
+    "semantic_hash": "aa9997e090a03f8b1bec289b62932a44"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-33/test-report.md": {
+    "mtime": 1781981637.245201,
+    "ast_hash": "2b1d4998a741ebfd3f270698112f7450",
+    "semantic_hash": "2b1d4998a741ebfd3f270698112f7450"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-34/architecture.md": {
+    "mtime": 1781981637.2453437,
+    "ast_hash": "a58579e7631bef44106d07d50b03fe01",
+    "semantic_hash": "a58579e7631bef44106d07d50b03fe01"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-34/challenge-review.md": {
+    "mtime": 1781981637.2455049,
+    "ast_hash": "6a7b572bed2c6928fe59861cec22da60",
+    "semantic_hash": "6a7b572bed2c6928fe59861cec22da60"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-35/audit.md": {
+    "mtime": 1781981637.2456858,
+    "ast_hash": "590676defdaadf31aeb1565a77c7d103",
+    "semantic_hash": "590676defdaadf31aeb1565a77c7d103"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-35/execution-evidence.md": {
+    "mtime": 1781981637.245776,
+    "ast_hash": "088f98d7fd4054b012681e58d65baa32",
+    "semantic_hash": "088f98d7fd4054b012681e58d65baa32"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-35/implementation.md": {
+    "mtime": 1781981637.245916,
+    "ast_hash": "9b599072ffde2662e9b10de58bb4901d",
+    "semantic_hash": "9b599072ffde2662e9b10de58bb4901d"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-35/plan.md": {
+    "mtime": 1781981637.2460022,
+    "ast_hash": "d13bb2bea2502515668a64e3e368f170",
+    "semantic_hash": "d13bb2bea2502515668a64e3e368f170"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-35/remediation.md": {
+    "mtime": 1781981637.2460873,
+    "ast_hash": "99fed57d5c0b9b7aced6381bf3a157cd",
+    "semantic_hash": "99fed57d5c0b9b7aced6381bf3a157cd"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-35/test-report.md": {
+    "mtime": 1781981637.2461808,
+    "ast_hash": "915c3837ecf0e2d2f6a9106510743efd",
+    "semantic_hash": "915c3837ecf0e2d2f6a9106510743efd"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-37/audit.md": {
+    "mtime": 1781981637.2463558,
+    "ast_hash": "d42540b9df8805f6d3ebae1e8099b50f",
+    "semantic_hash": "d42540b9df8805f6d3ebae1e8099b50f"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-37/implementation.md": {
+    "mtime": 1781981637.2464993,
+    "ast_hash": "ac36940870f6f1c32688dbea3cf68774",
+    "semantic_hash": "ac36940870f6f1c32688dbea3cf68774"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-37/plan.md": {
+    "mtime": 1781981637.246637,
+    "ast_hash": "472339b385a7501691742c2a1fe75774",
+    "semantic_hash": "472339b385a7501691742c2a1fe75774"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-37/remediation.md": {
+    "mtime": 1781981637.2467203,
+    "ast_hash": "9d8fb303af2dc1202b8b6146c5ca5974",
+    "semantic_hash": "9d8fb303af2dc1202b8b6146c5ca5974"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-38/audit.md": {
+    "mtime": 1781981637.2469,
+    "ast_hash": "af377c371789bcb933464d2e2d5625b0",
+    "semantic_hash": "af377c371789bcb933464d2e2d5625b0"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-38/implementation.md": {
+    "mtime": 1781981637.2470427,
+    "ast_hash": "e18061226972f4594238f330ae44074a",
+    "semantic_hash": "e18061226972f4594238f330ae44074a"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-38/plan.md": {
+    "mtime": 1781981637.2471921,
+    "ast_hash": "099260114aa4a1a63250b28f09e3118a",
+    "semantic_hash": "099260114aa4a1a63250b28f09e3118a"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-38/remediation.md": {
+    "mtime": 1781981637.247284,
+    "ast_hash": "9b635c1d960cc9b45c2bbb5dc66e40be",
+    "semantic_hash": "9b635c1d960cc9b45c2bbb5dc66e40be"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-39/audit.md": {
+    "mtime": 1781981637.2474477,
+    "ast_hash": "c86d2d7386d9f07c765c79d94ffd158c",
+    "semantic_hash": "c86d2d7386d9f07c765c79d94ffd158c"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-39/implementation.md": {
+    "mtime": 1781981637.2475858,
+    "ast_hash": "ca4b4b0b91c3cf72df7ca630fbb95af3",
+    "semantic_hash": "ca4b4b0b91c3cf72df7ca630fbb95af3"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-39/plan.md": {
+    "mtime": 1781981637.2477312,
+    "ast_hash": "b06d8e07e600fc76feef5a3243f7bdcd",
+    "semantic_hash": "b06d8e07e600fc76feef5a3243f7bdcd"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-39/remediation.md": {
+    "mtime": 1781981637.2478185,
+    "ast_hash": "debf21e974b49fff1e1ed49b51d172c8",
+    "semantic_hash": "debf21e974b49fff1e1ed49b51d172c8"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-40/audit.md": {
+    "mtime": 1781981637.2480004,
+    "ast_hash": "a00ba6edf701e0e585745414399006e8",
+    "semantic_hash": "a00ba6edf701e0e585745414399006e8"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-40/implementation.md": {
+    "mtime": 1781981637.2481575,
+    "ast_hash": "420fdc17aabd65bbe9ea9d7e207adb8a",
+    "semantic_hash": "420fdc17aabd65bbe9ea9d7e207adb8a"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-40/plan.md": {
+    "mtime": 1781981637.2482843,
+    "ast_hash": "f99ea60d2411cf4f9e7a1747250180e4",
+    "semantic_hash": "f99ea60d2411cf4f9e7a1747250180e4"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-40/remediation.md": {
+    "mtime": 1781981637.2484076,
+    "ast_hash": "526ecd385a151188630f2ac5e26dd3cc",
+    "semantic_hash": "526ecd385a151188630f2ac5e26dd3cc"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-41/audit.md": {
+    "mtime": 1781981637.2485998,
+    "ast_hash": "4de24c4ec017cc569699bac2a4ef8b0d",
+    "semantic_hash": "4de24c4ec017cc569699bac2a4ef8b0d"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-41/implementation.md": {
+    "mtime": 1781981637.2487512,
+    "ast_hash": "b4d7a85b2b1b7d9c6e61b18d79075e1a",
+    "semantic_hash": "b4d7a85b2b1b7d9c6e61b18d79075e1a"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-41/plan.md": {
+    "mtime": 1781981637.2489035,
+    "ast_hash": "753938503fda376fa67571aa0f5d4b32",
+    "semantic_hash": "753938503fda376fa67571aa0f5d4b32"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-41/remediation.md": {
+    "mtime": 1781981637.2490478,
+    "ast_hash": "d9d6f64a1f382f6720c92e107d2e3a10",
+    "semantic_hash": "d9d6f64a1f382f6720c92e107d2e3a10"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-42/audit.md": {
+    "mtime": 1781981637.24923,
+    "ast_hash": "0eaceee7db063c68735afc5224c12145",
+    "semantic_hash": "0eaceee7db063c68735afc5224c12145"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-42/implementation.md": {
+    "mtime": 1781981637.2493782,
+    "ast_hash": "ae5726b195a6fc36b1d332163386c52a",
+    "semantic_hash": "ae5726b195a6fc36b1d332163386c52a"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-42/plan.md": {
+    "mtime": 1781981637.2495265,
+    "ast_hash": "239643895778e7e156cea231fefae191",
+    "semantic_hash": "239643895778e7e156cea231fefae191"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-42/remediation.md": {
+    "mtime": 1781981637.2496753,
+    "ast_hash": "8b7d7cdd9d1dd6f85c5b07e2dd5d9261",
+    "semantic_hash": "8b7d7cdd9d1dd6f85c5b07e2dd5d9261"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-43/audit.md": {
+    "mtime": 1781981637.2498696,
+    "ast_hash": "f117c2ad91ae05b39c5e08076fd73910",
+    "semantic_hash": "f117c2ad91ae05b39c5e08076fd73910"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-43/implementation.md": {
+    "mtime": 1781981637.2500267,
+    "ast_hash": "0d4cd415f303d81084ca526361d327f2",
+    "semantic_hash": "0d4cd415f303d81084ca526361d327f2"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-43/plan.md": {
+    "mtime": 1781981637.2501776,
+    "ast_hash": "644ea31e8293d6aa318196d478dd1b0f",
+    "semantic_hash": "644ea31e8293d6aa318196d478dd1b0f"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-44/audit.md": {
+    "mtime": 1781981637.2503753,
+    "ast_hash": "83fb2c5824447e963410dfcd88bca2c3",
+    "semantic_hash": "83fb2c5824447e963410dfcd88bca2c3"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-44/implementation.md": {
+    "mtime": 1781981637.2505295,
+    "ast_hash": "b89ac4fe37380405244edb4b070a5320",
+    "semantic_hash": "b89ac4fe37380405244edb4b070a5320"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-44/plan.md": {
+    "mtime": 1781981637.250676,
+    "ast_hash": "4c754a5891cfc059d906fbb418292ebb",
+    "semantic_hash": "4c754a5891cfc059d906fbb418292ebb"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-44/remediation.md": {
+    "mtime": 1781981637.2507727,
+    "ast_hash": "c3d221b49da7f4b8cad1889a576164c4",
+    "semantic_hash": "c3d221b49da7f4b8cad1889a576164c4"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-45/audit.md": {
+    "mtime": 1781981637.25096,
+    "ast_hash": "fcaa0e3f329ace2f3d3c4362bc006b69",
+    "semantic_hash": "fcaa0e3f329ace2f3d3c4362bc006b69"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-45/implementation.md": {
+    "mtime": 1781981637.2511165,
+    "ast_hash": "aee716d9261858c73d89e8bb5df1e95b",
+    "semantic_hash": "aee716d9261858c73d89e8bb5df1e95b"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-45/plan.md": {
+    "mtime": 1781981637.2512698,
+    "ast_hash": "68ef0a84462204036402d58fc3e8f224",
+    "semantic_hash": "68ef0a84462204036402d58fc3e8f224"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-46/implementation.md": {
+    "mtime": 1781981637.251415,
+    "ast_hash": "bf65665a14b1044c18b0f000194cbe0d",
+    "semantic_hash": "bf65665a14b1044c18b0f000194cbe0d"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-47/audit.md": {
+    "mtime": 1781981637.2516053,
+    "ast_hash": "c49cc88ffac557fb24ba6ceec13abcce",
+    "semantic_hash": "c49cc88ffac557fb24ba6ceec13abcce"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-47/implementation.md": {
+    "mtime": 1781981637.251771,
+    "ast_hash": "5bfc6b1ab504c927d74de8a20e74788b",
+    "semantic_hash": "5bfc6b1ab504c927d74de8a20e74788b"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-47/plan.md": {
+    "mtime": 1781981637.2518623,
+    "ast_hash": "bd15694e3dcf12f5ab14d22fe0146e59",
+    "semantic_hash": "bd15694e3dcf12f5ab14d22fe0146e59"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-47/remediation.md": {
+    "mtime": 1781981637.2519534,
+    "ast_hash": "7b89b7a48e195ceb14a5e47c7b2b8741",
+    "semantic_hash": "7b89b7a48e195ceb14a5e47c7b2b8741"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-48/audit_report.md": {
+    "mtime": 1781981637.2521503,
+    "ast_hash": "0a08ebee0d1eb03a83a9b2d54d40e56a",
+    "semantic_hash": "0a08ebee0d1eb03a83a9b2d54d40e56a"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-48/final_audit.md": {
+    "mtime": 1781981637.2523072,
+    "ast_hash": "05b3ce99cf4225cd2d6702f72408128d",
+    "semantic_hash": "05b3ce99cf4225cd2d6702f72408128d"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-48/implementation.md": {
+    "mtime": 1781981637.2524657,
+    "ast_hash": "48e16d7b06c302079b0d02ca6c545422",
+    "semantic_hash": "48e16d7b06c302079b0d02ca6c545422"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-48/plan.md": {
+    "mtime": 1781981637.2526271,
+    "ast_hash": "57da1348985a535351bb9bb947ddaee3",
+    "semantic_hash": "57da1348985a535351bb9bb947ddaee3"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-48/remediation_plan.md": {
+    "mtime": 1781981637.2527819,
+    "ast_hash": "45489fb1aefbf3cc94d3b1cb15ef826a",
+    "semantic_hash": "45489fb1aefbf3cc94d3b1cb15ef826a"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-48/remediation_plan_audit.md": {
+    "mtime": 1781981637.2529364,
+    "ast_hash": "8c712ebea66ec18e60733328e4991241",
+    "semantic_hash": "8c712ebea66ec18e60733328e4991241"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-49/audit.md": {
+    "mtime": 1781981637.2531333,
+    "ast_hash": "06f07f0b55196b344812fb8f236b74d4",
+    "semantic_hash": "06f07f0b55196b344812fb8f236b74d4"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-49/implementation.md": {
+    "mtime": 1781981637.2532303,
+    "ast_hash": "51b135fd897b2bcf9b6bd1750faee80f",
+    "semantic_hash": "51b135fd897b2bcf9b6bd1750faee80f"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-50/audit.md": {
+    "mtime": 1781981637.2534137,
+    "ast_hash": "2a87d720e325e324a510cc281ecd6c9d",
+    "semantic_hash": "2a87d720e325e324a510cc281ecd6c9d"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-50/implementation.md": {
+    "mtime": 1781981637.2538018,
+    "ast_hash": "d7b4590a01a14e2f7851d8ecbae4a23e",
+    "semantic_hash": "d7b4590a01a14e2f7851d8ecbae4a23e"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-50/plan.md": {
+    "mtime": 1781981637.2539544,
+    "ast_hash": "6995d6b1bbcdaa40004d9b5270dcebe6",
+    "semantic_hash": "6995d6b1bbcdaa40004d9b5270dcebe6"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-50/remediation.md": {
+    "mtime": 1781981637.2541046,
+    "ast_hash": "cba9796963c08a861dda3f62b0b5540e",
+    "semantic_hash": "cba9796963c08a861dda3f62b0b5540e"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-51/audit.md": {
+    "mtime": 1781981637.254274,
+    "ast_hash": "ca8e2f13ad07ed4aad768e1ad527adda",
+    "semantic_hash": "ca8e2f13ad07ed4aad768e1ad527adda"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-51/code-generation.md": {
+    "mtime": 1781981637.254418,
+    "ast_hash": "2aeb9310b4cbaf9fbd2342aae4c0869d",
+    "semantic_hash": "2aeb9310b4cbaf9fbd2342aae4c0869d"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-51/implementation.md": {
+    "mtime": 1781981637.2545223,
+    "ast_hash": "4ba7d055205d1db1b115ee1b54954ca1",
+    "semantic_hash": "4ba7d055205d1db1b115ee1b54954ca1"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-51/plan.md": {
+    "mtime": 1781981637.2546473,
+    "ast_hash": "42d12358b87a512be1f6ff8e7e723c71",
+    "semantic_hash": "42d12358b87a512be1f6ff8e7e723c71"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-51/remediation.md": {
+    "mtime": 1781981637.2547972,
+    "ast_hash": "893917a7e6c8ecd151d94b70f9e3b817",
+    "semantic_hash": "893917a7e6c8ecd151d94b70f9e3b817"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-51/wave-1-review.md": {
+    "mtime": 1781981637.2549362,
+    "ast_hash": "f6f34c462decbd3f6eef5883e660f1a6",
+    "semantic_hash": "f6f34c462decbd3f6eef5883e660f1a6"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-51/wave-2-review.md": {
+    "mtime": 1781981637.2550702,
+    "ast_hash": "183be7c9103f8a61d49d7aaedf0e6d52",
+    "semantic_hash": "183be7c9103f8a61d49d7aaedf0e6d52"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-51/wave-3-review.md": {
+    "mtime": 1781981637.2552247,
+    "ast_hash": "655eff94190b5b18d9c27c9f9c6921a0",
+    "semantic_hash": "655eff94190b5b18d9c27c9f9c6921a0"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-51/wave-4-review.md": {
+    "mtime": 1781981637.2553804,
+    "ast_hash": "1df99cbca084e9d28ed9ef55c850506d",
+    "semantic_hash": "1df99cbca084e9d28ed9ef55c850506d"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-51/wave-5-architecture.md": {
+    "mtime": 1781981637.255629,
+    "ast_hash": "67b2a620b23daaba1e2f0d7b3f73004d",
+    "semantic_hash": "67b2a620b23daaba1e2f0d7b3f73004d"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-51/wave-5-review.md": {
+    "mtime": 1781981637.2557673,
+    "ast_hash": "737b5099e8094e8218de95691649e778",
+    "semantic_hash": "737b5099e8094e8218de95691649e778"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/first/sprint-52/audit.md": {
+    "mtime": 1781981637.255991,
+    "ast_hash": "ec721c63b669f6a0ca06840a65758301",
+    "semantic_hash": "ec721c63b669f6a0ca06840a65758301"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/second/sprint-03/audit.md": {
+    "mtime": 1781981637.2562528,
+    "ast_hash": "f37f32fec329bdd2f53358a948e43348",
+    "semantic_hash": "f37f32fec329bdd2f53358a948e43348"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/implementation_old/second/sprint-03/design.md": {
+    "mtime": 1781981637.256531,
+    "ast_hash": "ff2431d10d8843b5c7e2f9c461485f21",
+    "semantic_hash": "ff2431d10d8843b5c7e2f9c461485f21"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/revamp/stitch_karsa_web_design_system/DESIGN.md": {
+    "mtime": 1781981860.0,
+    "ast_hash": "e307de501f0ad8ca5e71a84faf6ad7b9",
+    "semantic_hash": "e307de501f0ad8ca5e71a84faf6ad7b9"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/revamp/stitch_karsa_web_design_system/code.html": {
+    "mtime": 1781981860.0,
+    "ast_hash": "480badfee103b39b0cc516966f53d828",
+    "semantic_hash": "480badfee103b39b0cc516966f53d828"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/revamp/stitch_karsa_web_design_system_mobile/DESIGN.md": {
+    "mtime": 1781981904.0,
+    "ast_hash": "e307de501f0ad8ca5e71a84faf6ad7b9",
+    "semantic_hash": "e307de501f0ad8ca5e71a84faf6ad7b9"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/revamp/stitch_karsa_web_design_system_mobile/code.html": {
+    "mtime": 1781981904.0,
+    "ast_hash": "605f14dbebca3230791082efda262755",
+    "semantic_hash": "605f14dbebca3230791082efda262755"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/roadmap/ROADMAP.md": {
+    "mtime": 1781538713.7255023,
+    "ast_hash": "ab6a189b3e3bef74ad66ff5ba7c8d710",
+    "semantic_hash": "ab6a189b3e3bef74ad66ff5ba7c8d710"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/roadmap/TECHNICAL_DEBT.md": {
+    "mtime": 1781538736.9726498,
+    "ast_hash": "e1ba303a1a3018ca1033fcfeda28783d",
+    "semantic_hash": "e1ba303a1a3018ca1033fcfeda28783d"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/roadmap/TRACEABILITY_MATRIX.md": {
+    "mtime": 1781538725.753468,
+    "ast_hash": "b3b74895b71eb1b454a948bb8c09dca2",
+    "semantic_hash": "b3b74895b71eb1b454a948bb8c09dca2"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/roadmap/control-plane-gap-audit.md": {
+    "mtime": 1781407984.0989192,
+    "ast_hash": "2ed22da01c1575ce297f6740e243c8a7",
+    "semantic_hash": "2ed22da01c1575ce297f6740e243c8a7"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/roadmap/roadmap-realignment.md": {
+    "mtime": 1781476630.9764407,
+    "ast_hash": "78446109018b2662a6f66afc47b70670",
+    "semantic_hash": "78446109018b2662a6f66afc47b70670"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/roadmap/roadmap-reality-alignment-audit.md": {
+    "mtime": 1781407696.8758855,
+    "ast_hash": "b1295887a31980f182c96d8a5519d616",
+    "semantic_hash": "b1295887a31980f182c96d8a5519d616"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/roadmap/roadmap-review.md": {
+    "mtime": 1781462474.1090086,
+    "ast_hash": "8e1a5f7e25ec6d4c7c0cb4fea66dd991",
+    "semantic_hash": "8e1a5f7e25ec6d4c7c0cb4fea66dd991"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/revamp/stitch_karsa_web_design_system/screen.png": {
+    "mtime": 1781981860.0,
+    "ast_hash": "d6d8d8b22f9989d07ff6bf1a1a80dfd8",
+    "semantic_hash": "d6d8d8b22f9989d07ff6bf1a1a80dfd8"
+  },
+  "/Users/dwiki.nugraha/dwikicode/karsa/docs/revamp/stitch_karsa_web_design_system_mobile/screen.png": {
+    "mtime": 1781981904.0,
+    "ast_hash": "e328282ff7be9f8401aa071afaf02b82",
+    "semantic_hash": "e328282ff7be9f8401aa071afaf02b82"
+  }
+}
