@@ -1,11 +1,15 @@
-"""CapabilityEngineBootstrap -- Sprint-11. Wave-7.
+"""CapabilityEngineBootstrap -- Sprint-11. Wave-7 / Sprint-12. Wave-4.
 
 Wires all capability engine dependencies for integration testing.
 Uses in-memory repositories by default; can be swapped for Postgres.
+
+Wave-4: Also builds facades and FastAPI app.
 """
 
 from dataclasses import dataclass
 from typing import Optional
+
+from fastapi import FastAPI
 
 from karsa.capability_engine.application.capability_event_dispatcher import (
     CapabilityEventDispatcher,
@@ -51,6 +55,17 @@ from karsa.capability_engine.workers.capability_reconciliation_worker import (
 from karsa.capability_engine.workers.capability_dead_letter_worker import (
     CapabilityDeadLetterWorker,
 )
+from karsa.capability_engine.integration.capability_command_facade import (
+    CapabilityCommandFacade,
+)
+from karsa.capability_engine.integration.capability_query_facade import (
+    CapabilityQueryFacade,
+)
+from karsa.capability_engine.transport.http.dependencies import (
+    set_dependencies,
+    clear_dependencies,
+)
+from karsa.capability_engine.transport.http.app import build_fastapi_app as _build_app
 
 
 @dataclass
@@ -83,6 +98,10 @@ class CapabilityEngineContainer:
 
     # Dispatcher
     dispatcher: CapabilityEventDispatcher
+
+    # Facades (Wave-4)
+    command_facade: Optional[CapabilityCommandFacade] = None
+    query_facade: Optional[CapabilityQueryFacade] = None
 
 
 def bootstrap() -> CapabilityEngineContainer:
@@ -157,6 +176,19 @@ def bootstrap() -> CapabilityEngineContainer:
         dispatcher=dispatcher,
     )
 
+    # Facades (Wave-4)
+    command_facade = CapabilityCommandFacade(
+        evolution_service=evolution_service,
+        scoring_service=scoring_service,
+        projection_service=projection_service,
+        reconciliation_service=reconciliation_service,
+    )
+    query_facade = CapabilityQueryFacade(
+        health_projection_repo=health_projection_repo,
+        evolution_projection_repo=evolution_projection_repo,
+        timeseries_projection_repo=timeseries_projection_repo,
+    )
+
     return CapabilityEngineContainer(
         evolution_repo=evolution_repo,
         version_registry=version_registry,
@@ -177,4 +209,26 @@ def bootstrap() -> CapabilityEngineContainer:
         reconciliation_service=reconciliation_service,
         dead_letter_worker=dead_letter_worker,
         dispatcher=dispatcher,
+        command_facade=command_facade,
+        query_facade=query_facade,
     )
+
+
+def build_fastapi_app() -> tuple:
+    """Build a fully wired FastAPI app with all dependencies.
+
+    Returns (app, container) tuple.
+    Transport layer does not know construction details.
+    """
+    container = bootstrap()
+
+    # Wire dependency providers
+    set_dependencies(
+        command_facade=container.command_facade,
+        query_facade=container.query_facade,
+    )
+
+    # Build FastAPI app (Wave-1 factory)
+    app = _build_app()
+
+    return app, container
