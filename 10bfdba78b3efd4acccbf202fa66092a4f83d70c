@@ -1,0 +1,355 @@
+src/karsa/investment_governance/domain/value_objects/mandate_rule.py
+  4bb8330d7d22c5e8 1-67
+tests/unit/capability_engine/transport/test_capability_command_router.py
+  4bb8330d7d22c5e8 1-339
+docs/investment_context/MANDATE.md
+  4bb8330d7d22c5e8 1-129
+tests/unit/investment_governance/__init__.py
+  4bb8330d7d22c5e8 1
+src/karsa/investment_workflow/domain/events/__init__.py
+  4bb8330d7d22c5e8 1
+docs/implementation/sprint-13/investment_workflow_implementation_plan.md
+  4bb8330d7d22c5e8 1-259
+src/karsa/investment_governance/domain/value_objects/compliance_result.py
+  4bb8330d7d22c5e8 1-56
+src/karsa/investment_attribution/__init__.py
+  4bb8330d7d22c5e8 1
+src/karsa/investment_workflow/domain/value_objects/__init__.py
+  4bb8330d7d22c5e8 1
+src/karsa/capability_engine/transport/http/requests/reconcile_capability_state_request.py
+  4bb8330d7d22c5e8 1-15
+src/karsa/investment_knowledge/application/__init__.py
+  4bb8330d7d22c5e8 1
+tests/unit/investment_workflow/transport/__init__.py
+  4bb8330d7d22c5e8 1
+src/karsa/capability_engine/transport/__init__.py
+  4bb8330d7d22c5e8 1
+src/karsa/investment_workflow/transport/__init__.py
+  4bb8330d7d22c5e8 1
+src/karsa/investment_workflow/infrastructure/repositories/investment_decision_repository.py
+  4bb8330d7d22c5e8 1-29
+src/karsa/investment_memo/infrastructure/persistence/in_memory_investment_memo_repository.py
+  4bb8330d7d22c5e8 1-42
+src/karsa/investment_attribution/domain/value_objects/__init__.py
+  4bb8330d7d22c5e8 1
+src/karsa/investment_workflow/application/ports/__init__.py
+  4bb8330d7d22c5e8 1
+src/karsa/capability_engine/transport/http/middleware/exception_mapper.py
+  4bb8330d7d22c5e8 1-130
+tests/unit/investment_knowledge/test_research_document.py
+  4bb8330d7d22c5e8 1-184
+src/karsa/investment_workflow/infrastructure/persistence/in_memory_investment_outbox_repository.py
+  4bb8330d7d22c5e8 1-54
+src/karsa/capability_engine/transport/http/responses/error_response.py
+  4bb8330d7d22c5e8 1-17
+src/karsa/capability_engine/transport/http/app.py
+  4bb8330d7d22c5e8 1-41
+src/karsa/capability_engine/integration/capability_engine_bootstrap.py
+  4bb8330d7d22c5e8 1,5-6,12-13,58-68,102-105,179-191,212-213,215-228,230-234
+src/karsa/investment_knowledge/domain/aggregates/__init__.py
+  4bb8330d7d22c5e8 1
+tests/unit/investment_workflow/test_facades.py
+  4bb8330d7d22c5e8 1-288
+src/karsa/investment_knowledge/domain/__init__.py
+  4bb8330d7d22c5e8 1
+tests/unit/investment_memo/test_memo_service.py
+  4bb8330d7d22c5e8 1-265
+docs/revamp/KARSA_Complete_Documentation/GAP_ANALYSIS.md
+  4bb8330d7d22c5e8 1-244
+src/karsa/investment_workflow/transport/http/__init__.py
+  4bb8330d7d22c5e8 1
+src/karsa/investment_attribution/domain/value_objects/attribution_breakdown.py
+  4bb8330d7d22c5e8 1-76
+src/karsa/investment_workflow/domain/entities/analyst_output.py
+  4bb8330d7d22c5e8 1-39
+src/karsa/investment_workflow/domain/value_objects/analyst_score.py
+  4bb8330d7d22c5e8 1-34
+src/karsa/investment_workflow/domain/value_objects/enums.py
+  4bb8330d7d22c5e8 1-60
+karsa-web/src/hooks/cio-dashboard/index.ts
+  4bb8330d7d22c5e8 1-190
+src/karsa/capability_engine/transport/http/requests/rebuild_capability_projections_request.py
+  4bb8330d7d22c5e8 1-28
+src/karsa/investment_knowledge/domain/events/__init__.py
+  4bb8330d7d22c5e8 1
+src/karsa/capability_engine/transport/http/routers/__init__.py
+  4bb8330d7d22c5e8 1
+src/karsa/investment_knowledge/__init__.py
+  4bb8330d7d22c5e8 1
+src/karsa/investment_governance/domain/value_objects/__init__.py
+  4bb8330d7d22c5e8 1
+src/karsa/investment_governance/domain/value_objects/mandate_config.py
+  4bb8330d7d22c5e8 1-126
+src/karsa/investment_memo/__init__.py
+  4bb8330d7d22c5e8 1
+src/karsa/investment_memo/domain/aggregates/investment_memo.py
+  4bb8330d7d22c5e8 1-197
+tests/unit/investment_knowledge/__init__.py
+  4bb8330d7d22c5e8 1
+src/karsa/capability_engine/transport/http/requests/__init__.py
+  4bb8330d7d22c5e8 1
+src/karsa/investment_governance/domain/value_objects/enums.py
+  4bb8330d7d22c5e8 1-24
+src/karsa/investment_workflow/integration/investment_workflow_bootstrap.py
+  4bb8330d7d22c5e8 1-61
+src/karsa/capability_engine/transport/http/__init__.py
+  4bb8330d7d22c5e8 1
+docs/investment_context/RISK_POLICY.md
+  4bb8330d7d22c5e8 1-126
+tests/unit/capability_engine/transport/test_request_validation.py
+  4bb8330d7d22c5e8 1-227
+tests/unit/investment_workflow/test_decision_service.py
+  4bb8330d7d22c5e8 1-413
+tests/unit/investment_workflow/test_projection.py
+  4bb8330d7d22c5e8 1-127
+src/karsa/investment_workflow/transport/http/responses/__init__.py
+  4bb8330d7d22c5e8 1
+src/karsa/investment_knowledge/domain/value_objects/__init__.py
+  4bb8330d7d22c5e8 1
+src/karsa/investment_workflow/transport/http/requests/record_analyst_request.py
+  4bb8330d7d22c5e8 1-24
+src/karsa/capability_engine/transport/http/responses/governance_status_response.py
+  4bb8330d7d22c5e8 1-17
+src/karsa/investment_memo/domain/entities/__init__.py
+  4bb8330d7d22c5e8 1
+src/karsa/investment_memo/domain/events/memo_events.py
+  4bb8330d7d22c5e8 1-154
+src/karsa/investment_attribution/infrastructure/persistence/__init__.py
+  4bb8330d7d22c5e8 1
+src/karsa/investment_memo/domain/exceptions.py
+  4bb8330d7d22c5e8 1-17
+src/karsa/investment_workflow/projections/investment_decision_projection.py
+  4bb8330d7d22c5e8 1-56
+src/karsa/investment_memo/domain/value_objects/__init__.py
+  4bb8330d7d22c5e8 1
+src/karsa/investment_memo/domain/entities/memo_revision.py
+  4bb8330d7d22c5e8 1-19
+src/karsa/investment_workflow/integration/__init__.py
+  4bb8330d7d22c5e8 1
+src/karsa/investment_workflow/application/__init__.py
+  4bb8330d7d22c5e8 1
+src/karsa/investment_workflow/transport/http/responses/command_result_response.py
+  4bb8330d7d22c5e8 1-14
+src/karsa/investment_governance/__init__.py
+  4bb8330d7d22c5e8 1
+src/karsa/capability_engine/transport/http/responses/command_result_response.py
+  4bb8330d7d22c5e8 1-21
+src/karsa/investment_workflow/infrastructure/persistence/__init__.py
+  4bb8330d7d22c5e8 1
+src/karsa/investment_attribution/domain/value_objects/win_rate.py
+  4bb8330d7d22c5e8 1-64
+src/karsa/investment_knowledge/infrastructure/persistence/__init__.py
+  4bb8330d7d22c5e8 1
+tests/unit/investment_attribution/__init__.py
+  4bb8330d7d22c5e8 1
+tests/unit/investment_workflow/test_value_objects.py
+  4bb8330d7d22c5e8 1-212
+src/karsa/investment_workflow/domain/aggregates/__init__.py
+  4bb8330d7d22c5e8 1
+src/karsa/investment_workflow/domain/entities/__init__.py
+  4bb8330d7d22c5e8 1
+src/karsa/investment_workflow/transport/http/responses/decision_response.py
+  4bb8330d7d22c5e8 1-25
+src/karsa/investment_memo/domain/__init__.py
+  4bb8330d7d22c5e8 1
+src/karsa/investment_workflow/domain/exceptions.py
+  4bb8330d7d22c5e8 1-25
+src/karsa/investment_workflow/transport/http/routers/investment_decision_router.py
+  4bb8330d7d22c5e8 1-256
+src/karsa/capability_engine/transport/http/dependencies.py
+  4bb8330d7d22c5e8 1-61
+docs/revamp/KARSA_Complete_Documentation/FEATURE_MAPPING.md
+  4bb8330d7d22c5e8 1-143
+src/karsa/capability_engine/transport/http/requests/record_capability_evolution_request.py
+  4bb8330d7d22c5e8 1-86
+src/karsa/capability_engine/transport/http/responses/capability_timeseries_response.py
+  4bb8330d7d22c5e8 1-26
+src/karsa/investment_knowledge/application/knowledge_service.py
+  4bb8330d7d22c5e8 1-150
+src/karsa/investment_memo/application/__init__.py
+  4bb8330d7d22c5e8 1
+src/karsa/investment_workflow/integration/investment_workflow_command_facade.py
+  4bb8330d7d22c5e8 1-189
+src/karsa/investment_workflow/domain/value_objects/conviction_score.py
+  4bb8330d7d22c5e8 1-57
+src/karsa/investment_attribution/domain/events/__init__.py
+  4bb8330d7d22c5e8 1
+src/karsa/investment_attribution/domain/value_objects/enums.py
+  4bb8330d7d22c5e8 1-34
+src/karsa/capability_engine/transport/http/router_registry.py
+  4bb8330d7d22c5e8 1-23
+src/karsa/investment_workflow/__init__.py
+  4bb8330d7d22c5e8 1
+src/karsa/investment_knowledge/infrastructure/persistence/in_memory_research_document_repository.py
+  4bb8330d7d22c5e8 1-83
+src/karsa/capability_engine/transport/http/middleware/__init__.py
+  4bb8330d7d22c5e8 1
+src/karsa/investment_knowledge/infrastructure/repositories/__init__.py
+  4bb8330d7d22c5e8 1
+src/karsa/investment_workflow/infrastructure/repositories/__init__.py
+  4bb8330d7d22c5e8 1
+src/karsa/investment_knowledge/domain/aggregates/research_document.py
+  4bb8330d7d22c5e8 1-95
+src/karsa/investment_memo/infrastructure/repositories/__init__.py
+  4bb8330d7d22c5e8 1
+src/karsa/investment_governance/domain/exceptions.py
+  4bb8330d7d22c5e8 1-13
+src/karsa/investment_attribution/domain/exceptions.py
+  4bb8330d7d22c5e8 1-13
+src/karsa/investment_workflow/application/investment_decision_service.py
+  4bb8330d7d22c5e8 1-408
+src/karsa/investment_attribution/application/__init__.py
+  4bb8330d7d22c5e8 1
+src/karsa/investment_memo/infrastructure/repositories/investment_memo_repository.py
+  4bb8330d7d22c5e8 1-28
+src/karsa/investment_attribution/domain/events/attribution_events.py
+  4bb8330d7d22c5e8 1-104
+src/karsa/investment_workflow/transport/http/routers/__init__.py
+  4bb8330d7d22c5e8 1
+src/karsa/investment_memo/domain/value_objects/enums.py
+  4bb8330d7d22c5e8 1-40
+src/karsa/investment_workflow/domain/value_objects/decision_memo.py
+  4bb8330d7d22c5e8 1-48
+tests/unit/investment_workflow/test_aggregate.py
+  4bb8330d7d22c5e8 1-298
+src/karsa/investment_workflow/domain/entities/debate_round.py
+  4bb8330d7d22c5e8 1-35
+src/karsa/investment_workflow/application/ports/investment_decision_port.py
+  4bb8330d7d22c5e8 1-30
+karsa-web/src/features/cio-dashboard/types/viewmodels.ts
+  4bb8330d7d22c5e8 1-105
+karsa-web/src/features/cio-dashboard/utils/__tests__/mappers.test.ts
+  4bb8330d7d22c5e8 1-191
+src/karsa/investment_workflow/integration/investment_workflow_query_facade.py
+  4bb8330d7d22c5e8 1-120
+src/karsa/investment_governance/domain/__init__.py
+  4bb8330d7d22c5e8 1
+src/karsa/investment_governance/application/mandate_compliance_service.py
+  4bb8330d7d22c5e8 1-326
+src/karsa/capability_engine/transport/http/routers/capability_command_router.py
+  4bb8330d7d22c5e8 1-198
+src/karsa/capability_engine/transport/http/responses/capability_health_response.py
+  4bb8330d7d22c5e8 1-29
+src/karsa/investment_workflow/domain/__init__.py
+  4bb8330d7d22c5e8 1
+src/karsa/investment_workflow/transport/http/requests/__init__.py
+  4bb8330d7d22c5e8 1
+src/karsa/investment_knowledge/infrastructure/repositories/research_document_repository.py
+  4bb8330d7d22c5e8 1-38
+src/karsa/investment_memo/domain/value_objects/realized_return.py
+  4bb8330d7d22c5e8 1-90
+src/karsa/investment_knowledge/domain/value_objects/enums.py
+  4bb8330d7d22c5e8 1-22
+src/karsa/investment_memo/application/memo_service.py
+  4bb8330d7d22c5e8 1-287
+tests/unit/capability_engine/transport/test_app.py
+  4bb8330d7d22c5e8 1-98
+src/karsa/investment_workflow/transport/http/requests/propose_decision_request.py
+  4bb8330d7d22c5e8 1-16
+src/karsa/investment_attribution/infrastructure/persistence/in_memory_performance_snapshot_repository.py
+  4bb8330d7d22c5e8 1-40
+tests/unit/investment_memo/__init__.py
+  4bb8330d7d22c5e8 1
+docs/revamp/KARSA_Complete_Documentation/DEVELOPMENT_PLAN.md
+  4bb8330d7d22c5e8 1-572
+src/karsa/investment_attribution/infrastructure/repositories/__init__.py
+  4bb8330d7d22c5e8 1
+src/karsa/capability_engine/transport/http/responses/capability_evolution_response.py
+  4bb8330d7d22c5e8 1-26
+src/karsa/investment_workflow/transport/http/requests/record_debate_request.py
+  4bb8330d7d22c5e8 1-21
+tests/unit/investment_governance/test_mandate_compliance.py
+  4bb8330d7d22c5e8 1-311
+tests/unit/investment_knowledge/test_knowledge_service.py
+  4bb8330d7d22c5e8 1-163
+src/karsa/capability_engine/transport/http/responses/__init__.py
+  4bb8330d7d22c5e8 1
+tests/unit/capability_engine/transport/test_health_router.py
+  4bb8330d7d22c5e8 1-60
+src/karsa/investment_workflow/projections/__init__.py
+  4bb8330d7d22c5e8 1
+src/karsa/investment_workflow/domain/events/investment_workflow_events.py
+  4bb8330d7d22c5e8 1-247
+tests/unit/capability_engine/transport/test_bootstrap_integration.py
+  4bb8330d7d22c5e8 1-187
+src/karsa/investment_memo/domain/aggregates/__init__.py
+  4bb8330d7d22c5e8 1
+src/karsa/investment_attribution/application/attribution_service.py
+  4bb8330d7d22c5e8 1-195
+tests/unit/capability_engine/transport/test_dependencies.py
+  4bb8330d7d22c5e8 1-74
+tests/unit/capability_engine/transport/test_exception_mapper.py
+  4bb8330d7d22c5e8 1-220
+tests/unit/investment_attribution/test_attribution.py
+  4bb8330d7d22c5e8 1-278
+tests/unit/capability_engine/transport/test_capability_query_router.py
+  4bb8330d7d22c5e8 1-389
+src/karsa/investment_governance/application/__init__.py
+  4bb8330d7d22c5e8 1
+tests/unit/capability_engine/transport/test_query_response_mapping.py
+  4bb8330d7d22c5e8 1-173
+src/karsa/capability_engine/transport/http/requests/update_capability_health_request.py
+  4bb8330d7d22c5e8 1-40
+src/karsa/investment_attribution/domain/__init__.py
+  4bb8330d7d22c5e8 1
+src/karsa/investment_attribution/infrastructure/repositories/performance_snapshot_repository.py
+  4bb8330d7d22c5e8 1-24
+docs/investment_context/DECISION_PROCESS.md
+  4bb8330d7d22c5e8 1-261
+src/karsa/capability_engine/transport/http/routers/capability_query_router.py
+  4bb8330d7d22c5e8 1-202
+docs/adr/ADR-140-investment-workflow-bounded-context.md
+  4bb8330d7d22c5e8 1-271
+src/karsa/investment_knowledge/domain/events/knowledge_events.py
+  4bb8330d7d22c5e8 1-98
+src/karsa/investment_workflow/domain/aggregates/investment_decision.py
+  4bb8330d7d22c5e8 1-160
+src/karsa/investment_workflow/application/ports/investment_outbox_port.py
+  4bb8330d7d22c5e8 1-48
+src/karsa/investment_memo/domain/events/__init__.py
+  4bb8330d7d22c5e8 1
+tests/unit/investment_memo/test_memo_aggregate.py
+  4bb8330d7d22c5e8 1-287
+src/karsa/investment_attribution/domain/value_objects/performance_snapshot.py
+  4bb8330d7d22c5e8 1-67
+src/karsa/capability_engine/transport/http/routers/health_router.py
+  4bb8330d7d22c5e8 1-27
+tests/unit/capability_engine/transport/__init__.py
+  4bb8330d7d22c5e8 1
+src/karsa/investment_workflow/infrastructure/persistence/in_memory_investment_decision_repository.py
+  4bb8330d7d22c5e8 1-46
+tests/unit/investment_workflow/__init__.py
+  4bb8330d7d22c5e8 1
+tests/unit/investment_workflow/transport/test_investment_decision_router.py
+  4bb8330d7d22c5e8 1-272
+src/karsa/investment_knowledge/domain/exceptions.py
+  4bb8330d7d22c5e8 1-13
+src/karsa/investment_memo/infrastructure/persistence/__init__.py
+  4bb8330d7d22c5e8 1
+karsa-web/src/features/cio-dashboard/utils/mappers.ts
+  4bb8330d7d22c5e8 1-131
+karsa-web/src/app/cio-dashboard/page.tsx
+  4bb8330d7d22c5e8 1-172
+src/karsa/investment_workflow/transport/http/requests/create_memo_request.py
+  4bb8330d7d22c5e8 1-26
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.23",
+  "base_commit_sha": "10bfdba78b3efd4acccbf202fa66092a4f83d70c",
+  "prompts": {
+    "4bb8330d7d22c5e8": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "22757a9c-4823-4832-a1df-6ad118962a3e",
+        "model": "mimo-v2.5-pro"
+      },
+      "human_author": "skeithnight <skeithnight@gmail.com>",
+      "messages": [],
+      "total_additions": 13577,
+      "total_deletions": 89,
+      "accepted_lines": 13489,
+      "overriden_lines": 0
+    }
+  }
+}
