@@ -1,0 +1,300 @@
+src/karsa/capability_engine/domain/entities/__init__.py
+  b04b0afec3e957dc 1
+tests/unit/capability_engine/test_evolution_service.py
+  4bb8330d7d22c5e8 1-394
+tests/unit/capability_engine/test_reconciliation_worker.py
+  4bb8330d7d22c5e8 1-288
+src/karsa/capability_engine/application/capability_event_dispatcher.py
+  4bb8330d7d22c5e8 1-148
+tests/integration/capability_engine/test_outbox_end_to_end.py
+  4bb8330d7d22c5e8 1-130
+tests/integration/capability_engine/test_governance_acl.py
+  4bb8330d7d22c5e8 1-97
+src/karsa/capability_engine/integration/__init__.py
+  4bb8330d7d22c5e8 1
+src/karsa/capability_engine/infrastructure/migrations/008_create_capability_score_timeseries_projection.sql
+  4bb8330d7d22c5e8 1-31
+src/karsa/capability_engine/contracts/get_capability_score_timeseries.py
+  4bb8330d7d22c5e8 1-19
+src/karsa/capability_engine/domain/events/__init__.py
+  b04b0afec3e957dc 1
+tests/integration/capability_engine/test_evolution_end_to_end.py
+  4bb8330d7d22c5e8 1-128
+src/karsa/capability_engine/application/capability_evolution_service.py
+  4bb8330d7d22c5e8 1-308
+src/karsa/capability_engine/infrastructure/migrations/007_create_capability_health_projection.sql
+  4bb8330d7d22c5e8 1-42
+src/karsa/capability_engine/integration/capability_engine_bootstrap.py
+  4bb8330d7d22c5e8 1-180
+src/karsa/capability_engine/contracts/capability_health_dto.py
+  4bb8330d7d22c5e8 1-39
+src/karsa/capability_engine/contracts/record_capability_evolution.py
+  4bb8330d7d22c5e8 1-59
+tests/unit/capability_engine/test_dead_letter_worker.py
+  4bb8330d7d22c5e8 1-150
+tests/unit/capability_engine/test_outbox_worker.py
+  4bb8330d7d22c5e8 1-228
+src/karsa/capability_engine/application/ports/capability_evolution_projection_port.py
+  4bb8330d7d22c5e8 1-27
+src/karsa/capability_engine/infrastructure/migrations/006_create_capability_evolution_projection.sql
+  4bb8330d7d22c5e8 1-26
+src/karsa/capability_engine/infrastructure/migrations/001_create_capability_evolutions.sql
+  4bb8330d7d22c5e8 1-64
+src/karsa/capability_engine/application/capability_evolution_replay_service.py
+  4bb8330d7d22c5e8 1-185
+src/karsa/capability_engine/infrastructure/persistence/postgres_evolution_projection_repository.py
+  b04b0afec3e957dc 1-48
+src/karsa/capability_engine/acl/attribution_acl.py
+  4bb8330d7d22c5e8 1-125
+tests/integration/capability_engine/test_command_facade.py
+  4bb8330d7d22c5e8 1-157
+src/karsa/capability_engine/application/command_translators/health_command_translator.py
+  4bb8330d7d22c5e8 1-49
+tests/integration/capability_engine/test_projection_end_to_end.py
+  4bb8330d7d22c5e8 1-129
+src/karsa/capability_engine/application/capability_scoring_service.py
+  4bb8330d7d22c5e8 1-292
+tests/integration/capability_engine/test_reconciliation_end_to_end.py
+  4bb8330d7d22c5e8 1-93
+src/karsa/capability_engine/domain/value_objects/evolution_evidence.py
+  b04b0afec3e957dc 1-31
+src/karsa/capability_engine/infrastructure/repositories/capability_health_score_repository.py
+  b04b0afec3e957dc 1-36
+tests/unit/capability_engine/test_value_objects.py
+  b04b0afec3e957dc 1-401
+src/karsa/capability_engine/infrastructure/migrations/004_create_capability_score_history.sql
+  4bb8330d7d22c5e8 1-36
+src/karsa/capability_engine/domain/value_objects/evolution_delta.py
+  b04b0afec3e957dc 1-41
+tests/unit/capability_engine/test_capability_health_projection.py
+  4bb8330d7d22c5e8 1-159
+tests/integration/capability_engine/test_replay_end_to_end.py
+  4bb8330d7d22c5e8 1-105
+tests/integration/capability_engine/test_query_facade.py
+  4bb8330d7d22c5e8 1-269
+src/karsa/capability_engine/application/ports/capability_timeseries_projection_port.py
+  4bb8330d7d22c5e8 1-27
+src/karsa/capability_engine/application/command_translators/__init__.py
+  4bb8330d7d22c5e8 1-17
+tests/integration/capability_engine/test_algorithm_version_end_to_end.py
+  4bb8330d7d22c5e8 1-130
+src/karsa/capability_engine/domain/events/capability_events.py
+  b04b0afec3e957dc 1-266
+src/karsa/capability_engine/domain/aggregates/__init__.py
+  b04b0afec3e957dc 1
+src/karsa/capability_engine/application/capability_evolution_versioning_service.py
+  4bb8330d7d22c5e8 1-216
+src/karsa/capability_engine/acl/review_acl.py
+  4bb8330d7d22c5e8 1-133
+tests/integration/capability_engine/test_attribution_acl.py
+  4bb8330d7d22c5e8 1-128
+src/karsa/capability_engine/domain/value_objects/enums.py
+  b04b0afec3e957dc 1-48
+src/karsa/capability_engine/domain/exceptions.py
+  b04b0afec3e957dc 1-29
+  4bb8330d7d22c5e8 30-33
+src/karsa/capability_engine/domain/entities/evolution_finding.py
+  b04b0afec3e957dc 1-31
+src/karsa/capability_engine/contracts/update_capability_health.py
+  4bb8330d7d22c5e8 1-24
+src/karsa/capability_engine/integration/capability_command_facade.py
+  4bb8330d7d22c5e8 1-168
+tests/unit/capability_engine/test_event_dispatcher.py
+  4bb8330d7d22c5e8 1-194
+src/karsa/capability_engine/domain/value_objects/score_history_entry.py
+  b04b0afec3e957dc 1-43
+src/karsa/capability_engine/projections/capability_evolution_projection.py
+  4bb8330d7d22c5e8 1-46
+src/karsa/capability_engine/contracts/__init__.py
+  4bb8330d7d22c5e8 1-7
+src/karsa/capability_engine/infrastructure/persistence/postgres_health_score_repository.py
+  b04b0afec3e957dc 1-148
+src/karsa/capability_engine/acl/governance_acl.py
+  4bb8330d7d22c5e8 1-82
+src/karsa/capability_engine/infrastructure/persistence/postgres_score_history_repository.py
+  b04b0afec3e957dc 1-120
+src/karsa/capability_engine/infrastructure/migrations/002_create_capability_evolution_version_registry.sql
+  4bb8330d7d22c5e8 1-33
+tests/unit/capability_engine/test_scoring_service.py
+  4bb8330d7d22c5e8 1-476
+src/karsa/capability_engine/workers/capability_reconciliation_worker.py
+  4bb8330d7d22c5e8 1-168
+src/karsa/capability_engine/domain/value_objects/evolution_context_snapshot.py
+  b04b0afec3e957dc 1-68
+src/karsa/capability_engine/infrastructure/migrations/003_create_capability_health_scores.sql
+  4bb8330d7d22c5e8 1-57
+src/karsa/capability_engine/domain/value_objects/__init__.py
+  b04b0afec3e957dc 1
+src/karsa/capability_engine/workers/capability_projection_worker.py
+  4bb8330d7d22c5e8 1-120
+tests/unit/capability_engine/test_events.py
+  b04b0afec3e957dc 1-517
+src/karsa/capability_engine/infrastructure/persistence/postgres_outbox_repository.py
+  4bb8330d7d22c5e8 85-95
+  b04b0afec3e957dc 1-84,96-106
+src/karsa/capability_engine/application/ports/capability_health_score_port.py
+  4bb8330d7d22c5e8 1-31
+src/karsa/capability_engine/acl/registry_acl.py
+  4bb8330d7d22c5e8 1-79
+src/karsa/capability_engine/infrastructure/persistence/postgres_capability_evolution_repository.py
+  b04b0afec3e957dc 1-239
+src/karsa/capability_engine/application/ports/capability_evolution_port.py
+  4bb8330d7d22c5e8 1-45
+src/karsa/capability_engine/application/ports/capability_health_projection_port.py
+  4bb8330d7d22c5e8 1-33
+tests/unit/capability_engine/test_projection_worker.py
+  4bb8330d7d22c5e8 1-231
+tests/unit/capability_engine/test_enums.py
+  b04b0afec3e957dc 1-91
+src/karsa/capability_engine/application/reconciliation_service.py
+  4bb8330d7d22c5e8 1-58
+src/karsa/capability_engine/infrastructure/persistence/postgres_version_registry_repository.py
+  b04b0afec3e957dc 1-128
+src/karsa/capability_engine/infrastructure/repositories/capability_score_timeseries_repository.py
+  4bb8330d7d22c5e8 1-28
+src/karsa/capability_engine/application/ports/capability_outbox_port.py
+  4bb8330d7d22c5e8 1-51
+src/karsa/capability_engine/application/__init__.py
+  4bb8330d7d22c5e8 1
+src/karsa/capability_engine/domain/entities/evolution_attribution_ref.py
+  b04b0afec3e957dc 1-29
+src/karsa/capability_engine/contracts/reconcile_capability_state.py
+  4bb8330d7d22c5e8 1-18
+src/karsa/capability_engine/integration/capability_engine_fixture.py
+  4bb8330d7d22c5e8 1-176
+src/karsa/capability_engine/workers/capability_outbox_worker.py
+  4bb8330d7d22c5e8 1-137
+src/karsa/capability_engine/__init__.py
+  b04b0afec3e957dc 1
+src/karsa/capability_engine/application/capability_projection_service.py
+  4bb8330d7d22c5e8 1-425
+src/karsa/capability_engine/domain/value_objects/capability_score_component.py
+  b04b0afec3e957dc 1-39
+src/karsa/capability_engine/contracts/get_capability_evolution_history.py
+  4bb8330d7d22c5e8 1-16
+tests/unit/capability_engine/test_capability_score_timeseries_projection.py
+  4bb8330d7d22c5e8 1-141
+src/karsa/capability_engine/workers/capability_dead_letter_worker.py
+  4bb8330d7d22c5e8 1-103
+src/karsa/capability_engine/application/ports/capability_score_history_port.py
+  4bb8330d7d22c5e8 1-31
+tests/unit/capability_engine/__init__.py
+  b04b0afec3e957dc 1
+tests/integration/capability_engine/test_multi_trigger_end_to_end.py
+  4bb8330d7d22c5e8 1-124
+src/karsa/capability_engine/contracts/get_capability_governance_status.py
+  4bb8330d7d22c5e8 1-14
+src/karsa/capability_engine/projections/__init__.py
+  4bb8330d7d22c5e8 1
+src/karsa/capability_engine/infrastructure/repositories/capability_health_projection_repository.py
+  b04b0afec3e957dc 1-30
+tests/unit/capability_engine/test_aggregates.py
+  b04b0afec3e957dc 1-400
+tests/unit/capability_engine/test_projection_service.py
+  4bb8330d7d22c5e8 1-906
+src/karsa/capability_engine/contracts/governance_status_dto.py
+  4bb8330d7d22c5e8 1-28
+src/karsa/capability_engine/contracts/get_capability_health.py
+  4bb8330d7d22c5e8 1-13
+tests/unit/capability_engine/test_repositories.py
+  b04b0afec3e957dc 1-480
+tests/unit/capability_engine/test_capability_evolution_projection.py
+  4bb8330d7d22c5e8 1-108
+src/karsa/capability_engine/acl/__init__.py
+  4bb8330d7d22c5e8 1-5
+tests/unit/capability_engine/test_entities.py
+  b04b0afec3e957dc 1-131
+src/karsa/capability_engine/infrastructure/repositories/capability_evolution_repository.py
+  b04b0afec3e957dc 1-48
+src/karsa/capability_engine/infrastructure/persistence/postgres_health_projection_repository.py
+  b04b0afec3e957dc 1-64
+tests/integration/capability_engine/test_occ_conflict_end_to_end.py
+  4bb8330d7d22c5e8 1-137
+src/karsa/capability_engine/infrastructure/repositories/capability_evolution_version_registry_repository.py
+  b04b0afec3e957dc 1-68
+tests/unit/capability_engine/test_replay_service.py
+  4bb8330d7d22c5e8 1-343
+src/karsa/capability_engine/application/ports/__init__.py
+  4bb8330d7d22c5e8 1-46
+src/karsa/capability_engine/infrastructure/persistence/in_memory_repositories.py
+  4bb8330d7d22c5e8 3,38-40,178-186,188-192,198-199,320-323,376-412
+  b04b0afec3e957dc 1-2,4-37,41-177,187,193-197,200-319,324-375
+src/karsa/capability_engine/domain/aggregates/capability_evolution.py
+  b04b0afec3e957dc 1-151
+tests/integration/capability_engine/test_review_acl.py
+  4bb8330d7d22c5e8 1-127
+src/karsa/capability_engine/integration/capability_query_facade.py
+  4bb8330d7d22c5e8 1-178
+tests/unit/capability_engine/test_versioning_service.py
+  4bb8330d7d22c5e8 1-418
+tests/integration/capability_engine/test_registry_acl.py
+  4bb8330d7d22c5e8 1-84
+tests/integration/capability_engine/test_scoring_end_to_end.py
+  4bb8330d7d22c5e8 1-103
+src/karsa/capability_engine/infrastructure/repositories/capability_evolution_outbox_repository.py
+  b04b0afec3e957dc 1-44
+  4bb8330d7d22c5e8 45-48
+src/karsa/capability_engine/infrastructure/repositories/capability_evolution_projection_repository.py
+  b04b0afec3e957dc 1-24
+src/karsa/capability_engine/infrastructure/repositories/capability_score_history_repository.py
+  b04b0afec3e957dc 1-36
+src/karsa/capability_engine/infrastructure/migrations/005_create_capability_evolution_outbox.sql
+  4bb8330d7d22c5e8 1-29
+src/karsa/capability_engine/application/ports/capability_version_registry_port.py
+  4bb8330d7d22c5e8 1-63
+src/karsa/capability_engine/domain/__init__.py
+  b04b0afec3e957dc 1
+tests/integration/capability_engine/test_governance_end_to_end.py
+  4bb8330d7d22c5e8 1-131
+tests/integration/capability_engine/__init__.py
+  4bb8330d7d22c5e8 1
+src/karsa/capability_engine/contracts/rebuild_capability_projections.py
+  4bb8330d7d22c5e8 1-19
+src/karsa/capability_engine/application/command_translators/evolution_command_translator.py
+  4bb8330d7d22c5e8 1-95
+src/karsa/capability_engine/contracts/capability_timeseries_dto.py
+  4bb8330d7d22c5e8 1-32
+src/karsa/capability_engine/projections/capability_score_timeseries_projection.py
+  4bb8330d7d22c5e8 1-40
+src/karsa/capability_engine/contracts/capability_evolution_dto.py
+  4bb8330d7d22c5e8 1-29
+src/karsa/capability_engine/projections/capability_health_projection.py
+  4bb8330d7d22c5e8 1-59
+src/karsa/capability_engine/domain/aggregates/capability_health_score.py
+  b04b0afec3e957dc 1-143
+src/karsa/capability_engine/workers/__init__.py
+  4bb8330d7d22c5e8 1
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.23",
+  "base_commit_sha": "82ae6542eacb30a574e3c9aa1f43294d744bffab",
+  "prompts": {
+    "4bb8330d7d22c5e8": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "22757a9c-4823-4832-a1df-6ad118962a3e",
+        "model": "mimo-v2.5-pro"
+      },
+      "human_author": "skeithnight <skeithnight@gmail.com>",
+      "messages": [],
+      "total_additions": 11089,
+      "total_deletions": 291,
+      "accepted_lines": 10802,
+      "overriden_lines": 0
+    },
+    "b04b0afec3e957dc": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "87dfc0d9-8b0e-4599-91d7-705b3aca61dd",
+        "model": "mimo-v2.5-pro"
+      },
+      "human_author": "skeithnight <skeithnight@gmail.com>",
+      "messages": [],
+      "total_additions": 4458,
+      "total_deletions": 29,
+      "accepted_lines": 4425,
+      "overriden_lines": 0
+    }
+  }
+}
