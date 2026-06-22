@@ -59,5 +59,23 @@
 - Sprint-49 Closed (IMPLEMENTATION_COMPLETE, AUDIT_COMPLETE, REMEDIATION_COMPLETE, FULLY_COMPLIANT, CLOSED_SPRINT_PROTECTED)
 - Sprint-50 Closed (IMPLEMENTATION_COMPLETE, AUDIT_COMPLETE, REMEDIATION_COMPLETE, PRODUCTION_READY, CLOSED_SPRINT_PROTECTED)
 
-## Proposed Future Roadmap
-- **Sprint-51**: TBD (Sprint-51 Scope Placeholder)
+## Proposed Future Roadmap — Qwen Audit Remediation (Phases 1–4)
+**Source:** `docs/qwen-audit/` — Architecture Audit & Engineering Specs
+**Goal:** Transition Karsa from "governance prototype" to "live trading desk tool" by building the Data Bridge, AI Grounding, Execution Bridge, and CIO Dashboard.
+
+### Phase 1: The Data Bridge (Critical Priority)
+- **Sprint-51**: Data Bridge — Foundation & Schema (DB-driven provider management, AES-256 encryption, hot-reload via pg_notify, Connector Factory pattern)
+- **Sprint-52**: Data Bridge — Connectors, Normalization & Aggregation (PolygonConnector, FinnhubConnector, Pydantic normalization, tick→OHLCV aggregation, event emission)
+- **Sprint-53**: Data Bridge — Resilience, Health & Observability (Health Monitor, automatic provider failover, gap-filling, Slack alerts)
+
+### Phase 2: Grounding the AI (Critical Priority, depends on Phase 1)
+- **Sprint-54**: AI Grounding — LLM Pool & RAG Infrastructure (LiteLLM multi-provider routing, pgvector schema, embedding pipeline, context retrieval)
+- **Sprint-55**: AI Grounding — Researcher & Governance Agents (ResearcherAgent thesis generation, GovernanceAgent LLM-as-a-Judge, Red Team test suite)
+
+### Phase 3: The Execution Bridge (Critical Priority, depends on Phase 2)
+- **Sprint-56**: Execution Bridge — Risk Engine & Order Management (Hard Pre-Trade Risk Engine, OMS state machine, TWAP slicer, kill switch, paper trading mode)
+- **Sprint-57**: Execution Bridge — Broker Adapters & Feedback Loop (AlpacaAdapter, IBKRAdapter, WebSocket fill handling, execution event feedback loop)
+
+### Phase 4: Live Risk & CIO Dashboards (Final Production Phase, depends on Phase 3)
+- **Sprint-58**: Live Risk — Volatility Targeting & Position Sizing (EWMA volatility calculator, risk calibration engine, vol-targeted position sizing, audit trail)
+- **Sprint-59**: CIO Dashboard — Producer, API & Real-Time Frontend (karsa-cio-producer, TimescaleDB read-models, REST+WebSocket API, Next.js CIO Dashboard, stale data circuit breaker)
