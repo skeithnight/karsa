@@ -4,6 +4,7 @@ import { PageHeader } from '../../components/shared/PageHeader';
 import { LoadingSkeleton } from '../../components/shared/LoadingSkeleton';
 import { ErrorState } from '../../components/shared/ErrorState';
 import { EmptyState } from '../../components/shared/EmptyState';
+import { FreshnessIndicator } from '../../components/shared/FreshnessIndicator';
 import {
   usePortfolioSummary,
   useRiskTrafficLight,
@@ -49,6 +50,12 @@ export default function CioDashboardPage() {
         title="CIO Dashboard"
         description="Executive summary — portfolio, risk, today's decisions"
       />
+      <div className="flex justify-end mt-2 mb-4">
+        <FreshnessIndicator
+          lastFetched={portfolio?.last_updated}
+          isLoading={loadingPortfolio}
+        />
+      </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
         {/* Portfolio Status Card */}
@@ -146,8 +153,18 @@ function DecisionCard({ decision }: { decision: TodayDecisionViewModel }) {
     ALERT: 'text-amber-600',
     MONITOR: 'text-blue-600',
   };
+  const handleClick = () => {
+    if (decision.memoId) {
+      window.location.href = `/memos/${decision.memoId}`;
+    }
+  };
   return (
-    <div className="border rounded-lg p-4 hover:shadow-md transition-shadow">
+    <div
+      className={`border rounded-lg p-4 hover:shadow-md transition-shadow ${decision.memoId ? 'cursor-pointer' : ''}`}
+      onClick={handleClick}
+      role={decision.memoId ? 'button' : undefined}
+      tabIndex={decision.memoId ? 0 : undefined}
+    >
       <div className="flex items-center justify-between mb-2">
         <span className="font-semibold">{decision.ticker}</span>
         <span className={`text-sm font-mono ${actionColors[decision.action]}`}>
@@ -167,6 +184,11 @@ function DecisionCard({ decision }: { decision: TodayDecisionViewModel }) {
       <p className="text-sm text-slate-700 dark:text-slate-300 mt-2">
         {decision.summary}
       </p>
+      {decision.memoId && (
+        <div className="text-xs text-blue-500 mt-2">
+          View Memo →
+        </div>
+      )}
     </div>
   );
 }

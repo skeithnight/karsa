@@ -16,4 +16,9 @@ export const NAV_ITEMS: NavItem[] = [
   { label: 'Oversight', href: '/oversight', icon: 'shield', owner: 'Governance' },
   { label: 'Infrastructure', href: '/infrastructure', icon: 'settings', owner: 'Platform Operations' },
   { label: 'Proposals', href: '/proposals', icon: 'file-check', owner: 'Capital Allocation' },
+  { label: 'Investments', href: '/investments', icon: 'target', owner: 'Investment Workflow' },
+  { label: 'Analytics', href: '/analytics', icon: 'bar-chart-2', owner: 'Analytics' },
+  { label: 'Forecasts', href: '/analytics/forecasts', icon: 'crystal-ball', owner: 'Analytics' },
+  { label: 'Attribution', href: '/performance/attribution', icon: 'pie-chart', owner: 'Performance' },
+  { label: 'Policies', href: '/oversight/policies', icon: 'shield-check', owner: 'Governance' },
 ];

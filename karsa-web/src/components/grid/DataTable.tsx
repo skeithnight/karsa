@@ -6,6 +6,7 @@ import "ag-grid-community/styles/ag-theme-alpine.css";
 
 import { LoadingSkeleton } from "../shared/LoadingSkeleton";
 import { EmptyState } from "../shared/EmptyState";
+import { exportToCsv } from "../../lib/export";
 
 export interface DataTableProps<T> {
   rowData: T[];
@@ -14,6 +15,10 @@ export interface DataTableProps<T> {
   onRowClick?: (row: T) => void;
   onSortChanged?: (sort: any) => void;
   onPaginationChanged?: (page: number) => void;
+  /** Enable CSV export button */
+  exportable?: boolean;
+  /** Filename for CSV export */
+  exportFilename?: string;
 }
 
 export function DataTable<T>({
@@ -23,6 +28,8 @@ export function DataTable<T>({
   onRowClick,
   onSortChanged,
   onPaginationChanged,
+  exportable = false,
+  exportFilename = "export",
 }: DataTableProps<T>) {
   if (isLoading) {
     return (
@@ -34,27 +41,46 @@ export function DataTable<T>({
 
   if (!rowData || rowData.length === 0) {
     return (
-      <EmptyState 
-        title="No Data" 
-        description="There are no records to display." 
+      <EmptyState
+        title="No Data"
+        description="There are no records to display."
       />
     );
   }
 
+  const handleExport = () => {
+    const columns = columnDefs
+      .filter(cd => cd.field)
+      .map(cd => ({ key: cd.field!, label: cd.headerName ?? cd.field! }));
+    exportToCsv(exportFilename, rowData as Record<string, unknown>[], columns);
+  };
+
   return (
-    <div className="ag-theme-alpine w-full h-[600px]">
-      <AgGridReact
-        rowData={rowData}
-        columnDefs={columnDefs}
-        onRowClicked={(e) => {
-          if (e.data !== undefined) {
-            onRowClick?.(e.data);
-          }
-        }}
-        onSortChanged={onSortChanged}
-        onPaginationChanged={(e) => onPaginationChanged?.(e.api.paginationGetCurrentPage())}
-        pagination={true}
-      />
+    <div>
+      {exportable && (
+        <div className="flex justify-end mb-2">
+          <button
+            onClick={handleExport}
+            className="text-xs px-3 py-1 border rounded hover:bg-slate-100 dark:hover:bg-slate-800"
+          >
+            Export CSV
+          </button>
+        </div>
+      )}
+      <div className="ag-theme-alpine w-full h-[600px]">
+        <AgGridReact
+          rowData={rowData}
+          columnDefs={columnDefs}
+          onRowClicked={(e) => {
+            if (e.data !== undefined) {
+              onRowClick?.(e.data);
+            }
+          }}
+          onSortChanged={onSortChanged}
+          onPaginationChanged={(e) => onPaginationChanged?.(e.api.paginationGetCurrentPage())}
+          pagination={true}
+        />
+      </div>
     </div>
   );
 }

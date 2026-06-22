@@ -34,7 +34,7 @@ export default function AnalystsWorkspace() {
       {isLoading ? (
         <LoadingSkeleton variant="table" />
       ) : (data?.data?.length ?? 0) > 0 ? (
-        <DataTable rowData={data?.data ?? []} columnDefs={[{ field: 'analystId' }, { field: 'role' }, { field: 'winRateDisplay' }, { field: 'trustScoreDisplay' }]} />
+        <DataTable rowData={data?.data ?? []} columnDefs={[{ field: 'analystId' }, { field: 'role' }, { field: 'winRateDisplay' }, { field: 'trustScoreDisplay' }]} exportable={true} exportFilename="analyst-metrics" />
       ) : (
         <EmptyState title="No Data" description="No analyst metrics found" />
       )}

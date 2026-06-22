@@ -31,7 +31,15 @@ export function useThesisDetail(id: string) {
 export function useThesisLineage(id: string) {
   return useQuery<ThesisLineageVM, ApiError>({
     queryKey: queryKeys.theses.lineage(id),
-    queryFn: async () => ({ sourceResearchIds: [], decisionUrns: [], governanceReviewIds: [] }),
+    queryFn: async () => {
+      const res = await ThesesApi.getLineage(id);
+      return {
+        sourceResearchIds: res.source_research_ids ?? [],
+        decisionUrns: res.decision_urns ?? [],
+        governanceReviewIds: res.governance_review_ids ?? [],
+      };
+    },
+    enabled: !!id,
     staleTime: 5 * 60 * 1000,
   });
 }

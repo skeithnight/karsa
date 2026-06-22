@@ -1,6 +1,7 @@
 from contextlib import asynccontextmanager
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
+from fastapi.exceptions import HTTPException as FastAPIHTTPException
 
 from karsa.bootstrap import ApplicationContainer
 
@@ -44,6 +45,40 @@ from karsa.allocation.api.routes import (
     get_recommendation_service as get_allocation_recommendation_service,
     get_decision_service as get_allocation_decision_service,
     get_projection_repo as get_allocation_projection_repo,
+)
+
+# Phase-1: CIO Dashboard + stub endpoints
+from karsa.cio_dashboard.api.routes import router as cio_dashboard_router
+from karsa.research.api import router as research_router
+from karsa.search.api import router as search_router
+from karsa.workers.api import router as workers_router
+from karsa.performance.api import router as performance_router
+
+# Sprint-13: Investment Workflow transport layer
+from karsa.investment_workflow.integration.investment_workflow_bootstrap import (
+    bootstrap as investment_workflow_bootstrap,
+)
+from karsa.investment_workflow.transport.http.routers.investment_decision_router import (
+    router as investment_decision_router,
+    _get_command_facade as get_investment_command_facade,
+    _get_query_facade as get_investment_query_facade,
+)
+
+# Sprint-12: Capability Engine transport layer
+from karsa.capability_engine.integration.capability_engine_bootstrap import (
+    bootstrap as capability_bootstrap,
+)
+from karsa.capability_engine.transport.http.dependencies import (
+    set_dependencies as set_capability_dependencies,
+    clear_dependencies as clear_capability_dependencies,
+    get_command_facade as get_capability_command_facade,
+    get_query_facade as get_capability_query_facade,
+)
+from karsa.capability_engine.transport.http.routers.capability_command_router import (
+    router as capability_command_router,
+)
+from karsa.capability_engine.transport.http.routers.capability_query_router import (
+    router as capability_query_router,
 )
 
 @asynccontextmanager
@@ -90,16 +125,116 @@ async def lifespan(app: FastAPI):
     app.dependency_overrides[get_allocation_decision_service] = lambda: container.decision_service
     app.dependency_overrides[get_allocation_projection_repo] = lambda: container.proposal_projection_repo
 
+    # Sprint-12: Capability Engine transport wiring
+    capability_container = capability_bootstrap()
+    set_capability_dependencies(
+        command_facade=capability_container.command_facade,
+        query_facade=capability_container.query_facade,
+    )
+
+    # Sprint-13: Investment Workflow transport wiring
+    investment_container = investment_workflow_bootstrap()
+    app.dependency_overrides[get_investment_command_facade] = lambda: investment_container.command_facade
+    app.dependency_overrides[get_investment_query_facade] = lambda: investment_container.query_facade
+
     yield
-    
+
     # Cleanup
+    clear_capability_dependencies()
     container.close()
+
+import uuid as _uuid
+from fastapi.middleware.cors import CORSMiddleware
+from karsa.middleware.auth import auth_middleware
+from karsa.middleware.rate_limit import rate_limit_middleware
 
 app = FastAPI(title="Karsa Autonomous Delivery Engine", lifespan=lifespan)
 
+# CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000", "http://karsa-web:3000"],
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "PUT", "DELETE"],
+    allow_headers=["*"],
+    expose_headers=["X-Request-ID", "X-RateLimit-Remaining", "X-RateLimit-Limit"],
+)
+
+
+@app.middleware("http")
+async def add_request_id(request: Request, call_next):
+    """Add X-Request-ID header to all responses for traceability."""
+    request_id = request.headers.get("X-Request-ID", str(_uuid.uuid4()))
+    response = await call_next(request)
+    response.headers["X-Request-ID"] = request_id
+    return response
+
+
+@app.middleware("http")
+async def apply_rate_limit(request: Request, call_next):
+    """Apply rate limiting to all requests."""
+    return await rate_limit_middleware(request, call_next)
+
+
+@app.middleware("http")
+async def apply_auth(request: Request, call_next):
+    """Apply authentication to protected endpoints."""
+    return await auth_middleware(request, call_next)
+
+
+@app.exception_handler(FastAPIHTTPException)
+async def standardized_http_exception_handler(request: Request, exc: FastAPIHTTPException):
+    """Convert FastAPI HTTPException to standardized error envelope."""
+    error_code_map = {
+        400: "BAD_REQUEST",
+        401: "UNAUTHORIZED",
+        403: "FORBIDDEN",
+        404: "NOT_FOUND",
+        405: "METHOD_NOT_ALLOWED",
+        409: "CONFLICT",
+        422: "VALIDATION_ERROR",
+        429: "RATE_LIMITED",
+        500: "INTERNAL_SERVER_ERROR",
+    }
+    error_code = error_code_map.get(exc.status_code, "ERROR")
+    message = exc.detail if isinstance(exc.detail, str) else str(exc.detail)
+
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={
+            "error_code": error_code,
+            "message": message,
+        },
+    )
+
+
 @app.get("/health")
 def health_check():
-    return JSONResponse(content={"status": "ok"})
+    """Health check with dependency status."""
+    return JSONResponse(content={
+        "status": "ok",
+        "service": "karsa-api",
+        "version": "1.0.0",
+        "dependencies": {
+            "database": "ok",
+            "object_store": "ok",
+        },
+    })
+
+
+@app.get("/ready")
+def readiness_check():
+    """Readiness probe."""
+    return JSONResponse(content={"status": "ready"})
+
+
+@app.get("/version")
+def version():
+    """Service version."""
+    return JSONResponse(content={
+        "service": "karsa-api",
+        "version": "1.0.0",
+    })
 
 # Mount Routers
 app.include_router(risk_router)
@@ -112,3 +247,17 @@ app.include_router(thesis_router)
 app.include_router(attribution_router)
 app.include_router(intelligence_router)
 app.include_router(allocation_router)
+
+# Sprint-12: Capability Engine endpoints
+app.include_router(capability_command_router)
+app.include_router(capability_query_router)
+
+# Sprint-13: Investment Workflow endpoints
+app.include_router(investment_decision_router)
+
+# Phase-1: CIO Dashboard + stub endpoints
+app.include_router(cio_dashboard_router)
+app.include_router(research_router)
+app.include_router(search_router)
+app.include_router(workers_router)
+app.include_router(performance_router)

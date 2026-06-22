@@ -12,6 +12,7 @@ export interface PortfolioSummaryViewModel {
   maxDrawdownYtd: string; // "8.2%"
   activeHoldings: number;
   cashPct: string; // "5%"
+  last_updated?: string | null; // ISO 8601 timestamp
 }
 
 /** Risk traffic light for Tier 1 */

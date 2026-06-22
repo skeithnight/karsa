@@ -8,7 +8,12 @@ import { ListAnalystsVM } from "../../features/analysts/types/viewmodels";
 export function useAnalystsMetrics() {
   return useQuery<ListAnalystsVM, ApiError>({
     queryKey: queryKeys.analysts.metrics(),
-    queryFn: async () => ({ data: [] }),
+    queryFn: async () => {
+      const response = await fetch('/workers/metrics');
+      if (!response.ok) throw new Error('Failed to fetch analysts');
+      const data = await response.json();
+      return mapListAnalysts(data);
+    },
     staleTime: 60 * 1000,
   });
 }

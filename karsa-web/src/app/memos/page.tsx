@@ -19,7 +19,17 @@ export default function MemosWorkspace() {
         {isLoading ? (
           <LoadingSkeleton variant="table" />
         ) : (data?.data?.length ?? 0) > 0 ? (
-          <DataTable rowData={data?.data ?? []} columnDefs={[{ field: 'decisionUrn' }, { field: 'intent' }, { field: 'timestampDisplay' }]} />
+          <DataTable
+            rowData={data?.data ?? []}
+            columnDefs={[{ field: 'decisionUrn' }, { field: 'intent' }, { field: 'timestampDisplay' }]}
+            exportable={true}
+            exportFilename="investment-memos"
+            onRowClick={(row) => {
+              if (row.decisionUrn) {
+                window.location.href = `/memos/${row.decisionUrn}`;
+              }
+            }}
+          />
         ) : (
           <EmptyState title="No Data" description="No memos available" />
         )}

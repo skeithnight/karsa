@@ -23,7 +23,7 @@ export default function ThesesWorkspace() {
         {isLoading ? (
           <LoadingSkeleton variant="table" />
         ) : (data?.data?.length ?? 0) > 0 ? (
-          <ThesisGrid data={data?.data ?? []} />
+          <ThesisGrid data={data?.data ?? []} exportable={true} />
         ) : (
           <EmptyState title="No Data" description="No active theses found" />
         )}

@@ -19,7 +19,15 @@ export default function OversightWorkspace() {
         {isLoading ? (
           <LoadingSkeleton variant="table" />
         ) : (data?.data?.length ?? 0) > 0 ? (
-          <DataTable rowData={data?.data ?? []} columnDefs={[{ field: 'thesisUrn' }, { field: 'failureReason' }, { field: 'policyOverridesDisplay' }]} />
+          <DataTable
+            rowData={data?.data ?? []}
+            columnDefs={[{ field: 'thesisUrn' }, { field: 'failureReason' }, { field: 'policyOverridesDisplay' }]}
+            onRowClick={(row) => {
+              if (row.id) {
+                window.location.href = `/oversight/${row.id}`;
+              }
+            }}
+          />
         ) : (
           <EmptyState title="No Data" description="No oversight records found" />
         )}

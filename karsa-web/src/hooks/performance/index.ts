@@ -9,7 +9,10 @@ import { PerformanceRequestDTO } from "../../types/performance/performance-reque
 export function usePerformanceAttribution(params: PerformanceRequestDTO) {
   return useQuery<PerformanceAttributionVM, ApiError>({
     queryKey: queryKeys.performance.attribution(params),
-    queryFn: async () => ({ data: [] }),
+    queryFn: async () => {
+      const response = await PerformanceApi.getAttribution(params);
+      return mapPerformanceAttribution(response);
+    },
     staleTime: 5 * 60 * 1000,
   });
 }

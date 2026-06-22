@@ -6,6 +6,7 @@ import { Input } from "../../../../components/ui/input";
 import { Textarea } from "../../../../components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "../../../../components/ui/card";
 import { useProposalDecision } from "../../../../hooks/allocation";
+import { useNotifications } from "../../../../components/shared/NotificationCenter";
 
 interface ApprovalFormProps {
   proposalId: string;
@@ -21,6 +22,7 @@ export function ApprovalForm({
   onSuccess,
 }: ApprovalFormProps) {
   const decisionMutation = useProposalDecision();
+  const { addNotification } = useNotifications();
 
   const [actionType, setActionType] = useState<ActionType>("APPROVE_ALLOCATION");
 
@@ -74,6 +76,15 @@ export function ApprovalForm({
       auto_expire: false,
     };
 
+    const handleSuccess = () => {
+      addNotification({
+        type: "success",
+        title: `Proposal ${actionType === "APPROVE_ALLOCATION" ? "Approved" : actionType === "REJECT_ALLOCATION" ? "Rejected" : "Modified"}`,
+        message: `Proposal ${proposalId} has been ${actionType === "APPROVE_ALLOCATION" ? "approved" : actionType === "REJECT_ALLOCATION" ? "rejected" : "modified"} successfully.`,
+      });
+      onSuccess();
+    };
+
     if (actionType === "APPROVE_ALLOCATION") {
       decisionMutation.mutate(
         {
@@ -85,7 +96,7 @@ export function ApprovalForm({
           risk_assessment: baseRiskAssessment,
           review_horizon: baseReviewHorizon,
         },
-        { onSuccess }
+        { onSuccess: handleSuccess }
       );
     } else if (actionType === "REJECT_ALLOCATION") {
       decisionMutation.mutate(
@@ -96,7 +107,7 @@ export function ApprovalForm({
           rejection_reason: rejectionReason || "Rejected by CIO.",
           votes: [{ voter_id: "cio-1", vote_type: "REJECT" }],
         },
-        { onSuccess }
+        { onSuccess: handleSuccess }
       );
     } else if (actionType === "OVERRIDE") {
       decisionMutation.mutate(
@@ -111,7 +122,7 @@ export function ApprovalForm({
           risk_assessment: baseRiskAssessment,
           review_horizon: baseReviewHorizon,
         },
-        { onSuccess }
+        { onSuccess: handleSuccess }
       );
     }
   };

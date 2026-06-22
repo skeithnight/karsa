@@ -23,7 +23,7 @@ export default function PerformanceWorkspace() {
       {isLoading ? (
         <LoadingSkeleton variant="table" />
       ) : (data?.data?.length ?? 0) > 0 ? (
-        <DataTable rowData={data?.data ?? []} columnDefs={[{ field: 'dateDisplay' }, { field: 'selectionReturnDisplay' }, { field: 'allocationReturnDisplay' }]} />
+        <DataTable rowData={data?.data ?? []} columnDefs={[{ field: 'dateDisplay' }, { field: 'selectionReturnDisplay' }, { field: 'allocationReturnDisplay' }]} exportable={true} exportFilename="performance-attribution" />
       ) : (
         <EmptyState title="No Data" description="No attribution data available" />
       )}

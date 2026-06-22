@@ -9,7 +9,10 @@ import { ListResearchReportsRequestDTO } from "../../types/research/list-researc
 export function useListResearchReports(params: ListResearchReportsRequestDTO) {
   return useQuery<ListResearchReportsVM, ApiError>({
     queryKey: queryKeys.research.list(params),
-    queryFn: async () => ({ data: [], total: 0 }),
+    queryFn: async () => {
+      const response = await ResearchApi.listReports(params);
+      return mapListResearchReports(response);
+    },
     staleTime: 60 * 1000,
   });
 }
