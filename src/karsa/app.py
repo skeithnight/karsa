@@ -134,6 +134,7 @@ async def lifespan(app: FastAPI):
 
     # Sprint-13: Investment Workflow transport wiring
     investment_container = investment_workflow_bootstrap()
+    app.state.investment_container = investment_container
     app.dependency_overrides[get_investment_command_facade] = lambda: investment_container.command_facade
     app.dependency_overrides[get_investment_query_facade] = lambda: investment_container.query_facade
 

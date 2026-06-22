@@ -132,6 +132,18 @@ export function useInvestmentDecisions(ticker?: string) {
   });
 }
 
+// --- Portfolio Holdings ---
+export function usePortfolioHoldings() {
+  return useQuery<Record<string, unknown>[]>({
+    queryKey: ['cio-dashboard', 'portfolio-holdings'],
+    queryFn: async () => {
+      const data = await ApiClient.fetch<Record<string, unknown>[]>('/api/portfolio/holdings');
+      return Array.isArray(data) ? data : [];
+    },
+    staleTime: 60_000,
+  });
+}
+
 // --- Score Timeseries ---
 export function useScoreTimeseries(familyId: string, versionId?: string) {
   return useQuery<ScoreTimeseriesEntryViewModel[]>({

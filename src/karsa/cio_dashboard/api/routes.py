@@ -1,13 +1,16 @@
 """CIO Dashboard API routes -- Sprint-16/Phase-1.
 
 Endpoints that the CIO dashboard frontend hooks expect.
-Reads from investment_workflow and capability_engine repositories.
+Reads from investment_workflow repositories AND PostgreSQL
+(worker-produced data).
 Uses standardized error responses and pagination.
 """
 
+import os
 from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
 
+import psycopg
 from fastapi import APIRouter, Request
 
 router = APIRouter(prefix="/api", tags=["CIO Dashboard"])
@@ -23,32 +26,137 @@ def _get_container(request: Request):
     return getattr(request.app.state, "container", None)
 
 
+def _get_investment_container(request: Request):
+    """Get the investment workflow container from app state."""
+    return getattr(request.app.state, "investment_container", None)
+
+
+def _get_pg_connection():
+    """Get a PostgreSQL connection from environment."""
+    url = os.environ.get(
+        "POSTGRES_URL",
+        "postgresql://karsa:karsa_password@localhost:5432/karsa_db",
+    )
+    return psycopg.connect(url)
+
+
+def _query_cio_decisions(limit: int = 50) -> List[Dict[str, Any]]:
+    """Query CIO decisions from PostgreSQL (worker-produced data)."""
+    try:
+        with _get_pg_connection() as conn:
+            with conn.cursor() as cur:
+                cur.execute(
+                    """SELECT decision_id, action_type, target_node_id,
+                              decision_payload, created_at
+                       FROM cio_decisions
+                       ORDER BY created_at DESC
+                       LIMIT %s""",
+                    (limit,),
+                )
+                rows = cur.fetchall()
+                results = []
+                for row in rows:
+                    payload = row[3] if row[3] else {}
+                    results.append({
+                        "decision_id": row[0],
+                        "action_type": row[1],
+                        "target_node_id": row[2],
+                        "allocated_weights": payload.get("allocated_weights", {}),
+                        "override_reason": payload.get("override_reason", {}),
+                        "created_at": row[4].isoformat() if row[4] else None,
+                    })
+                return results
+    except Exception:
+        return []
+
+
 # --- Portfolio Summary ---
 @router.get("/portfolio/summary")
 def get_portfolio_summary(request: Request) -> Dict[str, Any]:
     """Portfolio summary for Tier 1 executive view.
 
-    Reads from investment_workflow decisions to compute active holdings count.
+    Reads from PostgreSQL portfolio tables (worker-produced data).
     """
-    container = _get_container(request)
+    nav = 0.0
+    cash_balance = 0.0
     active_holdings = 0
+
+    # Read from PostgreSQL portfolio tables
+    try:
+        with _get_pg_connection() as conn:
+            with conn.cursor() as cur:
+                # Get portfolio valuation
+                cur.execute(
+                    "SELECT net_asset_value, cash_balance FROM portfolio_read_valuations ORDER BY updated_at DESC LIMIT 1"
+                )
+                row = cur.fetchone()
+                if row:
+                    nav = float(row[0]) if row[0] else 0.0
+                    cash_balance = float(row[1]) if row[1] else 0.0
+
+                # Count active positions (exclude CASH)
+                cur.execute(
+                    "SELECT COUNT(*) FROM portfolio_read_positions WHERE asset_id != 'CASH'"
+                )
+                count_row = cur.fetchone()
+                if count_row:
+                    active_holdings = count_row[0]
+    except Exception:
+        pass
+
+    # Also count investment workflow decisions
+    container = _get_investment_container(request)
     if container and hasattr(container, "decision_repo"):
         decisions = container.decision_repo.list_decisions(page=1, size=10000)
-        active_holdings = sum(
+        active_holdings += sum(
             1 for d in decisions
             if hasattr(d, "state") and d.state in ("ACTIVE", "APPROVED")
         )
 
+    nav_display = f"IDR {nav:,.0f}" if nav > 0 else "IDR 0"
+    cash_pct = f"{(cash_balance / nav * 100):.1f}%" if nav > 0 else "0%"
+
     return {
-        "nav": "IDR 0",
+        "nav": nav_display,
         "navChangeWtd": "0%",
         "navChangeYtd": "0%",
         "sharpeRatio": 0.0,
         "maxDrawdownYtd": "0%",
         "activeHoldings": active_holdings,
-        "cashPct": "0%",
+        "cashPct": cash_pct,
         "last_updated": _now_iso(),
     }
+
+
+# --- Portfolio Holdings ---
+@router.get("/portfolio/holdings")
+def get_portfolio_holdings() -> List[Dict[str, Any]]:
+    """Portfolio holdings from PostgreSQL (worker-produced data)."""
+    try:
+        with _get_pg_connection() as conn:
+            with conn.cursor() as cur:
+                cur.execute(
+                    """SELECT asset_id, portfolio_id, quantity, average_cost,
+                              market_value, exposure_pct, updated_at
+                       FROM portfolio_read_positions
+                       WHERE asset_id != 'CASH'
+                       ORDER BY asset_id"""
+                )
+                rows = cur.fetchall()
+                return [
+                    {
+                        "ticker": row[0],
+                        "portfolio_id": row[1],
+                        "quantity": float(row[2]) if row[2] else 0,
+                        "average_cost": float(row[3]) if row[3] else 0,
+                        "market_value": float(row[4]) if row[4] else 0,
+                        "exposure_pct": float(row[5]) if row[5] else 0,
+                        "updated_at": row[6].isoformat() if row[6] else None,
+                    }
+                    for row in rows
+                ]
+    except Exception:
+        return []
 
 
 # --- Risk Traffic Light ---
@@ -73,27 +181,43 @@ def get_risk_traffic_light() -> List[Dict[str, Any]]:
 def get_today_decisions(request: Request) -> List[Dict[str, Any]]:
     """Today's investment decisions for Tier 1.
 
-    Reads from investment_workflow decisions.
+    Reads from investment_workflow decisions AND CIO decisions from PostgreSQL.
     """
-    container = _get_container(request)
-    if not container or not hasattr(container, "decision_repo"):
-        return []
-
-    decisions = container.decision_repo.list_decisions(page=1, size=100)
-    today = datetime.now(timezone.utc).date()
-
     results = []
-    for d in decisions:
-        created = getattr(d, "created_at", None)
-        if created and hasattr(created, "date") and created.date() == today:
-            results.append({
-                "ticker": d.ticker,
-                "action": _map_state_to_action(d.state),
-                "conviction": getattr(d, "conviction", {}).get("level") if hasattr(d, "conviction") and d.conviction else None,
-                "targetPrice": None,
-                "summary": f"Decision for {d.ticker} in state {d.state}",
-                "memoId": None,
-            })
+
+    # 1. Read from investment workflow container (API-produced decisions)
+    container = _get_investment_container(request)
+    if container and hasattr(container, "decision_repo"):
+        decisions = container.decision_repo.list_decisions(page=1, size=100)
+        today = datetime.now(timezone.utc).date()
+
+        for d in decisions:
+            created = getattr(d, "created_at", None)
+            if created and hasattr(created, "date") and created.date() == today:
+                results.append({
+                    "ticker": d.ticker,
+                    "action": _map_state_to_action(d.state),
+                    "conviction": d.conviction.level if hasattr(d, "conviction") and d.conviction else None,
+                    "targetPrice": str(d.memo.exit_target) if hasattr(d, "memo") and d.memo and d.memo.exit_target else None,
+                    "summary": f"Decision for {d.ticker} in state {d.state}",
+                    "memoId": None,
+                    "source": "workflow",
+                })
+
+    # 2. Read from PostgreSQL (worker-produced CIO decisions)
+    cio_decisions = _query_cio_decisions(limit=10)
+    for d in cio_decisions:
+        weights = d.get("allocated_weights", {})
+        tickers = list(weights.keys()) if weights else ["N/A"]
+        results.append({
+            "ticker": ", ".join(tickers[:3]),
+            "action": d.get("action_type", "OVERRIDE"),
+            "conviction": None,
+            "targetPrice": None,
+            "summary": f"CIO Decision: {d.get('action_type', 'N/A')} ({d.get('target_node_id', 'N/A')})",
+            "memoId": d.get("decision_id"),
+            "source": "cio-producer",
+        })
 
     return results
 
@@ -122,7 +246,7 @@ def get_stock_decision(ticker: str, request: Request) -> Dict[str, Any]:
 
     Reads from investment_workflow decisions.
     """
-    container = _get_container(request)
+    container = _get_investment_container(request)
     if not container or not hasattr(container, "decision_repo"):
         return _empty_decision(ticker)
 

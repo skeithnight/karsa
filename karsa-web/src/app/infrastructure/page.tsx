@@ -90,34 +90,49 @@ export default function InfrastructureWorkspace() {
 
       {/* Data Pipeline Health */}
       <h2 className="text-lg font-semibold mt-8 mb-4">Data Pipeline</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <div className="border rounded-xl p-4 bg-white dark:bg-slate-900 shadow-sm">
           <h3 className="font-semibold text-slate-600 mb-2">Projection Worker</h3>
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 rounded-full bg-emerald-500" />
-            <span className="text-sm">Running (42h+)</span>
+            <span className="text-sm">Running — Processing events from PostgreSQL</span>
           </div>
+          <div className="text-xs text-slate-500 mt-1">Writes to: event_journal, projection_checkpoints</div>
         </div>
         <div className="border rounded-xl p-4 bg-white dark:bg-slate-900 shadow-sm">
           <h3 className="font-semibold text-slate-600 mb-2">CIO Producer</h3>
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 rounded-full bg-emerald-500" />
-            <span className="text-sm">Running (2h+)</span>
+            <span className="text-sm">Running — Generating CIO decisions</span>
           </div>
+          <div className="text-xs text-slate-500 mt-1">Writes to: cio_decisions, event_journal</div>
         </div>
         <div className="border rounded-xl p-4 bg-white dark:bg-slate-900 shadow-sm">
           <h3 className="font-semibold text-slate-600 mb-2">Event Processing</h3>
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 rounded-full bg-emerald-500" />
-            <span className="text-sm">Active</span>
+            <span className="text-sm">Active — Event journal at seq 7647+</span>
           </div>
+          <div className="text-xs text-slate-500 mt-1">Last event: PortfolioDecisionMadeEvent</div>
         </div>
-        <div className="border rounded-xl p-4 bg-white dark:bg-slate-900 shadow-sm">
-          <h3 className="font-semibold text-slate-600 mb-2">Outbox Queue</h3>
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-emerald-500" />
-            <span className="text-sm">0 pending</span>
-          </div>
+      </div>
+
+      {/* Worker Integration Status */}
+      <h2 className="text-lg font-semibold mt-8 mb-4">Worker Integration</h2>
+      <div className="border rounded-xl p-6 bg-white dark:bg-slate-900 mb-6">
+        <div className="flex items-center gap-2 mb-4">
+          <div className="w-3 h-3 rounded-full bg-amber-500" />
+          <span className="font-semibold text-amber-700">Integration Gap</span>
+        </div>
+        <p className="text-sm text-slate-600 mb-3">
+          Workers write to PostgreSQL. API reads from in-memory repositories.
+          Data produced by workers is not visible to the API until PostgreSQL
+          repository implementations are wired into the API bootstrap.
+        </p>
+        <div className="text-xs text-slate-500">
+          <strong>Affected:</strong> CIO decisions, portfolio data, event journal
+          <br />
+          <strong>Resolution:</strong> Wire Postgres repositories into API bootstrap
         </div>
       </div>
 
