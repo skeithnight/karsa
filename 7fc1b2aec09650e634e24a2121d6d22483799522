@@ -1,0 +1,43 @@
+docs/implementation/sprint-51/design.md
+  58d9d98060675007 1-120
+docs/implementation/sprint-52/design.md
+  58d9d98060675007 1-121
+docs/implementation/sprint-55/design.md
+  58d9d98060675007 1-123
+docs/implementation/sprint-51/audit.md
+  58d9d98060675007 1-349
+docs/implementation/sprint-54/design.md
+  58d9d98060675007 1-129
+docs/implementation/sprint-53/design.md
+  58d9d98060675007 1-118
+docs/implementation/sprint-58/design.md
+  58d9d98060675007 1-125
+docs/roadmap/ROADMAP.md
+  58d9d98060675007 62-81
+docs/implementation/sprint-59/design.md
+  58d9d98060675007 1-142
+docs/implementation/sprint-57/design.md
+  58d9d98060675007 1-111
+docs/implementation/sprint-56/design.md
+  58d9d98060675007 1-154
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.23",
+  "base_commit_sha": "7fc1b2aec09650e634e24a2121d6d22483799522",
+  "prompts": {
+    "58d9d98060675007": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ccb87b8a-b569-488a-9e6a-5f26a83c3761",
+        "model": "mimo-v2.5-pro"
+      },
+      "human_author": "skeithnight <skeithnight@gmail.com>",
+      "messages": [],
+      "total_additions": 1558,
+      "total_deletions": 48,
+      "accepted_lines": 1512,
+      "overriden_lines": 0
+    }
+  }
+}
