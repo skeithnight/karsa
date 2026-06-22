@@ -1,0 +1,133 @@
+karsa-web/next.config.ts
+  4bb8330d7d22c5e8 5-7
+karsa-web/src/hooks/performance/index.ts
+  4bb8330d7d22c5e8 12-15
+karsa-web/src/app/investments/[id]/page.tsx
+  4bb8330d7d22c5e8 1-51
+src/karsa/search/__init__.py
+  4bb8330d7d22c5e8 1
+karsa-web/src/lib/export.ts
+  4bb8330d7d22c5e8 1-54
+karsa-web/src/app/analysts/page.tsx
+  4bb8330d7d22c5e8 37
+src/karsa/workers/__init__.py
+  4bb8330d7d22c5e8 1
+karsa-web/src/config/navigation.ts
+  4bb8330d7d22c5e8 19-23
+karsa-web/src/features/cio-dashboard/types/viewmodels.ts
+  4bb8330d7d22c5e8 15
+karsa-web/src/app/analytics/page.tsx
+  4bb8330d7d22c5e8 1-177
+karsa-web/src/app/performance/attribution/page.tsx
+  4bb8330d7d22c5e8 1-75
+karsa-web/src/hooks/cio-dashboard/index.ts
+  4bb8330d7d22c5e8 4,10,36,38-41,48,50-53,60,62-65,72,74-77,85,87-90,97,99-102,109,111-114,122,124-130,137,139-145
+karsa-web/src/providers/index.tsx
+  4bb8330d7d22c5e8 6,12-15
+karsa-web/src/app/analytics/forecasts/page.tsx
+  4bb8330d7d22c5e8 1-89
+karsa-web/src/app/oversight/[id]/page.tsx
+  4bb8330d7d22c5e8 1-29
+karsa-web/src/app/theses/compare/page.tsx
+  4bb8330d7d22c5e8 1-25
+karsa-web/src/app/infrastructure/page.tsx
+  4bb8330d7d22c5e8 3,5,7-17,19-44,48-51,54-58,60-63,66-69,72-75,78-81,84-135,137-140
+docs/implementation/web-console-remediation-plan.md
+  4bb8330d7d22c5e8 1-452
+karsa-web/src/components/shared/NotificationCenter.tsx
+  4bb8330d7d22c5e8 1-136
+src/karsa/performance/__init__.py
+  4bb8330d7d22c5e8 1
+karsa-web/src/app/research/[id]/page.tsx
+  4bb8330d7d22c5e8 1-51
+karsa-web/src/app/memos/[id]/page.tsx
+  4bb8330d7d22c5e8 1-51
+karsa-web/src/app/research/page.tsx
+  4bb8330d7d22c5e8 8,13-15,22-41,45-61
+karsa-web/src/app/oversight/page.tsx
+  4bb8330d7d22c5e8 22-30
+src/karsa/cio_dashboard/__init__.py
+  4bb8330d7d22c5e8 1
+src/karsa/research/api.py
+  4bb8330d7d22c5e8 1-18
+karsa-web/src/app/cio-dashboard/page.tsx
+  4bb8330d7d22c5e8 7,53-58,156-160,162-167,187-191
+src/karsa/app.py
+  4bb8330d7d22c5e8 2,4,50-83,128-139,141,143,146-150,153-182,184-210,213-237,250-263
+karsa-web/src/features/intelligence/types/viewmodels.ts
+  4bb8330d7d22c5e8 1-38
+karsa-web/src/app/portfolio/holdings/page.tsx
+  4bb8330d7d22c5e8 1-25
+src/karsa/cio_dashboard/api/__init__.py
+  4bb8330d7d22c5e8 1
+src/karsa/workers/api.py
+  4bb8330d7d22c5e8 1-13
+karsa-web/src/app/investments/page.tsx
+  4bb8330d7d22c5e8 1-54
+src/karsa/shared/__init__.py
+  4bb8330d7d22c5e8 1
+karsa-web/src/hooks/analysts/index.ts
+  4bb8330d7d22c5e8 11-16
+src/karsa/performance/api.py
+  4bb8330d7d22c5e8 1-22
+karsa-web/src/app/performance/page.tsx
+  4bb8330d7d22c5e8 26
+src/karsa/shared/dto/error_response.py
+  4bb8330d7d22c5e8 1-31
+karsa-web/src/app/theses/page.tsx
+  4bb8330d7d22c5e8 26
+karsa-web/src/hooks/research/index.ts
+  4bb8330d7d22c5e8 12-15
+karsa-web/src/app/memos/page.tsx
+  4bb8330d7d22c5e8 22-32
+docs/implementation/api-contract-remediation-plan.md
+  4bb8330d7d22c5e8 1-358
+karsa-web/src/components/grid/DataTable.tsx
+  4bb8330d7d22c5e8 9,18-21,31-32,44-46,51-57,59-83
+karsa-web/src/app/proposals/[id]/components/ApprovalForm.tsx
+  4bb8330d7d22c5e8 9,25,79-87,99,110,125
+src/karsa/shared/dto/__init__.py
+  4bb8330d7d22c5e8 1
+karsa-web/src/app/oversight/policies/page.tsx
+  4bb8330d7d22c5e8 1-95
+src/karsa/search/api.py
+  4bb8330d7d22c5e8 1-13
+karsa-web/src/hooks/theses/index.ts
+  4bb8330d7d22c5e8 34-42
+karsa-web/src/components/shared/FreshnessIndicator.tsx
+  4bb8330d7d22c5e8 1-74
+src/karsa/cio_dashboard/api/routes.py
+  4bb8330d7d22c5e8 1-215
+src/karsa/research/__init__.py
+  4bb8330d7d22c5e8 1
+src/karsa/middleware/__init__.py
+  4bb8330d7d22c5e8 1
+src/karsa/middleware/auth.py
+  4bb8330d7d22c5e8 1-53
+karsa-web/src/hooks/intelligence/index.ts
+  4bb8330d7d22c5e8 2-7,9-52,55,58-64,69,72-78,83,86-92,97,100-105
+src/karsa/middleware/rate_limit.py
+  4bb8330d7d22c5e8 1-83
+src/karsa/shared/dto/pagination.py
+  4bb8330d7d22c5e8 1-44
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.23",
+  "base_commit_sha": "85932a70a8abba69a3df4fbdd771a91f7f47bc7c",
+  "prompts": {
+    "4bb8330d7d22c5e8": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "22757a9c-4823-4832-a1df-6ad118962a3e",
+        "model": "mimo-v2.5-pro"
+      },
+      "human_author": "skeithnight <skeithnight@gmail.com>",
+      "messages": [],
+      "total_additions": 3006,
+      "total_deletions": 243,
+      "accepted_lines": 2927,
+      "overriden_lines": 0
+    }
+  }
+}
