@@ -1,0 +1,49 @@
+docker-compose.yml
+  b8401d491f1b7ac4 39
+alembic/versions/109_pgvector_schema.py
+  b8401d491f1b7ac4 11,17-25,42-52
+alembic/versions/112_cio_dashboard_schema.py
+  b8401d491f1b7ac4 33-41,52-59
+src/karsa/data_bridge/setup_providers.py
+  b8401d491f1b7ac4 51,53-54,56-59,63-64,219-220
+alembic/versions/73_attribution_entries.py
+  b8401d491f1b7ac4 17,19-24,26-30,32-45,47-49,51-53,55-69
+src/karsa/execution/infrastructure/bridge_repositories.py
+  b8401d491f1b7ac4 16,52
+karsa-web/src/components/grid/DataTable.tsx
+  b8401d491f1b7ac4 5
+alembic/versions/72_review_records.py
+  b8401d491f1b7ac4 17,19-24,26-41,43-45,47-50,52-58,60-67
+alembic/versions/79_review_engine_indexes.py
+  b8401d491f1b7ac4 17-31
+alembic/versions/110_execution_bridge_schema.py
+  b8401d491f1b7ac4 39
+karsa-web/src/app/globals.css
+  b8401d491f1b7ac4 1
+src/karsa/shared/domain/event.py
+  b8401d491f1b7ac4 25
+src/karsa/cio_dashboard/api/routes.py
+  b8401d491f1b7ac4 340-396
+alembic/versions/74_capability_score_adjustments.py
+  b8401d491f1b7ac4 4,17,19,21-24,26-29,31-43,45-47,49-51,53-67
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.23",
+  "base_commit_sha": "c2968a7d4d17da8cc142207ed1e87b0e46fb7710",
+  "prompts": {
+    "b8401d491f1b7ac4": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "721351dd-5f44-4dd9-a9c1-8a883232adf7",
+        "model": "mimo-v2.5-pro"
+      },
+      "human_author": "skeithnight <skeithnight@gmail.com>",
+      "messages": [],
+      "total_additions": 288,
+      "total_deletions": 183,
+      "accepted_lines": 273,
+      "overriden_lines": 0
+    }
+  }
+}
