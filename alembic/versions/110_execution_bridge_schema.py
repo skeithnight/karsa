@@ -36,7 +36,7 @@ def upgrade() -> None:
     op.create_table(
         "execution_fills",
         sa.Column("id", sa.String(36), primary_key=True),
-        sa.Column("order_id", sa.ForeignKey("execution_orders.id", ondelete="CASCADE"), nullable=False, index=True),
+        sa.Column("order_id", sa.String(36), sa.ForeignKey("execution_orders.id", ondelete="CASCADE"), nullable=False, index=True),
         sa.Column("broker_fill_id", sa.String(100), nullable=True),
         sa.Column("quantity", sa.Numeric(18, 8), nullable=False),
         sa.Column("fill_price", sa.Numeric(18, 8), nullable=False),

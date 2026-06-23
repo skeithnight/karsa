@@ -13,6 +13,7 @@ from sqlalchemy.sql import func
 
 from karsa.shared.persistence.base import Base
 from karsa.shared.persistence.mixins import UUIDMixin
+from karsa.shared.persistence.types import GUID
 from karsa.execution.domain.bridge_models import (
     ExecutionOrder,
     ExecutionFill,
@@ -48,7 +49,7 @@ class ExecutionOrderModel(UUIDMixin, Base):
 class ExecutionFillModel(UUIDMixin, Base):
     __tablename__ = "execution_fills"
 
-    order_id = Column(ForeignKey("execution_orders.id", ondelete="CASCADE"), nullable=False, index=True)
+    order_id = Column(GUID(), ForeignKey("execution_orders.id", ondelete="CASCADE"), nullable=False, index=True)
     broker_fill_id = Column(String(100), nullable=True)
     quantity = Column(Numeric(18, 8), nullable=False)
     fill_price = Column(Numeric(18, 8), nullable=False)

@@ -30,12 +30,15 @@ def upgrade() -> None:
     )
 
     # Try TimescaleDB hypertable, fall back to standard index
-    try:
-        op.execute("SELECT create_hypertable('portfolio_snapshots', 'snapshot_time')")
-    except Exception:
-        op.execute(
-            "CREATE INDEX idx_portfolio_snapshots_time ON portfolio_snapshots (snapshot_time DESC)"
-        )
+    # Use DO blocks with EXCEPTION handlers to avoid poisoning the transaction
+    op.execute("""
+    DO $$
+    BEGIN
+        PERFORM create_hypertable('portfolio_snapshots', 'snapshot_time');
+    EXCEPTION WHEN OTHERS THEN
+        CREATE INDEX idx_portfolio_snapshots_time ON portfolio_snapshots (snapshot_time DESC);
+    END $$;
+    """)
 
     # Sector exposures time-series
     op.create_table(
@@ -46,12 +49,14 @@ def upgrade() -> None:
         sa.Column("net_exposure", sa.Numeric(18, 4), nullable=False),
     )
 
-    try:
-        op.execute("SELECT create_hypertable('sector_exposures', 'snapshot_time')")
-    except Exception:
-        op.execute(
-            "CREATE INDEX idx_sector_exposures_time ON sector_exposures (snapshot_time DESC)"
-        )
+    op.execute("""
+    DO $$
+    BEGIN
+        PERFORM create_hypertable('sector_exposures', 'snapshot_time');
+    EXCEPTION WHEN OTHERS THEN
+        CREATE INDEX idx_sector_exposures_time ON sector_exposures (snapshot_time DESC);
+    END $$;
+    """)
 
     # Composite index for latest sector query
     op.execute(

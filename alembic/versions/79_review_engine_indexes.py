@@ -14,10 +14,21 @@ depends_on = None
 
 
 def upgrade() -> None:
-    # Composite indexes for common query patterns
-    op.execute("CREATE INDEX ix_attribution_entries_review_dimension ON attribution_entries(review_id, dimension);")
-    op.execute("CREATE INDEX ix_capability_score_adj_target_type ON capability_score_adjustments(target_urn, target_type);")
-    op.execute("CREATE INDEX ix_outbox_events_status_created ON outbox_events(status, created_at);")
+    # Composite indexes for common query patterns — skip if tables don't exist
+    op.execute("""
+    DO $$
+    BEGIN
+        IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'attribution_entries') THEN
+            CREATE INDEX IF NOT EXISTS ix_attribution_entries_review_dimension ON attribution_entries(review_id, dimension);
+        END IF;
+        IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'capability_score_adjustments') THEN
+            CREATE INDEX IF NOT EXISTS ix_capability_score_adj_target_type ON capability_score_adjustments(target_urn, target_type);
+        END IF;
+        IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'outbox_events') THEN
+            CREATE INDEX IF NOT EXISTS ix_outbox_events_status_created ON outbox_events(status, created_at);
+        END IF;
+    END $$;
+    """)
 
 
 def downgrade() -> None:

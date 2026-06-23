@@ -48,16 +48,20 @@ def main():
     db_pass = os.environ.get("POSTGRES_PASSWORD", "karsa_password")
     db_host = os.environ.get("POSTGRES_HOST", "localhost")
     db_port = os.environ.get("POSTGRES_PORT", "5432")
-    dsn = f"dbname={db_name} user={db_user} password={db_pass} host={db_host} port={db_port}"
+    dsn = f"postgresql://{db_user}:{db_pass}@{db_host}:{db_port}/{db_name}"
 
-    pool = ConnectionPool(dsn, min_size=1, max_size=2)
-    conn = pool.getconn()
-    conn.autocommit = True
+    from sqlalchemy import create_engine
+    from sqlalchemy.orm import Session
+
+    engine = create_engine(dsn)
+    session = Session(engine)
+
+    pool = ConnectionPool(f"dbname={db_name} user={db_user} password={db_pass} host={db_host} port={db_port}", min_size=1, max_size=2)
 
     # Wire services
     event_bus = PostgresEventBus(pool)
-    provider_repo = DataBridgeProviderRepository(conn)
-    health_repo = ProviderHealthLogRepository(conn)
+    provider_repo = DataBridgeProviderRepository(session)
+    health_repo = ProviderHealthLogRepository(session)
     credential_service = CredentialEncryptionService()
     service = DataBridgeProviderService(
         provider_repo=provider_repo,
@@ -212,6 +216,8 @@ def main():
     except Exception as e:
         print(f"LLM setup skipped: {e}")
 
+    session.commit()
+    session.close()
     pool.close()
     print("\n✅ Provider setup complete. Start worker with:")
     print("  uv run python -m karsa.data_bridge.worker")

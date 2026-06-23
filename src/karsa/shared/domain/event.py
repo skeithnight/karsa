@@ -22,6 +22,6 @@ class DomainEvent:
         return {
             "event_id": str(self.event_id),
             "occurred_at": self.occurred_at.isoformat(),
-            "version": self.version,
+            "version": self.schema_version,
             "event_name": self.event_name
         }

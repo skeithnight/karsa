@@ -8,14 +8,21 @@ from alembic import op
 import sqlalchemy as sa
 
 revision = "109_pgvector_schema"
-down_revision = "108_llm_pool_config_schema"
+down_revision = "108"
 branch_labels = None
 depends_on = None
 
 
 def upgrade() -> None:
-    # Enable pgvector extension
-    op.execute("CREATE EXTENSION IF NOT EXISTS vector")
+    # Enable pgvector extension (skip if not installed — e.g., standard postgres:15 image)
+    op.execute("""
+    DO $$
+    BEGIN
+        CREATE EXTENSION IF NOT EXISTS vector;
+    EXCEPTION WHEN OTHERS THEN
+        RAISE NOTICE 'pgvector extension not available, skipping vector columns';
+    END $$;
+    """)
 
     # Create ai_institutional_memory table
     op.create_table(
@@ -32,16 +39,17 @@ def upgrade() -> None:
         sa.Column("created_at", sa.DateTime(timezone=True), server_default=sa.func.now(), nullable=False),
     )
 
-    # Add pgvector column (can't use SQLAlchemy for vector type)
-    op.execute(
-        "ALTER TABLE ai_institutional_memory ADD COLUMN embedding vector(1536) NOT NULL"
-    )
-
-    # Create HNSW index for fast cosine similarity search
-    op.execute(
-        "CREATE INDEX idx_ai_memory_embedding ON ai_institutional_memory "
-        "USING hnsw (embedding vector_cosine_ops)"
-    )
+    # Add pgvector column — only if extension is available
+    op.execute("""
+    DO $$
+    BEGIN
+        IF EXISTS (SELECT 1 FROM pg_extension WHERE extname = 'vector') THEN
+            ALTER TABLE ai_institutional_memory ADD COLUMN IF NOT EXISTS embedding vector(1536) NOT NULL;
+            CREATE INDEX IF NOT EXISTS idx_ai_memory_embedding ON ai_institutional_memory
+                USING hnsw (embedding vector_cosine_ops);
+        END IF;
+    END $$;
+    """)
 
     # Composite index for filtered searches
     op.execute(

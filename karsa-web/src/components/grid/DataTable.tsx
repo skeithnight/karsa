@@ -2,7 +2,7 @@ import React from "react";
 import { AgGridReact } from "ag-grid-react";
 import { ColDef } from "ag-grid-community";
 import "ag-grid-community/styles/ag-grid.css";
-import "ag-grid-community/styles/ag-theme-alpine-dark.css";
+import "ag-grid-community/styles/ag-theme-alpine.css";
 
 import { LoadingSkeleton } from "../shared/LoadingSkeleton";
 import { EmptyState } from "../shared/EmptyState";

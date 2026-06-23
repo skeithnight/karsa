@@ -337,3 +337,60 @@ def get_performance_attribution(period: str = "YTD") -> Dict[str, Any]:
         "winRate": 0.0,
         "modelAccuracy": 0.0,
     }
+
+
+# --- Conglomerate Exposure ---
+@router.get("/exposures/conglomerates")
+def get_conglomerate_exposures(request: Request) -> List[Dict[str, Any]]:
+    """Conglomerate exposure heatmap data.
+
+    Groups positions by IDX conglomerate (Prajogo, Sinar Mas, Astra, etc.)
+    and computes exposure vs limits from MANDATE.md.
+    """
+    from karsa.investment_governance.domain.value_objects.idx_conglomerate_mapper import (
+        CONGLOMERATE_GROUPS,
+        get_conglomerate_group,
+    )
+
+    # Get current positions from DB
+    positions = []
+    try:
+        conn = _get_pg_connection()
+        with conn.cursor() as cur:
+            cur.execute("SELECT symbol, market_value_idr FROM positions WHERE market_value_idr > 0")
+            positions = cur.fetchall()
+        conn.close()
+    except Exception:
+        pass
+
+    total_portfolio = sum(abs(p[1]) for p in positions) if positions else 1
+
+    # Group by conglomerate
+    group_map: Dict[str, Dict] = {}
+    for group_name, tickers, limit in CONGLOMERATE_GROUPS:
+        group_map[group_name] = {
+            "group": group_name,
+            "tickers": tickers,
+            "total_exposure_idr": 0.0,
+            "exposure_pct": 0.0,
+            "limit_pct": limit * 100,
+            "status": "OK",
+        }
+
+    for symbol, value in positions:
+        group = get_conglomerate_group(symbol)
+        if group and group in group_map:
+            group_map[group]["total_exposure_idr"] += abs(value)
+
+    # Compute percentages and status
+    for g in group_map.values():
+        g["exposure_pct"] = round(g["total_exposure_idr"] / total_portfolio * 100, 2)
+        util = g["exposure_pct"] / g["limit_pct"] if g["limit_pct"] > 0 else 0
+        if util >= 1.0:
+            g["status"] = "BREACH"
+        elif util >= 0.8:
+            g["status"] = "WARNING"
+        else:
+            g["status"] = "OK"
+
+    return list(group_map.values())
