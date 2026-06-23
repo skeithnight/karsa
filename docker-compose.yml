@@ -102,3 +102,19 @@ services:
       POSTGRES_USER: "karsa"
       POSTGRES_PASSWORD: "karsa_password"
     restart: always
+
+  karsa-data-ingestion-worker:
+    build: .
+    command: ["uv", "run", "python", "-m", "karsa.data_bridge.worker"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+    env_file:
+      - .env
+    environment:
+      POSTGRES_HOST: "postgres"
+      POSTGRES_PORT: "5432"
+      POSTGRES_DB: "karsa_db"
+      POSTGRES_USER: "karsa"
+      POSTGRES_PASSWORD: "karsa_password"
+    restart: always

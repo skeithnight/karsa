@@ -25,3 +25,8 @@ class ProviderUnavailableError(ProviderError):
 class TransientProviderError(ProviderError):
     """Thrown for other temporary network or provider anomalies."""
     pass
+
+
+class LLMProviderExhaustedError(ProviderError):
+    """Thrown when all providers in a model group have been exhausted."""
+    pass

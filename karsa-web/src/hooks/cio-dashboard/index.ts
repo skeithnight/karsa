@@ -36,10 +36,10 @@ export function usePortfolioSummary() {
   return useQuery<PortfolioSummaryViewModel>({
     queryKey: ['cio-dashboard', 'portfolio-summary'],
     queryFn: async () => {
-      const data = await ApiClient.fetch<Record<string, unknown>>('/api/portfolio/summary');
+      const data = await ApiClient.fetch<Record<string, unknown>>('/api/cio/portfolio/summary');
       return mapPortfolioSummary(data);
     },
-    staleTime: 60_000,
+    staleTime: 5_000,  // 5s for real-time trading
   });
 }
 
@@ -51,7 +51,7 @@ export function useRiskTrafficLight() {
       const data = await ApiClient.fetch<Record<string, unknown>[]>('/api/risk/traffic-light');
       return Array.isArray(data) ? data.map(mapRiskTrafficLight) : [];
     },
-    staleTime: 60_000,
+    staleTime: 30_000,
   });
 }
 
@@ -63,7 +63,7 @@ export function useTodayDecisions() {
       const data = await ApiClient.fetch<Record<string, unknown>[]>('/api/decisions/today');
       return Array.isArray(data) ? data.map(mapTodayDecision) : [];
     },
-    staleTime: 30_000,
+    staleTime: 15_000,
   });
 }
 

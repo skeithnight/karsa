@@ -1,0 +1,55 @@
+# =============================================================================
+# Karsa Data Ingestion Worker — Production Docker Compose Override
+# Usage: docker compose -f docker-compose.yml -f docker-compose.ingestion.yml up
+# =============================================================================
+
+services:
+  karsa-data-ingestion-worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.ingestion
+    command: ["python", "-m", "karsa.data_bridge.worker"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+    env_file:
+      - .env
+    environment:
+      POSTGRES_HOST: "postgres"
+      POSTGRES_PORT: "5432"
+      POSTGRES_DB: "karsa_db"
+      POSTGRES_USER: "karsa"
+      POSTGRES_PASSWORD: "karsa_password"
+      # Durable buffer path (mounted volume for crash recovery)
+      DURABLE_BUFFER_PATH: "/data/karsa/bar_buffer.db"
+      # Health server port
+      HEALTH_PORT: "8080"
+    restart: unless-stopped
+    stop_grace_period: 30s
+    read_only: true
+    tmpfs:
+      - /tmp:size=100M
+    volumes:
+      - ingestion-data:/data/karsa
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 15s
+      timeout: 5s
+      start_period: 15s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: "1.0"
+        reservations:
+          memory: 256M
+          cpus: "0.25"
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+
+volumes:
+  ingestion-data:
+    driver: local

@@ -199,6 +199,56 @@ class ApplicationContainer:
         self.registry_service = SchemaRegistryService(self.schema_repo)
         self.snapshot_service = SnapshotService(self.registry_service, self.snapshot_repo, self.blob_storage)
 
+        # Data Bridge Setup (Sprint-51)
+        from karsa.providers.application.credential_service import CredentialEncryptionService
+        from karsa.providers.application.data_bridge_services import DataBridgeProviderService
+        from karsa.providers.infrastructure.storage.data_bridge_repositories import (
+            DataBridgeProviderRepository,
+            ProviderHealthLogRepository,
+        )
+        self.data_bridge_provider_repo = DataBridgeProviderRepository(self.conn)
+        self.data_bridge_health_repo = ProviderHealthLogRepository(self.conn)
+        try:
+            self.credential_service = CredentialEncryptionService()
+        except Exception:
+            self.credential_service = None  # Will be None if DATA_BRIDGE_MASTER_KEY not set
+        self.data_bridge_service = DataBridgeProviderService(
+            provider_repo=self.data_bridge_provider_repo,
+            health_repo=self.data_bridge_health_repo,
+            credential_service=self.credential_service,
+            event_bus=self.event_bus,
+        )
+
+        # Sprint-53: Resilience Services
+        from karsa.providers.application.health_monitor import HealthMonitorService
+        from karsa.providers.application.failover_service import FailoverService
+        from karsa.providers.application.gap_fill_service import GapFillService
+
+        self.health_monitor = HealthMonitorService(
+            health_repo=self.data_bridge_health_repo,
+            provider_repo=self.data_bridge_provider_repo,
+        )
+        self.failover_service = FailoverService(
+            provider_repo=self.data_bridge_provider_repo,
+            health_repo=self.data_bridge_health_repo,
+            credential_service=self.credential_service,
+            event_bus=self.event_bus,
+        )
+        self.gap_fill_service = GapFillService(
+            event_bus=self.event_bus,
+        )
+
+        # LLM Pool Config Setup (Sprint-54 prep)
+        from karsa.llm.infrastructure.storage.config_repository import LLMConfigRepository
+        from karsa.llm.application.config_service import LLMConfigService
+
+        self.llm_config_repo = LLMConfigRepository(self.conn)
+        self.llm_config_service = LLMConfigService(
+            config_repo=self.llm_config_repo,
+            credential_service=self.credential_service,
+            event_bus=self.event_bus,
+        ) if self.credential_service else None
+
         # Attribution Setup
         from karsa.attribution.infrastructure.repositories import AttributionRepository
         self.attribution_repo = AttributionRepository(self.conn)

@@ -6,20 +6,20 @@ import { formatDate } from "../../../lib/formatters/date";
 import { PortfolioSummaryVM, PortfolioExposureVM, SectorExposureVM } from "../types/viewmodels";
 
 export function mapPortfolioSummary(dto: any): PortfolioSummaryVM {
-  const aum = dto.net_asset_value || dto.total_aum || 0;
+  const aum = dto.net_asset_value || dto.total_aum || dto.total_equity || 0;
   const pnl = dto.daily_pnl || 0;
-  const count = dto.active_theses_count || 0;
+  const count = dto.active_theses_count || dto.position_count || 0;
   const exposure = dto.net_exposure || 0;
   return {
     totalAumRaw: aum,
-    totalAumDisplay: formatCurrency(aum, "USD"),
+    totalAumDisplay: formatCurrency(aum, "IDR"),
     dailyPnlRaw: pnl,
-    dailyPnlDisplay: formatCurrency(pnl, "USD"),
+    dailyPnlDisplay: formatCurrency(pnl, "IDR"),
     activeThesesCount: count,
     netExposureRaw: exposure,
     netExposureDisplay: formatPercentage(exposure, 2),
-    lastUpdatedRaw: dto.last_updated || new Date().toISOString(),
-    lastUpdatedDisplay: formatDate(dto.last_updated || new Date().toISOString(), "short"),
+    lastUpdatedRaw: dto.last_updated || dto.snapshot_time || new Date().toISOString(),
+    lastUpdatedDisplay: formatDate(dto.last_updated || dto.snapshot_time || new Date().toISOString(), "short"),
   };
 }
 

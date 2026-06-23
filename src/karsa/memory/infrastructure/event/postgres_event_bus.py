@@ -1,16 +1,22 @@
+import asyncio
 import json
+import logging
+from collections import deque
 from datetime import datetime
 from karsa.domain.events import DomainEvent
 import psycopg
 from psycopg_pool import ConnectionPool
 
+logger = logging.getLogger(__name__)
+
+
 class PostgresEventBus:
     def __init__(self, pool: ConnectionPool):
         self.pool = pool
-        self.published_events = []
+        self.published_events = deque(maxlen=1000)  # Bounded — oldest auto-evicted
 
     def publish(self, event: DomainEvent) -> None:
-        """Writes domain events directly to the event_journal table within the current transaction."""
+        """Writes domain events directly to the event_journal table (synchronous)."""
         self.published_events.append(event)
         try:
             with self.pool.connection() as conn:
@@ -44,5 +50,12 @@ class PostgresEventBus:
                         )
                     )
         except Exception as e:
-            print(f"Failed to publish event to journal: {e}")
+            logger.error(f"Failed to publish event to journal: {e}")
             raise
+
+    async def async_publish(self, event: DomainEvent) -> None:
+        """Non-blocking publish — wraps synchronous DB call in a thread pool.
+
+        Use this from async contexts to avoid blocking the event loop.
+        """
+        await asyncio.to_thread(self.publish, event)

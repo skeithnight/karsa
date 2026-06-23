@@ -1,0 +1,53 @@
+# Version control
+.git
+.gitignore
+
+# Python
+__pycache__
+*.pyc
+*.pyo
+.venv
+.mypy_cache
+.pytest_cache
+.ruff_cache
+
+# Node (frontend)
+node_modules
+karsa-web/.next
+karsa-web/out
+karsa-web/node_modules
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# Docker
+Dockerfile*
+docker-compose*.yml
+.dockerignore
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# Tests (not needed in production)
+tests/
+
+# Documentation
+docs/
+*.md
+!README.md
+
+# Build artifacts
+dist/
+build/
+*.egg-info
+
+# Data
+graphify-out/
+/tmp/
+*.db
+*.sqlite
