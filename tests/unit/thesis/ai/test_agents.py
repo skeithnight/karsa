@@ -245,3 +245,119 @@ class TestResearcherAgent:
             thesis = await agent.on_market_bar(ticker="AAPL", close_price=103.0)
             assert thesis is None  # Graceful failure
         asyncio.run(run())
+
+    # --- Operator precedence bug fix tests (publish_event guard) ---
+    # Buggy line was:
+    #   if self._publish_event and thesis.side != ThesisSide.BUY or thesis.conviction.value >= 0.3:
+    # Fixed to:
+    #   if self._publish_event and thesis.side != ThesisSide.HOLD and thesis.conviction.value >= 0.3:
+    # The old code had two problems: (1) `or` caused the conviction check to
+    # short-circuit the publish guard, and (2) BUY was excluded instead of HOLD.
+
+    def test_low_conviction_sell_does_not_emit_event(self):
+        """SELL thesis with conviction 0.1 must NOT emit ThesisGeneratedEvent.
+
+        With the old `or` precedence bug, the conviction >= 0.3 branch was
+        evaluated independently, so low-conviction SELL theses could still
+        pass. The fixed `and` chain requires all three conditions to hold.
+        """
+        llm_content = json.dumps({
+            "title": "AAPL breakdown",
+            "ticker": "AAPL",
+            "side": "SELL",
+            "conviction": 0.1,
+            "time_horizon": "SWING",
+            "stop_loss": 210.0,
+            "take_profit": 190.0,
+            "position_size_pct": 1.0,
+            "reasoning": "Weak thesis with low conviction",
+        })
+        agent, mock_llm, mock_rag, mock_pub = self._make_agent(llm_content)
+
+        async def run():
+            agent._filter._previous_closes["AAPL"] = 100.0
+            thesis = await agent.on_market_bar(
+                ticker="AAPL",
+                close_price=103.0,  # 3% move -> passes significance filter
+            )
+            assert thesis is not None  # Thesis is still returned to caller
+            assert thesis.side == ThesisSide.SELL
+            assert thesis.conviction.value == 0.1
+            mock_pub.assert_not_called()  # Must NOT emit event
+
+        asyncio.run(run())
+
+    def test_high_conviction_sell_emits_event(self):
+        """SELL thesis with conviction 0.5 MUST emit ThesisGeneratedEvent.
+
+        Before the fix, the condition `thesis.side != ThesisSide.BUY` would
+        reject BUY theses and allow SELL ones through regardless of conviction.
+        After the fix, SELL with sufficient conviction (>= 0.3) correctly emits.
+        """
+        llm_content = json.dumps({
+            "title": "AAPL breakdown",
+            "ticker": "AAPL",
+            "side": "SELL",
+            "conviction": 0.5,
+            "time_horizon": "SWING",
+            "stop_loss": 210.0,
+            "take_profit": 190.0,
+            "position_size_pct": 2.0,
+            "reasoning": "Strong bearish thesis with good RAG support",
+        })
+        agent, mock_llm, mock_rag, mock_pub = self._make_agent(llm_content)
+
+        async def run():
+            agent._filter._previous_closes["AAPL"] = 100.0
+            thesis = await agent.on_market_bar(
+                ticker="AAPL",
+                close_price=103.0,
+            )
+            assert thesis is not None
+            assert thesis.side == ThesisSide.SELL
+            assert thesis.conviction.value == 0.5
+            mock_pub.assert_called_once()  # MUST emit event
+
+        asyncio.run(run())
+
+    def test_no_crash_when_publish_event_is_none(self):
+        """When publish_event is None, no crash occurs even with high conviction.
+
+        The `self._publish_event and ...` guard short-circuits on None/falsy,
+        so the event construction path is never entered. This must not raise.
+        """
+        llm_content = json.dumps({
+            "title": "AAPL momentum",
+            "ticker": "AAPL",
+            "side": "BUY",
+            "conviction": 0.8,
+            "time_horizon": "SWING",
+            "stop_loss": 190.0,
+            "take_profit": 210.0,
+            "position_size_pct": 2.0,
+            "reasoning": "Strong momentum",
+        })
+        mock_llm = AsyncMock(return_value={"content": llm_content, "model": "gpt-4o"})
+        mock_rag = AsyncMock(return_value="RAG context")
+        sig_filter = SignificanceFilter(price_move_threshold=0.02)
+
+        # publish_event is explicitly None (default)
+        agent = ResearcherAgentService(
+            call_llm=mock_llm,
+            retrieve_context=mock_rag,
+            significance_filter=sig_filter,
+            publish_event=None,
+        )
+
+        async def run():
+            agent._filter._previous_closes["AAPL"] = 100.0
+            thesis = await agent.on_market_bar(
+                ticker="AAPL",
+                close_price=103.0,
+            )
+            assert thesis is not None
+            assert thesis.side == ThesisSide.BUY
+            assert thesis.conviction.value == 0.8
+            # No crash, no exception — just returns thesis without emitting
+
+        asyncio.run(run())

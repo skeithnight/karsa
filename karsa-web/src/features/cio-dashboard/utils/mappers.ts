@@ -91,6 +91,8 @@ export function mapPerformanceAttribution(dto: Record<string, unknown>): Perform
     totalReturnPct: coalesce(dto.totalReturnPct as number, 0),
     winRate: coalesce(dto.winRate as number, 0),
     modelAccuracy: coalesce(dto.modelAccuracy as number, 0),
+    brierScore: coalesce(dto.brierScore as number, 0),
+    calibrationScore: coalesce(dto.calibrationScore as number, 0),
   };
 }
 

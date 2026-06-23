@@ -25,6 +25,8 @@ export const queryKeys = {
   },
   performance: {
     attribution: (params: PerformanceRequestDTO) => ['performance', 'attribution', params] as const,
+    brierScores: () => ['performance', 'brier-scores'] as const,
+    brinsonAttribution: () => ['performance', 'brinson-attribution'] as const,
   },
   governance: {
     list: (params: ListPostMortemsRequestDTO) => ['governance', 'list', params] as const,

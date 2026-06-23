@@ -1,0 +1,136 @@
+{
+  "mcpServers": {
+    "saham-idx": {
+      "command": "npx",
+      "args": ["@baguskto/saham@latest"],
+      "env": {
+        "IDX_MCP_SERVER_NAME": "Karsa IDX Data Provider",
+        "IDX_MCP_LOG_LEVEL": "error",
+        "IDX_MCP_DEBUG": "false",
+        "IDX_MCP_CACHE_TYPE": "memory",
+        "IDX_MCP_CACHE_TTL_MARKET_OVERVIEW": "60",
+        "IDX_MCP_CACHE_TTL_STOCK_INFO": "300",
+        "IDX_MCP_CACHE_TTL_HISTORICAL": "86400",
+        "IDX_MCP_YAHOO_TIMEOUT": "10000",
+        "IDX_MCP_WEB_TIMEOUT": "15000"
+      },
+      "description": "Indonesian Stock Exchange (IDX) data provider with 958 stocks, historical data from 2019, and multi-source fallback"
+    }
+  },
+  "karsaIntegration": {
+    "enabled": true,
+    "connectorModule": "src/karsa/providers/infrastructure/connectors/saham_mcp_connector.py",
+    "connectorClass": "SahamMCPConnector",
+    "supportedTools": [
+      {
+        "name": "get_market_overview",
+        "description": "Get IHSG index value, change, trading volume/value, market status, top gainers/losers",
+        "parameters": {}
+      },
+      {
+        "name": "get_stock_info",
+        "description": "Get detailed stock information including price, ratios, and market cap",
+        "parameters": {
+          "ticker": {
+            "type": "string",
+            "required": true,
+            "description": "Stock ticker symbol (e.g., BBCA, BBRI)"
+          }
+        }
+      },
+      {
+        "name": "get_historical_data",
+        "description": "Get historical price data from July 2019 to present",
+        "parameters": {
+          "ticker": {
+            "type": "string",
+            "required": true,
+            "description": "Stock ticker symbol"
+          },
+          "period": {
+            "type": "string",
+            "required": false,
+            "default": "1y",
+            "enum": ["1d", "1w", "1m", "3m", "6m", "1y", "2y", "5y"],
+            "description": "Time period for historical data"
+          }
+        }
+      },
+      {
+        "name": "get_sector_performance",
+        "description": "Get performance data for all IDX sectors",
+        "parameters": {}
+      },
+      {
+        "name": "search_stocks",
+        "description": "Search stocks by company name or ticker from 958 available stocks",
+        "parameters": {
+          "query": {
+            "type": "string",
+            "required": true,
+            "description": "Search query (company name or ticker)"
+          }
+        }
+      },
+      {
+        "name": "get_stock_analysis",
+        "description": "Get comprehensive technical analysis with indicators and recommendations",
+        "parameters": {
+          "ticker": {
+            "type": "string",
+            "required": true,
+            "description": "Stock ticker symbol"
+          },
+          "period": {
+            "type": "string",
+            "required": false,
+            "default": "1y",
+            "enum": ["1m", "3m", "6m", "1y", "2y", "5y"],
+            "description": "Analysis period"
+          }
+        }
+      },
+      {
+        "name": "compare_stocks",
+        "description": "Compare performance across 2-5 stocks",
+        "parameters": {
+          "tickers": {
+            "type": "array",
+            "items": {"type": "string"},
+            "minItems": 2,
+            "maxItems": 5,
+            "required": true,
+            "description": "Array of 2-5 stock ticker symbols to compare"
+          },
+          "period": {
+            "type": "string",
+            "required": false,
+            "default": "1y",
+            "enum": ["1m", "3m", "6m", "1y", "2y"],
+            "description": "Comparison period"
+          }
+        }
+      },
+      {
+        "name": "get_available_stocks",
+        "description": "Get complete list of 958 IDX stocks with LQ45 categorization and banking sector identification",
+        "parameters": {}
+      },
+      {
+        "name": "get_dataset_info",
+        "description": "Get repository info, last update, total stocks, cache statistics, data coverage range",
+        "parameters": {}
+      }
+    ],
+    "cacheSettings": {
+      "enabled": true,
+      "ttlSeconds": 300,
+      "maxEntries": 1000
+    },
+    "retryPolicy": {
+      "maxRetries": 3,
+      "backoffMultiplier": 2,
+      "initialDelayMs": 1000
+    }
+  }
+}

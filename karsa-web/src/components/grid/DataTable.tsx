@@ -2,7 +2,7 @@ import React from "react";
 import { AgGridReact } from "ag-grid-react";
 import { ColDef } from "ag-grid-community";
 import "ag-grid-community/styles/ag-grid.css";
-import "ag-grid-community/styles/ag-theme-alpine.css";
+import "ag-grid-community/styles/ag-theme-alpine-dark.css";
 
 import { LoadingSkeleton } from "../shared/LoadingSkeleton";
 import { EmptyState } from "../shared/EmptyState";
@@ -19,6 +19,10 @@ export interface DataTableProps<T> {
   exportable?: boolean;
   /** Filename for CSV export */
   exportFilename?: string;
+  /** Row height in pixels (default 28 for trading density) */
+  rowHeight?: number;
+  /** Header row height in pixels (default 32 for trading density) */
+  headerHeight?: number;
 }
 
 export function DataTable<T>({
@@ -30,6 +34,8 @@ export function DataTable<T>({
   onPaginationChanged,
   exportable = false,
   exportFilename = "export",
+  rowHeight = 28,
+  headerHeight = 32,
 }: DataTableProps<T>) {
   if (isLoading) {
     return (
@@ -67,10 +73,12 @@ export function DataTable<T>({
           </button>
         </div>
       )}
-      <div className="ag-theme-alpine w-full h-[600px]">
+      <div className="ag-theme-alpine-dark w-full h-[600px]">
         <AgGridReact
           rowData={rowData}
           columnDefs={columnDefs}
+          rowHeight={rowHeight}
+          headerHeight={headerHeight}
           onRowClicked={(e) => {
             if (e.data !== undefined) {
               onRowClick?.(e.data);

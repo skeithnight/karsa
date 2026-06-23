@@ -4,9 +4,11 @@ Run before starting the worker:
     uv run python -m karsa.data_bridge.setup_providers
 
 Requires environment variables:
-    DATA_BRIDGE_MASTER_KEY — base64-encoded 32-byte AES key
-    POLYGON_API_KEY        — Polygon.io API key
-    FINNHUB_API_KEY        — Finnhub API key
+    DATA_BRIDGE_MASTER_KEY  — base64-encoded 32-byte AES key
+    POLYGON_API_KEY         — Polygon.io API key
+    FINNHUB_API_KEY         — Finnhub API key
+    FMP_API_KEY             — Financial Modeling Prep API key (optional)
+    ALPHA_VANTAGE_API_KEY   — Alpha Vantage API key (optional)
 """
 import base64
 import os
@@ -101,6 +103,70 @@ def main():
                 },
             )
             print(f"✅ Registered Finnhub (id={provider.provider_id})")
+
+    # IDX ticker universe (from MANDATE.md)
+    IDX_TICKERS_YF = ["BBCA.JK", "BBRI.JK", "TLKM.JK", "ASII.JK", "ANTM.JK", "BMRI.JK", "ICBP.JK", "INDF.JK", "SMGR.JK", "MEDC.JK"]
+    IDX_TICKERS_AV = ["BBCA", "BBRI", "TLKM", "ASII", "ANTM", "BMRI", "ICBP", "INDF", "SMGR", "MEDC"]
+
+    # Register YFinance (no API key needed, primary EOD source)
+    existing = provider_repo.get_by_name("yfinance")
+    if existing:
+        print(f"YFinance already registered (id={existing.provider_id})")
+    else:
+        provider = service.register_provider(
+            name="yfinance",
+            ptype="market_bar",
+            api_key="",
+            priority=10,
+            initial_config={
+                "tickers": IDX_TICKERS_YF,
+                "schedule_hour_utc": 9,  # 16:00 WIB
+            },
+        )
+        print(f"✅ Registered YFinance (id={provider.provider_id})")
+
+    # Register FMP (secondary EOD + fundamentals)
+    fmp_key = os.environ.get("FMP_API_KEY")
+    if fmp_key:
+        existing = provider_repo.get_by_name("fmp")
+        if existing:
+            print(f"FMP already registered (id={existing.provider_id})")
+        else:
+            provider = service.register_provider(
+                name="fmp",
+                ptype="market_bar",
+                api_key=fmp_key,
+                priority=20,
+                initial_config={
+                    "tickers": IDX_TICKERS_YF,
+                    "poll_interval_seconds": 3600,
+                },
+            )
+            print(f"✅ Registered FMP (id={provider.provider_id})")
+    else:
+        print("WARNING: FMP_API_KEY not set — skipping FMP provider")
+
+    # Register Alpha Vantage (tertiary, rate-limited)
+    av_key = os.environ.get("ALPHA_VANTAGE_API_KEY")
+    if av_key:
+        existing = provider_repo.get_by_name("alpha_vantage")
+        if existing:
+            print(f"Alpha Vantage already registered (id={existing.provider_id})")
+        else:
+            provider = service.register_provider(
+                name="alpha_vantage",
+                ptype="market_bar",
+                api_key=av_key,
+                priority=30,
+                initial_config={
+                    "tickers": IDX_TICKERS_AV,
+                    "poll_interval_seconds": 7200,
+                    "per_ticker_delay_seconds": 3,
+                },
+            )
+            print(f"✅ Registered Alpha Vantage (id={provider.provider_id})")
+    else:
+        print("WARNING: ALPHA_VANTAGE_API_KEY not set — skipping Alpha Vantage provider")
 
     # Register LLM providers (if llm_config_service available)
     try:

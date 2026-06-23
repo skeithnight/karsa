@@ -283,12 +283,13 @@ class DataBridgeWorker:
                 # Get config and credentials (async-wrapped to avoid blocking)
                 configs = await asyncio.to_thread(provider_repo.get_all_configs, provider.provider_id)
                 cred = await asyncio.to_thread(provider_repo.get_credential, provider.provider_id)
-                if not cred:
-                    logger.warning(f"No credentials for {provider.name}, skipping")
-                    continue
-
-                decrypted_key = credential_service.decrypt(cred)
-                credentials = {"api_key": decrypted_key}
+                if cred:
+                    decrypted_key = credential_service.decrypt(cred)
+                    credentials = {"api_key": decrypted_key}
+                else:
+                    # Some connectors (idx_api, saham_mcp, yfinance) don't need API keys
+                    credentials = {}
+                    logger.info(f"No credentials for {provider.name}, using empty credentials")
 
                 # Create connector
                 connector = ConnectorFactory.create(
@@ -304,6 +305,8 @@ class DataBridgeWorker:
                     connector.set_on_tick(self._on_tick)
                 if hasattr(connector, "set_on_news"):
                     connector.set_on_news(self._on_news)
+                if hasattr(connector, "set_on_bar"):
+                    connector.set_on_bar(self._enqueue_bar)  # Direct to bar queue, skips aggregation
 
                 # Register with health monitor and config manager BEFORE starting
                 self._health_monitor.register_connector(provider.provider_id, connector)

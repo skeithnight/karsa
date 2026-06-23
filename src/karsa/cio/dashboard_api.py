@@ -17,6 +17,11 @@ from karsa.cio.dashboard_models import (
     SectorExposure,
     StaleDataState,
 )
+from karsa.investment_governance.domain.value_objects.idx_conglomerate_mapper import (
+    CONGLOMERATE_GROUPS,
+    get_conglomerate_group,
+    get_conglomerate_limit,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -72,6 +77,15 @@ class PositionsResponse(BaseModel):
     positions: List[PositionResponse]
     total_market_value_idr: float
     total_unrealized_pnl_idr: float
+
+
+class ConglomerateExposureResponse(BaseModel):
+    group: str
+    tickers: List[str]
+    total_exposure_idr: float
+    exposure_pct: float
+    limit_pct: float
+    status: str  # "OK" | "WARNING" | "BREACH"
 
 
 # --- WebSocket Manager ---
@@ -198,6 +212,52 @@ def create_cio_dashboard_api(
             state=cb.state.value,
             last_bar_time=cb.last_bar_time.isoformat() if cb.last_bar_time else None,
         )
+
+    @router.get("/exposures/conglomerates", response_model=List[ConglomerateExposureResponse])
+    async def get_conglomerate_exposures():
+        """Get conglomerate group exposures based on current positions.
+
+        Groups positions by conglomerate (Djarum/BCA, Astra, Sinar Mas, etc.)
+        and computes total exposure per group vs mandate limits.
+        """
+        producer = get_cio_producer()
+        state = producer.get_state()
+
+        # Aggregate market values by conglomerate group
+        group_exposures: Dict[str, float] = {}
+        total_portfolio = 0.0
+
+        for symbol, pos in state.positions.items():
+            mv = pos.market_value
+            total_portfolio += mv
+            group = get_conglomerate_group(symbol)
+            if group:
+                group_exposures[group] = group_exposures.get(group, 0.0) + mv
+
+        results: List[ConglomerateExposureResponse] = []
+        for group_name, tickers, limit_pct in CONGLOMERATE_GROUPS:
+            exposure_idr = group_exposures.get(group_name, 0.0)
+            exposure_pct = (exposure_idr / total_portfolio * 100) if total_portfolio > 0 else 0.0
+            limit_display = limit_pct * 100  # convert 0.15 -> 15
+
+            # Status determination: WARNING at 80% of limit, BREACH at 100%
+            if exposure_pct >= limit_display:
+                status = "BREACH"
+            elif exposure_pct >= limit_display * 0.8:
+                status = "WARNING"
+            else:
+                status = "OK"
+
+            results.append(ConglomerateExposureResponse(
+                group=group_name,
+                tickers=tickers,
+                total_exposure_idr=round(exposure_idr, 2),
+                exposure_pct=round(exposure_pct, 2),
+                limit_pct=round(limit_display, 2),
+                status=status,
+            ))
+
+        return results
 
     @router.get("/positions", response_model=PositionsResponse)
     async def get_positions():

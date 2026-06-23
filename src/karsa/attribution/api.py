@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
-from typing import Optional
+from typing import Any, Dict, List, Optional
 
 from karsa.attribution.infrastructure.repositories import (
     AttributionRepository,
@@ -42,3 +42,36 @@ def get_fact(
     if not result:
         raise HTTPException(status_code=404, detail="Fact not found")
     return result
+
+
+@router.get("/brinson")
+def get_brinson_attribution() -> List[Dict[str, Any]]:
+    """Brinson attribution breakdown by period.
+
+    Returns attribution data decomposed into selection, allocation,
+    beta, and residual components with win rate and model accuracy.
+
+    Stub: returns sample data to enable frontend development.
+    """
+    return [
+        {
+            "period": "MTD",
+            "selection_pct": 1.2,
+            "allocation_pct": 0.5,
+            "beta_pct": 0.8,
+            "residual_pct": -0.3,
+            "total_return_pct": 2.2,
+            "win_rate": 0.65,
+            "model_accuracy": 0.72,
+        },
+        {
+            "period": "YTD",
+            "selection_pct": 3.8,
+            "allocation_pct": 1.1,
+            "beta_pct": 2.4,
+            "residual_pct": -0.9,
+            "total_return_pct": 6.4,
+            "win_rate": 0.58,
+            "model_accuracy": 0.68,
+        },
+    ]

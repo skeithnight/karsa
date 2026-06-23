@@ -19,6 +19,7 @@ TIMEFRAME_DURATIONS = {
     "5m": timedelta(minutes=5),
     "15m": timedelta(minutes=15),
     "1h": timedelta(hours=1),
+    "1d": timedelta(days=1),
 }
 
 

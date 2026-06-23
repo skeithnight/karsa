@@ -70,6 +70,8 @@ export interface PerformanceAttributionViewModel {
   totalReturnPct: number;
   winRate: number;
   modelAccuracy: number;
+  brierScore: number;
+  calibrationScore: number;
 }
 
 /** Governance status */

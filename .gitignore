@@ -41,6 +41,8 @@ htmlcov/
 dist/
 build/
 *.egg-info/
+.next/
+karsa-web/.next/
 
 # ============================================================================
 # Virtual Environments
@@ -72,4 +74,19 @@ Thumbs.db
 .env.*
 *.pem
 *.key
-graphify-out/cost.json
+
+# ============================================================================
+# Node.js Tooling & Caches
+# ============================================================================
+# Prevents committing installed packages and package-manager debug logs.
+node_modules/
+karsa-web/node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ============================================================================
+# Generated Reports
+# ============================================================================
+graphify-out/

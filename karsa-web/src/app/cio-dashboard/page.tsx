@@ -16,15 +16,61 @@ import { useStaleDataState } from '../../hooks/cio-dashboard/use-stale-data';
 import { usePositions, PositionViewModel } from '../../hooks/cio-dashboard/use-positions';
 import { useEquityCurve } from '../../hooks/cio-dashboard/use-equity-curve';
 import { useSectorExposures } from '../../hooks/cio-dashboard/use-sector-exposures';
+import { useConglomerateExposures } from '../../hooks/cio-dashboard/use-conglomerate-exposures';
+import { ConglomerateHeatmap } from '../../components/charts/ConglomerateHeatmap';
 import { formatCurrency } from '../../lib/formatters/currency';
+
+import { DataTable } from '../../components/grid/DataTable';
+import { ColDef } from 'ag-grid-community';
+import { TradingViewChart } from '../../components/charts/TradingViewChart';
 import type {
   RiskTrafficLightViewModel,
   TodayDecisionViewModel,
 } from '../../features/cio-dashboard/types/viewmodels';
 
+
+const positionColumnDefs: ColDef<PositionViewModel>[] = [
+  { field: 'symbol', headerName: 'Symbol', sortable: true, filter: true, flex: 1 },
+  { field: 'quantityLots', headerName: 'Lots', sortable: true, valueFormatter: (p) => p.value?.toFixed(0) || '0', flex: 1 },
+  { field: 'avgEntryPrice', headerName: 'Entry', sortable: true, valueFormatter: (p) => formatCurrency(p.value, 'IDR'), flex: 1 },
+  { field: 'currentPrice', headerName: 'Current', sortable: true, valueFormatter: (p) => formatCurrency(p.value, 'IDR'), flex: 1 },
+  { field: 'marketValueIdr', headerName: 'Mkt Value', sortable: true, valueFormatter: (p) => formatCurrency(p.value, 'IDR'), flex: 1.5 },
+  { 
+    field: 'unrealizedPnlIdr', 
+    headerName: 'PnL', 
+    sortable: true, 
+    valueFormatter: (p) => formatCurrency(p.value, 'IDR'),
+    cellClassRules: { 'text-emerald-600': 'x >= 0', 'text-red-600': 'x < 0' },
+    flex: 1.5
+  },
+  { 
+    field: 'unrealizedPnlPct', 
+    headerName: 'PnL %', 
+    sortable: true, 
+    valueFormatter: (p) => p.value?.toFixed(2) + '%',
+    cellClassRules: { 'text-emerald-600': 'x >= 0', 'text-red-600': 'x < 0' },
+    flex: 1
+  },
+  { field: 'sector', headerName: 'Sector', sortable: true, filter: true, flex: 1.5 }
+];
+
+const sectorColumnDefs: ColDef[] = [
+  { field: 'sectorName', headerName: 'Sector', sortable: true, filter: true, flex: 2 },
+  { 
+    field: 'netExposureIdr', 
+    headerName: 'Net Exposure', 
+    sortable: true,
+    valueFormatter: (p) => formatCurrency(p.value, 'IDR'),
+    cellClassRules: { 'text-emerald-600': 'x >= 0', 'text-red-600': 'x < 0' },
+    flex: 1.5
+  },
+  { field: 'grossExposureIdr', headerName: 'Gross Exposure', sortable: true, valueFormatter: (p) => formatCurrency(p.value, 'IDR'), flex: 1.5 }
+];
+
 /** Tier 1: Executive Summary — 5-second comprehension */
 export default function CioDashboardPage() {
   const [staleAlertState, setStaleAlertState] = useState<string | null>(null);
+  const [exposureTab, setExposureTab] = useState<'sector' | 'conglomerate'>('sector');
 
   // WebSocket real-time updates
   const { isConnected } = useLivePortfolioUpdates({
@@ -45,6 +91,7 @@ export default function CioDashboardPage() {
   const { data: positions, isLoading: loadingPositions } = usePositions();
   const { data: equityCurve, isLoading: loadingEquity } = useEquityCurve('1D');
   const { data: sectorExposures, isLoading: loadingSectors } = useSectorExposures();
+  const { data: conglomerateExposures, isLoading: loadingConglomerates } = useConglomerateExposures();
 
   // Determine stale data state (WebSocket alert takes precedence)
   const effectiveStaleState = staleAlertState || staleState?.state || 'FRESH';
@@ -120,51 +167,66 @@ export default function CioDashboardPage() {
         </div>
       </div>
 
-      {/* Open Positions Grid */}
+      {/* Equity Curve Chart */}
       <div className="mt-6 border rounded-xl p-6 bg-white dark:bg-slate-900">
-        <h3 className="text-lg font-semibold mb-4">Open Positions</h3>
-        {loadingPositions ? (
-          <LoadingSkeleton variant="table" />
-        ) : (positions?.length ?? 0) > 0 ? (
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b text-left text-slate-500">
-                  <th className="py-2 pr-4">Symbol</th>
-                  <th className="py-2 pr-4 text-right">Lots</th>
-                  <th className="py-2 pr-4 text-right">Entry</th>
-                  <th className="py-2 pr-4 text-right">Current</th>
-                  <th className="py-2 pr-4 text-right">Mkt Value</th>
-                  <th className="py-2 pr-4 text-right">PnL</th>
-                  <th className="py-2 pr-4 text-right">PnL %</th>
-                  <th className="py-2">Sector</th>
-                </tr>
-              </thead>
-              <tbody>
-                {positions!.map((pos) => (
-                  <PositionRow key={pos.symbol} position={pos} />
-                ))}
-              </tbody>
-            </table>
-          </div>
+        <h3 className="text-lg font-semibold mb-4">Equity Curve</h3>
+        {loadingEquity ? (
+          <LoadingSkeleton variant="card" />
+        ) : (equityCurve?.length ?? 0) > 0 ? (
+          <TradingViewChart data={equityCurve || []} height={256} />
         ) : (
-          <EmptyState title="No Positions" description="No open positions" />
+          <EmptyState title="No Data" description="Equity curve data unavailable" />
         )}
       </div>
 
-      {/* Sector Exposure */}
+      {/* Open Positions Grid */}
       <div className="mt-6 border rounded-xl p-6 bg-white dark:bg-slate-900">
-        <h3 className="text-lg font-semibold mb-4">Sector Exposure</h3>
-        {loadingSectors ? (
-          <LoadingSkeleton variant="table" />
-        ) : (sectorExposures?.length ?? 0) > 0 ? (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {sectorExposures!.map((sector) => (
-              <SectorCard key={sector.sectorName} sector={sector} />
-            ))}
+        <h3 className="text-lg font-semibold mb-4">Open Positions</h3>
+        <DataTable
+          rowData={positions || []}
+          columnDefs={positionColumnDefs}
+          isLoading={loadingPositions}
+        />
+      </div>
+
+      {/* Exposure Tabs: Sector / Conglomerate */}
+      <div className="mt-6 border rounded-xl p-6 bg-white dark:bg-slate-900">
+        <div className="flex items-center gap-1 mb-4">
+          <h3 className="text-lg font-semibold">Exposure</h3>
+          <div className="ml-auto flex rounded-lg border overflow-hidden">
+            <button
+              className={`px-3 py-1.5 text-sm font-medium transition-colors ${
+                exposureTab === 'sector'
+                  ? 'bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900'
+                  : 'text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800'
+              }`}
+              onClick={() => setExposureTab('sector')}
+            >
+              Sector
+            </button>
+            <button
+              className={`px-3 py-1.5 text-sm font-medium transition-colors ${
+                exposureTab === 'conglomerate'
+                  ? 'bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900'
+                  : 'text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800'
+              }`}
+              onClick={() => setExposureTab('conglomerate')}
+            >
+              Conglomerate
+            </button>
           </div>
+        </div>
+        {exposureTab === 'sector' ? (
+          <DataTable
+            rowData={sectorExposures || []}
+            columnDefs={sectorColumnDefs}
+            isLoading={loadingSectors}
+          />
         ) : (
-          <EmptyState title="No Sector Data" description="Sector exposure unavailable" />
+          <ConglomerateHeatmap
+            data={conglomerateExposures || []}
+            isLoading={loadingConglomerates}
+          />
         )}
       </div>
 
@@ -218,42 +280,7 @@ function RiskRow({ risk }: { risk: RiskTrafficLightViewModel }) {
   );
 }
 
-function PositionRow({ position }: { position: PositionViewModel }) {
-  const pnlColor = position.unrealizedPnlIdr >= 0 ? 'text-emerald-600' : 'text-red-600';
-  return (
-    <tr className="border-b hover:bg-slate-50 dark:hover:bg-slate-800">
-      <td className="py-2 pr-4 font-semibold">{position.symbol}</td>
-      <td className="py-2 pr-4 text-right font-mono">{position.quantityLots.toFixed(1)}</td>
-      <td className="py-2 pr-4 text-right font-mono">{formatCurrency(position.avgEntryPrice, 'IDR')}</td>
-      <td className="py-2 pr-4 text-right font-mono">{formatCurrency(position.currentPrice, 'IDR')}</td>
-      <td className="py-2 pr-4 text-right font-mono">{formatCurrency(position.marketValueIdr, 'IDR')}</td>
-      <td className={`py-2 pr-4 text-right font-mono ${pnlColor}`}>
-        {formatCurrency(position.unrealizedPnlIdr, 'IDR')}
-      </td>
-      <td className={`py-2 pr-4 text-right font-mono ${pnlColor}`}>
-        {position.unrealizedPnlPct.toFixed(2)}%
-      </td>
-      <td className="py-2 text-sm text-slate-500">{position.sector}</td>
-    </tr>
-  );
-}
 
-function SectorCard({ sector }: { sector: { sectorName: string; grossExposureIdr: number; netExposureIdr: number } }) {
-  const isLong = sector.netExposureIdr >= 0;
-  return (
-    <div className="border rounded-lg p-3">
-      <div className="text-sm font-semibold mb-1">{sector.sectorName}</div>
-      <div className="text-xs text-slate-500">
-        Net: <span className={isLong ? 'text-emerald-600' : 'text-red-600'}>
-          {formatCurrency(sector.netExposureIdr, 'IDR')}
-        </span>
-      </div>
-      <div className="text-xs text-slate-500">
-        Gross: {formatCurrency(sector.grossExposureIdr, 'IDR')}
-      </div>
-    </div>
-  );
-}
 
 function DecisionCard({ decision }: { decision: TodayDecisionViewModel }) {
   const actionColors = {

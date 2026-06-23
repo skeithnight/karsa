@@ -17,8 +17,8 @@ from karsa.providers.infrastructure.storage.dead_letter_repository import DeadLe
 
 logger = logging.getLogger(__name__)
 
-# Polygon WebSocket endpoint
-POLYGON_WS_URL = "wss://socket.polygon.io/stocks"
+# Massive (formerly Polygon.io) WebSocket endpoint
+POLYGON_WS_URL = "wss://socket.massive.com/stocks"
 
 
 @register_connector("polygon")

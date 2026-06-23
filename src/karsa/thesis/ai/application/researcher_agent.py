@@ -86,6 +86,17 @@ class SignificanceFilter:
         # Update previous close for next check
         self._previous_closes[ticker] = current_price
         self._filtered_count += 1
+
+        # Log filter stats every 100 calls
+        total = self._filtered_count + self._passed_count
+        if total > 0 and total % 100 == 0:
+            logger.info(
+                "SignificanceFilter stats: filtered=%d passed=%d pass_rate=%.1f%%",
+                self._filtered_count,
+                self._passed_count,
+                100 * self._passed_count / total,
+            )
+
         return False
 
     @property
@@ -139,11 +150,13 @@ class ResearcherAgentService:
         retrieve_context: Callable,  # async callable: (ticker, sector, query_text) -> str
         significance_filter: Optional[SignificanceFilter] = None,
         publish_event: Optional[Callable] = None,  # async callable: (event) -> None
+        get_current_price: Optional[Callable] = None,  # async callable: (ticker) -> float
     ):
         self._call_llm = call_llm
         self._retrieve_context = retrieve_context
         self._filter = significance_filter or SignificanceFilter()
         self._publish_event = publish_event
+        self._get_current_price = get_current_price
         self._parser = ThesisParser()
         self._thesis_count = 0
 
@@ -188,9 +201,17 @@ class ResearcherAgentService:
 
         News always passes the significance filter.
         """
+        # Look up current price if provider is wired
+        current_price = 0.0
+        if self._get_current_price:
+            try:
+                current_price = await self._get_current_price(ticker)
+            except Exception as e:
+                logger.warning(f"Failed to get current price for {ticker}: {e}")
+
         return await self._generate_thesis(
             ticker=ticker,
-            current_price=0.0,  # Will be enriched from RAG context
+            current_price=current_price,
             sector=sector,
             trigger="news",
             source_news_event_id=article_id,
@@ -263,9 +284,8 @@ class ResearcherAgentService:
             logger.warning(f"Failed to parse thesis for {ticker}")
             return None
 
-        # 5. Emit event
-        if self._publish_event and thesis.side != ThesisSide.BUY or thesis.conviction.value >= 0.3:
-            # Only emit if conviction is meaningful (not HOLD)
+        # 5. Emit event (only if publisher wired, side is not HOLD, and conviction >= 0.3)
+        if self._publish_event and thesis.side != ThesisSide.HOLD and thesis.conviction.value >= 0.3:
             event = ThesisGeneratedEvent(
                 thesis_id=thesis.thesis_id,
                 ticker=thesis.ticker,
