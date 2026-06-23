@@ -1,0 +1,129 @@
+tests/unit/thesis/ai/test_agents.py
+  b8401d491f1b7ac4 248-363
+karsa-web/src/components/charts/BrierScoreChart.tsx
+  b8401d491f1b7ac4 1-196
+karsa-web/src/components/grid/DataTable.tsx
+  b8401d491f1b7ac4 5,22-25,37-38,76,80-81
+karsa-web/src/app/globals.css
+  b8401d491f1b7ac4 4,131-135
+tests/unit/investment_governance/test_idx_conglomerate_mapper.py
+  b8401d491f1b7ac4 1-176
+src/karsa/providers/infrastructure/connectors/alpha_vantage_connector.py
+  b8401d491f1b7ac4 1-122
+tests/unit/providers/test_yfinance_connector.py
+  b8401d491f1b7ac4 1-179
+tests/unit/providers/test_alpha_vantage_connector.py
+  b8401d491f1b7ac4 1-340
+src/karsa/cio/dashboard_api.py
+  b8401d491f1b7ac4 20-24,82-90,216-261
+karsa-web/src/api/endpoints/performance.ts
+  b8401d491f1b7ac4 6-26,30-36
+karsa-web/src/app/performance/page.tsx
+  b8401d491f1b7ac4 5-7,9-37,39-46,48-54,56-73,77-91,94-95
+.gitignore
+  a40a1a09478590d0 44-45,77-92
+src/karsa/attribution/api.py
+  b8401d491f1b7ac4 2,45-77
+tests/unit/execution/test_idx_adapter.py
+  b8401d491f1b7ac4 1-175
+src/karsa/performance/api.py
+  b8401d491f1b7ac4 1,3,24-59
+src/karsa/providers/infrastructure/connectors/saham_mcp_connector.py
+  a8eb5ba437a40660 1-676
+karsa-web/src/components/charts/ConglomerateHeatmap.tsx
+  b8401d491f1b7ac4 1-133
+src/karsa/providers/infrastructure/connectors/yfinance_connector.py
+  b8401d491f1b7ac4 1-120
+src/karsa/providers/infrastructure/connectors/idx_api_connector.py
+  a8eb5ba437a40660 1-284
+karsa-web/src/hooks/performance/index.ts
+  b8401d491f1b7ac4 19-78
+src/karsa/thesis/ai/application/researcher_agent.py
+  b8401d491f1b7ac4 89-99,153,159,204-211,214,287-288
+src/karsa/thesis/ai/application/pipeline_orchestrator.py
+  b8401d491f1b7ac4 1-101
+karsa-web/src/components/charts/TradingViewChart.tsx
+  b8401d491f1b7ac4 1-255
+karsa-web/src/hooks/query-keys.ts
+  b8401d491f1b7ac4 28-29
+karsa-web/src/components/tables/AttributionTable.tsx
+  b8401d491f1b7ac4 1-137
+src/karsa/data_bridge/worker.py
+  a8eb5ba437a40660 286-292
+  b8401d491f1b7ac4 308-309
+docs/integration/saham-mcp-integration.md
+  a8eb5ba437a40660 1-317
+karsa-web/src/app/cio-dashboard/page.tsx
+  b8401d491f1b7ac4 19-20,25,73,94,176,192,194-216,218-224,226-229
+karsa-web/src/features/cio-dashboard/types/viewmodels.ts
+  b8401d491f1b7ac4 73-74
+src/karsa/providers/infrastructure/connectors/__init__.py
+  a8eb5ba437a40660 11-12,20-21
+  b8401d491f1b7ac4 8-10,14-19
+src/karsa/execution/infrastructure/adapters/idx_adapter.py
+  b8401d491f1b7ac4 1-97
+config/saham-mcp-config.json
+  a8eb5ba437a40660 1-136
+src/karsa/providers/infrastructure/connectors/fmp_connector.py
+  b8401d491f1b7ac4 1-99
+karsa-web/src/hooks/cio-dashboard/use-conglomerate-exposures.ts
+  b8401d491f1b7ac4 1-52
+karsa-web/src/features/cio-dashboard/utils/mappers.ts
+  b8401d491f1b7ac4 94-95
+tests/unit/providers/test_fmp_connector.py
+  b8401d491f1b7ac4 1-217
+src/karsa/data_bridge/setup_providers.py
+  b8401d491f1b7ac4 7-11,107-170
+src/karsa/investment_governance/domain/value_objects/idx_conglomerate_mapper.py
+  b8401d491f1b7ac4 1-77
+src/karsa/providers/infrastructure/connectors/polygon_connector.py
+  a8eb5ba437a40660 20-21
+src/karsa/providers/application/aggregation_engine.py
+  b8401d491f1b7ac4 22
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.23",
+  "base_commit_sha": "a09756c81a2e2b81128a294d000956363b6a5e98",
+  "prompts": {
+    "a40a1a09478590d0": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019ef572-7fe7-7af3-afa9-e22dad33ee59",
+        "model": "gpt-5.4"
+      },
+      "human_author": "skeithnight <skeithnight@gmail.com>",
+      "messages": [],
+      "total_additions": 18,
+      "total_deletions": 1,
+      "accepted_lines": 18,
+      "overriden_lines": 0
+    },
+    "a8eb5ba437a40660": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a903af17-4b16-49b0-af09-7c569abd56b5",
+        "model": "mimo-v2.5-pro"
+      },
+      "human_author": "skeithnight <skeithnight@gmail.com>",
+      "messages": [],
+      "total_additions": 1477,
+      "total_deletions": 59,
+      "accepted_lines": 1426,
+      "overriden_lines": 0
+    },
+    "b8401d491f1b7ac4": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "721351dd-5f44-4dd9-a9c1-8a883232adf7",
+        "model": "mimo-v2.5-pro"
+      },
+      "human_author": "skeithnight <skeithnight@gmail.com>",
+      "messages": [],
+      "total_additions": 3129,
+      "total_deletions": 123,
+      "accepted_lines": 3067,
+      "overriden_lines": 0
+    }
+  }
+}
