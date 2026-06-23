@@ -1,0 +1,264 @@
+src/karsa/execution/domain/bridge_events.py
+  a161e693e624fb5c 1-127
+src/karsa/providers/application/gap_fill_service.py
+  a161e693e624fb5c 103
+  58d9d98060675007 1-102,104-139
+docker-compose.ingestion.yml
+  a161e693e624fb5c 1-55
+src/karsa/cio/dashboard_repositories.py
+  a161e693e624fb5c 1-161
+src/karsa/llm/events/events.py
+  58d9d98060675007 1-41
+src/karsa/llm/infrastructure/storage/config_models.py
+  58d9d98060675007 1-70
+karsa-web/src/app/cio-dashboard/page.tsx
+  a161e693e624fb5c 2,8,14-19,27-33,42-47,49-50,63-68,73,78-81,84,123-168,221-257
+tests/unit/rag/test_context_retrieval.py
+  a161e693e624fb5c 1-95
+src/karsa/providers/domain/normalization.py
+  58d9d98060675007 1-66
+src/karsa/providers/application/connector_factory.py
+  a161e693e624fb5c 54-61
+  58d9d98060675007 1-53,62-126
+src/karsa/llm/errors.py
+  a161e693e624fb5c 28-32
+src/karsa/providers/application/aggregation_engine.py
+  58d9d98060675007 1-175
+tests/unit/thesis/ai/test_red_team.py
+  a161e693e624fb5c 1-341
+tests/integration/ai_pipeline/fixtures.py
+  a161e693e624fb5c 1-297
+karsa-web/src/hooks/cio-dashboard/use-stale-data.ts
+  a161e693e624fb5c 1-26
+src/karsa/providers/application/failover_service.py
+  58d9d98060675007 1-5,7-71,73-82,84-100,103-145,147-175
+  a161e693e624fb5c 6,72,83,101-102,146
+k8s/ingestion-worker.yaml
+  a161e693e624fb5c 1-190
+src/karsa/bootstrap.py
+  58d9d98060675007 202-251
+src/karsa/execution/application/risk_engine.py
+  a161e693e624fb5c 1-181
+src/karsa/providers/infrastructure/connectors/polygon_connector.py
+  a92c94c86bf42298 107-116,119,121-123,130-131,136,138-145,147
+  58d9d98060675007 1-61,70-75,82-87,89,104-106,117-118,120,124-129,132-135,137,146,148-246
+  a161e693e624fb5c 62-69,76-81,88,90-103
+src/karsa/data_bridge/__init__.py
+  58d9d98060675007 1
+alembic/versions/109_pgvector_schema.py
+  a161e693e624fb5c 1-55
+tests/unit/providers/test_sprint53.py
+  a161e693e624fb5c 146,204
+  58d9d98060675007 1-145,147-203,205-249
+src/karsa/execution/infrastructure/adapters/ibkr_adapter.py
+  a161e693e624fb5c 1-102
+src/karsa/rag/__init__.py
+  a161e693e624fb5c 1
+src/karsa/rag/application/embedding_pipeline.py
+  a161e693e624fb5c 1-214
+src/karsa/providers/application/health_monitor.py
+  a161e693e624fb5c 39,49-51,69-71,94,126,133-136
+  58d9d98060675007 1-38,40-48,52-68,72-93,95-125,127-132,137-160
+src/karsa/data_bridge/setup_providers.py
+  58d9d98060675007 1-155
+tests/unit/thesis/ai/test_agents.py
+  a161e693e624fb5c 1-247
+src/karsa/execution/infrastructure/adapters/alpaca_adapter.py
+  a161e693e624fb5c 1-212
+alembic/versions/107_add_nonce_to_provider_credentials.py
+  58d9d98060675007 3-4,10-11
+src/karsa/providers/infrastructure/storage/dead_letter_repository.py
+  58d9d98060675007 1-37
+Dockerfile.ingestion
+  a161e693e624fb5c 1-78
+src/karsa/execution/domain/bridge_models.py
+  a161e693e624fb5c 1-154
+src/karsa/execution/infrastructure/bridge_repositories.py
+  a161e693e624fb5c 1-178
+alembic/versions/112_cio_dashboard_schema.py
+  a161e693e624fb5c 1-64
+src/karsa/providers/infrastructure/storage/data_bridge_repositories.py
+  a92c94c86bf42298 180
+  58d9d98060675007 1-179,181-204
+tests/unit/cio/test_dashboard.py
+  a161e693e624fb5c 1-271
+src/karsa/execution/application/bridge_services.py
+  a161e693e624fb5c 1-384
+tests/unit/providers/test_data_bridge.py
+  58d9d98060675007 1-291
+src/karsa/llm/infrastructure/storage/config_repository.py
+  58d9d98060675007 1-209
+src/karsa/risk/volatility_models.py
+  a161e693e624fb5c 1-83
+src/karsa/risk/volatility_repositories.py
+  a161e693e624fb5c 1-99
+karsa-web/src/features/portfolio/utils/mappers.ts
+  a161e693e624fb5c 9,11,15,17,21-22
+tests/unit/cio/test_idx_localization.py
+  a161e693e624fb5c 1-159
+src/karsa/providers/infrastructure/adapters/slack_alert_adapter.py
+  58d9d98060675007 1-65
+alembic/versions/105_data_bridge_provider_schema.py
+  58d9d98060675007 3-4,10-11
+karsa-web/src/hooks/cio-dashboard/use-live-updates.ts
+  a161e693e624fb5c 1-135
+src/karsa/rag/infrastructure/pgvector_repository.py
+  a161e693e624fb5c 1-196
+src/karsa/providers/application/config_manager.py
+  a161e693e624fb5c 45-48,54-57,70-72,112-113,118-120,123,132,142,144-149,155,158-159,161-171,173,182,189,197
+  58d9d98060675007 1-44,49-53,58-69,73-111,114-117,121-122,124-131,133-141,143,150-154,156-157,160,172,174-181,183-188,190-196,198-199
+src/karsa/thesis/ai/domain/events.py
+  a161e693e624fb5c 1-113
+src/karsa/thesis/ai/application/governance_agent.py
+  a161e693e624fb5c 1-315
+src/karsa/risk/volatility_events.py
+  a161e693e624fb5c 1-48
+karsa-web/src/hooks/cio-dashboard/use-equity-curve.ts
+  a161e693e624fb5c 1-42
+alembic/versions/106_data_bridge_dead_letter.py
+  58d9d98060675007 3-4,10-11
+tests/unit/providers/test_sprint52.py
+  58d9d98060675007 1-326
+src/karsa/llm/router.py
+  a161e693e624fb5c 1-347
+src/karsa/rag/domain/models.py
+  a161e693e624fb5c 1-66
+src/karsa/thesis/ai/application/researcher_agent.py
+  a161e693e624fb5c 1-303
+src/karsa/data_bridge/durable_buffer.py
+  a161e693e624fb5c 1-238
+src/karsa/providers/application/data_bridge_services.py
+  58d9d98060675007 1-215
+tests/unit/execution/test_bridge.py
+  a161e693e624fb5c 1-328
+karsa-web/src/lib/formatters/currency.ts
+  a161e693e624fb5c 1,3-21
+karsa-web/src/hooks/cio-dashboard/use-sector-exposures.ts
+  a161e693e624fb5c 1-42
+src/karsa/cio/idx_sector_mapper.py
+  a161e693e624fb5c 1-86
+karsa-web/src/components/shared/StaleDataBanner.tsx
+  a161e693e624fb5c 1-59
+src/karsa/providers/infrastructure/storage/data_bridge_models.py
+  58d9d98060675007 1-73
+src/karsa/llm/application/config_service.py
+  58d9d98060675007 1-187
+src/karsa/data_bridge/audit_runner.py
+  58d9d98060675007 1-217
+alembic/versions/108_llm_pool_config_schema.py
+  58d9d98060675007 3-4,10-11
+src/karsa/memory/infrastructure/event/postgres_event_bus.py
+  a161e693e624fb5c 1,3-4,10-12,16,19,53,55-61
+.dockerignore
+  a161e693e624fb5c 1-53
+src/karsa/thesis/ai/domain/models.py
+  a161e693e624fb5c 1-101
+src/karsa/data_bridge/worker.py
+  a161e693e624fb5c 20,34,42-43,64,72-78,89,91,93,102-103,105-109,119-123,126,138-140,148-161,163-164,171-194,204,212-216,221-224,226-247,250-251,259-266,279-280,283-285,308,312-318,323-358,364-453,457-461,477-490,524,526-533,535,538-551
+  58d9d98060675007 1-19,21-33,35-41,44-63,65-71,79-88,90,92,94-101,104,110-118,124-125,127-137,141-147,162,165-170,195-203,205-211,217-220,225,248-249,252-258,267-278,281-282,286-307,309-311,319-322,359-363,454-456,462-476,491-523,525,534,536-537,552-559
+src/karsa/thesis/ai/__init__.py
+  a161e693e624fb5c 1
+src/karsa/providers/application/credential_service.py
+  58d9d98060675007 1-72
+src/karsa/data_bridge/health_server.py
+  a161e693e624fb5c 1-192
+src/karsa/thesis/ai/application/thesis_parser.py
+  a161e693e624fb5c 1-138
+docker-compose.yml
+  58d9d98060675007 105-120
+tests/unit/llm/test_router.py
+  a161e693e624fb5c 1-123
+src/karsa/execution/application/order_slicer.py
+  a161e693e624fb5c 1-182
+tests/unit/risk/test_volatility.py
+  a161e693e624fb5c 1-241
+src/karsa/providers/ports.py
+  58d9d98060675007 1-34
+tests/integration/ai_pipeline/test_full_pipeline.py
+  a161e693e624fb5c 1-588
+alembic/versions/110_execution_bridge_schema.py
+  a161e693e624fb5c 1-67
+src/karsa/providers/application/event_emitter.py
+  58d9d98060675007 1-77
+karsa-web/src/hooks/cio-dashboard/use-positions.ts
+  a161e693e624fb5c 1-63
+src/karsa/cio/dashboard_models.py
+  a161e693e624fb5c 1-146
+karsa-web/src/hooks/cio-dashboard/index.ts
+  a161e693e624fb5c 39,42,54,66
+docs/implementation/sprint-60/design.md
+  a161e693e624fb5c 1-262
+src/karsa/risk/volatility_services.py
+  a161e693e624fb5c 1-314
+src/karsa/cio/dashboard_services.py
+  a161e693e624fb5c 1-339
+src/karsa/providers/infrastructure/connectors/__init__.py
+  58d9d98060675007 1-9
+src/karsa/providers/infrastructure/connectors/finnhub_connector.py
+  a161e693e624fb5c 63,70-71,73-76,79-86
+  58d9d98060675007 1-62,64-69,72,77-78,87-194
+src/karsa/data_bridge/setup_all_keys.py
+  58d9d98060675007 1-265
+tests/unit/llm/test_config_service.py
+  58d9d98060675007 1-162
+src/karsa/rag/application/context_retrieval.py
+  a161e693e624fb5c 1-159
+src/karsa/llm/domain/config_models.py
+  58d9d98060675007 1-106
+src/karsa/providers/domain/data_bridge.py
+  58d9d98060675007 1-138
+alembic/versions/111_asset_risk_metrics.py
+  a161e693e624fb5c 1-36
+src/karsa/cio/dashboard_api.py
+  a161e693e624fb5c 1-290
+docs/implementation/sprint-51/audit_data_bridge.md
+  58d9d98060675007 1-391
+src/karsa/providers/events/events.py
+  58d9d98060675007 32-85
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.23",
+  "base_commit_sha": "59eeafa451d49f6c1c81ee28d0e220ffbfbab333",
+  "prompts": {
+    "58d9d98060675007": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ccb87b8a-b569-488a-9e6a-5f26a83c3761",
+        "model": "mimo-v2.5-pro"
+      },
+      "human_author": "skeithnight <skeithnight@gmail.com>",
+      "messages": [],
+      "total_additions": 5864,
+      "total_deletions": 220,
+      "accepted_lines": 5579,
+      "overriden_lines": 0
+    },
+    "a161e693e624fb5c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ce0d81fd-585b-491c-8d0a-9b7aed0d0240",
+        "model": "mimo-v2.5-pro"
+      },
+      "human_author": "skeithnight <skeithnight@gmail.com>",
+      "messages": [],
+      "total_additions": 10020,
+      "total_deletions": 151,
+      "accepted_lines": 9970,
+      "overriden_lines": 0
+    },
+    "a92c94c86bf42298": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "38d96609-db7c-4806-8e11-c1abc1f940bd",
+        "model": "mimo-v2.5-pro"
+      },
+      "human_author": "skeithnight <skeithnight@gmail.com>",
+      "messages": [],
+      "total_additions": 27,
+      "total_deletions": 5,
+      "accepted_lines": 27,
+      "overriden_lines": 0
+    }
+  }
+}
