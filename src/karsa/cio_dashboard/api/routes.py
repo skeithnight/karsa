@@ -394,3 +394,62 @@ def get_conglomerate_exposures(request: Request) -> List[Dict[str, Any]]:
             g["status"] = "OK"
 
     return list(group_map.values())
+
+
+# --- Equity Curve ---
+@router.get("/cio/portfolio/equity-curve")
+def get_equity_curve(timeframe: str = "1M") -> list:
+    """Portfolio equity curve timeseries for charting."""
+    try:
+        conn = _get_pg_connection()
+        with conn.cursor() as cur:
+            # Calculate cutoff based on timeframe
+            from datetime import timedelta
+            now = datetime.now(timezone.utc)
+            cutoffs = {"1D": timedelta(days=1), "1W": timedelta(weeks=1),
+                       "1M": timedelta(days=30), "YTD": now.replace(month=1, day=1, hour=0, minute=0, second=0)}
+            cutoff = cutoffs.get(timeframe, timedelta(days=30))
+            if isinstance(cutoff, timedelta):
+                cutoff = now - cutoff
+
+            cur.execute("""
+                SELECT snapshot_time, total_equity, daily_pnl
+                FROM portfolio_snapshots
+                WHERE snapshot_time >= %s
+                ORDER BY snapshot_time ASC
+            """, (cutoff,))
+            rows = cur.fetchall()
+        conn.close()
+
+        return [{
+            "timestamp": row[0].isoformat() if row[0] else "",
+            "totalEquity": float(row[1]) if row[1] else 0,
+            "dailyPnl": float(row[2]) if row[2] else 0,
+        } for row in rows]
+    except Exception:
+        return []
+
+
+# --- Sector Exposures ---
+@router.get("/cio/exposures/sectors")
+def get_sector_exposures() -> list:
+    """Latest sector exposure breakdown."""
+    try:
+        conn = _get_pg_connection()
+        with conn.cursor() as cur:
+            cur.execute("""
+                SELECT sector_name, gross_exposure, net_exposure
+                FROM sector_exposures
+                WHERE snapshot_time = (SELECT MAX(snapshot_time) FROM sector_exposures)
+                ORDER BY sector_name
+            """)
+            rows = cur.fetchall()
+        conn.close()
+
+        return [{
+            "sectorName": row[0],
+            "grossExposureIdr": float(row[1]) if row[1] else 0,
+            "netExposureIdr": float(row[2]) if row[2] else 0,
+        } for row in rows]
+    except Exception:
+        return []
