@@ -1,0 +1,105 @@
+karsa-web/src/features/governance/utils/mappers.ts
+  7c02e3e707677829 6,12-17,21-27,30-31,33-35,37-43,45-48,50-53,55,58-65
+docs/implementation/sprint-63/verify.md
+  7c02e3e707677829 1-5
+docs/implementation/sprint-63/remediation.md
+  7c02e3e707677829 1-249
+karsa-web/src/components/shared/ConvictionPips.tsx
+  7c02e3e707677829 1-24
+karsa-web/src/hooks/signals/index.ts
+  7c02e3e707677829 1-53
+karsa-web/src/app/portfolio/page.tsx
+  7c02e3e707677829 3-11,13-19,21-28,30-51,55-68,71-94
+docs/implementation/sprint-63/implementation.md
+  7c02e3e707677829 1-5
+src/karsa/seed_idx_stocks.sql
+  7c02e3e707677829 1-95
+karsa-web/src/components/shared/BrierCalibration.tsx
+  7c02e3e707677829 1-45
+karsa-web/src/config/navigation.ts
+  7c02e3e707677829 25-32
+karsa-web/src/features/signals/utils/mappers.ts
+  7c02e3e707677829 1-94
+karsa-web/src/features/performance/types/viewmodels.ts
+  7c02e3e707677829 15-61
+docs/implementation/sprint-63/design.md
+  7c02e3e707677829 1-366
+karsa-web/src/app/governance/page.tsx
+  7c02e3e707677829 1-115
+karsa-web/src/components/shared/ConglomerateHeatmap.tsx
+  7c02e3e707677829 1-57
+src/karsa/seed_portfolio_data.sql
+  7c02e3e707677829 1-55
+karsa-web/src/features/signals/types/viewmodels.ts
+  7c02e3e707677829 1-23
+karsa-web/src/components/layout/TopTabBar.tsx
+  7c02e3e707677829 1-66
+karsa-web/src/components/shared/TickerTape.tsx
+  7c02e3e707677829 1-40
+karsa-web/src/components/shared/KpiStrip.tsx
+  7c02e3e707677829 1-46
+karsa-web/src/api/endpoints/performance.ts
+  7c02e3e707677829 35
+karsa-web/next.config.ts
+  7c02e3e707677829 12,14-19,21-44,47-92
+karsa-web/src/app/page.tsx
+  7c02e3e707677829 5-6,10,12-15,17-18,20-27,31-34,37-70,72-77
+karsa-web/src/components/shared/RiskPanel.tsx
+  7c02e3e707677829 1-81
+docs/roadmap/ROADMAP.md
+  7c02e3e707677829 81-84
+karsa-web/src/app/layout.tsx
+  7c02e3e707677829 4,12,14
+src/karsa/search/api.py
+  7c02e3e707677829 1,3,6,12-80,83-86
+karsa-web/src/api/endpoints/cio-dashboard.ts
+  7c02e3e707677829 1-148
+src/karsa/cio_dashboard/api/routes.py
+  7c02e3e707677829 456-500
+karsa-web/src/components/layout/AppShell.tsx
+  7c02e3e707677829 1-45
+karsa-web/src/features/dashboard/utils/mappers.ts
+  7c02e3e707677829 1-60
+docs/implementation/sprint-63/audit.md
+  7c02e3e707677829 1-374
+karsa-web/src/app/performance/page.tsx
+  7c02e3e707677829 3-9,11-14,17-25,30-35,45-51,53-55,59,61-68,70-77,81-138
+karsa-web/src/features/dashboard/types/viewmodels.ts
+  7c02e3e707677829 1-39
+karsa-web/src/hooks/performance/index.ts
+  7c02e3e707677829 5-9,11-15,30,39,57,59,63-66,69-72,75,81-84,86-90
+karsa-web/src/api/endpoints/investments.ts
+  7c02e3e707677829 1-52
+karsa-web/src/hooks/dashboard/index.ts
+  7c02e3e707677829 1-62
+karsa-web/src/features/performance/utils/mappers.ts
+  7c02e3e707677829 3-4,7-13,34-137
+karsa-web/src/components/shared/SectorBars.tsx
+  7c02e3e707677829 1-35
+karsa-web/src/app/signals/page.tsx
+  7c02e3e707677829 1-185
+src/karsa/seed_signals.sql
+  7c02e3e707677829 1-61
+karsa-web/src/hooks/governance/index.ts
+  7c02e3e707677829 8,13-21,46,49,58-59,62
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.23",
+  "base_commit_sha": "9681bdfb1e80095e3dc2f382cd585c6d518dfcf1",
+  "prompts": {
+    "7c02e3e707677829": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "fc63676a-b3c4-488b-8ad3-728e5448867c",
+        "model": "mimo-v2.5-pro"
+      },
+      "human_author": "skeithnight <skeithnight@gmail.com>",
+      "messages": [],
+      "total_additions": 3826,
+      "total_deletions": 923,
+      "accepted_lines": 3237,
+      "overriden_lines": 0
+    }
+  }
+}
