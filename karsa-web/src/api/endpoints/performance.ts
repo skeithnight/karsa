@@ -32,6 +32,6 @@ export const PerformanceApi = {
     return ApiClient.fetch<BrierScoreDTO[]>('/performance/brier-scores');
   },
   getBrinsonAttribution: (): Promise<BrinsonAttributionDTO[]> => {
-    return ApiClient.fetch<BrinsonAttributionDTO[]>('/api/v1/attribution/brinson');
+    return ApiClient.fetch<BrinsonAttributionDTO[]>('/v1/attribution/brinson');
   },
 };

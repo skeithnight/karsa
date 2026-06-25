@@ -22,3 +22,11 @@ export const NAV_ITEMS: NavItem[] = [
   { label: 'Attribution', href: '/performance/attribution', icon: 'pie-chart', owner: 'Performance' },
   { label: 'Policies', href: '/oversight/policies', icon: 'shield-check', owner: 'Governance' },
 ];
+
+export const NAV_TABS = [
+  { label: 'Dashboard', href: '/', icon: 'LayoutDashboard' },
+  { label: 'Signals', href: '/signals', icon: 'Bolt' },
+  { label: 'Portfolio', href: '/portfolio', icon: 'ChartPie' },
+  { label: 'Performance', href: '/performance', icon: 'TrendingUp' },
+  { label: 'Governance', href: '/governance', icon: 'ShieldCheck' },
+] as const;

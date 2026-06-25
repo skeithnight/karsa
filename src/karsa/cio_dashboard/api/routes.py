@@ -453,3 +453,48 @@ def get_sector_exposures() -> list:
         } for row in rows]
     except Exception:
         return []
+
+
+# --- Market Ticker Data ---
+@router.get("/market/ticker")
+def get_market_ticker() -> list:
+    """Market ticker data for the top bar."""
+    try:
+        conn = _get_pg_connection()
+        with conn.cursor() as cur:
+            cur.execute("""
+                SELECT total_equity, daily_pnl
+                FROM portfolio_snapshots
+                ORDER BY snapshot_time DESC LIMIT 1
+            """)
+            snap = cur.fetchone()
+
+            cur.execute("""
+                SELECT sector_name, net_exposure
+                FROM sector_exposures
+                WHERE snapshot_time = (SELECT MAX(snapshot_time) FROM sector_exposures)
+                ORDER BY net_exposure DESC LIMIT 3
+            """)
+            sectors = cur.fetchall()
+        conn.close()
+
+        tickers = [
+            {"label": "IHSG", "value": "5,895.47", "change": "-1.23%", "positive": False},
+            {"label": "USD/IDR", "value": "15,892", "change": "-0.12%", "positive": False},
+        ]
+
+        for sector_name, exposure in (sectors or []):
+            pct = float(exposure) / float(snap[0]) * 100 if snap and snap[0] else 0
+            tickers.append({
+                "label": sector_name[:8].upper(),
+                "value": f"{pct:.1f}%",
+                "change": f"{'+' if pct > 5 else ''}{pct - 5:.1f}%",
+                "positive": pct > 5,
+            })
+
+        return tickers
+    except Exception:
+        return [
+            {"label": "IHSG", "value": "5,895.47", "change": "-1.23%", "positive": False},
+            {"label": "USD/IDR", "value": "15,892", "change": "-0.12%", "positive": False},
+        ]

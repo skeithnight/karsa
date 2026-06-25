@@ -2,8 +2,18 @@ import { ApiError } from "../../api/errors/api-error";
 import { useQuery } from "@tanstack/react-query";
 import { queryKeys } from "../query-keys";
 import { PerformanceApi } from "../../api/endpoints/performance";
-import { mapPerformanceAttribution } from "../../features/performance/utils/mappers";
-import { PerformanceAttributionVM } from "../../features/performance/types/viewmodels";
+import {
+  mapPerformanceAttribution,
+  mapBrinsonAttribution,
+  mapCalibration,
+  mapPerformanceKpis,
+} from "../../features/performance/utils/mappers";
+import {
+  PerformanceAttributionVM,
+  BrinsonAttributionVM,
+  CalibrationVM,
+  PerformanceKpiVM,
+} from "../../features/performance/types/viewmodels";
 import { PerformanceRequestDTO } from "../../types/performance/performance-request.dto";
 
 export function usePerformanceAttribution(params: PerformanceRequestDTO) {
@@ -17,7 +27,7 @@ export function usePerformanceAttribution(params: PerformanceRequestDTO) {
   });
 }
 
-/** Brier score timeseries entry (viewmodel matches DTO for this simple type) */
+/** Brier score timeseries entry (raw DTO passthrough for calibration charts) */
 export interface BrierScoreEntry {
   evaluationSequence: number;
   score: number;
@@ -26,19 +36,7 @@ export interface BrierScoreEntry {
   capabilityVersionId: string | null;
 }
 
-/** Brinson attribution row viewmodel */
-export interface BrinsonAttributionEntry {
-  period: string;
-  selectionPct: number;
-  allocationPct: number;
-  betaPct: number;
-  residualPct: number;
-  totalReturnPct: number;
-  winRate: number;
-  modelAccuracy: number;
-}
-
-/** Hook to fetch Brier score timeseries */
+/** Hook to fetch raw Brier score timeseries (used by calibration charts) */
 export function useBrierScores() {
   return useQuery<BrierScoreEntry[], ApiError>({
     queryKey: queryKeys.performance.brierScores(),
@@ -56,22 +54,40 @@ export function useBrierScores() {
   });
 }
 
-/** Hook to fetch Brinson attribution data */
+/** Hook to fetch Brinson attribution data mapped to BrinsonAttributionVM */
 export function useBrinsonAttribution() {
-  return useQuery<BrinsonAttributionEntry[], ApiError>({
+  return useQuery<BrinsonAttributionVM[], ApiError>({
     queryKey: queryKeys.performance.brinsonAttribution(),
     queryFn: async () => {
       const response = await PerformanceApi.getBrinsonAttribution();
-      return response.map((dto) => ({
-        period: dto.period,
-        selectionPct: dto.selection_pct,
-        allocationPct: dto.allocation_pct,
-        betaPct: dto.beta_pct,
-        residualPct: dto.residual_pct,
-        totalReturnPct: dto.total_return_pct,
-        winRate: dto.win_rate,
-        modelAccuracy: dto.model_accuracy,
-      }));
+      return response.map(mapBrinsonAttribution);
+    },
+    staleTime: 5 * 60 * 1000,
+  });
+}
+
+/** Hook to fetch calibration buckets (Brier scores grouped by tier) */
+export function useCalibration() {
+  return useQuery<CalibrationVM[], ApiError>({
+    queryKey: [...queryKeys.performance.brierScores(), "calibration"] as const,
+    queryFn: async () => {
+      const response = await PerformanceApi.getBrierScores();
+      return mapCalibration(response);
+    },
+    staleTime: 5 * 60 * 1000,
+  });
+}
+
+/** Hook combining Brinson attribution + Brier scores into unified performance KPIs */
+export function usePerformanceKpis() {
+  return useQuery<PerformanceKpiVM, ApiError>({
+    queryKey: [...queryKeys.performance.brinsonAttribution(), "kpis"] as const,
+    queryFn: async () => {
+      const [brinson, brier] = await Promise.all([
+        PerformanceApi.getBrinsonAttribution(),
+        PerformanceApi.getBrierScores(),
+      ]);
+      return mapPerformanceKpis(brinson, brier);
     },
     staleTime: 5 * 60 * 1000,
   });

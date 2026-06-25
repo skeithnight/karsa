@@ -79,3 +79,6 @@
 ### Phase 4: Live Risk & CIO Dashboards (Final Production Phase, depends on Phase 3)
 - **Sprint-58**: Live Risk — Volatility Targeting & Position Sizing (EWMA volatility calculator, risk calibration engine, vol-targeted position sizing, audit trail)
 - **Sprint-59**: CIO Dashboard — Producer, API & Real-Time Frontend (karsa-cio-producer, TimescaleDB read-models, REST+WebSocket API, Next.js CIO Dashboard, stale data circuit breaker)
+
+### Phase 5: Frontend Console Revamp (Design Reference: `docs/revamp/karsa_console_revamp.html`)
+- **Sprint-63**: Karsa Web Console Revamp — DESIGN phase complete. Restructure 12+ pages into 5-page model (Dashboard, Signals, Portfolio, Performance, Governance). Replace sidebar with top-tab navigation. Add ticker tape, conviction pips, conglomerate heatmap, Brier calibration. Unify all data fetching to React Query. Status: DESIGN
